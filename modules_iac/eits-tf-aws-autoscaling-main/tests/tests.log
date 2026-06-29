@@ -1,0 +1,4248 @@
+Tests started at 2026-03-27 15:22:36 UTC
+Branch: UKICLOENA-2854
+Pull Request ID: 23
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'basic': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.autoscaling.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + default_instance_warmup          = 300
+      + desired_capacity                 = (known after apply)
+      + enabled_metrics                  = [
+          + "GroupInServiceCapacity",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = "EC2"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 2
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + region                           = "eu-west-2"
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + termination_policies             = []
+      + vpc_zone_identifier              = [
+          + "subnet-0007176f4041512f4",
+          + "subnet-07f7f119f8527be21",
+          + "subnet-0f7f54f853d636f9a",
+        ]
+      + wait_for_capacity_timeout        = "0"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + instance_refresh {
+          + strategy = "Rolling"
+
+          + preferences {
+              + auto_rollback                = true
+              + checkpoint_delay             = "600"
+              + checkpoint_percentages       = [
+                  + 35,
+                  + 70,
+                  + 100,
+                ]
+              + instance_warmup              = "300"
+              + max_healthy_percentage       = 100
+              + min_healthy_percentage       = 50
+              + scale_in_protected_instances = "Refresh"
+              + skip_matching                = false
+              + standby_instances            = "Terminate"
+
+              + alarm_specification {}
+            }
+        }
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "AppID"
+          + propagate_at_launch = true
+          + value               = "23117"
+        }
+      + tag {
+          + key                 = "BusinessUnit"
+          + propagate_at_launch = true
+          + value               = "EITS"
+        }
+      + tag {
+          + key                 = "CostString"
+          + propagate_at_launch = true
+          + value               = "2000.GB.139.606005"
+        }
+      + tag {
+          + key                 = "CreatedWith"
+          + propagate_at_launch = true
+          + value               = "Terraform"
+        }
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "sbx"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+        }
+      + tag {
+          + key                 = "ResourceName"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+        }
+      + tag {
+          + key                 = "ResourceOwner"
+          + propagate_at_launch = true
+          + value               = "eitsukicloud@experian.com"
+        }
+      + tag {
+          + key                 = "eitsce:modulename"
+          + propagate_at_launch = true
+          + value               = "eits-tf-aws-autoscaling"
+        }
+      + tag {
+          + key                 = "eitsce:moduleversion"
+          + propagate_at_launch = true
+          + value               = "local"
+        }
+      + tag {
+          + key                 = "eitsce:tagschecked"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # module.autoscaling.aws_autoscaling_schedule.this["scale_down"] will be created
+  + resource "aws_autoscaling_schedule" "this" {
+      + arn                    = (known after apply)
+      + autoscaling_group_name = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+      + desired_capacity       = 0
+      + end_time               = (known after apply)
+      + id                     = (known after apply)
+      + max_size               = 0
+      + min_size               = 0
+      + recurrence             = "0 20 * * *"
+      + region                 = "eu-west-2"
+      + scheduled_action_name  = "scale_down"
+      + start_time             = (known after apply)
+      + time_zone              = (known after apply)
+    }
+
+  # module.autoscaling.aws_autoscaling_schedule.this["scale_up"] will be created
+  + resource "aws_autoscaling_schedule" "this" {
+      + arn                    = (known after apply)
+      + autoscaling_group_name = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+      + desired_capacity       = 1
+      + end_time               = (known after apply)
+      + id                     = (known after apply)
+      + max_size               = 2
+      + min_size               = 1
+      + recurrence             = "0 6 * * *"
+      + region                 = "eu-west-2"
+      + scheduled_action_name  = "scale_up"
+      + start_time             = (known after apply)
+      + time_zone              = (known after apply)
+    }
+
+  # module.autoscaling.aws_iam_service_linked_role.this[0] will be created
+  + resource "aws_iam_service_linked_role" "this" {
+      + arn              = (known after apply)
+      + aws_service_name = "autoscaling.amazonaws.com"
+      + create_date      = (known after apply)
+      + custom_suffix    = "eits-tf-aws-autoscaling-test"
+      + description      = "A service linked role for autoscaling"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + path             = (known after apply)
+      + tags_all         = (known after apply)
+      + unique_id        = (known after apply)
+    }
+
+  # module.autoscaling.aws_kms_grant.this[0] will be created
+  + resource "aws_kms_grant" "this" {
+      + grant_id          = (known after apply)
+      + grant_token       = (sensitive value)
+      + grantee_principal = (known after apply)
+      + id                = (known after apply)
+      + key_id            = "arn:aws:kms:eu-west-2:363353661606:key/4e9611e2-dd2a-4b8c-b79d-1b7602d5155f"
+      + name              = "GrantAutoScalingRoleAccessToAMI"
+      + operations        = [
+          + "CreateGrant",
+          + "Decrypt",
+          + "DescribeKey",
+          + "Encrypt",
+          + "GenerateDataKey",
+          + "GenerateDataKeyWithoutPlaintext",
+          + "ReEncryptFrom",
+          + "ReEncryptTo",
+        ]
+      + region            = "eu-west-2"
+      + retire_on_delete  = false
+    }
+
+  # module.autoscaling.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                                  = (known after apply)
+      + default_version                      = (known after apply)
+      + description                          = "Launch template for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+      + ebs_optimized                        = "true"
+      + id                                   = (known after apply)
+      + image_id                             = "ami-06446373a3c45693b"
+      + instance_initiated_shutdown_behavior = "stop"
+      + instance_type                        = "t3.micro"
+      + latest_version                       = (known after apply)
+      + name                                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-lt"
+      + name_prefix                          = (known after apply)
+      + region                               = "eu-west-2"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + update_default_version               = true
+      + vpc_security_group_ids               = (known after apply)
+
+      + block_device_mappings {
+          + device_name = "/dev/sde"
+
+          + ebs {
+              + delete_on_termination      = "true"
+              + iops                       = (known after apply)
+              + throughput                 = (known after apply)
+              + volume_initialization_rate = (known after apply)
+              + volume_size                = 30
+              + volume_type                = "gp3"
+            }
+        }
+
+      + enclave_options {
+          + enabled = false
+        }
+
+      + hibernation_options {
+          + configured = false
+        }
+
+      + iam_instance_profile {
+          + name = "eec-aws-amifactory-sc-iam-ec2role"
+        }
+
+      + maintenance_options {
+          + auto_recovery = "default"
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + network_performance_options {
+          + bandwidth_weighting = "default"
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "adDomain"             = "gdc.local"
+              + "adGroup"              = "WS-ADM_example_ec2_servers"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+      + tag_specifications {
+          + resource_type = "volume"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+    }
+
+  # module.autoscaling.time_sleep.wait_for_role[0] will be created
+  + resource "time_sleep" "wait_for_role" {
+      + create_duration = "10s"
+      + id              = (known after apply)
+    }
+
+  # module.autoscaling.module.alarm["in_service"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to detect when the capacity in the group is below the desired capacity required for your workload."
+      + alarm_name                            = "AWS/AutoScaling GroupInServiceCapacity AutoScalingGroupName=uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "GroupInServiceCapacity"
+      + namespace                             = "AWS/AutoScaling"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = (known after apply)
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.autoscaling.module.security_group[0].aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "Security group for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-asg"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-test-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.145/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.145/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.146/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.146/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.147/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.147/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_8"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = 8
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 0
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "SSH"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.241.0/27"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 4750
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.226.224.0/24"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 4750
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.28.243.0/24"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.13.24.0/28"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.31.135.102/32"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_c"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.195.240/28"
+      + description            = "CyberArk UK CPM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_d"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.196.0/27"
+      + description            = "CyberArk UK PSM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 17472
+    }
+
+  # module.autoscaling.module.security_group[0].time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 25 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'basic': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a1-060b-8cdd-ad1c-e398044a8001%252A2c2026-03-27T15%2525%25252A3a24%2525%25252A3a16.588744892Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'just_launch_template': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.launch_template.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                                  = (known after apply)
+      + default_version                      = (known after apply)
+      + description                          = "Launch template for auto scaling group eits-tf-aws-launch-template-asg"
+      + ebs_optimized                        = "true"
+      + id                                   = (known after apply)
+      + image_id                             = "ami-06446373a3c45693b"
+      + instance_initiated_shutdown_behavior = "stop"
+      + instance_type                        = "t3.micro"
+      + latest_version                       = (known after apply)
+      + name                                 = "eits-tf-aws-launch-template-lt"
+      + name_prefix                          = (known after apply)
+      + region                               = "eu-west-2"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + update_default_version               = true
+
+      + block_device_mappings {
+          + device_name = "/dev/sde"
+
+          + ebs {
+              + delete_on_termination      = "true"
+              + iops                       = (known after apply)
+              + throughput                 = (known after apply)
+              + volume_initialization_rate = (known after apply)
+              + volume_size                = 30
+              + volume_type                = "gp3"
+            }
+        }
+
+      + enclave_options {
+          + enabled = false
+        }
+
+      + hibernation_options {
+          + configured = false
+        }
+
+      + iam_instance_profile {
+          + name = "eec-aws-amifactory-sc-iam-ec2role"
+        }
+
+      + maintenance_options {
+          + auto_recovery = "default"
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + network_interfaces {
+          + description = "default"
+          + subnet_id   = "subnet-07f7f119f8527be21"
+        }
+
+      + network_performance_options {
+          + bandwidth_weighting = "default"
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "adDomain"             = "gdc.local"
+              + "adGroup"              = "WS-ADM_example_ec2_servers"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+      + tag_specifications {
+          + resource_type = "volume"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+    }
+
+Plan: 1 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'just_launch_template': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a1-510b-880a-b79d-e85c5e7c8001%252A2c2026-03-27T15%2525%25252A3a25%2525%25252A3a24.344322155Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'use_existing_template': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_launch_template.this will be created
+  + resource "aws_launch_template" "this" {
+      + arn                    = (known after apply)
+      + default_version        = (known after apply)
+      + description            = "Launch template for auto scaling group eits-tf-aws-autoscaling"
+      + id                     = (known after apply)
+      + image_id               = "ami-06446373a3c45693b"
+      + instance_type          = "t3.micro"
+      + latest_version         = (known after apply)
+      + name                   = "eits-tf-aws-autoscaling-template-lt"
+      + name_prefix            = (known after apply)
+      + region                 = "eu-west-2"
+      + tags                   = {
+          + "AppID"         = "23117"
+          + "BusinessUnit"  = "EITS"
+          + "CostString"    = "2000.GB.139.606005"
+          + "CreatedWith"   = "Terraform"
+          + "Environment"   = "sbx"
+          + "ResourceOwner" = "eitsukicloud@experian.com"
+        }
+      + tags_all               = {
+          + "AppID"         = "23117"
+          + "BusinessUnit"  = "EITS"
+          + "CostString"    = "2000.GB.139.606005"
+          + "CreatedWith"   = "Terraform"
+          + "Environment"   = "sbx"
+          + "ResourceOwner" = "eitsukicloud@experian.com"
+        }
+      + update_default_version = true
+      + vpc_security_group_ids = (known after apply)
+
+      + block_device_mappings {
+          + device_name = "/dev/sde"
+
+          + ebs {
+              + delete_on_termination      = "true"
+              + iops                       = (known after apply)
+              + throughput                 = (known after apply)
+              + volume_initialization_rate = (known after apply)
+              + volume_size                = 30
+              + volume_type                = "gp3"
+            }
+        }
+
+      + metadata_options {
+          + http_endpoint               = (known after apply)
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = (known after apply)
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = (known after apply)
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"         = "23117"
+              + "BusinessUnit"  = "EITS"
+              + "CostString"    = "2000.GB.139.606005"
+              + "CreatedWith"   = "Terraform"
+              + "Environment"   = "sbx"
+              + "ResourceOwner" = "eitsukicloud@experian.com"
+              + "adDomain"      = "gdc.local"
+              + "adGroup"       = "WS-ADM_example_ec2_servers"
+            }
+        }
+    }
+
+  # module.autoscaling.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + desired_capacity                 = (known after apply)
+      + enabled_metrics                  = [
+          + "GroupInServiceCapacity",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = (known after apply)
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 2
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + region                           = "eu-west-2"
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + termination_policies             = []
+      + vpc_zone_identifier              = [
+          + "subnet-0007176f4041512f4",
+          + "subnet-07f7f119f8527be21",
+          + "subnet-0f7f54f853d636f9a",
+        ]
+      + wait_for_capacity_timeout        = "10m"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "AppID"
+          + propagate_at_launch = true
+          + value               = "23117"
+        }
+      + tag {
+          + key                 = "BusinessUnit"
+          + propagate_at_launch = true
+          + value               = "EITS"
+        }
+      + tag {
+          + key                 = "CostString"
+          + propagate_at_launch = true
+          + value               = "2000.GB.139.606005"
+        }
+      + tag {
+          + key                 = "CreatedWith"
+          + propagate_at_launch = true
+          + value               = "Terraform"
+        }
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "sbx"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-asg"
+        }
+      + tag {
+          + key                 = "ResourceName"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-asg"
+        }
+      + tag {
+          + key                 = "ResourceOwner"
+          + propagate_at_launch = true
+          + value               = "eitsukicloud@experian.com"
+        }
+      + tag {
+          + key                 = "eitsce:modulename"
+          + propagate_at_launch = true
+          + value               = "eits-tf-aws-autoscaling"
+        }
+      + tag {
+          + key                 = "eitsce:moduleversion"
+          + propagate_at_launch = true
+          + value               = "local"
+        }
+      + tag {
+          + key                 = "eitsce:tagschecked"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # module.autoscaling.aws_iam_service_linked_role.this[0] will be created
+  + resource "aws_iam_service_linked_role" "this" {
+      + arn              = (known after apply)
+      + aws_service_name = "autoscaling.amazonaws.com"
+      + create_date      = (known after apply)
+      + custom_suffix    = "eits-tf-aws-autoscaling-template"
+      + description      = "A service linked role for autoscaling"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + path             = (known after apply)
+      + tags_all         = (known after apply)
+      + unique_id        = (known after apply)
+    }
+
+  # module.autoscaling.aws_kms_grant.this[0] will be created
+  + resource "aws_kms_grant" "this" {
+      + grant_id          = (known after apply)
+      + grant_token       = (sensitive value)
+      + grantee_principal = (known after apply)
+      + id                = (known after apply)
+      + key_id            = "arn:aws:kms:eu-west-2:363353661606:key/4e9611e2-dd2a-4b8c-b79d-1b7602d5155f"
+      + name              = "GrantAutoScalingRoleAccessToAMI"
+      + operations        = [
+          + "CreateGrant",
+          + "Decrypt",
+          + "DescribeKey",
+          + "Encrypt",
+          + "GenerateDataKey",
+          + "GenerateDataKeyWithoutPlaintext",
+          + "ReEncryptFrom",
+          + "ReEncryptTo",
+        ]
+      + region            = "eu-west-2"
+      + retire_on_delete  = false
+    }
+
+  # module.autoscaling.time_sleep.wait_for_role[0] will be created
+  + resource "time_sleep" "wait_for_role" {
+      + create_duration = "10s"
+      + id              = (known after apply)
+    }
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "For eits-tf-aws-autoscaling module testing"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.145/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.145/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.146/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.146/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.147/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.147/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_8"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = 8
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 0
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "SSH"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.autoscaling.module.alarm["in_service"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to detect when the capacity in the group is below the desired capacity required for your workload."
+      + alarm_name                            = "AWS/AutoScaling GroupInServiceCapacity AutoScalingGroupName=uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-asg"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-template-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "GroupInServiceCapacity"
+      + namespace                             = "AWS/AutoScaling"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = (known after apply)
+      + treat_missing_data                    = "breaching"
+    }
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'use_existing_template': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a1-960b-81b4-94c0-aea502588001%252A2c2026-03-27T15%2525%25252A3a26%2525%25252A3a32.276256558Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'use_kms_key': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.autoscaling.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + default_instance_warmup          = 300
+      + desired_capacity                 = (known after apply)
+      + enabled_metrics                  = [
+          + "GroupInServiceCapacity",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = "EC2"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 2
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + region                           = "eu-west-2"
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + termination_policies             = []
+      + vpc_zone_identifier              = [
+          + "subnet-0007176f4041512f4",
+          + "subnet-07f7f119f8527be21",
+          + "subnet-0f7f54f853d636f9a",
+        ]
+      + wait_for_capacity_timeout        = "0"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "AppID"
+          + propagate_at_launch = true
+          + value               = "23117"
+        }
+      + tag {
+          + key                 = "BusinessUnit"
+          + propagate_at_launch = true
+          + value               = "EITS"
+        }
+      + tag {
+          + key                 = "CostString"
+          + propagate_at_launch = true
+          + value               = "2000.GB.139.606005"
+        }
+      + tag {
+          + key                 = "CreatedWith"
+          + propagate_at_launch = true
+          + value               = "Terraform"
+        }
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "sbx"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-asg"
+        }
+      + tag {
+          + key                 = "ResourceName"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-asg"
+        }
+      + tag {
+          + key                 = "ResourceOwner"
+          + propagate_at_launch = true
+          + value               = "eitsukicloud@experian.com"
+        }
+      + tag {
+          + key                 = "eitsce:modulename"
+          + propagate_at_launch = true
+          + value               = "eits-tf-aws-autoscaling"
+        }
+      + tag {
+          + key                 = "eitsce:moduleversion"
+          + propagate_at_launch = true
+          + value               = "local"
+        }
+      + tag {
+          + key                 = "eitsce:tagschecked"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # module.autoscaling.aws_iam_service_linked_role.this[0] will be created
+  + resource "aws_iam_service_linked_role" "this" {
+      + arn              = (known after apply)
+      + aws_service_name = "autoscaling.amazonaws.com"
+      + create_date      = (known after apply)
+      + custom_suffix    = "eits-tf-aws-autoscaling-use-kms"
+      + description      = "A service linked role for autoscaling"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + path             = (known after apply)
+      + tags_all         = (known after apply)
+      + unique_id        = (known after apply)
+    }
+
+  # module.autoscaling.aws_kms_grant.this[0] will be created
+  + resource "aws_kms_grant" "this" {
+      + grant_id          = (known after apply)
+      + grant_token       = (sensitive value)
+      + grantee_principal = (known after apply)
+      + id                = (known after apply)
+      + key_id            = "arn:aws:kms:eu-west-2:363353661606:key/4e9611e2-dd2a-4b8c-b79d-1b7602d5155f"
+      + name              = "GrantAutoScalingRoleAccessToAMI"
+      + operations        = [
+          + "CreateGrant",
+          + "Decrypt",
+          + "DescribeKey",
+          + "Encrypt",
+          + "GenerateDataKey",
+          + "GenerateDataKeyWithoutPlaintext",
+          + "ReEncryptFrom",
+          + "ReEncryptTo",
+        ]
+      + region            = "eu-west-2"
+      + retire_on_delete  = false
+    }
+
+  # module.autoscaling.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                                  = (known after apply)
+      + default_version                      = (known after apply)
+      + description                          = "Launch template for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-asg"
+      + ebs_optimized                        = "true"
+      + id                                   = (known after apply)
+      + image_id                             = "ami-06446373a3c45693b"
+      + instance_initiated_shutdown_behavior = "stop"
+      + instance_type                        = "t3.micro"
+      + latest_version                       = (known after apply)
+      + name                                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-lt"
+      + name_prefix                          = (known after apply)
+      + region                               = "eu-west-2"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + update_default_version               = true
+      + vpc_security_group_ids               = (known after apply)
+
+      + block_device_mappings {
+          + device_name = "/dev/sda1"
+
+          + ebs (known after apply)
+        }
+      + block_device_mappings {
+          + device_name = "/dev/sde"
+
+          + ebs (known after apply)
+        }
+
+      + enclave_options {
+          + enabled = false
+        }
+
+      + hibernation_options {
+          + configured = false
+        }
+
+      + iam_instance_profile {
+          + name = "eec-aws-amifactory-sc-iam-ec2role"
+        }
+
+      + maintenance_options {
+          + auto_recovery = "default"
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + network_performance_options {
+          + bandwidth_weighting = "default"
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "adDomain"             = "gdc.local"
+              + "adGroup"              = "WS-ADM_example_ec2_servers"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+      + tag_specifications {
+          + resource_type = "volume"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+    }
+
+  # module.autoscaling.time_sleep.wait_for_role[0] will be created
+  + resource "time_sleep" "wait_for_role" {
+      + create_duration = "10s"
+      + id              = (known after apply)
+    }
+
+  # module.kms_key.aws_kms_key.this will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key for autoscaling group eits-tf-aws-autoscaling-use-kms instances"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:root"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/AdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling_eits-tf-aws-autoscaling-use-kms",
+                              + "arn:aws:iam::077820194866:role/BURoleForAWSBackup",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:RevokeGrant",
+                          + "kms:ListGrants",
+                          + "kms:CreateGrant",
+                        ]
+                      + Condition = {
+                          + Bool = {
+                              + "kms:GrantIsForAWSResource" = "true"
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling_eits-tf-aws-autoscaling-use-kms"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyServiceUsage"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = (known after apply)
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.3.0"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.3.0"
+        }
+    }
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "For eits-tf-aws-autoscaling module testing"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.145/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.145/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.146/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.146/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.147/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.147/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_8"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = 8
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 0
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "SSH"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.autoscaling.module.alarm["in_service"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to detect when the capacity in the group is below the desired capacity required for your workload."
+      + alarm_name                            = "AWS/AutoScaling GroupInServiceCapacity AutoScalingGroupName=uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-asg"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-use-kms-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "GroupInServiceCapacity"
+      + namespace                             = "AWS/AutoScaling"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = (known after apply)
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.kms_key.module.eits_vars.validation_warnings.eits_validation will be created
+  + resource "validation_warnings" "eits_validation" {
+      + id = (known after apply)
+
+      + warning {
+          + condition = false
+          + details   = <<-EOT
+                If the account name is not compliant with the standard (and thus is missing some information), then please ensure that the generated prefix is correct. 
+                    If the generated output is incorrect or you need a different prefix label, then please manually provide the label, without using this module.
+            EOT
+          + summary   = "The account name is not in a standard format. The format should be like 'eec-aws-<country_code>-<bu>-<product_name>-<environment>'"
+        }
+      + warning {
+          + condition = false
+          + details   = "From 1st September 2023 this tag is required. The format of the 'CostString' tag should be like '1234.CC.123.123456'"
+          + summary   = "Invalid Cost Centre string in 'CostString' tag. The format should be like '1234.CC.123.123456'"
+        }
+      + warning {
+          + condition = false
+          + details   = "From 1st September 2023 this tag is required. 'AppID' and 'Environment' tags are both required. AppID = 0 is only valid for Sandbox accounts (Environment = 'sbx')"
+          + summary   = "'AppID' tag is required"
+        }
+      + warning {
+          + condition = false
+          + details   = "From 1st September 2023 this tag is required. 'Environment' tag not valid. It must be one of [prd,stg,uat,tst,dev,sbx]"
+          + summary   = "'Environment' tag is required"
+        }
+    }
+
+Plan: 15 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'use_kms_key': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a1-dd0b-8a7b-9a3d-64661e608001%252A2c2026-03-27T15%2525%25252A3a27%2525%25252A3a44.070922191Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'with_network_performance_options': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.autoscaling_supported.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + default_instance_warmup          = 300
+      + desired_capacity                 = (known after apply)
+      + enabled_metrics                  = [
+          + "GroupInServiceCapacity",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = "EC2"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 2
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + region                           = "eu-west-2"
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + termination_policies             = []
+      + vpc_zone_identifier              = [
+          + "subnet-0007176f4041512f4",
+          + "subnet-07f7f119f8527be21",
+          + "subnet-0f7f54f853d636f9a",
+        ]
+      + wait_for_capacity_timeout        = "0"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "AppID"
+          + propagate_at_launch = true
+          + value               = "23117"
+        }
+      + tag {
+          + key                 = "BusinessUnit"
+          + propagate_at_launch = true
+          + value               = "EITS"
+        }
+      + tag {
+          + key                 = "CostString"
+          + propagate_at_launch = true
+          + value               = "2000.GB.139.606005"
+        }
+      + tag {
+          + key                 = "CreatedWith"
+          + propagate_at_launch = true
+          + value               = "Terraform"
+        }
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "sbx"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+        }
+      + tag {
+          + key                 = "ResourceName"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+        }
+      + tag {
+          + key                 = "ResourceOwner"
+          + propagate_at_launch = true
+          + value               = "eitsukicloud@experian.com"
+        }
+      + tag {
+          + key                 = "eitsce:modulename"
+          + propagate_at_launch = true
+          + value               = "eits-tf-aws-autoscaling"
+        }
+      + tag {
+          + key                 = "eitsce:moduleversion"
+          + propagate_at_launch = true
+          + value               = "local"
+        }
+      + tag {
+          + key                 = "eitsce:tagschecked"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # module.autoscaling_supported.aws_iam_service_linked_role.this[0] will be created
+  + resource "aws_iam_service_linked_role" "this" {
+      + arn              = (known after apply)
+      + aws_service_name = "autoscaling.amazonaws.com"
+      + create_date      = (known after apply)
+      + custom_suffix    = "eits-tf-aws-asg-net-perf-supported"
+      + description      = "A service linked role for autoscaling"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + path             = (known after apply)
+      + tags_all         = (known after apply)
+      + unique_id        = (known after apply)
+    }
+
+  # module.autoscaling_supported.aws_kms_grant.this[0] will be created
+  + resource "aws_kms_grant" "this" {
+      + grant_id          = (known after apply)
+      + grant_token       = (sensitive value)
+      + grantee_principal = (known after apply)
+      + id                = (known after apply)
+      + key_id            = "arn:aws:kms:eu-west-2:363353661606:key/4e9611e2-dd2a-4b8c-b79d-1b7602d5155f"
+      + name              = "GrantAutoScalingRoleAccessToAMI"
+      + operations        = [
+          + "CreateGrant",
+          + "Decrypt",
+          + "DescribeKey",
+          + "Encrypt",
+          + "GenerateDataKey",
+          + "GenerateDataKeyWithoutPlaintext",
+          + "ReEncryptFrom",
+          + "ReEncryptTo",
+        ]
+      + region            = "eu-west-2"
+      + retire_on_delete  = false
+    }
+
+  # module.autoscaling_supported.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                                  = (known after apply)
+      + default_version                      = (known after apply)
+      + description                          = "Launch template for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+      + ebs_optimized                        = "true"
+      + id                                   = (known after apply)
+      + image_id                             = "ami-06446373a3c45693b"
+      + instance_initiated_shutdown_behavior = "stop"
+      + instance_type                        = "c8i.xlarge"
+      + latest_version                       = (known after apply)
+      + name                                 = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-lt"
+      + name_prefix                          = (known after apply)
+      + region                               = "eu-west-2"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + update_default_version               = true
+      + vpc_security_group_ids               = (known after apply)
+
+      + enclave_options {
+          + enabled = false
+        }
+
+      + hibernation_options {
+          + configured = false
+        }
+
+      + iam_instance_profile {
+          + name = "eec-aws-amifactory-sc-iam-ec2role"
+        }
+
+      + maintenance_options {
+          + auto_recovery = "default"
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + network_performance_options {
+          + bandwidth_weighting = "vpc-1"
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "adDomain"             = "gdc.local"
+              + "adGroup"              = "WS-ADM_example_ec2_servers"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+      + tag_specifications {
+          + resource_type = "volume"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+    }
+
+  # module.autoscaling_supported.time_sleep.wait_for_role[0] will be created
+  + resource "time_sleep" "wait_for_role" {
+      + create_duration = "10s"
+      + id              = (known after apply)
+    }
+
+  # module.autoscaling_supported.module.alarm["in_service"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to detect when the capacity in the group is below the desired capacity required for your workload."
+      + alarm_name                            = "AWS/AutoScaling GroupInServiceCapacity AutoScalingGroupName=uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "GroupInServiceCapacity"
+      + namespace                             = "AWS/AutoScaling"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = (known after apply)
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "Security group for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-asg"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-asg-net-perf-supported-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "SSH"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.241.0/27"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 4750
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.226.224.0/24"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 4750
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.28.243.0/24"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.13.24.0/28"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.31.135.102/32"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_c"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.195.240/28"
+      + description            = "CyberArk UK CPM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_d"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.196.0/27"
+      + description            = "CyberArk UK PSM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.autoscaling_supported.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 17472
+    }
+
+  # module.autoscaling_supported.module.security_group[0].time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 19 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_network_performance_options': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a2-200b-8df3-8b9c-f7b2f7a98001%252A2c2026-03-27T15%2525%25252A3a28%2525%25252A3a50.217192723Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'with_scaling_policy': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.autoscaling.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + default_instance_warmup          = 300
+      + desired_capacity                 = (known after apply)
+      + enabled_metrics                  = [
+          + "GroupInServiceCapacity",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = "EC2"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 2
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + region                           = "eu-west-2"
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + termination_policies             = []
+      + vpc_zone_identifier              = [
+          + "subnet-0007176f4041512f4",
+          + "subnet-07f7f119f8527be21",
+          + "subnet-0f7f54f853d636f9a",
+        ]
+      + wait_for_capacity_timeout        = "0"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "AppID"
+          + propagate_at_launch = true
+          + value               = "23117"
+        }
+      + tag {
+          + key                 = "BusinessUnit"
+          + propagate_at_launch = true
+          + value               = "EITS"
+        }
+      + tag {
+          + key                 = "CostString"
+          + propagate_at_launch = true
+          + value               = "2000.GB.139.606005"
+        }
+      + tag {
+          + key                 = "CreatedWith"
+          + propagate_at_launch = true
+          + value               = "Terraform"
+        }
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "sbx"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+        }
+      + tag {
+          + key                 = "ResourceName"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+        }
+      + tag {
+          + key                 = "ResourceOwner"
+          + propagate_at_launch = true
+          + value               = "eitsukicloud@experian.com"
+        }
+      + tag {
+          + key                 = "eitsce:modulename"
+          + propagate_at_launch = true
+          + value               = "eits-tf-aws-autoscaling"
+        }
+      + tag {
+          + key                 = "eitsce:moduleversion"
+          + propagate_at_launch = true
+          + value               = "local"
+        }
+      + tag {
+          + key                 = "eitsce:tagschecked"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # module.autoscaling.aws_autoscaling_policy.this["CPU Tracking Policy"] will be created
+  + resource "aws_autoscaling_policy" "this" {
+      + arn                     = (known after apply)
+      + autoscaling_group_name  = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+      + enabled                 = true
+      + id                      = (known after apply)
+      + metric_aggregation_type = (known after apply)
+      + name                    = "CPU Tracking Policy"
+      + policy_type             = "TargetTrackingScaling"
+      + region                  = "eu-west-2"
+
+      + target_tracking_configuration {
+          + disable_scale_in = false
+          + target_value     = 50
+
+          + predefined_metric_specification {
+              + predefined_metric_type = "ASGAverageCPUUtilization"
+            }
+        }
+    }
+
+  # module.autoscaling.aws_autoscaling_policy.this["Step Scaling Policy"] will be created
+  + resource "aws_autoscaling_policy" "this" {
+      + adjustment_type           = "PercentChangeInCapacity"
+      + arn                       = (known after apply)
+      + autoscaling_group_name    = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+      + enabled                   = true
+      + estimated_instance_warmup = 300
+      + id                        = (known after apply)
+      + metric_aggregation_type   = (known after apply)
+      + name                      = "Step Scaling Policy"
+      + policy_type               = "StepScaling"
+      + region                    = "eu-west-2"
+
+      + step_adjustment {
+          + metric_interval_lower_bound = "0"
+          + metric_interval_upper_bound = "5"
+          + scaling_adjustment          = 20
+        }
+      + step_adjustment {
+          + metric_interval_lower_bound = "15"
+          + scaling_adjustment          = 50
+            # (1 unchanged attribute hidden)
+        }
+      + step_adjustment {
+          + metric_interval_lower_bound = "5"
+          + metric_interval_upper_bound = "15"
+          + scaling_adjustment          = 25
+        }
+    }
+
+  # module.autoscaling.aws_iam_service_linked_role.this[0] will be created
+  + resource "aws_iam_service_linked_role" "this" {
+      + arn              = (known after apply)
+      + aws_service_name = "autoscaling.amazonaws.com"
+      + create_date      = (known after apply)
+      + custom_suffix    = "eits-tf-aws-autoscaling-sscaling"
+      + description      = "A service linked role for autoscaling"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + path             = (known after apply)
+      + tags_all         = (known after apply)
+      + unique_id        = (known after apply)
+    }
+
+  # module.autoscaling.aws_kms_grant.this[0] will be created
+  + resource "aws_kms_grant" "this" {
+      + grant_id          = (known after apply)
+      + grant_token       = (sensitive value)
+      + grantee_principal = (known after apply)
+      + id                = (known after apply)
+      + key_id            = "arn:aws:kms:eu-west-2:363353661606:key/4e9611e2-dd2a-4b8c-b79d-1b7602d5155f"
+      + name              = "GrantAutoScalingRoleAccessToAMI"
+      + operations        = [
+          + "CreateGrant",
+          + "Decrypt",
+          + "DescribeKey",
+          + "Encrypt",
+          + "GenerateDataKey",
+          + "GenerateDataKeyWithoutPlaintext",
+          + "ReEncryptFrom",
+          + "ReEncryptTo",
+        ]
+      + region            = "eu-west-2"
+      + retire_on_delete  = false
+    }
+
+  # module.autoscaling.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                                  = (known after apply)
+      + default_version                      = (known after apply)
+      + description                          = "Launch template for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+      + ebs_optimized                        = "true"
+      + id                                   = (known after apply)
+      + image_id                             = "ami-06446373a3c45693b"
+      + instance_initiated_shutdown_behavior = "stop"
+      + instance_type                        = "t3.micro"
+      + latest_version                       = (known after apply)
+      + name                                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-lt"
+      + name_prefix                          = (known after apply)
+      + region                               = "eu-west-2"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + update_default_version               = true
+      + vpc_security_group_ids               = (known after apply)
+
+      + enclave_options {
+          + enabled = false
+        }
+
+      + hibernation_options {
+          + configured = false
+        }
+
+      + iam_instance_profile {
+          + name = "eec-aws-amifactory-sc-iam-ec2role"
+        }
+
+      + maintenance_options {
+          + auto_recovery = "default"
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + network_performance_options {
+          + bandwidth_weighting = "default"
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "adDomain"             = "gdc.local"
+              + "adGroup"              = "WS-ADM_example_ec2_servers"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+      + tag_specifications {
+          + resource_type = "volume"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+    }
+
+  # module.autoscaling.time_sleep.wait_for_role[0] will be created
+  + resource "time_sleep" "wait_for_role" {
+      + create_duration = "10s"
+      + id              = (known after apply)
+    }
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "For eits-tf-aws-autoscaling module testing"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.145/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.145/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.146/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.146/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.147/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.147/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_8"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = 8
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 0
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "SSH"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.autoscaling.module.alarm["in_service"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to detect when the capacity in the group is below the desired capacity required for your workload."
+      + alarm_name                            = "AWS/AutoScaling GroupInServiceCapacity AutoScalingGroupName=uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-sscaling-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "GroupInServiceCapacity"
+      + namespace                             = "AWS/AutoScaling"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = (known after apply)
+      + treat_missing_data                    = "breaching"
+    }
+
+Plan: 15 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_scaling_policy': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a2-630b-8ce0-962f-6fafb3188001%252A2c2026-03-27T15%2525%25252A3a29%2525%25252A3a57.666813858Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'with_sns_alarms': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.autoscaling.aws_autoscaling_group.this[0] will be created
+  + resource "aws_autoscaling_group" "this" {
+      + arn                              = (known after apply)
+      + availability_zones               = (known after apply)
+      + default_cooldown                 = (known after apply)
+      + default_instance_warmup          = 300
+      + desired_capacity                 = (known after apply)
+      + enabled_metrics                  = [
+          + "GroupInServiceCapacity",
+        ]
+      + force_delete                     = false
+      + force_delete_warm_pool           = false
+      + health_check_grace_period        = 300
+      + health_check_type                = "EC2"
+      + id                               = (known after apply)
+      + ignore_failed_scaling_activities = false
+      + load_balancers                   = (known after apply)
+      + max_size                         = 2
+      + metrics_granularity              = "1Minute"
+      + min_size                         = 1
+      + name                             = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-asg"
+      + name_prefix                      = (known after apply)
+      + predicted_capacity               = (known after apply)
+      + protect_from_scale_in            = false
+      + region                           = "eu-west-2"
+      + service_linked_role_arn          = (known after apply)
+      + target_group_arns                = (known after apply)
+      + termination_policies             = []
+      + vpc_zone_identifier              = [
+          + "subnet-0007176f4041512f4",
+          + "subnet-07f7f119f8527be21",
+          + "subnet-0f7f54f853d636f9a",
+        ]
+      + wait_for_capacity_timeout        = "0"
+      + warm_pool_size                   = (known after apply)
+
+      + availability_zone_distribution (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + launch_template {
+          + id      = (known after apply)
+          + name    = (known after apply)
+          + version = (known after apply)
+        }
+
+      + mixed_instances_policy (known after apply)
+
+      + tag {
+          + key                 = "AppID"
+          + propagate_at_launch = true
+          + value               = "23117"
+        }
+      + tag {
+          + key                 = "BusinessUnit"
+          + propagate_at_launch = true
+          + value               = "EITS"
+        }
+      + tag {
+          + key                 = "CostString"
+          + propagate_at_launch = true
+          + value               = "2000.GB.139.606005"
+        }
+      + tag {
+          + key                 = "CreatedWith"
+          + propagate_at_launch = true
+          + value               = "Terraform"
+        }
+      + tag {
+          + key                 = "Environment"
+          + propagate_at_launch = true
+          + value               = "sbx"
+        }
+      + tag {
+          + key                 = "Name"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-asg"
+        }
+      + tag {
+          + key                 = "ResourceName"
+          + propagate_at_launch = true
+          + value               = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-asg"
+        }
+      + tag {
+          + key                 = "ResourceOwner"
+          + propagate_at_launch = true
+          + value               = "eitsukicloud@experian.com"
+        }
+      + tag {
+          + key                 = "eitsce:modulename"
+          + propagate_at_launch = true
+          + value               = "eits-tf-aws-autoscaling"
+        }
+      + tag {
+          + key                 = "eitsce:moduleversion"
+          + propagate_at_launch = true
+          + value               = "local"
+        }
+      + tag {
+          + key                 = "eitsce:tagschecked"
+          + propagate_at_launch = true
+          + value               = "true"
+        }
+
+      + traffic_source (known after apply)
+    }
+
+  # module.autoscaling.aws_iam_service_linked_role.this[0] will be created
+  + resource "aws_iam_service_linked_role" "this" {
+      + arn              = (known after apply)
+      + aws_service_name = "autoscaling.amazonaws.com"
+      + create_date      = (known after apply)
+      + custom_suffix    = "eits-tf-aws-autoscaling-alarms"
+      + description      = "A service linked role for autoscaling"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + path             = (known after apply)
+      + tags_all         = (known after apply)
+      + unique_id        = (known after apply)
+    }
+
+  # module.autoscaling.aws_kms_grant.this[0] will be created
+  + resource "aws_kms_grant" "this" {
+      + grant_id          = (known after apply)
+      + grant_token       = (sensitive value)
+      + grantee_principal = (known after apply)
+      + id                = (known after apply)
+      + key_id            = "arn:aws:kms:eu-west-2:363353661606:key/4e9611e2-dd2a-4b8c-b79d-1b7602d5155f"
+      + name              = "GrantAutoScalingRoleAccessToAMI"
+      + operations        = [
+          + "CreateGrant",
+          + "Decrypt",
+          + "DescribeKey",
+          + "Encrypt",
+          + "GenerateDataKey",
+          + "GenerateDataKeyWithoutPlaintext",
+          + "ReEncryptFrom",
+          + "ReEncryptTo",
+        ]
+      + region            = "eu-west-2"
+      + retire_on_delete  = false
+    }
+
+  # module.autoscaling.aws_launch_template.this[0] will be created
+  + resource "aws_launch_template" "this" {
+      + arn                                  = (known after apply)
+      + default_version                      = (known after apply)
+      + description                          = "Launch template for auto scaling group uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-asg"
+      + ebs_optimized                        = "true"
+      + id                                   = (known after apply)
+      + image_id                             = "ami-06446373a3c45693b"
+      + instance_initiated_shutdown_behavior = "stop"
+      + instance_type                        = "t3.micro"
+      + latest_version                       = (known after apply)
+      + name                                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-lt"
+      + name_prefix                          = (known after apply)
+      + region                               = "eu-west-2"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + update_default_version               = true
+      + vpc_security_group_ids               = (known after apply)
+
+      + enclave_options {
+          + enabled = false
+        }
+
+      + hibernation_options {
+          + configured = false
+        }
+
+      + iam_instance_profile {
+          + name = "eec-aws-amifactory-sc-iam-ec2role"
+        }
+
+      + maintenance_options {
+          + auto_recovery = "default"
+        }
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = (known after apply)
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + monitoring {
+          + enabled = true
+        }
+
+      + network_performance_options {
+          + bandwidth_weighting = "default"
+        }
+
+      + tag_specifications {
+          + resource_type = "instance"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "adDomain"             = "gdc.local"
+              + "adGroup"              = "WS-ADM_example_ec2_servers"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+      + tag_specifications {
+          + resource_type = "volume"
+          + tags          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-autoscaling"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+        }
+    }
+
+  # module.autoscaling.time_sleep.wait_for_role[0] will be created
+  + resource "time_sleep" "wait_for_role" {
+      + create_duration = "10s"
+      + id              = (known after apply)
+    }
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "For eits-tf-aws-autoscaling module testing"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.145/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.145/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.146/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.146/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["194.60.173.147/32_tcp_389"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "194.60.173.147/32"
+      + description            = "Centrify"
+      + from_port              = 389
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 389
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_8"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = 8
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 0
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "SSH"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + arn                         = (known after apply)
+      + beginning_archive_time      = (known after apply)
+      + content_based_deduplication = false
+      + fifo_throughput_scope       = (known after apply)
+      + fifo_topic                  = false
+      + id                          = (known after apply)
+      + kms_master_key_id           = "alias/aws/sns"
+      + name                        = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-sns-topic"
+      + name_prefix                 = (known after apply)
+      + owner                       = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "eu-west-2"
+      + signature_version           = (known after apply)
+      + tags                        = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "1.0.0"
+        }
+      + tags_all                    = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "1.0.0"
+        }
+      + tracing_config              = (known after apply)
+    }
+
+  # module.autoscaling.module.alarm["in_service"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "This alarm helps to detect when the capacity in the group is below the desired capacity required for your workload."
+      + alarm_name                            = "AWS/AutoScaling GroupInServiceCapacity AutoScalingGroupName=uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-asg"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "AutoScalingGroupName" = "uk-cloudenablement-sbx-eits-tf-aws-autoscaling-alarms-asg"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "GroupInServiceCapacity"
+      + namespace                             = "AWS/AutoScaling"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-autoscaling"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = (known after apply)
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.sns.module.eits_vars.validation_warnings.eits_validation will be created
+  + resource "validation_warnings" "eits_validation" {
+      + id = (known after apply)
+
+      + warning {
+          + condition = false
+          + details   = <<-EOT
+                If the account name is not compliant with the standard (and thus is missing some information), then please ensure that the generated prefix is correct. 
+                    If the generated output is incorrect or you need a different prefix label, then please manually provide the label, without using this module.
+            EOT
+          + summary   = "The account name is not in a standard format. The format should be like 'eec-aws-<country_code>-<bu>-<product_name>-<environment>'"
+        }
+      + warning {
+          + condition = false
+          + details   = "From 1st September 2023 this tag is required. The format of the 'CostString' tag should be like '1234.CC.123.123456'"
+          + summary   = "Invalid Cost Centre string in 'CostString' tag. The format should be like '1234.CC.123.123456'"
+        }
+      + warning {
+          + condition = false
+          + details   = "From 1st September 2023 this tag is required. 'AppID' and 'Environment' tags are both required. AppID = 0 is only valid for Sandbox accounts (Environment = 'sbx')"
+          + summary   = "'AppID' tag is required"
+        }
+      + warning {
+          + condition = false
+          + details   = "From 1st September 2023 this tag is required. 'Environment' tag not valid. It must be one of [prd,stg,uat,tst,dev,sbx]"
+          + summary   = "'Environment' tag is required"
+        }
+    }
+
+Plan: 15 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_sns_alarms': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%25270069c6a2-bf0b-8586-985a-6efd70868001%252A2c2026-03-27T15%2525%25252A3a31%2525%25252A3a32.229625671Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 27,
+      "queriesExecuted": 27,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
