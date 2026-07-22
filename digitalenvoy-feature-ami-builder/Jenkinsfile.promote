@@ -1,0 +1,246 @@
+pipeline {
+   agent {
+      label 'Linux'
+   }
+
+   options {
+      timestamps()
+      timeout(time: 3, unit: 'HOURS')
+   }
+
+   environment {
+      date          = new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+      time          = new Date().getTime()
+      team_name     = "digitalenvoy"
+      amiRepo       = "${scm.getUserRemoteConfigs()[0].getUrl()}"
+      amiFile       = 'ami.yaml'
+      amiRepoBranch = 'feature/ami-builder'
+   }
+
+   parameters {
+      booleanParam(
+              name: 'Validate plan',
+              defaultValue: false,
+              description: 'Validate/approve the plan before applying?'
+      )
+   }
+
+   stages {
+
+      // ── Stage 1: clone this same repo and load ami.yaml ──────────────────
+      stage('Clone AMI list repo') {
+         when { not { branch "PR-*" } }
+         steps {
+            script {
+               dirName = sh(script: "head /dev/urandom | LC_ALL=C tr -dc A-Za-z0-9 | head -c 13", returnStdout: true).trim()
+               dir(dirName) {
+                  git url: amiRepo, credentialsId: 'artifactory-sa', branch: amiRepoBranch
+                  amiData = readYaml file: amiFile
+               }
+            }
+         }
+      }
+
+      // ── Stage 2: pick project → source env → source region → dest env ────
+      stage('Select Source and Destination') {
+         steps {
+            script {
+               dir(dirName) {
+
+                  // AWS config keyed by env → region
+                  AWS = [
+                          stage: [
+                                  'us-east-1': [account: "131646119455", region: 'us-east-1', externalId: '997355b03cd411ee9ec10aa4bd88de5f'],
+                                  'us-west-2': [account: "131646119455", region: 'us-west-2', externalId: '997355b03cd411ee9ec10aa4bd88de5f']
+                          ],
+                          uat: [
+                                  'us-east-1': [account: "637423375496", region: 'us-east-1', externalId: '188eb460d23111eeaba20a037d8ba073'],
+                                  'us-west-2': [account: "637423375496", region: 'us-west-2', externalId: '188eb460d23111eeaba20a037d8ba073']
+                          ],
+                          prod: [
+                                  'us-east-1': [account: "058264474031", region: 'us-east-1', externalId: 'a9737f20d21c11eea42c0ec8f39c9273'],
+                                  'us-west-2': [account: "058264474031", region: 'us-west-2', externalId: 'a9737f20d21c11eea42c0ec8f39c9273']
+                          ]
+                  ]
+
+                  // 1) Select project (e.g. "digitalenvoy")
+                  def selectedProject = input(
+                          message: 'Select the project to promote',
+                          parameters: [
+                                  choice(choices: amiData.keySet() as List, description: 'Select Project', name: 'SELECT_PROJECT')
+                          ]
+                  )
+
+                  // 2) Select source environment (stage / uat / prod)
+                  def sourceEnv = input(
+                          message: 'Select the source environment',
+                          parameters: [
+                                  choice(choices: ['stage'], description: 'Source Environment', name: 'SOURCE_ENV')
+                          ]
+                  )
+
+
+                  // 3) Select source region — only show regions that actually have AMIs
+                  def sourceRegionData = amiData."${selectedProject}"."${sourceEnv}"
+                  def availableSourceRegions = sourceRegionData.keySet().findAll { r ->
+                     def val = sourceRegionData[r]
+                     val != null && val.toString().trim() != '' && val.toString().trim() != 'null'
+                  } as List
+                  if (availableSourceRegions.isEmpty()) {
+                     error("No AMIs found in ${sourceEnv} for project ${selectedProject}")
+                  }
+                  def sourceRegion = input(
+                          message: 'Select the source region',
+                          parameters: [
+                                  choice(choices: availableSourceRegions, description: 'Source Region', name: 'SOURCE_REGION')
+                          ]
+                  )
+
+                  // 4) Select destination environment
+                  def destinationEnv = input(
+                          message: 'Select the destination environment',
+                          parameters: [
+                                  choice(choices: ['uat', 'prod'], description: 'Destination Environment', name: 'DEST_ENV')
+                          ]
+                  )
+                  // Safety guard (defensive check)
+                  if (sourceEnv != 'stage' || !(destinationEnv in ['uat', 'prod'])) {
+                     error("Only stage -> uat or stage -> prod promotion is allowed.")
+                  }
+
+
+
+                  // Store everything in env vars for downstream stages
+                  env.PROJECT_SELECTED   = selectedProject
+                  env.SOURCE_ENV         = sourceEnv
+                  env.SOURCE_REGION      = sourceRegion
+                  env.DEST_ENV           = destinationEnv
+                  env.DEST_REGION        = sourceRegion // lock same-region promotion only
+                  env.SOURCE_ACCOUNT     = AWS[sourceEnv][sourceRegion].account
+                  env.SOURCE_EXTERNAL_ID = AWS[sourceEnv][sourceRegion].externalId
+                  env.DEST_ACCOUNT       = AWS[destinationEnv][sourceRegion].account
+                  env.DEST_EXTERNAL_ID   = AWS[destinationEnv][sourceRegion].externalId
+               }
+            }
+         }
+      }
+
+      // ── Stage 3: show only AMIs from the chosen region ───────────────────
+      stage('Select AMI') {
+         steps {
+            script {
+               dir(dirName) {
+                  def amiData = readYaml file: amiFile
+
+                  // ami.yaml: digitalenvoy.stage.us-east-1 is now a String or List of Strings
+                  def rawValue = amiData."${env.PROJECT_SELECTED}"."${env.SOURCE_ENV}"."${env.SOURCE_REGION}"
+
+                  // Normalise to a flat List<String>
+                  def amiList = []
+                  if (rawValue instanceof List) {
+                     amiList = rawValue.collect { it.toString().trim() }.findAll { it && it != 'null' }
+                  } else if (rawValue != null && rawValue.toString().trim() != '' && rawValue.toString().trim() != 'null') {
+                     amiList = [rawValue.toString().trim()]
+                  }
+
+                  if (amiList.isEmpty()) {
+                     error("No AMIs found in ${env.SOURCE_ENV}/${env.SOURCE_REGION} for project ${env.PROJECT_SELECTED}")
+                  }
+
+                  def selectedAmi = input(
+                          id: 'selectAmi',
+                          message: "Select an AMI from ${env.SOURCE_ENV}/${env.SOURCE_REGION}",
+                          parameters: [
+                                  choice(name: 'AMI', choices: amiList, description: 'Select the AMI to promote')
+                          ]
+                  )
+
+                  selectedAmiId = selectedAmi.split('\\|')[0].trim()
+                  echo "Selected AMI: ${selectedAmiId}"
+               }
+            }
+         }
+      }
+
+      // ── Stage 4: run Terraform to copy/share the AMI ─────────────────────
+      stage('Promote AMI') {
+         steps {
+            script {
+               withAWS(roleAccount: env.SOURCE_ACCOUNT, region: env.SOURCE_REGION,
+                       role: 'eec-aws-infrastructure-deployment-role',
+                       useNode: true, externalId: env.SOURCE_EXTERNAL_ID, duration: 7200) {
+
+                  dir("ami-builder/promote") {
+                     // Use unique state file path per source env/region and destination env
+                     // Avoids workspace management which requires reading root terraform.tfstate
+                     def stateKey = "ami/nada-digital-envoy/digital-envoy/promote/${env.SOURCE_ENV}-${env.SOURCE_REGION}-to-${env.DEST_ENV}/terraform.tfstate"
+
+                     sh 'rm -rf .terraform.lock.hcl'
+                     sh "terraform init -input=false -no-color -reconfigure -backend-config='key=${stateKey}'"
+                     
+                     sh "terraform plan -no-color -out plan-${date}-${time}-${BUILD_NUMBER} -var destination_account_id=${env.DEST_ACCOUNT} -var image_id=${selectedAmiId} -var aws_region=${env.SOURCE_REGION}"
+
+                     if (params.'Validate plan' == true) {
+                        input(message: 'Proceed with this plan?', ok: 'Yes')
+                     }
+                     sh "terraform apply -no-color plan-${date}-${time}-${BUILD_NUMBER}"
+                  }
+               }
+            }
+         }
+      }
+
+      // ── Stage 5: append promoted AMI to the correct dest env/region ──────
+      stage('Update AMI to Git') {
+         steps {
+            script {
+               dir(dirName) {
+                  def amiYaml = readYaml file: amiFile
+
+                  // Ensure the dest env / region key exists and is a List
+                  if (!amiYaml."${env.PROJECT_SELECTED}"."${env.DEST_ENV}") {
+                     amiYaml."${env.PROJECT_SELECTED}"."${env.DEST_ENV}" = [:]
+                  }
+                  def destEntry = amiYaml."${env.PROJECT_SELECTED}"."${env.DEST_ENV}"."${env.DEST_REGION}"
+                  if (destEntry == null || destEntry.toString().trim() == 'null' || destEntry.toString().trim() == '') {
+                     amiYaml."${env.PROJECT_SELECTED}"."${env.DEST_ENV}"."${env.DEST_REGION}" = []
+                  } else if (!(destEntry instanceof List)) {
+                     amiYaml."${env.PROJECT_SELECTED}"."${env.DEST_ENV}"."${env.DEST_REGION}" = [destEntry.toString()]
+                  }
+
+                  // Append the new entry
+                  def label = "${selectedAmiId} | ${env.PROJECT_SELECTED}-${env.DEST_REGION}-${date}-${time}-${BUILD_NUMBER}"
+                  amiYaml."${env.PROJECT_SELECTED}"."${env.DEST_ENV}"."${env.DEST_REGION}" << label
+
+                  writeYaml file: amiFile, data: amiYaml, overwrite: true
+
+                  withCredentials([usernamePassword(credentialsId: 'artifactory-sa', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                     sh """
+                        set +x
+                        git remote set-url origin https://\$USERNAME:\$PASSWORD@${amiRepo.minus('https://')}
+                     """
+                  }
+                  sh """
+                     git config user.email "jenkins@experian.com"
+                     git config user.name "Jenkins"
+                     git add ${amiFile}
+                     if git diff --cached --quiet; then
+                        echo "No changes to commit."
+                     else
+                        git commit -m "Promote AMI ${selectedAmiId} to ${env.DEST_ENV}/${env.DEST_REGION}"
+                        git push -u origin ${amiRepoBranch}
+                     fi
+                  """
+               }
+            }
+         }
+      }
+   }
+
+   post {
+      always {
+         cleanWs()
+      }
+   }
+}
+
