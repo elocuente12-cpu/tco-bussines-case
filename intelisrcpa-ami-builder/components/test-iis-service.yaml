@@ -1,0 +1,97 @@
+name: TestIISService
+description: >
+  Test component que valida la correcta operacion de IIS
+  en una instancia lanzada desde el snapshot (post-bake).
+  Se ejecuta en el test stage de Image Builder.
+schemaVersion: "1.0"
+
+phases:
+  - name: test
+    steps:
+      - name: VerifyIISServiceRunning
+        action: ExecutePowerShell
+        timeoutSeconds: 120
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              # Verificar que W3SVC (IIS) esta corriendo
+              $svc = Get-Service -Name W3SVC -ErrorAction SilentlyContinue
+              if (-not $svc) {
+                  Write-Error "TEST FAILED: W3SVC service not found."
+                  exit 1
+              }
+              if ($svc.Status -ne 'Running') {
+                  Write-Warning "W3SVC not running, attempting to start..."
+                  Start-Service -Name W3SVC -ErrorAction Stop
+                  Start-Sleep -Seconds 5
+                  $svc = Get-Service -Name W3SVC
+                  if ($svc.Status -ne 'Running') {
+                      Write-Error "TEST FAILED: Could not start W3SVC."
+                      exit 1
+                  }
+              }
+              Write-Output "TEST PASSED: W3SVC is running."
+
+      - name: VerifyIISResponding
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              # Verificar que IIS responde en localhost
+              try {
+                  $response = Invoke-WebRequest -Uri "http://localhost" -UseBasicParsing -TimeoutSec 10
+                  if ($response.StatusCode -eq 200) {
+                      Write-Output "TEST PASSED: IIS responding on http://localhost (HTTP 200)."
+                  } else {
+                      Write-Error "TEST FAILED: IIS returned status code $($response.StatusCode)"
+                      exit 1
+                  }
+              } catch {
+                  Write-Error "TEST FAILED: Could not connect to http://localhost - $($_.Exception.Message)"
+                  exit 1
+              }
+
+      - name: VerifyDotNetRuntime
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              # Verificar .NET Framework 4.5+
+              $dotnet = Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full" -ErrorAction SilentlyContinue
+              if (-not $dotnet -or $dotnet.Release -lt 378389) {
+                  Write-Error "TEST FAILED: .NET Framework 4.5+ not detected."
+                  exit 1
+              }
+              Write-Output "TEST PASSED: .NET Framework $($dotnet.Version) detected (Release: $($dotnet.Release))."
+
+      - name: VerifyScriptsExist
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              # Verificar que los scripts de runtime estan presentes
+              $requiredScripts = @(
+                  "C:\Scripts\Startup\Mount-FsxShare.ps1",
+                  "C:\Scripts\Domain\Join-Domain.ps1",
+                  "C:\Scripts\Domain\Leave-Domain.ps1"
+              )
+
+              $failed = $false
+              foreach ($script in $requiredScripts) {
+                  if (-not (Test-Path $script)) {
+                      Write-Error "TEST FAILED: Missing script: $script"
+                      $failed = $true
+                  } else {
+                      Write-Output "  OK: $script"
+                  }
+              }
+
+              if ($failed) { exit 1 }
+              Write-Output "TEST PASSED: All runtime scripts present."

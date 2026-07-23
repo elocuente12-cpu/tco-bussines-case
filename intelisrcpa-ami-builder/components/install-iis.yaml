@@ -1,0 +1,70 @@
+name: InstallIIS
+description: >
+  Instala IIS Web Server con todos los features y roles necesarios
+  para hospedar aplicaciones .NET/ASP.NET en Windows Server.
+  Incluye configuración de Application Pool y logging W3C.
+schemaVersion: "1.0"
+
+phases:
+  - name: build
+    steps:
+      - name: InstallWebServer
+        action: ExecutePowerShell
+        timeoutSeconds: 900
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              Write-Output "Installing IIS Web Server with all sub-features..."
+              Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools
+              Install-WindowsFeature -Name NET-Framework-45-Features -IncludeAllSubFeature
+              Install-WindowsFeature -Name NET-WCF-Services45 -IncludeAllSubFeature
+              Install-WindowsFeature -Name Web-Asp-Net45
+
+      - name: ConfigureIISDefaults
+        action: ExecutePowerShell
+        timeoutSeconds: 300
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              Import-Module WebAdministration
+
+              # Application Pool: .NET 4.0, AlwaysRunning
+              Set-ItemProperty "IIS:\AppPools\DefaultAppPool" -Name "managedRuntimeVersion" -Value "v4.0"
+              Set-ItemProperty "IIS:\AppPools\DefaultAppPool" -Name "startMode" -Value "AlwaysRunning"
+
+              # Logging: W3C format
+              Set-WebConfigurationProperty -Filter "system.applicationHost/sites/siteDefaults/logFile" `
+                  -Name "logFormat" -Value "W3C"
+
+              Write-Output "IIS defaults configured: .NET 4.0 runtime, AlwaysRunning, W3C logging."
+
+  - name: validate
+    steps:
+      - name: ValidateIISInstallation
+        action: ExecutePowerShell
+        timeoutSeconds: 120
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              $feature = Get-WindowsFeature -Name Web-Server
+              if ($feature.InstallState -ne 'Installed') {
+                  Write-Error "VALIDATION FAILED: IIS Web-Server feature is not installed."
+                  exit 1
+              }
+
+              $aspnet = Get-WindowsFeature -Name Web-Asp-Net45
+              if ($aspnet.InstallState -ne 'Installed') {
+                  Write-Error "VALIDATION FAILED: ASP.NET 4.5 feature is not installed."
+                  exit 1
+              }
+
+              $svc = Get-Service -Name W3SVC -ErrorAction SilentlyContinue
+              if (-not $svc) {
+                  Write-Error "VALIDATION FAILED: W3SVC (IIS) service not found."
+                  exit 1
+              }
+
+              Write-Output "VALIDATION PASSED: IIS installed and W3SVC service present."

@@ -1,0 +1,31 @@
+@Library('splatam_template')_
+
+splatam_template(sonar_token: 'eec-aws-us-eits-intelisrcpa-sonar',
+sonar_key: 'SP-LATAM:EITS:ami-builder-Panama:00000_SP-LATAM:EITS:ami-builder-panama:eec-aws-us-eits-intelisrcpa',
+project: ['intelisrcpa'],
+accounts: [
+    'dev': [
+        'accountname' : 'eec-aws-us-eits-intelisrcpa-dev',
+        'external_id' : 'eec-aws-us-eits-intelisrcpa-dev-external-id',
+        'accountid' : '779394371865',
+        'tagenv' : 'dev'
+    ],
+    'qa' : [
+        'accountname' : 'eec-aws-us-eits-intelisrcpa-test',
+        'external_id' : 'eec-aws-us-eits-intelisrcpa-test-external-id',
+        'accountid' : '409447266290',
+        'tagenv' : 'tst'
+    ],
+    'stg' : [
+        'accountname' : "eec-aws-us-eits-intelisrcpa-uat",
+        'external_id' : "eec-aws-us-eits-intelisrcpa-uat-external-id",
+        'accountid' : "375662988321",
+        'tagenv' : 'uat'
+    ],
+    'pro' : [
+        'accountname' : "eec-aws-us-eits-intelisrcpa-prod",
+        'external_id' : "eec-aws-us-eits-intelisrcpa-prod-external-id",
+        'accountid' : "274193347839",
+        'tagenv' : 'prd'
+    ]
+  ])

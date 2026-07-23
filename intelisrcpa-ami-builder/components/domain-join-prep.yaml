@@ -1,0 +1,282 @@
+name: DomainJoinPreparation
+description: >
+  Prepara la instancia para domain join rapido en runtime.
+  Crea los scripts de Join-Domain (con SSM counter incremental)
+  y Leave-Domain (con reciclaje del numero y cleanup de AD).
+  El domain join real ocurre en runtime via UserData, no durante el bake.
+  Naming: cumple estandar Experian LLAARzEFFOBUNN con numeros reciclables.
+schemaVersion: "1.0"
+
+phases:
+  - name: build
+    steps:
+      - name: CreateDirectories
+        action: ExecutePowerShell
+        timeoutSeconds: 30
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              New-Item -Path "C:\Scripts\Domain" -ItemType Directory -Force | Out-Null
+              New-Item -Path "C:\Scripts\Startup" -ItemType Directory -Force | Out-Null
+              Write-Output "Directories created."
+
+      - name: CreateJoinDomainScript
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              $joinScript = @'
+              <#
+              .SYNOPSIS
+                  Domain join con hostname incremental basado en SSM Parameter Store.
+              .DESCRIPTION
+                  1. Adquiere un numero del pool disponible en SSM (reciclado o incremental)
+                  2. Construye el hostname con formato Experian: {Prefix}{NN}
+                  3. Une la maquina al dominio con credenciales de Secrets Manager
+                  4. Registra el instance-id asociado al numero en SSM
+              .PARAMETER HostnamePrefix
+                  Prefijo del hostname segun estandar Experian (ej: USAEA1UAPWES)
+              .PARAMETER DomainFQDN
+                  FQDN del dominio Active Directory
+              .PARAMETER SecretId
+                  ARN del secreto en Secrets Manager con credenciales de AD
+              .PARAMETER OUPath
+                  OU donde se crea el objeto de computadora
+              .PARAMETER Region
+                  Region AWS
+              #>
+              param(
+                  [Parameter(Mandatory)][string]$HostnamePrefix,
+                  [Parameter(Mandatory)][string]$DomainFQDN,
+                  [Parameter(Mandatory)][string]$SecretId,
+                  [string]$OUPath,
+                  [string]$Region = "us-east-1"
+              )
+
+              Set-StrictMode -Version Latest
+              $ErrorActionPreference = "Stop"
+
+              # ─── Obtener instance-id via IMDSv2 ───────────────────────
+              $token = Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" `
+                  -Headers @{"X-aws-ec2-metadata-token-ttl-seconds" = "300"}
+              $instanceId = Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" `
+                  -Headers @{"X-aws-ec2-metadata-token" = $token}
+
+              # ─── Adquirir numero del pool (SSM Parameter Store) ───────
+              $poolParam = "/intelisrcpa/hostname-pool/$HostnamePrefix"
+              $usedParam = "/intelisrcpa/hostname-used/$HostnamePrefix"
+
+              # Leer numeros disponibles (reciclados por Leave-Domain)
+              $availableNumbers = @()
+              try {
+                  $poolValue = (Get-SSMParameter -Name $poolParam -Region $Region).Value
+                  if ($poolValue -and $poolValue.Trim() -ne "") {
+                      $availableNumbers = $poolValue.Split(",") | Where-Object { $_ -ne "" } | ForEach-Object { [int]$_ }
+                  }
+              } catch {
+                  # Parameter no existe aun, se creara
+              }
+
+              if ($availableNumbers.Count -gt 0) {
+                  # Tomar el primer numero disponible del pool reciclado
+                  $assignedNumber = $availableNumbers[0]
+                  $remainingNumbers = $availableNumbers[1..($availableNumbers.Count - 1)]
+                  $newPoolValue = ($remainingNumbers -join ",")
+                  Write-SSMParameter -Name $poolParam -Value $newPoolValue -Type String -Overwrite $true -Region $Region
+              } else {
+                  # No hay reciclados, incrementar counter
+                  $counterParam = "/intelisrcpa/hostname-counter/$HostnamePrefix"
+                  $currentMax = 0
+                  try {
+                      $currentMax = [int](Get-SSMParameter -Name $counterParam -Region $Region).Value
+                  } catch {}
+                  $assignedNumber = $currentMax + 1
+                  Write-SSMParameter -Name $counterParam -Value "$assignedNumber" -Type String -Overwrite $true -Region $Region
+              }
+
+              # ─── Construir hostname ───────────────────────────────────
+              $hostname = "$HostnamePrefix{0:D2}" -f $assignedNumber
+              Write-Output "Assigned hostname: $hostname (number: $assignedNumber)"
+
+              # ─── Registrar asignacion: instance-id → numero ──────────
+              $mappingParam = "/intelisrcpa/hostname-mapping/$instanceId"
+              $mappingValue = "$HostnamePrefix|$assignedNumber"
+              Write-SSMParameter -Name $mappingParam -Value $mappingValue -Type String -Overwrite $true -Region $Region
+
+              # ─── Obtener credenciales de AD ───────────────────────────
+              $secretValue = Get-SECSecretValue -SecretId $SecretId -Region $Region
+              $creds = $secretValue.SecretString | ConvertFrom-Json
+              $securePassword = ConvertTo-SecureString $creds.password -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential($creds.username, $securePassword)
+
+              # ─── Renombrar y unir al dominio ──────────────────────────
+              Rename-Computer -NewName $hostname -Force
+
+              $joinParams = @{
+                  DomainName = $DomainFQDN
+                  Credential = $credential
+                  NewName    = $hostname
+                  Force      = $true
+                  Restart    = $true
+              }
+              if ($OUPath -and $OUPath -ne "") { $joinParams.OUPath = $OUPath }
+
+              Add-Computer @joinParams
+              # La instancia se reinicia automaticamente despues del join
+              '@
+
+              Set-Content -Path "C:\Scripts\Domain\Join-Domain.ps1" -Value $joinScript -Force
+              Write-Output "Join-Domain.ps1 created."
+
+      - name: CreateLeaveDomainScript
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              $leaveScript = @'
+              <#
+              .SYNOPSIS
+                  Leave domain + reciclaje de hostname number + cleanup de AD.
+              .DESCRIPTION
+                  1. Remueve la maquina del dominio
+                  2. Elimina el objeto de computadora del AD
+                  3. Devuelve el numero al pool de disponibles en SSM
+                  4. Limpia el mapping instance-id → numero
+                  Ejecutado por el Lifecycle Hook del ASG al hacer scale-in.
+              .PARAMETER SecretId
+                  ARN del secreto en Secrets Manager con credenciales de AD
+              .PARAMETER Region
+                  Region AWS
+              #>
+              param(
+                  [Parameter(Mandatory)][string]$SecretId,
+                  [string]$Region = "us-east-1"
+              )
+
+              Set-StrictMode -Version Latest
+              $ErrorActionPreference = "Stop"
+
+              # ─── Obtener instance-id ──────────────────────────────────
+              $token = Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" `
+                  -Headers @{"X-aws-ec2-metadata-token-ttl-seconds" = "300"}
+              $instanceId = Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" `
+                  -Headers @{"X-aws-ec2-metadata-token" = $token}
+
+              # ─── Leer mapping para saber el numero asignado ───────────
+              $mappingParam = "/intelisrcpa/hostname-mapping/$instanceId"
+              $mappingValue = ""
+              try {
+                  $mappingValue = (Get-SSMParameter -Name $mappingParam -Region $Region).Value
+              } catch {
+                  Write-Warning "No mapping found for $instanceId, skipping number recycle."
+              }
+
+              # ─── Obtener credenciales de AD ───────────────────────────
+              $secretValue = Get-SECSecretValue -SecretId $SecretId -Region $Region
+              $creds = $secretValue.SecretString | ConvertFrom-Json
+              $securePassword = ConvertTo-SecureString $creds.password -AsPlainText -Force
+              $credential = New-Object System.Management.Automation.PSCredential($creds.username, $securePassword)
+
+              # ─── Remover del dominio ──────────────────────────────────
+              try {
+                  Remove-Computer -UnjoinDomainCredential $credential -Force -PassThru
+                  Write-Output "Successfully removed from domain."
+              } catch {
+                  Write-Warning "Remove-Computer failed: $($_.Exception.Message)"
+              }
+
+              # ─── Eliminar objeto de AD ────────────────────────────────
+              $computerName = $env:COMPUTERNAME
+              try {
+                  # Usar ADSI para eliminar sin modulo ActiveDirectory
+                  $searcher = New-Object DirectoryServices.DirectorySearcher
+                  $searcher.Filter = "(&(objectClass=computer)(cn=$computerName))"
+                  $result = $searcher.FindOne()
+                  if ($result) {
+                      $computerEntry = $result.GetDirectoryEntry()
+                      $computerEntry.DeleteTree()
+                      Write-Output "AD object '$computerName' deleted."
+                  } else {
+                      Write-Warning "AD object '$computerName' not found."
+                  }
+              } catch {
+                  Write-Warning "Could not delete AD object: $($_.Exception.Message)"
+              }
+
+              # ─── Reciclar numero al pool ──────────────────────────────
+              if ($mappingValue -and $mappingValue.Contains("|")) {
+                  $parts = $mappingValue.Split("|")
+                  $prefix = $parts[0]
+                  $number = $parts[1]
+
+                  $poolParam = "/intelisrcpa/hostname-pool/$prefix"
+                  $currentPool = ""
+                  try {
+                      $currentPool = (Get-SSMParameter -Name $poolParam -Region $Region).Value
+                  } catch {}
+
+                  if ($currentPool -and $currentPool.Trim() -ne "") {
+                      $newPool = "$currentPool,$number"
+                  } else {
+                      $newPool = "$number"
+                  }
+                  Write-SSMParameter -Name $poolParam -Value $newPool -Type String -Overwrite $true -Region $Region
+                  Write-Output "Number $number recycled back to pool for prefix $prefix."
+
+                  # Limpiar mapping
+                  Remove-SSMParameter -Name $mappingParam -Region $Region -Force
+                  Write-Output "Mapping for $instanceId removed."
+              }
+
+              Write-Output "Leave-Domain completed."
+              '@
+
+              Set-Content -Path "C:\Scripts\Domain\Leave-Domain.ps1" -Value $leaveScript -Force
+              Write-Output "Leave-Domain.ps1 created."
+
+      - name: ConfigureDNS
+        action: ExecutePowerShell
+        timeoutSeconds: 30
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              Set-Service -Name Dnscache -StartupType Automatic
+              Write-Output "DNS Client service set to Automatic."
+
+  - name: validate
+    steps:
+      - name: ValidateDomainScripts
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              $scripts = @(
+                  "C:\Scripts\Domain\Join-Domain.ps1",
+                  "C:\Scripts\Domain\Leave-Domain.ps1"
+              )
+
+              foreach ($script in $scripts) {
+                  if (-not (Test-Path $script)) {
+                      Write-Error "VALIDATION FAILED: $script not found"
+                      exit 1
+                  }
+                  # Verificar que es parseable
+                  $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $script -Raw), [ref]$null)
+                  Write-Output "  OK: $script (syntax valid)"
+              }
+
+              $dnsService = Get-Service -Name Dnscache
+              if ($dnsService.StartType -ne 'Automatic') {
+                  Write-Error "VALIDATION FAILED: DNS Client not set to Automatic"
+                  exit 1
+              }
+
+              Write-Output "VALIDATION PASSED: All domain scripts valid and DNS configured."

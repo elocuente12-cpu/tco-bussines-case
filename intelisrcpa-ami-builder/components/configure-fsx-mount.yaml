@@ -1,0 +1,73 @@
+name: ConfigureFsxMount
+description: >
+  Prepara los scripts de mount para FSx for Windows File Server.
+  El mount real se ejecuta en runtime via UserData despues del domain join.
+  Este componente solo pre-crea los scripts para reducir el tiempo de bootstrap.
+schemaVersion: "1.0"
+
+phases:
+  - name: build
+    steps:
+      - name: CreateMountScripts
+        action: ExecutePowerShell
+        timeoutSeconds: 120
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              # Crear directorio para scripts de startup
+              $scriptsPath = "C:\Scripts\Startup"
+              if (-not (Test-Path $scriptsPath)) {
+                  New-Item -Path $scriptsPath -ItemType Directory -Force | Out-Null
+              }
+
+              # Script que se ejecuta en runtime (UserData) para montar FSx
+              $mountScript = @'
+              param(
+                  [Parameter(Mandatory)]
+                  [string]$FsxDnsName,
+                  [string]$ShareName = "share",
+                  [string]$DriveLetter = "Z"
+              )
+
+              $maxRetries = 30
+              $retryCount = 0
+              while ($retryCount -lt $maxRetries) {
+                  try {
+                      $testPath = "\\$FsxDnsName\$ShareName"
+                      if (Test-Path $testPath) { break }
+                  } catch {
+                      Write-Output "Waiting for FSx availability... attempt $retryCount"
+                  }
+                  Start-Sleep -Seconds 10
+                  $retryCount++
+              }
+
+              if (Test-Path "\\$FsxDnsName\$ShareName") {
+                  New-PSDrive -Name $DriveLetter -PSProvider FileSystem `
+                      -Root "\\$FsxDnsName\$ShareName" -Persist -Scope Global
+                  Write-Output "FSx share mounted at ${DriveLetter}:"
+              } else {
+                  Write-Error "FSx share not available after $maxRetries attempts"
+                  exit 1
+              }
+              '@
+
+              Set-Content -Path "$scriptsPath\Mount-FsxShare.ps1" -Value $mountScript -Force
+              Write-Output "FSx mount script created at: $scriptsPath\Mount-FsxShare.ps1"
+
+  - name: validate
+    steps:
+      - name: ValidateMountScript
+        action: ExecutePowerShell
+        timeoutSeconds: 60
+        onFailure: Abort
+        inputs:
+          commands:
+            - |
+              $scriptPath = "C:\Scripts\Startup\Mount-FsxShare.ps1"
+              if (-not (Test-Path $scriptPath)) {
+                  Write-Error "VALIDATION FAILED: Mount script not found at $scriptPath"
+                  exit 1
+              }
+              Write-Output "VALIDATION PASSED: FSx mount script exists."
