@@ -1,6 +1,7 @@
-At C:\Build\Build-AMI.ps1:234 char:106
-+ ... -image --instance-id INSTANCE_ID --name ""$exampleName"" --no-reboot"
-+                                                                         ~
+PS C:\Build> .\Build-AMI.ps1 `    -AmiName "eec-aws-us-eits-intelisrcpa-prd-windows-iis" `    -AppVersion "1.0.0" `    -Environment "prd"
+At C:\Build\Build-AMI.ps1:234 char:100
++ ... --instance-id INSTANCE_ID --name "' + $exampleName + '" --no-reboot')
++                                                           ~~~~~~~~~~~~~~~
 The string is missing the terminator: ".
 At C:\Build\Build-AMI.ps1:162 char:28
 + if (-not $SkipAmiCreation) {
