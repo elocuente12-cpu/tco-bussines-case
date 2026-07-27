@@ -1,31 +1,10 @@
-At C:\Build\Build-AMI.ps1:224 char:43
-+     Write-Output "AMI creation skipped (--SkipAmiCreation). Scripts i ...
-+                                           ~
-Missing expression after unary operator '--'.
-At C:\Build\Build-AMI.ps1:224 char:43
-+     Write-Output "AMI creation skipped (--SkipAmiCreation). Scripts i ...
-+                                           ~~~~~~~~~~~~~~~
-Unexpected token 'SkipAmiCreation' in expression or statement.
-At C:\Build\Build-AMI.ps1:224 char:43
-+     Write-Output "AMI creation skipped (--SkipAmiCreation). Scripts i ...
-+                                           ~
-Missing closing ')' in expression.
+At C:\Build\Build-AMI.ps1:234 char:106
++ ... -image --instance-id INSTANCE_ID --name ""$exampleName"" --no-reboot"
++                                                                         ~
+The string is missing the terminator: ".
 At C:\Build\Build-AMI.ps1:162 char:28
 + if (-not $SkipAmiCreation) {
 +                            ~
 Missing closing '}' in statement block or type definition.
-At C:\Build\Build-AMI.ps1:224 char:58
-+     Write-Output "AMI creation skipped (--SkipAmiCreation). Scripts i ...
-+                                                          ~
-Unexpected token ')' in expression or statement.
-At C:\Build\Build-AMI.ps1:233 char:59
-+     Write-Output "     aws ec2 create-image --instance-id <INSTANCE_I ...
-+                                                           ~
-The '<' operator is reserved for future use.
-At C:\Build\Build-AMI.ps1:233 char:146
-+ ... e `"$AmiName-$(Get-Date -Format yyyyMMdd)-v$AppVersion`" --no-reboot"
-+                                                                         ~
-The string is missing the terminator: ".
     + CategoryInfo          : ParserError: (:) [], ParseException
-    + FullyQualifiedErrorId : MissingExpressionAfterOperator
-tiene menú contextual
+    + FullyQualifiedErrorId : TerminatorExpectedAtEndOfString
