@@ -1,0 +1,71 @@
+Error: Invalid index
+
+  on securitygroups.tf line 133, in module "sg_fsx":
+ 133:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 133, in module "sg_fsx":
+ 133:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 148, in module "sg_fsx":
+ 148:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 148, in module "sg_fsx":
+ 148:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 155, in module "sg_fsx":
+ 155:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 155, in module "sg_fsx":
+ 155:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 162, in module "sg_fsx":
+ 162:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
+
+Error: Invalid index
+
+  on securitygroups.tf line 162, in module "sg_fsx":
+ 162:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+    ├────────────────
+    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+
+The given key does not identify an element in this collection value.
