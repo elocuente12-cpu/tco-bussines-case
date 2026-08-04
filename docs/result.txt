@@ -1,11 +1,22 @@
-CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local
- 
-IdentityReference ActiveDirectoryRights InheritanceType
------------------ --------------------- ---------------
-GDC\C91582B-A                GenericAll            None
-GDC\C91582B-A                GenericAll             All
- 
- 
-False
- 
-PS C:\Users\c91582b-a>
+
+error ejecucion paso 
+
+B.2 — Estado actual del RG
+
+Get-DfsReplicationGroup -GroupName $rg | Format-List GroupName, DomainName, State
+Get-DfsrMember -GroupName $rg | Format-Table ComputerName, DomainName
+Get-DfsrMembership -GroupName $rg |
+  Format-Table ComputerName, ContentPath, StagingPath, StagingPathQuotaInMB, PrimaryMember
+
+Get-ADComputer : Unable to find a default server with Active Directory Web Services running.
+At line:11 char:12
++ $found = @(Get-ADComputer -Filter "Name -eq '$fsxHost'")
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [Get-ADComputer], ADServerDownException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:1355,Microsoft.ActiveDirectory.Management.Commands.GetADComputer
+Se esperaba 1 computer object, se encontraron 0
+At line:12 char:27
++ ... nt -ne 1) { throw "Se esperaba 1 computer object, se encontraron $($f ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Se esperaba 1 c...e encontraron 0:String) [], RuntimeException
+    + FullyQualifiedErrorId : Se esperaba 1 computer object, se encontraron 0
