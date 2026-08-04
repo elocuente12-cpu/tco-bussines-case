@@ -1,30 +1,37 @@
-Cambios
-Ruta — D:\share\Datos → D:\share\APC en las 11 referencias (variables, comandos, UNC, rollback, Fase E). Justificación registrada: consistencia con los otros cuatro miembros, que todos usan APC.
-
-A.1 reescrito — el defecto real. Pasó de ACL manual sobre CN=Topology a:
-
 
 Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
-La alternativa manual quedó en un <details> colapsable, ahora aplicada sobre el objeto del RG completo con herencia, para que cubra Content y Topology. Con el árbol dibujado:
 
 
-CN=APXEXPERIAN,CN=DFSR-GlobalSettings,CN=System,DC=gdc,DC=local
-  ├── CN=Content     -> msDFSR-ContentSet    <- lo que necesita C.3
-  └── CN=Topology    -> msDFSR-Member/Connection <- lo que necesita C.1 y C.2
-Error 5 documentado — los tres mensajes, cuáles son benignos y por qué, la tabla de Microsoft que separa las dos delegaciones, y el síntoma diagnóstico: ContentPath vacío en Get-DfsrMembership mientras los demás muestran su ruta.
+Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
+  -ContentPath $contentPath `
+  -StagingPathQuotaInMB $stagingMB `
+  -ConflictAndDeletedQuotaInMB $conflictMB `
+  -PrimaryMember $false `
+  -Force
 
-Estado actualizado — C.1 ✅ y C.2 ✅ (los hizo el wizard), C.3 ⬜ como único pendiente, más A.1b y B.1b como los dos pasos que lo desbloquean.
+Add-DfsrMember : A computer with the specified name already exists and cannot be added.
+At line:24 char:1
++ Add-DfsrMember -GroupName $rg -ComputerName $fsx -Description "FSx in ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (amznfsxeze56tbv.gdc.local:String) [Add-DfsrMember], DfsrException
+    + FullyQualifiedErrorId : DfsrCore.AddNewMember.MemberAlreadyExists,Microsoft.DistributedFileSystemReplication.Commands.AddDfsrM 
+   emberCommand
+Add-DfsrConnection : Could not add the following connection: DFSR connection with replication group: "APXEXPERIAN"; sending 
+computer: PAHWPAPTUI04; receiving computer: amznfsxeze56tbv.gdc.local; GUID: None specified The connection already exists.
+At line:25 char:1
++ Add-DfsrConnection -GroupName $rg -SourceComputerName $onprem -Destin ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DFSR connection... None specified:String) [Add-DfsrConnection], DfsrException
+    + FullyQualifiedErrorId : Add-DfsrConnection.OMException,Microsoft.DistributedFileSystemReplication.Commands.AddDfsrConnectionCo 
+   mmand
+Set-DfsrMembership : Security cannot be set on the replicated folder. Access is denied
+At line:26 char:1
++ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DFSR membership...None specified.:String) [Set-DfsrMembership], DfsrException
+    + FullyQualifiedErrorId : DfsrCore.ThrowIfInconsistent,Microsoft.DistributedFileSystemReplication.Commands.SetDfsrMembershipComm 
+   and
 
-Antes de reintentar C.3
+ 
+PS C:\Windows\system32>
 
-# 1. Crear la carpeta (Domain Admins)
-New-Item -Type Directory -Path "\\amznfsxeze56tbv.gdc.local\D`$\share\APC"
-
-# 2. Delegación (Domain Admins)
-Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
-
-# 3. Propagar
-repadmin /syncall (Get-ADDomain).PDCEmulator /AdeP
-Luego C.3 con $contentPath = "D:\share\APC", y directo a D.1.
-
-Sigue abierto el Resolve-DnsName PAHWPAPTUI03.gdc.local para contrastar contra las tres IPs del Security Group — es lo que decide si después del 4102 verás replicación o eventos 5002/5004/5008.
