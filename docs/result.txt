@@ -1,22 +1,25 @@
+resultado b2.
 
-error ejecucion paso 
-
-B.2 — Estado actual del RG
-
-Get-DfsReplicationGroup -GroupName $rg | Format-List GroupName, DomainName, State
-Get-DfsrMember -GroupName $rg | Format-Table ComputerName, DomainName
-Get-DfsrMembership -GroupName $rg |
-  Format-Table ComputerName, ContentPath, StagingPath, StagingPathQuotaInMB, PrimaryMember
-
-Get-ADComputer : Unable to find a default server with Active Directory Web Services running.
-At line:11 char:12
-+ $found = @(Get-ADComputer -Filter "Name -eq '$fsxHost'")
-+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ResourceUnavailable: (:) [Get-ADComputer], ADServerDownException
-    + FullyQualifiedErrorId : ActiveDirectoryServer:1355,Microsoft.ActiveDirectory.Management.Commands.GetADComputer
-Se esperaba 1 computer object, se encontraron 0
-At line:12 char:27
-+ ... nt -ne 1) { throw "Se esperaba 1 computer object, se encontraron $($f ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : OperationStopped: (Se esperaba 1 c...e encontraron 0:String) [], RuntimeException
-    + FullyQualifiedErrorId : Se esperaba 1 computer object, se encontraron 0
+GroupName  : APXEXPERIAN
+DomainName : gdc.local
+State      : Normal
+ 
+ 
+ 
+ComputerName DomainName
+------------ ----------
+PAHWPAPTUI03 gdc.local 
+PAHWPAPTUI04 gdc.local 
+PACLPAPTUI03 gdc.local 
+PACLPAPTUI04 gdc.local
+ 
+ 
+ComputerName ContentPath StagingPath                StagingPathQuotaInMB PrimaryMember
+------------ ----------- -----------                -------------------- -------------
+PAHWPAPTUI04 D:\APC      D:\APC\DfsrPrivate\Staging                 4096         False
+PAHWPAPTUI03 E:\APC      E:\APC\DfsrPrivate\Staging                 4096         False
+PACLPAPTUI03 E:\APC      E:\APC\DfsrPrivate\Staging                 4096         False
+PACLPAPTUI04 E:\APC      E:\APC\DfsrPrivate\Staging                 4096         False
+ 
+ 
+PS C:\Windows\system32>
