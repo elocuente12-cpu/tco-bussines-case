@@ -473,15 +473,34 @@ $rf          = "COMPLETAR_DESDE_B2"
 $onprem      = "COMPLETAR_DESDE_B2"
 $fsx         = "amznfsxeze56tbv.gdc.local"
 $contentPath = "D:\share\Datos"
-$stagingMB   = 16384      # ajustar con el resultado de B.3
-$conflictMB  = 4096
+$stagingMB   = 4096       # COMPLETAR CON B.3 - ver tabla de dimensionamiento abajo
+$conflictMB  = 660        # default de DFSR; subir solo si hay muchos conflictos
 # ==============================
 
 # Validacion previa - no continuar si algo sigue como PENDIENTE
 if ($rg -like "COMPLETAR*" -or $rf -like "COMPLETAR*" -or $onprem -like "COMPLETAR*") {
     throw "Faltan valores de B.2. Completar el bloque de variables antes de continuar."
 }
+
+# Validacion de capacidad - dataset + staging + conflict debe caber en el file system
+$capacidadGiB = 32                          # actualizar si se aumenta fsx_storage_capacity
+$datasetGiB   = 20                          # resultado de B.3
+$totalGiB = $datasetGiB + ($stagingMB/1024) + ($conflictMB/1024)
+if ($totalGiB -gt ($capacidadGiB * 0.85)) {
+    throw "No cabe: $([math]::Round($totalGiB,1)) GiB requeridos sobre $capacidadGiB GiB (limite 85%). Aumentar fsx_storage_capacity."
+}
+Write-Host "Capacidad OK: $([math]::Round($totalGiB,1)) de $capacidadGiB GiB" -ForegroundColor Green
 ```
+
+**Dimensionamiento con el dataset actual (~20 GiB) sobre 32 GiB:**
+
+| `$stagingMB` | Total ocupado | % del volumen | Veredicto |
+|---|---|---|---|
+| 4096 (4 GiB) | 24,6 GiB | 77% | Cabe, sin margen de crecimiento |
+| 8192 (8 GiB) | 28,6 GiB | 90% | Demasiado justo |
+| 16384 (16 GiB) | 36,6 GiB | **>100%** | **No cabe** |
+
+`$stagingMB` debe ser ≥ la suma de los 32 archivos más grandes (resultado de B.3). Si ese número supera 4 GiB, **no se puede continuar a 32 GiB de capacidad** — hay que aumentar `fsx_storage_capacity` primero (§7).
 
 ---
 
@@ -742,12 +761,38 @@ Remove-Item "\\amznfsxeze56tbv.gdc.local\D`$\share\Datos\DfsrPrivate" -Recurse -
 
 | Componente | Tamaño |
 |---|---|
-| Datos replicados | dataset completo |
-| Staging (`DfsrPrivate`) | default 4 GB = **12,5% del volumen**; recomendado ≥ suma de los 32 archivos más grandes |
+| Datos replicados | **~20 GiB** (dato aportado por el equipo, pendiente de confirmar con B.3) |
+| Staging (`DfsrPrivate`) | default 4 GiB = **12,5% del volumen**; requerido ≥ suma de los 32 archivos más grandes |
 | `ConflictAndDeleted` | default 660 MB (configurable) |
-| `PreExisting` | solo si hubo pre-seeding con hashes no coincidentes |
+| `PreExisting` | solo si hubo pre-seeding con hashes no coincidentes — no aplica, no se hace pre-seeding |
+
+**Situación con 20 GiB de datos:** 20 + 4 (staging default) + 0,65 (conflict default) = **24,6 GiB, el 77% del volumen**. Cabe, pero sin margen de crecimiento y asumiendo que el staging por defecto alcanza.
 
 Si el staging queda corto, DFSR entra en backlog permanente (eventos 4202/4204). La capacidad se puede aumentar en caliente, pero **no se puede reducir**.
+
+### Recomendación: aumentar a 64 GiB antes de arrancar
+
+| | 32 GiB | 64 GiB |
+|---|---|---|
+| Ocupación con 20 GiB de datos | 77% | 38% |
+| Margen para staging holgado | No | Sí |
+| Margen de crecimiento del share | Nulo | ~30 GiB |
+| SSD IOPS por defecto (3/GiB) | ~96 | ~192 |
+| Costo adicional (SSD, us-east-1 ~$0,13/GB-mes) | — | **~$4/mes** |
+
+**Restricciones del aumento** ([Increasing storage capacity](https://docs.aws.amazon.com/fsx/latest/WindowsGuide/increase-storage-capacity.html)): mínimo 10% por operación, online y sin downtime, hasta 65.536 GiB. De 32 a 64 es un solo salto válido.
+
+**Opción A — vía IaC (preferida):** `fsx_storage_capacity = 64` en `terraform.tfvars:675` y aplicar. Requiere resolver antes el bloqueador de abajo.
+
+**Opción B — vía CLI (desbloquea de inmediato, genera drift):**
+
+```bash
+aws fsx update-file-system --file-system-id fs-XXXXXXXX --storage-capacity 64
+aws fsx describe-file-systems --file-system-id fs-XXXXXXXX \
+  --query "FileSystems[0].AdministrativeActions"
+```
+
+Si se usa B, **reflejar el 64 en tfvars después**: el próximo apply intentaría bajarlo a 32 y fallaría, porque FSx no permite reducir capacidad.
 
 > **Bloqueador para el aumento:** `securitygroups.tf:133` referencia `module.sg_windows["PAHWPWSAPI01"]` y `["PAHWPWFINT01"]`, pero ambas claves están comentadas en el mapa `sg_windows` de `terraform.tfvars:149`. Un `terraform plan` debería fallar con *invalid index*. **Corregir esto antes de necesitar un apply de emergencia.**
 
