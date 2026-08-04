@@ -104,7 +104,7 @@ La **cuenta de servicio de FSx** (`fsx.tf:34-35`) es otra cosa: solo la usa el s
 | `$fsx` | `amznfsxeze56tbv.gdc.local` | AWS |
 | `$fsxDn` | `CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local` | AD |
 | `$dom` | `DC=gdc,DC=local` | — |
-| `$contentPath` | `D:\share\Datos` | Carpeta creada en B.1 |
+| `$contentPath` | `D:\share\APC` | Elegido por consistencia con los otros 4 miembros (todos usan `APC`) |
 | `$stagingMB` | `4096` | B.2 — valor en uso por los 4 miembros actuales |
 | `$conflictMB` | `660` | Default DFSR |
 | Cuenta operativa | `GDC\C91582B-A` | — |
@@ -120,7 +120,7 @@ La **cuenta de servicio de FSx** (`fsx.tf:34-35`) es otra cosa: solo la usa el s
 
 > `PrimaryMember = False` en los cuatro es lo esperado: DFSR limpia esa marca al completar la replicación inicial. Confirma que el RG está convergido, y refuerza que `-PrimaryMember $false` es correcto para el FSx.
 >
-> El `ContentPath` varía entre miembros (`D:` vs `E:`) — es una ruta **local de cada miembro**, no un identificador compartido. Por eso `D:\share\Datos` en el FSx es válido y no hay que alinearlo.
+> El `ContentPath` varía entre miembros (`D:` vs `E:`) — es una ruta **local de cada miembro**, no un identificador compartido. Por eso `D:\share\APC` en el FSx es válido y no hay que alinearlo.
 
 **Valor pendiente de completar antes de entregar a manos remotas:**
 
@@ -185,10 +185,16 @@ Get-DfsrConnection -GroupName "APXEXPERIAN" |
 | B.1 — Carpeta destino en FSx | ✅ completado |
 | B.2 — Descubrimiento del RG | ✅ completado — `$rg`, `$rf`, `$stagingMB` obtenidos |
 | B.3 — Dimensionamiento | ✅ **omitido con justificación** — ver nota |
-| **5.1 — Elegir miembro origen** | ⬜ **pendiente, bloquea la Fase C** |
-| B.4 — Limpiar residuos | ⬜ pendiente |
-| C.1 / C.2 / C.3 | ⬜ pendiente |
+| 5.1 — Elegir miembro origen | ✅ `PAHWPAPTUI03` — pendiente validar su IP contra el SG |
+| B.4 — Limpiar residuos | ⚠️ omitido — el wizard había dejado miembro y conexiones (ver error 5) |
+| C.1 — Agregar miembro | ✅ completado (lo había creado el wizard) |
+| C.2 — Conexiones | ✅ completado — **bidireccional**, ambos sentidos `Enabled = True` |
+| **C.3 — Membresía** | ⬜ **pendiente** — falló con *Access is denied*, ver error 5 |
+| A.1b — `Grant-DfsrDelegation` | ⬜ **pendiente, desbloquea C.3** |
+| B.1b — Crear `D:\share\APC` | ⬜ pendiente (B.1 creó `Datos`) |
 | D.1 / D.2 / D.3 | ⬜ pendiente |
+
+> **Estado real del miembro FSx:** existe en el RG con ambas conexiones activas, pero su membresía tiene **`ContentPath` vacío** — está en el grupo sin replicar nada. C.3 es lo único que falta.
 
 > **Por qué se omite B.3:** los cuatro miembros actuales replican este dataset con `StagingPathQuotaInMB = 4096` de forma estable. Es evidencia operativa directa de que el default alcanza, superior al cálculo teórico de los 32 archivos mayores. Con ~20 GiB de datos: `20 + 4 + 0,65 = 24,6 GiB sobre 32 GiB = 77%` de ocupación. Cabe, sin margen de crecimiento.
 >
@@ -373,9 +379,9 @@ Flags: `/A` todos los naming contexts, `/d` identifica servidores por DN, `/e` c
 ```powershell
 # ===== FASE B - VARIABLES =====
 $fsx         = "amznfsxeze56tbv.gdc.local"
-$contentPath = "D:\share\Datos"
-$uncAdmin    = "\\$fsx\D`$\share\Datos"     # admin share D$ (backtick escapa el $)
-$uncShare    = "\\$fsx\share\Datos"          # share publico
+$contentPath = "D:\share\APC"
+$uncAdmin    = "\\$fsx\D`$\share\APC"     # admin share D$ (backtick escapa el $)
+$uncShare    = "\\$fsx\share\APC"          # share publico
 $rutaOrigen  = "PENDIENTE_RUTA_LOCAL_DEL_REPLICATED_FOLDER_ONPREM"
 # ==============================
 ```
@@ -398,7 +404,7 @@ Get-ChildItem "\\$fsx\D`$\share\"
 
 **Qué hace:** crea por SMB la carpeta que será el replicated folder.
 
-`D$` es el **admin share** del volumen D: del file system. FSx expone el share visible `\share`, que internamente es `D:\share`. Se usa `D$` porque en C.3 hay que declarar la **ruta local vista por el miembro** (`D:\share\Datos`), y esta notación deja explícita la correspondencia.
+`D$` es el **admin share** del volumen D: del file system. FSx expone el share visible `\share`, que internamente es `D:\share`. Se usa `D$` porque en C.3 hay que declarar la **ruta local vista por el miembro** (`D:\share\APC`), y esta notación deja explícita la correspondencia.
 
 **Por qué exige `Domain Admins`:** acceder a un admin share requiere privilegios administrativos sobre el file system, y en FSx eso lo define `file_system_administrators_group`, que en este despliegue es `Domain Admins` (§4).
 
@@ -530,7 +536,7 @@ $rg          = "APXEXPERIAN"
 $rf          = "APC"
 $onprem      = "COMPLETAR_SEGUN_5.1"      # uno de: PAHWPAPTUI03/04, PACLPAPTUI03/04
 $fsx         = "amznfsxeze56tbv.gdc.local"
-$contentPath = "D:\share\Datos"
+$contentPath = "D:\share\APC"
 $stagingMB   = 4096       # validado: los 4 miembros actuales usan este valor
 $conflictMB  = 660        # default de DFSR
 # ==============================
@@ -630,7 +636,7 @@ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
 
 | Parámetro | Atributo AD | Qué hace |
 |---|---|---|
-| `-ContentPath "D:\share\Datos"` | `msDFSR-RootPath` | Ruta **local vista por el FSx**, no la UNC. Corresponde a `\\amznfsxeze56tbv.gdc.local\share\Datos` |
+| `-ContentPath "D:\share\APC"` | `msDFSR-RootPath` | Ruta **local vista por el FSx**, no la UNC. Corresponde a `\\amznfsxeze56tbv.gdc.local\share\APC` |
 | `-StagingPathQuotaInMB` | `msDFSR-StagingSizeInMb` | Tamaño del área de staging. Usar el valor de B.3; el default de 4096 rara vez alcanza |
 | `-ConflictAndDeletedQuotaInMB` | `msDFSR-ConflictSizeInMb` | Espacio para archivos perdedores de conflictos y borrados. Default: 660 MB |
 | `-PrimaryMember $false` | — | **Crítico.** Declara que este miembro *no* es la fuente autoritativa |
@@ -638,7 +644,7 @@ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
 
 > **Por qué `-PrimaryMember $false` es crítico:** en la replicación inicial, el contenido del miembro primario gana. Como el FSx está vacío, marcarlo como primario haría que su vacío se propague y **borre los datos on-premises**. El primario debe seguir siendo el miembro que ya tiene los datos.
 
-**Nota sobre las rutas:** `-ContentPath` usa la ruta del sistema de archivos tal como la ve el servicio DFSR dentro del FSx (`D:\share\Datos`), no la UNC con la que se creó la carpeta en B.1 (`\\...\D$\share\Datos`). Ambas apuntan al mismo lugar.
+**Nota sobre las rutas:** `-ContentPath` usa la ruta del sistema de archivos tal como la ve el servicio DFSR dentro del FSx (`D:\share\APC`), no la UNC con la que se creó la carpeta en B.1 (`\\...\D$\share\APC`). Ambas apuntan al mismo lugar.
 
 Para membresía de solo lectura (si las EC2 únicamente leen), agregar `-ReadOnly $true`. Que FSx acepte membresía read-only no está documentado por AWS — validar en el PoC.
 
@@ -652,7 +658,7 @@ Para membresía de solo lectura (si las EC2 únicamente leen), agregar `-ReadOnl
 # ===== FASE D - VARIABLES =====
 $fsx      = "amznfsxeze56tbv.gdc.local"
 $fsxDn    = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
-$uncShare = "\\$fsx\share\Datos"
+$uncShare = "\\$fsx\share\APC"
 # ==============================
 ```
 
@@ -763,7 +769,7 @@ Get-ChildItem $uncShare -Recurse -File | Measure-Object -Property Length -Sum |
 | **Estado** | ⬜ pendiente |
 
 ```powershell
-net use Z: \\amznfsxeze56tbv.gdc.local\share\Datos /persistent:yes
+net use Z: \\amznfsxeze56tbv.gdc.local\share\APC /persistent:yes
 ```
 
 **Qué hace:** mapea el share como unidad de red. `/persistent:yes` mantiene el mapeo entre reinicios. Aquí se usa el share público `\share`, no el admin share `D$` de B.1.
@@ -772,7 +778,7 @@ net use Z: \\amznfsxeze56tbv.gdc.local\share\Datos /persistent:yes
 
 ```powershell
 New-DfsnFolderTarget -Path "\\gdc.local\<Namespace>\<Folder>" `
-  -TargetPath "\\amznfsxeze56tbv.gdc.local\share\Datos" `
+  -TargetPath "\\amznfsxeze56tbv.gdc.local\share\APC" `
   -ReferralPriorityClass SiteCostNormal
 ```
 
@@ -808,7 +814,7 @@ Saca el FSx del RG **sin tocar el miembro on-premises ni sus datos**. Los datos 
 Limpieza posterior de la carpeta interna de DFSR (requiere `Domain Admins`):
 
 ```powershell
-Remove-Item "\\amznfsxeze56tbv.gdc.local\D`$\share\Datos\DfsrPrivate" -Recurse -Force
+Remove-Item "\\amznfsxeze56tbv.gdc.local\D`$\share\APC\DfsrPrivate" -Recurse -Force
 ```
 
 ---

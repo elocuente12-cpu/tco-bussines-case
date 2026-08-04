@@ -1,6 +1,24 @@
-Get-ChildItem "\\amznfsxeze56tbv.gdc.local\D`$\share\" | Format-Table Name, CreationTime -AutoSize
+Buena elección — queda consistente con los otros cuatro miembros, que usan APC como nombre de carpeta replicada.
 
-New-Item -Type Directory -Path "\\amznfsxeze56tbv.gdc.local\D`$\share\APC"
+Pasos
 
-Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
-Get-DfsrDelegation -GroupName "APXEXPERIAN" | Format-Table AccountName, IsInherited -AutoSize
+$fsx = "amznfsxeze56tbv.gdc.local"
+
+# 1. Ver que existe hoy
+Get-ChildItem "\\$fsx\D`$\share\" | Format-Table Name, CreationTime -AutoSize
+Si falta APC (requiere Domain Admins):
+
+
+New-Item -Type Directory -Path "\\$fsx\D`$\share\APC"
+Si quedó Datos de B.1, confirma que está vacía y elimínala — la replicación nunca arrancó, así que debería estarlo:
+
+
+Get-ChildItem "\\$fsx\D`$\share\Datos" -Recurse -File | Measure-Object
+Remove-Item "\\$fsx\D`$\share\Datos" -Recurse -Force
+Valores finales
+
+$contentPath = "D:\share\APC"                                  # ruta local vista por el FSx
+# UNC equivalente: \\amznfsxeze56tbv.gdc.local\share\APC       # para las EC2 y verificacion
+Recuerda la correspondencia: D:\share es el share por defecto \share del FSx. Se administra por D$ (admin share, exige Domain Admins) y se consume por \share.
+
+Actualizo el runbook.
