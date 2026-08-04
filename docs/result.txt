@@ -1,0 +1,11 @@
+CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local
+ 
+IdentityReference ActiveDirectoryRights InheritanceType
+----------------- --------------------- ---------------
+GDC\C91582B-A                GenericAll            None
+GDC\C91582B-A                GenericAll             All
+ 
+ 
+False
+ 
+PS C:\Users\c91582b-a>
