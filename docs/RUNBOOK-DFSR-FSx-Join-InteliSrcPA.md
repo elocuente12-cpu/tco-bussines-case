@@ -181,6 +181,57 @@ $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
 $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
 ```
 
+###ERROR
+
+False
+Get-Acl : Cannot find path 'AD:\CN=AMZNFSX03TTJZMW,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsx0i5lbxmu,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsx26oislzq,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSX2J1KXUNF,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSX2MZF7YJL,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSX3FKCOPYD,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSX4BH43O9J,OU=AWS FSX 
+Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsx4cnoi0km,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSX564DKDLG,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsx6tiqlz4w,OU=AWS FSX 
+Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSX7HZQVVUA,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsx9lzfnymf,OU=AWS 
+FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXCIAFVGNR,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsxdhnmfnkv,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsxet830km1,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXGADPDL0X,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXHPNQTZR2,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsxi4waark1,OU=AWS FSX 
+Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsxjraxv1xz,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXLCXIQNKX,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXP48SWHBX,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXPHPXL23K,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsxpqhg3mmm,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=AMZNFSXTNSRVP6D,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsxusylgtaq,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsxwgkjf8fd,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXWVK2EFPT,OU=AWS FSX 
+Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsxxklsyxgn,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
+CN=amznfsxyn82hu7w,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXZD02YIIR,OU=AWS FSX 
+Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXZIOQ5PG6,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local' because it 
+does not exist.
+At line:31 char:9
++ $acl  = Get-Acl -Path "AD:\$fsxDn"
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (:) [Get-Acl], ItemNotFoundException
+    + FullyQualifiedErrorId : GetAcl_PathNotFound_Exception,Microsoft.PowerShell.Commands.GetAclCommand
+You cannot call a method on a null-valued expression.
+At line:37 char:1
++ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+Set-Acl : Cannot bind argument to parameter 'AclObject' because it is null.
+At line:37 char:66
++ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
++                                                                  ~~~~
+    + CategoryInfo          : InvalidData: (:) [Set-Acl], ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationErrorNullNotAllowed,Microsoft.PowerShell.Commands.SetAclCommand
+
+ 
+PS C:\Users\c91582b-a>
+
 **Qué hace:** el mismo patrón de A.1, pero aplicado al **computer object del FSx** en lugar del nodo Topology.
 
 Es necesario porque los objetos `DFSR-LocalSettings` → `msDFSR-Subscriber` → `msDFSR-Subscription` se crean como **hijos del computer object del miembro** (ver §3). Sin este permiso aparece el error 1 de §8.
