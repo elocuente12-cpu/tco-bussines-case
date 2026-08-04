@@ -240,7 +240,47 @@ $topoDn  = "CN=Topology,CN=$rg,CN=DFSR-GlobalSettings,CN=System,$dom"
 
 ---
 
-#### A.1 — Full Control sobre el Topology del RG
+#### A.1 — Delegación sobre el replication group
+
+> ⚠️ **Usar `Grant-DfsrDelegation`, no la ACL manual sobre Topology.** La versión original de este paso solo cubría `CN=Topology`, lo que permite agregar miembros y conexiones pero **no configurar membresías** — esas tocan `CN=Content`. El resultado es un `Set-DfsrMembership` que falla con *"Security cannot be set on the replicated folder. Access is denied"* (§8, error 5).
+
+| | |
+|---|---|
+| **Ejecutar en** | File server on-prem |
+| **Cuenta** | **Domain Admins** (una sola vez) |
+| **Requiere** | `$rg` |
+| **Estado** | ⬜ pendiente |
+
+```powershell
+$rg     = "APXEXPERIAN"
+$cuenta = "GDC\C91582B-A"
+
+# Estado actual
+Get-DfsrDelegation -GroupName $rg | Format-Table AccountName, IsInherited -AutoSize
+
+# Otorgar
+Grant-DfsrDelegation -GroupName $rg -AccountName $cuenta -Force
+
+# Confirmar
+Get-DfsrDelegation -GroupName $rg |
+  Where-Object AccountName -like "*C91582B-A*" |
+  Format-Table AccountName, IsInherited -AutoSize
+```
+
+**Qué hace:** concede permiso para crear *replicated folders, connections, members y **memberships*** dentro del replication group — los cuatro tipos de objeto, en `CN=Content` y `CN=Topology` a la vez. Es el equivalente de *Delegate Management Permissions* en la GUI de DFS Management.
+
+Según [Microsoft](https://learn.microsoft.com/en-us/powershell/module/dfsr/grant-dfsrdelegation), permite que administradores locales de los servidores DFSR gestionen la parte de AD DS de la topología sin ser Domain Admins.
+
+**Resultado esperado:** la cuenta aparece en `Get-DfsrDelegation` con `IsInherited = False`.
+
+Después, propagar (A.3).
+
+---
+
+<details>
+<summary>Alternativa manual — ACL directa sobre los nodos del RG (solo si <code>Grant-DfsrDelegation</code> no está disponible)</summary>
+
+Hay que aplicarla sobre **`CN=Topology` y `CN=Content`**, o sobre el objeto del RG completo con herencia. Otorgarla solo sobre Topology es lo que produce el error 5.
 
 | | |
 |---|---|
@@ -249,32 +289,34 @@ $topoDn  = "CN=Topology,CN=$rg,CN=DFSR-GlobalSettings,CN=System,$dom"
 | **Requiere** | `$rg` completado; módulo `ActiveDirectory` con ADWS operativo |
 | **Estado** | ⬜ pendiente de verificar |
 
-**Verificar primero:**
+Aplicar sobre el **objeto del RG completo**, para que la herencia cubra `Content` y `Topology` de una vez:
 
 ```powershell
-(Get-Acl "AD:\$topoDn").Access |
+$rgDn = "CN=$rg,CN=DFSR-GlobalSettings,CN=System,$dom"
+
+# Verificar
+(Get-Acl "AD:\$rgDn").Access |
   Where-Object { $_.IdentityReference -like "*C91582B-A*" -or $_.IdentityReference -like "*Domain Admins*" } |
   Format-Table IdentityReference, ActiveDirectoryRights, InheritanceType, IsInherited -AutoSize
-```
 
-**Qué hace:** lee la ACL del contenedor `Topology` del replication group. `AD:\` es el PSDrive de Active Directory, que permite tratar objetos del directorio como rutas y usar `Get-Acl`/`Set-Acl` sobre ellos.
-
-`CN=Topology` es el nodo donde viven los objetos `msDFSR-Member` (un miembro del RG) y `msDFSR-Connection` (una conexión). **Este es el permiso que habilita C.1 y C.2** — es distinto del de A.2, que habilita C.3.
-
-**Resultado esperado:** una fila con `GenericAll`. Si la cuenta es Domain Admin, puede aparecer heredado (`IsInherited = True`), lo cual es suficiente.
-
-**Si sale vacío**, otorgarlo (requiere Domain Admin, una sola vez):
-
-```powershell
+# Otorgar
 $sid = (New-Object System.Security.Principal.NTAccount($cuenta)).Translate(
          [System.Security.Principal.SecurityIdentifier])
-$acl  = Get-Acl -Path "AD:\$topoDn"
+$acl  = Get-Acl -Path "AD:\$rgDn"
 $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
           $sid,
           [System.DirectoryServices.ActiveDirectoryRights]::GenericAll,
           [System.Security.AccessControl.AccessControlType]::Allow,
           [System.DirectoryServices.ActiveDirectorySecurityInheritance]::All)
-$acl.AddAccessRule($rule); Set-Acl -Path "AD:\$topoDn" -AclObject $acl
+$acl.AddAccessRule($rule); Set-Acl -Path "AD:\$rgDn" -AclObject $acl
+```
+
+**Estructura de los nodos del RG:**
+
+```
+CN=APXEXPERIAN,CN=DFSR-GlobalSettings,CN=System,DC=gdc,DC=local
+  ├── CN=Content     -> msDFSR-ContentSet (una por replicated folder)  <- lo que necesita C.3
+  └── CN=Topology    -> msDFSR-Member + msDFSR-Connection              <- lo que necesita C.1 y C.2
 ```
 
 **Línea por línea:**
@@ -286,9 +328,11 @@ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$topoDn" -AclObject $acl
 | `ActiveDirectoryAccessRule(...)` | Construye la regla de permiso |
 | `GenericAll` | Equivale a **Full Control** |
 | `AccessControlType::Allow` | Regla de permitir, no de denegar |
-| `ActiveDirectorySecurityInheritance::All` | Aplica a este objeto **y todos los descendientes** — equivale a *"This object and all descendant objects"* en la GUI |
+| `ActiveDirectorySecurityInheritance::All` | Aplica a este objeto **y todos los descendientes** — aquí es lo que hace que cubra `Content` y `Topology` |
 | `$acl.AddAccessRule($rule)` | Agrega la regla **en memoria** |
 | `Set-Acl` | Persiste en AD. Hasta aquí nada se había escrito |
+
+</details>
 
 ---
 
@@ -976,6 +1020,52 @@ Get-ADComputer -Filter "Name -eq 'AMZNFSXEZE56TBV'" -Server 10.5.214.247
 **Resolución 3 — fallback por LDAP puro** para D.1 (ver el bloque ADSI en ese paso). Usa `System.DirectoryServices` sobre el puerto 389, sin ADWS.
 
 > Este error también explica por qué `$dom = (Get-ADDomain).DistinguishedName` es frágil en este entorno. En §5.0 está fijado como `"DC=gdc,DC=local"`.
+
+### Error 5 — Membresía rechazada por permisos sobre el nodo Content
+
+Al ejecutar la Fase C completa aparecieron tres mensajes. Los dos primeros son benignos:
+
+```
+Add-DfsrMember : A computer with the specified name already exists and cannot be added.
+Add-DfsrConnection : ... The connection already exists.
+```
+
+**Causa (1 y 2):** el wizard de DFS Management, que falló en el SCM (error 2), **alcanzó a escribir los objetos en AD antes de abortar** — esa validación ocurre después de la escritura. Quedaron el `msDFSR-Member` y ambas conexiones.
+
+Es exactamente lo que B.4 previene. Se había omitido ese paso.
+
+**No es un fallo:** verificado con `Get-DfsrConnection`, las dos conexiones existen en ambos sentidos y `Enabled = True`. C.1 y C.2 quedaron efectivamente completos, hechos por el wizard.
+
+---
+
+El tercer mensaje sí es bloqueante:
+
+```
+Set-DfsrMembership : Security cannot be set on the replicated folder. Access is denied
+    + FullyQualifiedErrorId : DfsrCore.ThrowIfInconsistent
+```
+
+**Causa:** la delegación cubría solo `CN=Topology`. Configurar una **membresía** también toca el objeto de la carpeta replicada — `msDFSR-ContentSet`, bajo `CN=Content` — porque DFSR escribe ahí un descriptor de seguridad para el nuevo miembro.
+
+[Microsoft separa explícitamente](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/delegating-dfs-replication) las dos delegaciones:
+
+| Operación | Nodo AD |
+|---|---|
+| Add/Remove/Modify **members and connections** | `CN=Topology` |
+| Add/Remove/Modify **replicated folders** (incluye membresías) | `CN=Content` |
+
+**Síntoma diagnóstico:** el miembro aparece en `Get-DfsrMembership` con **`ContentPath` vacío** mientras los demás miembros muestran su ruta. Está en el grupo pero sin replicar nada.
+
+**Resolución:**
+
+```powershell
+Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
+repadmin /syncall (Get-ADDomain).PDCEmulator /AdeP
+```
+
+Cubre los cuatro tipos de objeto del RG en una sola operación. Luego reejecutar **solo C.3** — C.1 y C.2 no deben repetirse.
+
+**Defecto corregido en el runbook:** A.1 pasó de aplicar una ACL manual sobre `CN=Topology` a usar `Grant-DfsrDelegation` sobre el RG completo.
 
 ---
 
