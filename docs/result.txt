@@ -1,32 +1,7 @@
-Get-DfsrConnection -GroupName $rg |
-  Where-Object { $_.SourceComputerName -like "*amznfsx*" -or $_.DestinationComputerName -like "*amznfsx*" } |
-  Format-Table SourceComputerName, DestinationComputerName, Enabled -AutoSize
- 
-Get-DfsrMembership -GroupName $rg |
-  Format-Table ComputerName, ContentPath, StagingPathQuotaInMB, Enabled -AutoSize
- 
-ComputerName    DomainName
-------------    ----------
-AMZNFSXEZE56TBV gdc.local 
-PAHWPAPTUI03    gdc.local 
-PAHWPAPTUI04    gdc.local 
-PACLPAPTUI03    gdc.local 
-PACLPAPTUI04    gdc.local
- 
- 
-SourceComputerName DestinationComputerName Enabled
------------------- ----------------------- -------
-PAHWPAPTUI03       AMZNFSXEZE56TBV            True
-PAHWPAPTUI04       AMZNFSXEZE56TBV            True
-AMZNFSXEZE56TBV    PAHWPAPTUI03               True
-AMZNFSXEZE56TBV    PAHWPAPTUI04               True
- 
- 
-ComputerName    ContentPath StagingPathQuotaInMB Enabled
-------------    ----------- -------------------- -------
-PAHWPAPTUI04    D:\APC                      4096    True
-PAHWPAPTUI03    E:\APC                      4096    True
-PACLPAPTUI03    E:\APC                      4096    True
-PACLPAPTUI04    E:\APC                      4096    True
-AMZNFSXEZE56TBV                             4096    True
- 
+$fsxDn = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
+
+$entry = [ADSI]"LDAP://$fsxDn"
+$s = New-Object System.DirectoryServices.DirectorySearcher($entry)
+$s.Filter      = "(objectClass=msDFSR-Subscription)"
+$s.SearchScope = "Subtree"
+$s.FindAll() | ForEach-Object { $_.Path; $_.Properties["msdfsr-rootpath"] }
