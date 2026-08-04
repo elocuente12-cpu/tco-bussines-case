@@ -103,7 +103,22 @@ $dom    = (Get-ADDomain).DistinguishedName
 $fsxDn  = (Get-ADComputer -Filter 'Name -like "amznfsx*"').DistinguishedName
 ```
 
+**Qué hace:** define los identificadores que usa todo el runbook.
+
+| Variable | Qué es | De dónde sale |
+|---|---|---|
+| `$rg` | Nombre del replication group existente | `Get-DfsReplicationGroup` |
+| `$rf` | Nombre del replicated folder dentro del RG | `Get-DfsReplicatedFolder -GroupName $rg` |
+| `$fsx` | FQDN del file system | Consola FSx → Network & Security → DNS name, o `aws fsx describe-file-systems` |
+| `$onprem` | FQDN del file server que ya es miembro | `Get-DfsrMember -GroupName $rg` |
+| `$dom` | DN del dominio (ej. `DC=gdc,DC=local`) | Se calcula solo |
+| `$fsxDn` | DN del computer object del FSx en AD | Se calcula solo; el FSx registra su objeto con prefijo `amznfsx` |
+
+`Get-ADComputer` requiere el módulo `ActiveDirectory`. Si falta: `Install-WindowsFeature RSAT-AD-PowerShell`.
+
 ### Fase A — Delegaciones (una vez)
+
+Esta fase no toca DFS-R: solo ajusta permisos en Active Directory para que la cuenta pueda crear los objetos que DFS-R necesita. Se ejecuta una sola vez.
 
 **A.1 — Verificar/otorgar Full Control sobre el Topology del RG**
 
@@ -115,6 +130,14 @@ $topoDn = "CN=Topology,CN=$rg,CN=DFSR-GlobalSettings,CN=System,$dom"
   Where-Object { $_.IdentityReference -like "*$env:USERNAME*" } |
   Format-Table IdentityReference, ActiveDirectoryRights, InheritanceType
 ```
+
+**Qué hace:** lee la ACL del contenedor `Topology` del replication group y filtra las entradas de tu usuario.
+
+`CN=Topology` es el nodo de AD donde viven los objetos `msDFSR-Member` (un miembro del RG) y `msDFSR-Connection` (una conexión de replicación). Sin permisos de escritura ahí, `Add-DfsrMember` y `Add-DfsrConnection` fallan.
+
+`AD:\` es el PSDrive de Active Directory: permite tratar objetos de AD como rutas de archivo y usar `Get-Acl`/`Set-Acl` sobre ellos.
+
+**Resultado esperado:** una fila con `ActiveDirectoryRights = GenericAll`. Si sale vacío, no tienes el permiso.
 
 Si está vacío (requiere Domain Admin una vez):
 
@@ -129,6 +152,19 @@ $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
           [System.DirectoryServices.ActiveDirectorySecurityInheritance]::All)
 $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$topoDn" -AclObject $acl
 ```
+
+**Qué hace, línea por línea:**
+
+| Línea | Acción |
+|---|---|
+| `$sid = ...Translate(...)` | Convierte el nombre de cuenta `GDC\usuario` a su SID. Las ACL de AD se escriben con SIDs, no con nombres |
+| `$acl = Get-Acl` | Descarga la ACL actual del objeto |
+| `ActiveDirectoryAccessRule(...)` | Construye la nueva regla de permiso |
+| `GenericAll` | Equivale a **Full Control** |
+| `AccessControlType::Allow` | Es una regla de permitir (no de denegar) |
+| `ActiveDirectorySecurityInheritance::All` | Aplica a **este objeto y todos los descendientes** — equivale a *"This object and all descendant objects"* en la GUI |
+| `$acl.AddAccessRule($rule)` | Agrega la regla al objeto ACL **en memoria** |
+| `Set-Acl` | Escribe la ACL modificada de vuelta a AD. Hasta aquí nada se había persistido |
 
 **A.2 — Full Control sobre el computer object del FSx**
 
@@ -145,6 +181,15 @@ $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
 $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
 ```
 
+**Qué hace:** el mismo patrón de A.1, pero aplicado al **computer object del FSx** en lugar del nodo Topology.
+
+Es necesario porque los objetos `DFSR-LocalSettings` → `msDFSR-Subscriber` → `msDFSR-Subscription` se crean como **hijos del computer object del miembro** (ver §3). Sin este permiso aparece el error 1 de §8.
+
+`AreAccessRulesProtected` responde: *¿esta OU tiene la herencia bloqueada?*
+
+- `False` → la OU hereda permisos del padre; lo normal
+- `True` → herencia bloqueada. Los permisos heredados **no aplican**, así que ni un Domain Admin heredado necesariamente pasa. Hay que otorgar la ACL explícita de abajo
+
 > Vía GUI (ADUC): View → **Advanced Features** → computer object → Properties → Security → Advanced → Add → **Applies to: "This object and all descendant objects"** (dejarlo en *This object only* es el error más común).
 
 **A.3 — Propagar y refrescar token**
@@ -153,7 +198,13 @@ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
 repadmin /syncall (Get-ADDomain).PDCEmulator /AdeP
 ```
 
-DFS Management se ancla normalmente al PDC emulator. Si se otorgó el permiso contra otro DC, esperar la replicación. **Si se cambió membresía de grupo, cerrar sesión y volver a entrar** — el token de Kerberos arrastra los grupos anteriores.
+**Qué hace:** fuerza la replicación de AD hacia el PDC emulator para que el permiso recién escrito esté disponible ahí de inmediato, en vez de esperar el ciclo normal de replicación entre DCs.
+
+Los flags: `/A` todos los naming contexts, `/d` identifica servidores por DN, `/e` cruza sitios (enterprise), `/P` empuja desde el servidor local en lugar de traer.
+
+**Por qué el PDC emulator:** las herramientas DFS se anclan a ese DC para leer y escribir la configuración DFSR. Si otorgaste el permiso contra otro DC y no replicó aún, los comandos siguen fallando aunque el permiso "ya esté puesto".
+
+**Si se cambió membresía de grupo, cerrar sesión y volver a entrar** — el token de Kerberos se emite al iniciar sesión y arrastra los grupos que tenías en ese momento. Ningún `repadmin` lo actualiza.
 
 ### Fase B — Preparación
 
@@ -164,9 +215,15 @@ New-Item -Type Directory -Path "\\$fsx\D$\share\Datos"
 Get-ChildItem "\\$fsx\D$\share\"
 ```
 
-> ⚠️ **No modificar las ACL NTFS del usuario `SYSTEM`** sobre esta carpeta. AWS advierte que `SYSTEM` requiere Full control en toda carpeta con share, y alterarlo puede dejar el file system inaccesible y los backups inutilizables.
+**Qué hace:** crea por SMB la carpeta que será el replicated folder, y lista el contenido para confirmarlo.
 
-El share por defecto es `\share`, que corresponde a `D:\share` en el file system.
+`D$` es el **admin share** del volumen D: del file system. FSx expone el share visible `\share`, que internamente es `D:\share`. Se usa `D$` en lugar de `\share` porque en el paso C.3 hay que declarar la **ruta local vista por el miembro** (`D:\share\Datos`), y esta notación deja explícita esa correspondencia.
+
+**Por qué necesita `Domain Admins`:** acceder a un admin share (`D$`) exige privilegios administrativos sobre el file system, y en FSx eso lo define `file_system_administrators_group`, que en este despliegue es `Domain Admins` (§4).
+
+**Si falla con *access denied*:** la cuenta no está en ese grupo. No es un problema de red — que `telnet` al 445 conecte solo prueba que el puerto está abierto, no que tengas permisos.
+
+> ⚠️ **No modificar las ACL NTFS del usuario `SYSTEM`** sobre esta carpeta. AWS advierte que `SYSTEM` requiere Full control en toda carpeta con share, y alterarlo puede dejar el file system inaccesible y los backups inutilizables.
 
 **B.2 — Estado actual del RG**
 
@@ -177,7 +234,15 @@ Get-DfsrMembership -GroupName $rg |
   Format-Table ComputerName, ContentPath, StagingPath, StagingPathQuotaInMB, PrimaryMember
 ```
 
-Anotar el `StagingPathQuotaInMB` del miembro on-prem: replicar ese valor o mayor.
+**Qué hace:** fotografía del RG antes de tocarlo. Son tres niveles distintos:
+
+| Cmdlet | Devuelve | Para qué sirve aquí |
+|---|---|---|
+| `Get-DfsReplicationGroup` | El grupo en sí | Confirmar que `DomainName` es `gdc.local` — si fuera otro dominio, el FSx no puede unirse |
+| `Get-DfsrMember` | Los servidores que participan | Ver quién está hoy y detectar residuos de intentos previos |
+| `Get-DfsrMembership` | La relación miembro ↔ carpeta replicada | Es donde viven `ContentPath`, `StagingPath` y las cuotas |
+
+**Qué anotar:** el `StagingPathQuotaInMB` del miembro on-prem — se replica ese valor o mayor en C.3. Y confirmar cuál miembro tiene `PrimaryMember = True`.
 
 **B.3 — Dimensionamiento** *(gate obligatorio — ver §7)*
 
@@ -194,6 +259,12 @@ Get-ChildItem "E:\RutaDelFolder" -Recurse -File |
   ForEach-Object { [math]::Round($_.Sum/1GB,2) }
 ```
 
+**Qué hace el primero:** recorre recursivamente la carpeta origen, suma el tamaño de todos los archivos y devuelve cantidad y GB. `-File` excluye directorios para no contar dos veces.
+
+**Qué hace el segundo:** ordena los archivos de mayor a menor, toma los 32 primeros y suma su tamaño. Ese número es el **mínimo de staging quota** según la regla de Microsoft.
+
+**Por qué 32 archivos:** DFSR usa el staging como área intermedia donde prepara los archivos antes de transmitirlos. Si la cuota no alcanza para los archivos más grandes en vuelo simultáneo, DFSR entra en un ciclo de limpieza y reintento que se manifiesta como backlog permanente (eventos 4202/4204).
+
 **No continuar** si `dataset + staging + conflict` no cabe holgado en la capacidad del FSx.
 
 **B.4 — Limpiar residuos de intentos previos**
@@ -204,16 +275,43 @@ if (Get-DfsrMember -GroupName $rg | Where-Object ComputerName -like "amznfsx*") 
 }
 ```
 
+**Qué hace:** si el FSx ya figura como miembro del RG, lo elimina antes de reintentar.
+
+**Por qué es necesario:** el wizard de DFS Management aborta a mitad de camino (§8, error 2), y puede dejar un `msDFSR-Member` creado sin su suscripción correspondiente. Ese estado a medias hace que `Add-DfsrMember` falle con *"already exists"*.
+
+`-Force` suprime la confirmación interactiva. El cmdlet solo borra objetos de AD del miembro FSx: **no toca al miembro on-premises ni sus datos**.
+
 ### Fase C — Configuración
 
+Los tres cmdlets **solo escriben objetos en Active Directory**. No abren SCM ni WMI contra el FSx, que es exactamente por lo que funcionan donde el wizard falla (§2). El servicio DFSR del FSx recoge esta configuración por su cuenta en el siguiente ciclo de polling.
+
+**C.1 — Agregar el FSx como miembro del RG**
+
 ```powershell
-# C.1 Agregar el FSx como miembro del RG
 Add-DfsrMember -GroupName $rg -ComputerName $fsx -Description "FSx intelisrcpa-prd (Single-AZ 1)"
+```
 
-# C.2 Conexion — bidireccional por defecto; agregar -CreateOneWay para unidireccional estricto
+**Qué hace:** crea un objeto `msDFSR-Member` bajo `CN=Topology` del RG, con un atributo `msDFSR-ComputerReference` que apunta al computer object del FSx.
+
+Esto solo declara *"este servidor pertenece al grupo"*. Todavía no replica nada: no hay conexión ni carpeta asignada.
+
+**Permiso que ejercita:** Full Control sobre `CN=Topology` (A.1).
+
+**C.2 — Crear la conexión de replicación**
+
+```powershell
 Add-DfsrConnection -GroupName $rg -SourceComputerName $onprem -DestinationComputerName $fsx
+```
 
-# C.3 Membresia
+**Qué hace:** crea los objetos `msDFSR-Connection` que definen la topología — qué miembro replica con cuál.
+
+**Dirección:** por defecto **bidireccional**. El cmdlet crea dos objetos de conexión, uno por sentido. Para unidireccional estricto (solo on-prem → FSx) hay que agregar `-CreateOneWay`.
+
+> Bidireccional implica que **las eliminaciones se propagan de vuelta**: si una aplicación en las EC2 borra una carpeta en el FSx, se borra también on-premises. Este es el riesgo operativo principal de la replicación multi-master, más que los conflictos de edición.
+
+**C.3 — Configurar la membresía**
+
+```powershell
 Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
   -ContentPath "D:\share\Datos" `
   -StagingPathQuotaInMB 16384 `
@@ -222,7 +320,21 @@ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
   -Force
 ```
 
-**`-PrimaryMember $false` es crítico:** garantiza que el contenido del miembro on-premises es el autoritativo. Marcar el FSx como primario haría que su contenido (vacío) gane y sobrescriba los datos on-premises.
+**Qué hace:** crea los objetos *server-local* bajo el computer object del FSx (`DFSR-LocalSettings` → `msDFSR-Subscriber` → `msDFSR-Subscription`) y les escribe los atributos de configuración. Es el paso que le dice al FSx **qué carpeta replicar y cómo**.
+
+**Permiso que ejercita:** Full Control sobre el computer object del FSx (A.2). Si falta, aquí aparece el error 1 de §8.
+
+| Parámetro | Atributo AD | Qué hace |
+|---|---|---|
+| `-ContentPath "D:\share\Datos"` | `msDFSR-RootPath` | Ruta **local vista por el FSx**, no la UNC. Corresponde a `\\$fsx\share\Datos` |
+| `-StagingPathQuotaInMB 16384` | `msDFSR-StagingSizeInMb` | Tamaño del área de staging. Ajustar con el valor de B.3; el default de 4096 rara vez alcanza |
+| `-ConflictAndDeletedQuotaInMB 4096` | `msDFSR-ConflictSizeInMb` | Espacio para archivos perdedores de conflictos y borrados. Default: 660 MB |
+| `-PrimaryMember $false` | — | **Crítico.** Declara que este miembro *no* es la fuente autoritativa |
+| `-Force` | — | Suprime la confirmación interactiva |
+
+**Por qué `-PrimaryMember $false` es crítico:** en la replicación inicial, el contenido del miembro primario gana. Como el FSx está vacío, marcarlo como primario haría que su vacío se propague y **borre los datos on-premises**. El primario debe seguir siendo el miembro que ya tiene los datos.
+
+**Nota sobre las rutas:** `-ContentPath` usa la ruta del sistema de archivos tal como la ve el servicio DFSR corriendo dentro del FSx (`D:\share\Datos`), no la ruta de red con la que tú creaste la carpeta en B.1 (`\\$fsx\D$\share\Datos`). Ambas apuntan al mismo lugar.
 
 Para membresía de solo lectura (si las EC2 únicamente leen), agregar `-ReadOnly $true`. Nota: que FSx acepte membresía read-only no está documentado por AWS — validar en el PoC.
 
@@ -234,7 +346,11 @@ Para membresía de solo lectura (si las EC2 únicamente leen), agregar `-ReadOnl
 Get-ADObject -SearchBase $fsxDn -Filter * -SearchScope Subtree | Select-Object Name, ObjectClass
 ```
 
+**Qué hace:** enumera todo lo que cuelga del computer object del FSx en AD. `-SearchScope Subtree` recorre todos los niveles; `-Filter *` no descarta nada.
+
 Debe aparecer: `DFSR-LocalSettings` → `msDFSR-Subscriber` → `msDFSR-Subscription`.
+
+**Por qué este paso es la frontera:** si los tres objetos existen, todo lo que dependía de ti está hecho. De ahí en adelante el trabajo es del servicio DFSR corriendo dentro del FSx, que es código gestionado por AWS y no observable desde tu lado. Si falla después de este punto, el caso es de Soporte AWS (§9).
 
 **D.2 — Eventos en el miembro on-premises** (esperar ~5 min; hasta 1 hora)
 
@@ -242,6 +358,12 @@ Debe aparecer: `DFSR-LocalSettings` → `msDFSR-Subscriber` → `msDFSR-Subscrip
 Get-WinEvent -LogName "DFS Replication" -MaxEvents 30 |
   Format-Table TimeCreated, Id, Message -Wrap
 ```
+
+**Qué hace:** lee el log de eventos `DFS Replication` **local** del file server on-premises.
+
+**Por qué desde on-prem y no contra el FSx:** es el único miembro cuyos logs son accesibles. El FSx no expone su log de eventos. Como la replicación es una conversación entre ambos, el lado on-prem registra el estado de la conexión con el FSx — que es justo lo que necesitas saber.
+
+**Por qué hay que esperar:** no existe forma de forzar el refresco (`Update-DfsrConfigurationFromAD` requiere WMI contra el FSx, ver §2). El servicio DFSR consulta AD por su cuenta cada ~5 minutos.
 
 | Evento | Significado | Acción |
 |---|---|---|
@@ -257,11 +379,17 @@ Get-WinEvent -LogName "DFS Replication" -MaxEvents 30 |
 Get-ChildItem "\\$fsx\share\Datos" -Recurse -File | Measure-Object -Property Length -Sum
 ```
 
+**Qué hace:** cuenta archivos y suma bytes en el destino, por SMB.
+
+**Por qué importa:** es la única verificación que no depende de WMI ni de admin local. Comparar este resultado contra el de B.3 te dice el avance real. Si el número crece entre ejecuciones, está replicando — sin importar lo que digan (o dejen de decir) los cmdlets de diagnóstico.
+
 ### Fase E — Consumo desde las EC2
 
 ```powershell
 net use Z: \\amznfsxXXXXXXXX.gdc.local\share\Datos /persistent:yes
 ```
+
+**Qué hace:** mapea el share como unidad de red en la EC2. `/persistent:yes` mantiene el mapeo entre reinicios. Nótese que aquí se usa el share público `\share`, no el admin share `D$` de B.1.
 
 Opcionalmente, publicar el share en el namespace existente para mantener el mismo UNC:
 
@@ -270,6 +398,10 @@ New-DfsnFolderTarget -Path "\\gdc.local\<Namespace>\<Folder>" `
   -TargetPath "\\amznfsxXXXXXXXX.gdc.local\share\Datos" `
   -ReferralPriorityClass SiteCostNormal
 ```
+
+**Qué hace:** agrega el share del FSx como *folder target* adicional de una carpeta del namespace DFS que ya existe. Las aplicaciones siguen usando el mismo UNC (`\\gdc.local\<Namespace>\<Folder>`) y DFS-N las dirige a un target u otro.
+
+`-ReferralPriorityClass SiteCostNormal` hace que la selección de target siga el costo de sitio de AD: cada cliente va al target de su propio sitio. Así las EC2 llegan al FSx y los clientes on-premises al file server local, sin cambiar nada en las aplicaciones.
 
 > **No permitir escrituras desde las EC2 hasta ver el evento 4104.** Con replicación bidireccional, escribir durante la sincronización inicial genera conflictos evitables.
 
