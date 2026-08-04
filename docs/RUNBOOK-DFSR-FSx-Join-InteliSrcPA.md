@@ -96,25 +96,73 @@ La **cuenta de servicio de FSx** (`fsx.tf:34-35`) es otra cosa: solo la usa el s
 
 **Valores confirmados** (ya verificados, no modificar):
 
-| Variable | Valor |
-|---|---|
-| `$fsxHost` | `AMZNFSXEZE56TBV` |
-| `$fsx` | `amznfsxeze56tbv.gdc.local` |
-| `$fsxDn` | `CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local` |
-| `$dom` | `DC=gdc,DC=local` |
-| `$contentPath` | `D:\share\Datos` |
-| Cuenta operativa | `GDC\C91582B-A` |
-
-**Valores pendientes de completar antes de entregar a manos remotas:**
-
-| Variable | Qué es | Cómo obtenerlo |
+| Variable | Valor | Origen |
 |---|---|---|
-| `$rg` | Nombre del replication group | Paso B.2 |
-| `$rf` | Nombre del replicated folder | Paso B.2 |
-| `$onprem` | FQDN del file server que ya es miembro | Paso B.2 |
-| `$stagingMB` | Cuota de staging en MB | Paso B.3 |
+| `$rg` | `APXEXPERIAN` | B.2 — State `Normal`, dominio `gdc.local` |
+| `$rf` | `APC` | B.2 — `Get-DfsReplicatedFolder` |
+| `$fsxHost` | `AMZNFSXEZE56TBV` | AWS |
+| `$fsx` | `amznfsxeze56tbv.gdc.local` | AWS |
+| `$fsxDn` | `CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local` | AD |
+| `$dom` | `DC=gdc,DC=local` | — |
+| `$contentPath` | `D:\share\Datos` | Carpeta creada en B.1 |
+| `$stagingMB` | `4096` | B.2 — valor en uso por los 4 miembros actuales |
+| `$conflictMB` | `660` | Default DFSR |
+| Cuenta operativa | `GDC\C91582B-A` | — |
 
-> ⚠️ **B.2 debe ejecutarse primero y sus resultados escribirse en esta tabla** antes de que manos remotas continúen con A.1 o la Fase C.
+**Miembros actuales del RG `APXEXPERIAN`** (B.2):
+
+| Miembro | ContentPath | StagingQuota | PrimaryMember |
+|---|---|---|---|
+| PAHWPAPTUI03 | `E:\APC` | 4096 | False |
+| PAHWPAPTUI04 | `D:\APC` | 4096 | False |
+| PACLPAPTUI03 | `E:\APC` | 4096 | False |
+| PACLPAPTUI04 | `E:\APC` | 4096 | False |
+
+> `PrimaryMember = False` en los cuatro es lo esperado: DFSR limpia esa marca al completar la replicación inicial. Confirma que el RG está convergido, y refuerza que `-PrimaryMember $false` es correcto para el FSx.
+>
+> El `ContentPath` varía entre miembros (`D:` vs `E:`) — es una ruta **local de cada miembro**, no un identificador compartido. Por eso `D:\share\Datos` en el FSx es válido y no hay que alinearlo.
+
+**Valor pendiente de completar antes de entregar a manos remotas:**
+
+| Variable | Qué es | Cómo decidirlo |
+|---|---|---|
+| `$onprem` | Miembro al que se conectará el FSx | Ver §5.1 — depende de topología y cobertura del Security Group |
+
+---
+
+### 5.1 — Decisión pendiente: a qué miembro conectar el FSx
+
+El RG tiene **cuatro miembros**, presumiblemente en dos sitios (`PAHW*` y `PACL*` — datacenter principal y alterno de DR). El paso C.2 crea la conexión desde **un** miembro, y esa elección define la topología y el punto único de fallo hacia AWS.
+
+**Dato bloqueante — cobertura del Security Group.** Las reglas de `terraform.tfvars:238` abren 135, 445 y 49152-65535 hacia el FSx solo desde tres IPs:
+
+```
+192.168.210.63    192.168.210.64    10.54.128.63
+```
+
+Hay cuatro miembros, así que al menos uno queda fuera. Además, las `.63/.64` tienen también reglas LDAP, lo que sugiere que podrían ser DCs y no file servers.
+
+**Si `$onprem` no está entre esas tres IPs:** la configuración se escribe correctamente en AD, aparece el evento 4102, y luego **5002/5004/5008** — replicación bloqueada por firewall.
+
+**Comandos para cerrar la decisión:**
+
+```powershell
+# Topologia actual de conexiones
+Get-DfsrConnection -GroupName "APXEXPERIAN" |
+  Format-Table SourceComputerName, DestinationComputerName, Enabled, RdcEnabled -AutoSize
+
+# Mapeo miembro -> IP, para cruzar con las reglas del SG
+"PAHWPAPTUI03","PAHWPAPTUI04","PACLPAPTUI03","PACLPAPTUI04" | ForEach-Object {
+  [PSCustomObject]@{
+    Miembro = $_
+    IP = (Resolve-DnsName "$_.gdc.local" -Type A -ErrorAction SilentlyContinue).IPAddress -join ", "
+  }
+} | Format-Table -AutoSize
+```
+
+**Criterio de selección:** el miembro debe (a) tener su IP en las reglas del SG y (b) estar en el sitio con mejor conectividad hacia AWS. Si ninguno de los cuatro está cubierto, hay que agregar su IP a `sg_fsx_extra_ingress_rules` antes de la Fase C.
+
+**Consideración de topología:** conectar el FSx a un solo miembro lo deja dependiente de ese servidor. Si el RG actual es full mesh, evaluar agregar una segunda conexión (repetir C.2 con otro miembro) para redundancia.
 
 **Dónde se ejecuta cada fase:**
 
@@ -135,11 +183,21 @@ La **cuenta de servicio de FSx** (`fsx.tf:34-35`) es otra cosa: solo la usa el s
 | A.2 — Full Control en computer object FSx | ✅ completado |
 | A.3 — Propagar a AD | ⬜ pendiente |
 | B.1 — Carpeta destino en FSx | ✅ completado |
-| B.2 — Descubrimiento del RG | ⬜ pendiente |
-| B.3 — Dimensionamiento | ⬜ pendiente |
+| B.2 — Descubrimiento del RG | ✅ completado — `$rg`, `$rf`, `$stagingMB` obtenidos |
+| B.3 — Dimensionamiento | ✅ **omitido con justificación** — ver nota |
+| **5.1 — Elegir miembro origen** | ⬜ **pendiente, bloquea la Fase C** |
 | B.4 — Limpiar residuos | ⬜ pendiente |
 | C.1 / C.2 / C.3 | ⬜ pendiente |
 | D.1 / D.2 / D.3 | ⬜ pendiente |
+
+> **Por qué se omite B.3:** los cuatro miembros actuales replican este dataset con `StagingPathQuotaInMB = 4096` de forma estable. Es evidencia operativa directa de que el default alcanza, superior al cálculo teórico de los 32 archivos mayores. Con ~20 GiB de datos: `20 + 4 + 0,65 = 24,6 GiB sobre 32 GiB = 77%` de ocupación. Cabe, sin margen de crecimiento.
+>
+> Confirmación opcional — verificar que los miembros actuales no estén sufriendo en silencio:
+> ```powershell
+> Get-WinEvent -LogName "DFS Replication" -MaxEvents 200 -ErrorAction SilentlyContinue |
+>   Where-Object { $_.Id -in 4202,4204,4206,4208 } | Format-Table TimeCreated, Id -AutoSize
+> ```
+> Salida vacía = 4096 es sano. Con eventos = el default ya está corto y el FSx heredaría el problema.
 
 ---
 
@@ -161,7 +219,7 @@ Esta fase no toca DFS-R: solo ajusta permisos en AD para que la cuenta pueda cre
 
 ```powershell
 # ===== FASE A - VARIABLES =====
-$rg      = "PENDIENTE_COMPLETAR_DESDE_B2"
+$rg      = "APXEXPERIAN"
 $dom     = "DC=gdc,DC=local"
 $fsxHost = "AMZNFSXEZE56TBV"
 $fsx     = "amznfsxeze56tbv.gdc.local"
@@ -468,18 +526,18 @@ Los tres cmdlets **solo escriben objetos en Active Directory**. No abren SCM ni 
 
 ```powershell
 # ===== FASE C - VARIABLES =====
-$rg          = "COMPLETAR_DESDE_B2"
-$rf          = "COMPLETAR_DESDE_B2"
-$onprem      = "COMPLETAR_DESDE_B2"
+$rg          = "APXEXPERIAN"
+$rf          = "APC"
+$onprem      = "COMPLETAR_SEGUN_5.1"      # uno de: PAHWPAPTUI03/04, PACLPAPTUI03/04
 $fsx         = "amznfsxeze56tbv.gdc.local"
 $contentPath = "D:\share\Datos"
-$stagingMB   = 4096       # COMPLETAR CON B.3 - ver tabla de dimensionamiento abajo
-$conflictMB  = 660        # default de DFSR; subir solo si hay muchos conflictos
+$stagingMB   = 4096       # validado: los 4 miembros actuales usan este valor
+$conflictMB  = 660        # default de DFSR
 # ==============================
 
-# Validacion previa - no continuar si algo sigue como PENDIENTE
-if ($rg -like "COMPLETAR*" -or $rf -like "COMPLETAR*" -or $onprem -like "COMPLETAR*") {
-    throw "Faltan valores de B.2. Completar el bloque de variables antes de continuar."
+# Validacion previa - no continuar si falta elegir el miembro origen
+if ($onprem -like "COMPLETAR*") {
+    throw "Falta definir el miembro origen. Ver seccion 5.1 (topologia + cobertura del Security Group)."
 }
 
 # Validacion de capacidad - dataset + staging + conflict debe caber en el file system
