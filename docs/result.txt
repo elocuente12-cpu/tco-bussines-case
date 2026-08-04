@@ -1,3 +1,6 @@
 Get-ChildItem "\\amznfsxeze56tbv.gdc.local\D`$\share\" | Format-Table Name, CreationTime -AutoSize
 
 New-Item -Type Directory -Path "\\amznfsxeze56tbv.gdc.local\D`$\share\APC"
+
+Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
+Get-DfsrDelegation -GroupName "APXEXPERIAN" | Format-Table AccountName, IsInherited -AutoSize
