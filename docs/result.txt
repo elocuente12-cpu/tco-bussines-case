@@ -1,25 +1,83 @@
-resultado b2.
+resultado de ejecutar toda la fase C:
 
-GroupName  : APXEXPERIAN
-DomainName : gdc.local
-State      : Normal
+PS C:\Windows\system32> $rg          = "APXEXPERIAN"
+$rf          = "APC"
+$onprem      = "PAHWPAPTUI03"      # uno de: PAHWPAPTUI03/04, PACLPAPTUI03/04
+$fsx         = "amznfsxeze56tbv.gdc.local"
+$contentPath = "D:\share\APC"
+$stagingMB   = 4096       # validado: los 4 miembros actuales usan este valor
+$conflictMB  = 660        # default de DFSR
+# ==============================
  
+# Validacion previa - no continuar si falta elegir el miembro origen
+if ($onprem -like "COMPLETAR*") {
+    throw "Falta definir el miembro origen. Ver seccion 5.1 (topologia + cobertura del Security Group)."
+}
  
+# Validacion de capacidad - dataset + staging + conflict debe caber en el file system
+$capacidadGiB = 32                          # actualizar si se aumenta fsx_storage_capacity
+$datasetGiB   = 20                          # resultado de B.3
+$totalGiB = $datasetGiB + ($stagingMB/1024) + ($conflictMB/1024)
+if ($totalGiB -gt ($capacidadGiB * 0.85)) {
+    throw "No cabe: $([math]::Round($totalGiB,1)) GiB requeridos sobre $capacidadGiB GiB (limite 85%). Aumentar fsx_storage_capacity."
+}
+Write-Host "Capacidad OK: $([math]::Round($totalGiB,1)) de $capacidadGiB GiB" -ForegroundColor Green
+Capacidad OK: 24.6 de 32 GiB
  
-ComputerName DomainName
------------- ----------
-PAHWPAPTUI03 gdc.local 
-PAHWPAPTUI04 gdc.local 
-PACLPAPTUI03 gdc.local 
-PACLPAPTUI04 gdc.local
+PS C:\Windows\system32> $rg          = "APXEXPERIAN"
+$rf          = "APC"
+$onprem      = "PAHWPAPTUI03"      # uno de: PAHWPAPTUI03/04, PACLPAPTUI03/04
+$fsx         = "amznfsxeze56tbv.gdc.local"
+$contentPath = "D:\share\APC"
+$stagingMB   = 4096       # validado: los 4 miembros actuales usan este valor
+$conflictMB  = 660        # default de DFSR
+# ==============================
  
+# Validacion previa - no continuar si falta elegir el miembro origen
+if ($onprem -like "COMPLETAR*") {
+    throw "Falta definir el miembro origen. Ver seccion 5.1 (topologia + cobertura del Security Group)."
+}
  
-ComputerName ContentPath StagingPath                StagingPathQuotaInMB PrimaryMember
------------- ----------- -----------                -------------------- -------------
-PAHWPAPTUI04 D:\APC      D:\APC\DfsrPrivate\Staging                 4096         False
-PAHWPAPTUI03 E:\APC      E:\APC\DfsrPrivate\Staging                 4096         False
-PACLPAPTUI03 E:\APC      E:\APC\DfsrPrivate\Staging                 4096         False
-PACLPAPTUI04 E:\APC      E:\APC\DfsrPrivate\Staging                 4096         False
+# Validacion de capacidad - dataset + staging + conflict debe caber en el file system
+$capacidadGiB = 32                          # actualizar si se aumenta fsx_storage_capacity
+$datasetGiB   = 20                          # resultado de B.3
+$totalGiB = $datasetGiB + ($stagingMB/1024) + ($conflictMB/1024)
+if ($totalGiB -gt ($capacidadGiB * 0.85)) {
+    throw "No cabe: $([math]::Round($totalGiB,1)) GiB requeridos sobre $capacidadGiB GiB (limite 85%). Aumentar fsx_storage_capacity."
+}
+Write-Host "Capacidad OK: $([math]::Round($totalGiB,1)) de $capacidadGiB GiB" -ForegroundColor Green
  
+Add-DfsrMember -GroupName $rg -ComputerName $fsx -Description "FSx intelisrcpa-prd (Single-AZ 1)"
+Add-DfsrConnection -GroupName $rg -SourceComputerName $onprem -DestinationComputerName $fsx
+Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
+  -ContentPath $contentPath `
+  -StagingPathQuotaInMB $stagingMB `
+  -ConflictAndDeletedQuotaInMB $conflictMB `
+  -PrimaryMember $false `
+  -Force
+Capacidad OK: 24.6 de 32 GiB
+Add-DfsrMember : A computer with the specified name already exists and cannot be added.
+At line:24 char:1
++ Add-DfsrMember -GroupName $rg -ComputerName $fsx -Description "FSx in ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (amznfsxeze56tbv.gdc.local:String) [Add-DfsrMember], DfsrException
+    + FullyQualifiedErrorId : DfsrCore.AddNewMember.MemberAlreadyExists,Microsoft.DistributedFileSystemReplication.Commands.AddDfsrM 
+   emberCommand
+Add-DfsrConnection : Could not add the following connection: DFSR connection with replication group: "APXEXPERIAN"; sending 
+computer: PAHWPAPTUI03; receiving computer: amznfsxeze56tbv.gdc.local; GUID: None specified The connection already exists.
+At line:25 char:1
++ Add-DfsrConnection -GroupName $rg -SourceComputerName $onprem -Destin ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DFSR connection... None specified:String) [Add-DfsrConnection], DfsrException
+    + FullyQualifiedErrorId : Add-DfsrConnection.OMException,Microsoft.DistributedFileSystemReplication.Commands.AddDfsrConnectionCo 
+   mmand
+Set-DfsrMembership : Security cannot be set on the replicated folder. Access is denied
+At line:26 char:1
++ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DFSR membership...None specified.:String) [Set-DfsrMembership], DfsrException
+    + FullyQualifiedErrorId : DfsrCore.ThrowIfInconsistent,Microsoft.DistributedFileSystemReplication.Commands.SetDfsrMembershipComm 
+   and
+
  
 PS C:\Windows\system32>
