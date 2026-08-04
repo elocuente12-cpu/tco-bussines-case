@@ -94,25 +94,62 @@ Ejecutar desde el **file server on-premise miembro del RG**. Es el host correcto
 
 ### Variables
 
+> ⚠️ **El dominio `gdc.local` contiene ~30 file systems FSx** de distintos equipos, repartidos en al menos cinco OUs (`OU=FSx,OU=Windows,...`, `OU=AWS FSX Servers`, `OU=AlteryxFSx`, `OU=CEMDataOpsFSx`, y objetos sueltos en `OU=Servers`). Solo en la OU de este proyecto hay nueve.
+>
+> **Nunca resolver el computer object con un filtro tipo `Name -like "amznfsx*"`** — devuelve un array y rompe todo lo que dependa de él (§8, error 3). Hay que identificar el objeto exacto.
+
+**Identificación del FSx de este proyecto** *(confirmada)*:
+
+| Dato | Valor |
+|---|---|
+| Tag `Name` | `intelisrcpa-prd` (`terraform.tfvars:673`) |
+| DNS name | `amznfsxeze56tbv.gdc.local` |
+| Computer object en AD | `AMZNFSXEZE56TBV` |
+| DN completo | `CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local` |
+
+> El nombre del computer object **lo genera AWS al crear el file system** — no se deriva de `fsx_name` ni del `FileSystemId`. No está en el tfvars. Si el file system se recrea, este valor cambia y hay que actualizarlo aquí.
+>
+> Para re-obtenerlo: `aws fsx describe-file-systems --query "FileSystems[?Tags[?Key=='Name'&&Value=='intelisrcpa-prd']].{Id:FileSystemId,DNS:DNSName}"`. Los outputs `fsx_id` / `fsx_dns_name` de `outputs.tf:97-110` lo expondrían vía `terraform output`, pero están comentados.
+
 ```powershell
-$rg     = "<ReplicationGroup>"          # Get-DfsReplicationGroup
-$rf     = "<FolderName>"                # Get-DfsReplicatedFolder -GroupName $rg
-$fsx    = "amznfsxXXXXXXXX.gdc.local"   # DNS name del FSx
-$onprem = "FS01.gdc.local"              # miembro actual del RG
-$dom    = (Get-ADDomain).DistinguishedName
-$fsxDn  = (Get-ADComputer -Filter 'Name -like "amznfsx*"').DistinguishedName
+$rg      = "<ReplicationGroup>"     # Get-DfsReplicationGroup
+$rf      = "<FolderName>"           # Get-DfsReplicatedFolder -GroupName $rg
+$onprem  = "FS01.gdc.local"         # miembro actual del RG
+$dom     = (Get-ADDomain).DistinguishedName
+
+$fsxHost = "AMZNFSXEZE56TBV"
+$fsx     = "amznfsxeze56tbv.gdc.local"
+
+# Resolucion con guarda: falla ruidosamente si no encuentra exactamente uno
+$found = @(Get-ADComputer -Filter "Name -eq '$fsxHost'")
+if ($found.Count -ne 1) { throw "Se esperaba 1 computer object, se encontraron $($found.Count)" }
+$fsxDn = $found[0].DistinguishedName
+
+# Confirmar visualmente antes de continuar
+$fsxDn
 ```
 
-**Qué hace:** define los identificadores que usa todo el runbook.
+**Qué hace:** define los identificadores que usa todo el runbook y resuelve el computer object del FSx de forma inequívoca.
 
 | Variable | Qué es | De dónde sale |
 |---|---|---|
 | `$rg` | Nombre del replication group existente | `Get-DfsReplicationGroup` |
 | `$rf` | Nombre del replicated folder dentro del RG | `Get-DfsReplicatedFolder -GroupName $rg` |
-| `$fsx` | FQDN del file system | Consola FSx → Network & Security → DNS name, o `aws fsx describe-file-systems` |
+| `$fsxHost` | Hostname del file system (sin dominio) | `AMZNFSXEZE56TBV` — confirmado |
+| `$fsx` | FQDN del file system | `amznfsxeze56tbv.gdc.local` — confirmado |
 | `$onprem` | FQDN del file server que ya es miembro | `Get-DfsrMember -GroupName $rg` |
-| `$dom` | DN del dominio (ej. `DC=gdc,DC=local`) | Se calcula solo |
-| `$fsxDn` | DN del computer object del FSx en AD | Se calcula solo; el FSx registra su objeto con prefijo `amznfsx` |
+| `$dom` | DN del dominio (`DC=gdc,DC=local`) | Se calcula solo |
+| `$fsxDn` | DN del computer object del FSx en AD | Se resuelve con guarda |
+
+**El bloque `if ($found.Count -ne 1) { throw ... }` no es opcional.** `Get-ADComputer` devuelve una colección; envolverlo en `@()` fuerza que siempre sea array y permite contarlo. Sin esa validación, un filtro amplio produce un array que PowerShell interpola como string concatenado, y los errores aparecen tres comandos más adelante con mensajes que no señalan la causa.
+
+**Verificación manual antes de seguir:** el DN impreso debe terminar en la OU de este proyecto:
+
+```
+CN=<fsxHost>,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local
+```
+
+Si termina en `OU=AWS FSX Servers`, `OU=AlteryxFSx` o `OU=CEMDataOpsFSx`, es el FSx de **otro equipo**. Detenerse.
 
 `Get-ADComputer` requiere el módulo `ActiveDirectory`. Si falta: `Install-WindowsFeature RSAT-AD-PowerShell`.
 
@@ -181,65 +218,26 @@ $rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
 $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
 ```
 
-###ERROR
-
-False
-Get-Acl : Cannot find path 'AD:\CN=AMZNFSX03TTJZMW,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsx0i5lbxmu,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsx26oislzq,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSX2J1KXUNF,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSX2MZF7YJL,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSX3FKCOPYD,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSX4BH43O9J,OU=AWS FSX 
-Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsx4cnoi0km,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSX564DKDLG,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsx6tiqlz4w,OU=AWS FSX 
-Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSX7HZQVVUA,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsx9lzfnymf,OU=AWS 
-FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXCIAFVGNR,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsxdhnmfnkv,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsxet830km1,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXGADPDL0X,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXHPNQTZR2,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsxi4waark1,OU=AWS FSX 
-Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsxjraxv1xz,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXLCXIQNKX,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXP48SWHBX,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXPHPXL23K,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsxpqhg3mmm,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=AMZNFSXTNSRVP6D,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsxusylgtaq,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsxwgkjf8fd,OU=AlteryxFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXWVK2EFPT,OU=AWS FSX 
-Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=amznfsxxklsyxgn,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local 
-CN=amznfsxyn82hu7w,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXZD02YIIR,OU=AWS FSX 
-Servers,OU=Servers,OU=Systems,DC=gdc,DC=local CN=AMZNFSXZIOQ5PG6,OU=CEMDataOpsFSx,OU=Servers,OU=Systems,DC=gdc,DC=local' because it 
-does not exist.
-At line:31 char:9
-+ $acl  = Get-Acl -Path "AD:\$fsxDn"
-+         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (:) [Get-Acl], ItemNotFoundException
-    + FullyQualifiedErrorId : GetAcl_PathNotFound_Exception,Microsoft.PowerShell.Commands.GetAclCommand
-You cannot call a method on a null-valued expression.
-At line:37 char:1
-+ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : InvalidOperation: (:) [], RuntimeException
-    + FullyQualifiedErrorId : InvokeMethodOnNull
-Set-Acl : Cannot bind argument to parameter 'AclObject' because it is null.
-At line:37 char:66
-+ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
-+                                                                  ~~~~
-    + CategoryInfo          : InvalidData: (:) [Set-Acl], ParameterBindingValidationException
-    + FullyQualifiedErrorId : ParameterArgumentValidationErrorNullNotAllowed,Microsoft.PowerShell.Commands.SetAclCommand
-
- 
-PS C:\Users\c91582b-a>
-
 **Qué hace:** el mismo patrón de A.1, pero aplicado al **computer object del FSx** en lugar del nodo Topology.
 
 Es necesario porque los objetos `DFSR-LocalSettings` → `msDFSR-Subscriber` → `msDFSR-Subscription` se crean como **hijos del computer object del miembro** (ver §3). Sin este permiso aparece el error 1 de §8.
 
 `AreAccessRulesProtected` responde: *¿esta OU tiene la herencia bloqueada?*
 
-- `False` → la OU hereda permisos del padre; lo normal
-- `True` → herencia bloqueada. Los permisos heredados **no aplican**, así que ni un Domain Admin heredado necesariamente pasa. Hay que otorgar la ACL explícita de abajo
+- `False` → la OU hereda permisos del padre; lo normal. **Valor confirmado en este entorno.**
+- `True` → herencia bloqueada. Los permisos heredados **no aplican**, así que ni un Domain Admin heredado necesariamente pasa
+
+> **Requisito:** `$fsxDn` debe haberse resuelto con la guarda de la sección Variables. Si se resolvió con un filtro amplio, `Get-Acl` falla con *"Cannot find path"* mostrando todos los DNs concatenados (§8, error 3).
+
+**Verificar el resultado:**
+
+```powershell
+(Get-Acl "AD:\$fsxDn").Access |
+  Where-Object { $_.IdentityReference -like "*$env:USERNAME*" } |
+  Format-Table IdentityReference, ActiveDirectoryRights, InheritanceType, IsInherited
+```
+
+Debe aparecer `GenericAll` con `InheritanceType = All` e `IsInherited = False` (es una ACE explícita, no heredada).
 
 > Vía GUI (ADUC): View → **Advanced Features** → computer object → Properties → Security → Advanced → Add → **Applies to: "This object and all descendant objects"** (dejarlo en *This object only* es el error más común).
 
@@ -523,6 +521,44 @@ The service control manager cannot be opened. Access is denied.
 **Resolución:** abandonar el wizard de DFS Management y usar la Fase C por PowerShell, que escribe directamente en AD sin validación en vivo contra el miembro.
 
 > Este error confirma que el GUI **nunca** podrá completar el procedimiento contra un FSx. No reintentar.
+
+### Error 3 — Resolución ambigua del computer object
+
+```
+Get-Acl : Cannot find path 'AD:\CN=AMZNFSX03TTJZMW,OU=AWS FSX Servers,OU=Servers,OU=Systems,DC=gdc,DC=local
+CN=amznfsx0i5lbxmu,OU=FSx,OU=Windows,... CN=amznfsx26oislzq,OU=FSx,OU=Windows,... [~30 DNs concatenados]'
+because it does not exist.
+
+You cannot call a method on a null-valued expression.
++ $acl.AddAccessRule($rule); Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
+
+Set-Acl : Cannot bind argument to parameter 'AclObject' because it is null.
+```
+
+**Causa:** `$fsxDn` se resolvió con un filtro amplio:
+
+```powershell
+# INCORRECTO
+$fsxDn = (Get-ADComputer -Filter 'Name -like "amznfsx*"').DistinguishedName
+```
+
+El dominio `gdc.local` contiene **~30 file systems FSx** de distintos equipos. El filtro los matcheó todos y `$fsxDn` quedó como un **array**. Al interpolarlo en `"AD:\$fsxDn"`, PowerShell unió todos los elementos separados por espacios formando una ruta inexistente.
+
+Los dos errores siguientes son cascada: `$acl` quedó `$null`, y `Set-Acl` no acepta un `AclObject` nulo.
+
+**No se modificó nada en AD** — el fallo ocurre antes de cualquier escritura.
+
+**Resolución:** identificar el file system por su DNS name en AWS y resolver el objeto con `-eq` más una guarda de conteo (ver sección Variables de §5).
+
+**Riesgo asociado:** los FSx del dominio están repartidos en al menos cinco OUs, y solo en la OU de este proyecto hay nueve objetos. Otorgar Full Control sobre el objeto equivocado **no produce error**: simplemente no sirve, y el `Add-DfsrMember` posterior apuntaría a un file system de otro equipo. Siempre confirmar el DN antes de escribir.
+
+**Diagnóstico rápido del inventario:**
+
+```powershell
+Get-ADComputer -Filter 'Name -like "amznfsx*"' |
+  Select-Object Name, DistinguishedName |
+  Sort-Object DistinguishedName | Format-Table -AutoSize
+```
 
 ---
 
