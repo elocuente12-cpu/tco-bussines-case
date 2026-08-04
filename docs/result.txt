@@ -1,24 +1,30 @@
-Buena elección — queda consistente con los otros cuatro miembros, que usan APC como nombre de carpeta replicada.
+Cambios
+Ruta — D:\share\Datos → D:\share\APC en las 11 referencias (variables, comandos, UNC, rollback, Fase E). Justificación registrada: consistencia con los otros cuatro miembros, que todos usan APC.
 
-Pasos
-
-$fsx = "amznfsxeze56tbv.gdc.local"
-
-# 1. Ver que existe hoy
-Get-ChildItem "\\$fsx\D`$\share\" | Format-Table Name, CreationTime -AutoSize
-Si falta APC (requiere Domain Admins):
+A.1 reescrito — el defecto real. Pasó de ACL manual sobre CN=Topology a:
 
 
-New-Item -Type Directory -Path "\\$fsx\D`$\share\APC"
-Si quedó Datos de B.1, confirma que está vacía y elimínala — la replicación nunca arrancó, así que debería estarlo:
+Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
+La alternativa manual quedó en un <details> colapsable, ahora aplicada sobre el objeto del RG completo con herencia, para que cubra Content y Topology. Con el árbol dibujado:
 
 
-Get-ChildItem "\\$fsx\D`$\share\Datos" -Recurse -File | Measure-Object
-Remove-Item "\\$fsx\D`$\share\Datos" -Recurse -Force
-Valores finales
+CN=APXEXPERIAN,CN=DFSR-GlobalSettings,CN=System,DC=gdc,DC=local
+  ├── CN=Content     -> msDFSR-ContentSet    <- lo que necesita C.3
+  └── CN=Topology    -> msDFSR-Member/Connection <- lo que necesita C.1 y C.2
+Error 5 documentado — los tres mensajes, cuáles son benignos y por qué, la tabla de Microsoft que separa las dos delegaciones, y el síntoma diagnóstico: ContentPath vacío en Get-DfsrMembership mientras los demás muestran su ruta.
 
-$contentPath = "D:\share\APC"                                  # ruta local vista por el FSx
-# UNC equivalente: \\amznfsxeze56tbv.gdc.local\share\APC       # para las EC2 y verificacion
-Recuerda la correspondencia: D:\share es el share por defecto \share del FSx. Se administra por D$ (admin share, exige Domain Admins) y se consume por \share.
+Estado actualizado — C.1 ✅ y C.2 ✅ (los hizo el wizard), C.3 ⬜ como único pendiente, más A.1b y B.1b como los dos pasos que lo desbloquean.
 
-Actualizo el runbook.
+Antes de reintentar C.3
+
+# 1. Crear la carpeta (Domain Admins)
+New-Item -Type Directory -Path "\\amznfsxeze56tbv.gdc.local\D`$\share\APC"
+
+# 2. Delegación (Domain Admins)
+Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
+
+# 3. Propagar
+repadmin /syncall (Get-ADDomain).PDCEmulator /AdeP
+Luego C.3 con $contentPath = "D:\share\APC", y directo a D.1.
+
+Sigue abierto el Resolve-DnsName PAHWPAPTUI03.gdc.local para contrastar contra las tres IPs del Security Group — es lo que decide si después del 4102 verás replicación o eventos 5002/5004/5008.
