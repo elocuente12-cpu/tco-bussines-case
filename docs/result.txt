@@ -9,6 +9,22 @@ Add-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local
 
 Add-DfsrConnection -GroupName "APXEXPERIAN" -SourceComputerName "PAHWPAPTUI03" -DestinationComputerName "amznfsxeze56tbv.gdc.local"
 
+Add-DfsrConnection : The connection could not be added because DFS Replication could not find at least one source and one destination computer in the replication group, or because the source 
+
+and destination computers were the same. Source computer: PAHWPAPTUI03 Destination computer: amznfsxeze56tbv.gdc.local Replication group: "APXEXPERIAN"
+
+At line:1 char:1
+
++ Add-DfsrConnection -GroupName "APXEXPERIAN" -SourceComputerName "PAHW ...
+
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    + CategoryInfo          : ObjectNotFound: (:) [Add-DfsrConnection], DfsrException
+
+    + FullyQualifiedErrorId : Add-DfsrConnection.NoDistinctMemberPairs,Microsoft.DistributedFileSystemReplication.Commands.AddDfsrConnectionCommand
+
+ 
+
 Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amznfsxeze56tbv.gdc.local" `
   -ContentPath "D:\share\APC" `
   -StagingPathQuotaInMB 4096 `
