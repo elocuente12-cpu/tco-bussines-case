@@ -1,55 +1,32 @@
-El problema está claro. Según tu propio runbook (§8, Error 5), el Set-DfsrMembership falla con "Security cannot be set on the replicated folder. Access is denied" porque la delegación original solo cubría CN=Topology, no CN=Content.
-
-Estado actual
-Paso	Estado	Evidencia
-C.1 — Add-DfsrMember	✅ Ya existe (lo creó el wizard)	AMZNFSXEZE56TBV aparece en Get-DfsrMember
-C.2 — Add-DfsrConnection	✅ Ya existen (bidireccional)	4 conexiones Enabled=True
-C.3 — Set-DfsrMembership	❌ Bloqueado	Access is denied sobre CN=Content
-La membresía del FSx muestra ContentPath vacío — está en el grupo pero sin replicar nada.
-
-Lo que falta: ejecutar A.1 con Grant-DfsrDelegation
-Tu runbook ya documenta la solución exacta. El paso pendiente es:
-
-# Ejecutar con una cuenta Domain Admins (una sola vez)
 Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
-Verificar:
 
-Get-DfsrDelegation -GroupName "APXEXPERIAN" |
-  Where-Object AccountName -like "*C91582B-A*" |
-  Format-Table AccountName, IsInherited -AutoSize
-Propagar:
+nltest /dclist:gdc.local
 
-repadmin /syncall /AdeP
-Después, solo reejecutar C.3 (no repetir C.1 ni C.2 que ya existen):
 
-$rg          = "APXEXPERIAN"
-$rf          = "APC"
-$fsx         = "amznfsxeze56tbv.gdc.local"
-$contentPath = "D:\share\APC"
-$stagingMB   = 4096
-$conflictMB  = 660
-
-Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
-  -ContentPath $contentPath `
-  -StagingPathQuotaInMB $stagingMB `
-  -ConflictAndDeletedQuotaInMB $conflictMB `
-  -PrimaryMember $false `
-  -Force
-
-  Set-DfsrMembership : Could not edit the DFSR membership with domain: ; replication group: "APXEXPERIAN"; replicated folder: "APC"; 
-computer: amznfsxeze56tbv.gdc.local; GUID: None specified. The LDAP server is unavailable.
-At line:8 char:1
-+ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx  ...
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (DFSR membership...None specified.:String) [Set-DfsrMembership], DfsrException
-    + FullyQualifiedErrorId : Set-DfsrMembership.OMException,Microsoft.DistributedFileSystemReplication.Commands.SetDfsrMembershipCo 
-   mmand
-¿Por qué falla?
-Set-DfsrMembership escribe en el objeto msDFSR-ContentSet bajo CN=Content del RG, no en CN=Topology. La ACL manual que se aplicó antes solo cubría Topology. Grant-DfsrDelegation otorga permisos sobre los cuatro tipos de objeto del RG (members, connections, content sets, y memberships) en una sola operación.
-
-Resumen de acciones
-⬜ Ejecutar Grant-DfsrDelegation (requiere Domain Admins)
-⬜ repadmin /syncall /AdeP
-⬜ Reejecutar solo Set-DfsrMembership (C.3)
-⬜ Verificar que ContentPath = D:\share\APC aparece en Get-DfsrMembership
-⬜ Esperar evento 4102 en el log DFS Replication del miembro on-prem
+PS C:\Windows\system32> Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
+ 
+nltest /dclist:gdc.local
+ 
+ 
+GroupName   : APXEXPERIAN
+AccountName : GDC\C91582B-A
+IsInherited : False
+ 
+Get list of DCs in domain 'gdc.local' from '\\CNYZPDCGDC01.gdc.local'.
+     CORP-NOT-GDC01.gdc.local [PDC]  [DS] Site: Nottingham
+    usaea1pdcwgdc01.gdc.local        [DS] Site: AWSEastRegion-Virginia
+            ALNGDC1.gdc.local        [DS] Site: Allen
+            MCKGDC1.gdc.local        [DS] Site: McKinney
+     CORP-NOT-GDC02.gdc.local        [DS] Site: Nottingham
+     USMEA2PDCWES01.gdc.local        [DS] Site: AzureEastRegion
+       COBOPDCGDC02.gdc.local        [DS] Site: Bogota
+       CNYZPDCGDC01.gdc.local        [DS] Site: Beijing-CNX2
+       AUMBPDCGDC01.gdc.local        [DS] Site: Melbourne-AUX2
+          AUX1GDC01.gdc.local        [DS] Site: SydneyIDC
+     zamza1pdcwes01.gdc.local        [DS] Site: AzureZARegion
+       INMBPDCGDC01.gdc.local        [DS] Site: MumbaiDC-INX1
+       MYCBPDCGDC01.gdc.local        [DS] Site: KualaLumpurIDC-MX1
+The command completed successfully
+ 
+ 
+PS C:\Windows\system32>
