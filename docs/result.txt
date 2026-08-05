@@ -1,9 +1,10 @@
-# Verificar A.2 desde ESTE servidor
 $fsxDn = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
 
-(Get-Acl "AD:\$fsxDn").Access |
+$entry = [ADSI]"LDAP://$fsxDn"
+$entry.ObjectSecurity.Access |
   Where-Object { $_.IdentityReference -like "*C91582B-A*" } |
   Format-Table IdentityReference, ActiveDirectoryRights, InheritanceType -AutoSize
+
 
 
 $fsxDn  = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
