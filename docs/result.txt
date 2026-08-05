@@ -35,6 +35,15 @@ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx `
   -ConflictAndDeletedQuotaInMB $conflictMB `
   -PrimaryMember $false `
   -Force
+
+  Set-DfsrMembership : Could not edit the DFSR membership with domain: ; replication group: "APXEXPERIAN"; replicated folder: "APC"; 
+computer: amznfsxeze56tbv.gdc.local; GUID: None specified. The LDAP server is unavailable.
+At line:8 char:1
++ Set-DfsrMembership -GroupName $rg -FolderName $rf -ComputerName $fsx  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DFSR membership...None specified.:String) [Set-DfsrMembership], DfsrException
+    + FullyQualifiedErrorId : Set-DfsrMembership.OMException,Microsoft.DistributedFileSystemReplication.Commands.SetDfsrMembershipCo 
+   mmand
 ¿Por qué falla?
 Set-DfsrMembership escribe en el objeto msDFSR-ContentSet bajo CN=Content del RG, no en CN=Topology. La ACL manual que se aplicó antes solo cubría Topology. Grant-DfsrDelegation otorga permisos sobre los cuatro tipos de objeto del RG (members, connections, content sets, y memberships) en una sola operación.
 
