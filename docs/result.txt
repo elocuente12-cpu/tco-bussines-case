@@ -1,12 +1,17 @@
-IdentityReference ActiveDirectoryRights InheritanceType
------------------ --------------------- ---------------
-GDC\C91582B-A                GenericAll             All
- 
- 
-IdentityReference ActiveDirectoryRights InheritanceType
------------------ --------------------- ---------------
-GDC\C91582B-A                GenericAll            None
-GDC\C91582B-A                GenericAll             All
- 
- 
-PS C:\Windows\system32>
+# 1. Eliminar el miembro FSx del RG (limpia conexiones y membresía residual)
+Remove-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local" -Force
+
+# 2. Verificar que ya no existe
+Get-DfsrMember -GroupName "APXEXPERIAN" | Format-Table ComputerName -AutoSize
+
+# 3. Recrear todo de una vez (C.1 + C.2 + C.3 juntos)
+Add-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local"
+
+Add-DfsrConnection -GroupName "APXEXPERIAN" -SourceComputerName "PAHWPAPTUI03" -DestinationComputerName "amznfsxeze56tbv.gdc.local"
+
+Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amznfsxeze56tbv.gdc.local" `
+  -ContentPath "D:\share\APC" `
+  -StagingPathQuotaInMB 4096 `
+  -ConflictAndDeletedQuotaInMB 660 `
+  -PrimaryMember $false `
+  -Force
