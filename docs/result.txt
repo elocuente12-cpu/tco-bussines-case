@@ -1,33 +1,20 @@
-PS C:\Users\c91582b-a> nltest /dclist:gdc.local
+Si falla incluso con Domain Admins, el problema no es de permisos. Es un estado corrupto del objeto msDFSR-ContentSet en AD que el cmdlet no puede sobrescribir.
 
-Get list of DCs in domain 'gdc.local' from '\\INMBPDCGDC01.gdc.local'.
+Vamos a escribir la membresía directamente en AD via ADSI, bypaseando Set-DfsrMembership:
 
-     CORP-NOT-GDC01.gdc.local [PDC]  [DS] Site: Nottingham
+Paso 1 — Verificar si ya existe un objeto de suscripción residual:
 
-    usaea1pdcwgdc01.gdc.local        [DS] Site: AWSEastRegion-Virginia
+$fsxDn = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
+$entry = [ADSI]"LDAP://$fsxDn"
+$searcher = New-Object System.DirectoryServices.DirectorySearcher($entry)
+$searcher.Filter = "(objectClass=*)"
+$searcher.SearchScope = "Subtree"
+$searcher.FindAll() | ForEach-Object { $_.Path }
+Paso 2 — Verificar el security descriptor del ContentSet:
 
-            ALNGDC1.gdc.local        [DS] Site: Allen
-
-            MCKGDC1.gdc.local        [DS] Site: McKinney
-
-     CORP-NOT-GDC02.gdc.local        [DS] Site: Nottingham
-
-     USMEA2PDCWES01.gdc.local        [DS] Site: AzureEastRegion
-
-       COBOPDCGDC02.gdc.local        [DS] Site: Bogota
-
-     zamza1pdcwes01.gdc.local        [DS] Site: AzureZARegion
-
-       CNYZPDCGDC01.gdc.local        [DS] Site: Beijing-CNX2
-
-       AUMBPDCGDC01.gdc.local        [DS] Site: Melbourne-AUX2
-
-          AUX1GDC01.gdc.local        [DS] Site: SydneyIDC
-
-       INMBPDCGDC01.gdc.local        [DS] Site: MumbaiDC-INX1
-
-       MYCBPDCGDC01.gdc.local        [DS] Site: KualaLumpurIDC-MX1
-
-The command completed successfully
-
- 
+$contentSetDn = "CN=APC,CN=Content,CN=APXEXPERIAN,CN=DFSR-GlobalSettings,CN=System,DC=gdc,DC=local"
+$csEntry = [ADSI]"LDAP://$contentSetDn"
+$csEntry.ObjectSecurity.Access |
+  Where-Object { $_.AccessControlType -eq "Deny" } |
+  Format-Table IdentityReference, ActiveDirectoryRights, AccessControlType -AutoSize
+Esto verificará si hay una ACE de denegación explícita sobre el ContentSet que bloquea a todos, incluso Domain Admins. Pásame la salida de ambos.
