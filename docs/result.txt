@@ -1,32 +1,6 @@
-Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
-
-nltest /dclist:gdc.local
-
-
-PS C:\Windows\system32> Grant-DfsrDelegation -GroupName "APXEXPERIAN" -AccountName "GDC\C91582B-A" -Force
- 
-nltest /dclist:gdc.local
- 
- 
-GroupName   : APXEXPERIAN
-AccountName : GDC\C91582B-A
-IsInherited : False
- 
-Get list of DCs in domain 'gdc.local' from '\\CNYZPDCGDC01.gdc.local'.
-     CORP-NOT-GDC01.gdc.local [PDC]  [DS] Site: Nottingham
-    usaea1pdcwgdc01.gdc.local        [DS] Site: AWSEastRegion-Virginia
-            ALNGDC1.gdc.local        [DS] Site: Allen
-            MCKGDC1.gdc.local        [DS] Site: McKinney
-     CORP-NOT-GDC02.gdc.local        [DS] Site: Nottingham
-     USMEA2PDCWES01.gdc.local        [DS] Site: AzureEastRegion
-       COBOPDCGDC02.gdc.local        [DS] Site: Bogota
-       CNYZPDCGDC01.gdc.local        [DS] Site: Beijing-CNX2
-       AUMBPDCGDC01.gdc.local        [DS] Site: Melbourne-AUX2
-          AUX1GDC01.gdc.local        [DS] Site: SydneyIDC
-     zamza1pdcwes01.gdc.local        [DS] Site: AzureZARegion
-       INMBPDCGDC01.gdc.local        [DS] Site: MumbaiDC-INX1
-       MYCBPDCGDC01.gdc.local        [DS] Site: KualaLumpurIDC-MX1
-The command completed successfully
- 
- 
-PS C:\Windows\system32>
+Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amznfsxeze56tbv.gdc.local" `
+  -ContentPath "D:\share\APC" `
+  -StagingPathQuotaInMB 4096 `
+  -ConflictAndDeletedQuotaInMB 660 `
+  -PrimaryMember $false `
+  -Force
