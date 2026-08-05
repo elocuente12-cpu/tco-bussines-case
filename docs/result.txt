@@ -1,90 +1,33 @@
-# 1. Eliminar el miembro FSx del RG (limpia conexiones y membresía residual)
-Remove-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local" -Force
+PS C:\Users\c91582b-a> nltest /dclist:gdc.local
 
-# 2. Verificar que ya no existe
-Get-DfsrMember -GroupName "APXEXPERIAN" | Format-Table ComputerName -AutoSize
+Get list of DCs in domain 'gdc.local' from '\\INMBPDCGDC01.gdc.local'.
 
-# 3. Recrear todo de una vez (C.1 + C.2 + C.3 juntos)
-Add-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local"
+     CORP-NOT-GDC01.gdc.local [PDC]  [DS] Site: Nottingham
 
-Add-DfsrConnection -GroupName "APXEXPERIAN" -SourceComputerName "PAHWPAPTUI03" -DestinationComputerName "amznfsxeze56tbv.gdc.local"
+    usaea1pdcwgdc01.gdc.local        [DS] Site: AWSEastRegion-Virginia
 
-Add-DfsrConnection : The connection could not be added because DFS Replication could not find at least one source and one destination computer in the replication group, or because the source 
+            ALNGDC1.gdc.local        [DS] Site: Allen
 
-and destination computers were the same. Source computer: PAHWPAPTUI03 Destination computer: amznfsxeze56tbv.gdc.local Replication group: "APXEXPERIAN"
+            MCKGDC1.gdc.local        [DS] Site: McKinney
 
-At line:1 char:1
+     CORP-NOT-GDC02.gdc.local        [DS] Site: Nottingham
 
-+ Add-DfsrConnection -GroupName "APXEXPERIAN" -SourceComputerName "PAHW ...
+     USMEA2PDCWES01.gdc.local        [DS] Site: AzureEastRegion
 
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+       COBOPDCGDC02.gdc.local        [DS] Site: Bogota
 
-    + CategoryInfo          : ObjectNotFound: (:) [Add-DfsrConnection], DfsrException
+     zamza1pdcwes01.gdc.local        [DS] Site: AzureZARegion
 
-    + FullyQualifiedErrorId : Add-DfsrConnection.NoDistinctMemberPairs,Microsoft.DistributedFileSystemReplication.Commands.AddDfsrConnectionCommand
+       CNYZPDCGDC01.gdc.local        [DS] Site: Beijing-CNX2
 
- 
+       AUMBPDCGDC01.gdc.local        [DS] Site: Melbourne-AUX2
 
-Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amznfsxeze56tbv.gdc.local" `
-  -ContentPath "D:\share\APC" `
-  -StagingPathQuotaInMB 4096 `
-  -ConflictAndDeletedQuotaInMB 660 `
-  -PrimaryMember $false `
-  -Force
+          AUX1GDC01.gdc.local        [DS] Site: SydneyIDC
 
+       INMBPDCGDC01.gdc.local        [DS] Site: MumbaiDC-INX1
 
-S C:\Windows\system32> Add-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local" -Verbose
+       MYCBPDCGDC01.gdc.local        [DS] Site: KualaLumpurIDC-MX1
 
-VERBOSE: Performing the operation "Add-DfsrMember" on target "APXEXPERIAN".
- 
- 
-GroupName                    : APXEXPERIAN
+The command completed successfully
 
-ComputerName                 : AMZNFSXEZE56TBV
-
-DomainName                   : gdc.local
-
-Identifier                   : 6a29bbf5-d898-4511-b3a2-84e88ffdd6fb
-
-Description                  : 
-
-DnsName                      : amznfsxeze56tbv.gdc.local
-
-Site                         : 
-
-NumberOfConnections          : 0
-
-NumberOfInboundConnections   : 0
-
-NumberOfOutboundConnections  : 0
-
-NumberOfInterSiteConnections : 0
-
-NumberOfIntraSiteConnections : 0
-
-IsClusterNode                : False
-
-State                        : Incomplete
- 
- 
- 
-The DFS Replication service is stopping communication with partner AMZNFSXEZE56TBV for replication group APXEXPERIAN due to an error. The service will retry the connection periodically. 
-
-Additional Information: 
-
-Error: 1726 (The remote procedure call failed.) 
-
-Connection ID: 350062BA-563F-49C1-AE67-BD495EEEC45F 
-
-Replication Group ID: B2343E58-B578-4B4F-9215-1434432E65FC
- 
-The DFS Replication service successfully established an inbound connection with partner AMZNFSXEZE56TBV for replication group APXEXPERIAN. 
-
-Additional Information: 
-
-Connection Address Used: amznfsxeze56tbv.gdc.local 
-
-Connection ID: 350062BA-563F-49C1-AE67-BD495EEEC45F 
-
-Replication Group ID: B2343E58-B578-4B4F-9215-1434432E65FC
  
