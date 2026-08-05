@@ -4,3 +4,14 @@ Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amz
   -ConflictAndDeletedQuotaInMB 660 `
   -PrimaryMember $false `
   -Force
+
+Set-DfsrMembership : Security cannot be set on the replicated folder. Access is denied
+At line:1 char:1
++ Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -Comput ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DFSR membership...None specified.:String) [Set-DfsrMembership], DfsrException
+    + FullyQualifiedErrorId : DfsrCore.ThrowIfInconsistent,Microsoft.DistributedFileSystemReplication.Commands.SetDfsrMembershipComm 
+   and
+
+ 
+PS C:\Windows\system32>
