@@ -15,3 +15,60 @@ Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amz
   -ConflictAndDeletedQuotaInMB 660 `
   -PrimaryMember $false `
   -Force
+
+
+S C:\Windows\system32> Add-DfsrMember -GroupName "APXEXPERIAN" -ComputerName "amznfsxeze56tbv.gdc.local" -Verbose
+
+VERBOSE: Performing the operation "Add-DfsrMember" on target "APXEXPERIAN".
+ 
+ 
+GroupName                    : APXEXPERIAN
+
+ComputerName                 : AMZNFSXEZE56TBV
+
+DomainName                   : gdc.local
+
+Identifier                   : 6a29bbf5-d898-4511-b3a2-84e88ffdd6fb
+
+Description                  : 
+
+DnsName                      : amznfsxeze56tbv.gdc.local
+
+Site                         : 
+
+NumberOfConnections          : 0
+
+NumberOfInboundConnections   : 0
+
+NumberOfOutboundConnections  : 0
+
+NumberOfInterSiteConnections : 0
+
+NumberOfIntraSiteConnections : 0
+
+IsClusterNode                : False
+
+State                        : Incomplete
+ 
+ 
+ 
+The DFS Replication service is stopping communication with partner AMZNFSXEZE56TBV for replication group APXEXPERIAN due to an error. The service will retry the connection periodically. 
+
+Additional Information: 
+
+Error: 1726 (The remote procedure call failed.) 
+
+Connection ID: 350062BA-563F-49C1-AE67-BD495EEEC45F 
+
+Replication Group ID: B2343E58-B578-4B4F-9215-1434432E65FC
+ 
+The DFS Replication service successfully established an inbound connection with partner AMZNFSXEZE56TBV for replication group APXEXPERIAN. 
+
+Additional Information: 
+
+Connection Address Used: amznfsxeze56tbv.gdc.local 
+
+Connection ID: 350062BA-563F-49C1-AE67-BD495EEEC45F 
+
+Replication Group ID: B2343E58-B578-4B4F-9215-1434432E65FC
+ 
