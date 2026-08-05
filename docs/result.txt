@@ -1,17 +1,21 @@
-Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -ComputerName "amznfsxeze56tbv.gdc.local" `
-  -ContentPath "D:\share\APC" `
-  -StagingPathQuotaInMB 4096 `
-  -ConflictAndDeletedQuotaInMB 660 `
-  -PrimaryMember $false `
-  -Force
+# Verificar A.2 desde ESTE servidor
+$fsxDn = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
 
-Set-DfsrMembership : Security cannot be set on the replicated folder. Access is denied
-At line:1 char:1
-+ Set-DfsrMembership -GroupName "APXEXPERIAN" -FolderName "APC" -Comput ...
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (DFSR membership...None specified.:String) [Set-DfsrMembership], DfsrException
-    + FullyQualifiedErrorId : DfsrCore.ThrowIfInconsistent,Microsoft.DistributedFileSystemReplication.Commands.SetDfsrMembershipComm 
-   and
+(Get-Acl "AD:\$fsxDn").Access |
+  Where-Object { $_.IdentityReference -like "*C91582B-A*" } |
+  Format-Table IdentityReference, ActiveDirectoryRights, InheritanceType -AutoSize
 
- 
-PS C:\Windows\system32>
+
+$fsxDn  = "CN=AMZNFSXEZE56TBV,OU=FSx,OU=Windows,OU=AWS,OU=ExperianExpressCloud,OU=Servers,OU=Systems,DC=gdc,DC=local"
+$cuenta = "GDC\C91582B-A"
+
+$sid  = (New-Object System.Security.Principal.NTAccount($cuenta)).Translate(
+          [System.Security.Principal.SecurityIdentifier])
+$acl  = Get-Acl -Path "AD:\$fsxDn"
+$rule = New-Object System.DirectoryServices.ActiveDirectoryAccessRule(
+          $sid,
+          [System.DirectoryServices.ActiveDirectoryRights]::GenericAll,
+          [System.Security.AccessControl.AccessControlType]::Allow,
+          [System.DirectoryServices.ActiveDirectorySecurityInheritance]::All)
+$acl.AddAccessRule($rule)
+Set-Acl -Path "AD:\$fsxDn" -AclObject $acl
