@@ -1,0 +1,23 @@
+EC2	Hostname	NAT IP	 	 	 
+USAEA1PWBWES21	
+PAHWPAPTUI03	10.54.128.63	Portal APCExperian y TuIntelidat	https://mobile.apc.com.pa	amznfsxx4fnxdip.gdc.local Inicio 
+PAHWPAPTUI04	10.54.128.64	https://www.tuintelidat.com
+
+USAEA1PWBWES22
+PAHWPAPSRC03	10.54.128.53	InteliSRC	https://online.intelidat.com	FSx 	 
+PAHWPAPSRC04	10.54.128.54
+
+USAEA1PWBWES23
+PAHWPAPWFC01	10.54.128.30	WebFolder	https://webfolder.intelidat.com	FSx 	 
+PAHWPAPWFC02	10.54.128.50
+
+USAEA1PWBWES24
+PAHWPAPWSS03	10.54.128.43	WebServices	https://webservices.apcexperian.com	FSx 	 
+PAHWPAPWSS04	10.54.128.44	https://webservices.apc.com.pa
+
+USAEA1PWBWES25	
+PAHWPWSAPI01	10.54.129.84	API AscendOps y SalesForce	 	FSx
+PAHWPWSAPI02	10.54.129.94
+
+USAEA1PWBWES26
+PAHWPCHECS01	10.54.128.61	ECS Chile	https://www.miexperian.cl/	FSx
