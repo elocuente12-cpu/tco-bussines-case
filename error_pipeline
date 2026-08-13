@@ -1,7 +1,73 @@
-Error: Reference to undeclared resource
+Error: Unsupported attribute
 
-  on asg.tf line 31, in module "asg_windows":
-  31:   existing_service_linked_role_arn = data.aws_iam_role.autoscaling_slr.arn
+  on outputs.tf line 21, in output "sg_fsx_id":
+  21:   value       = module.sg_fsx.id
+    ├────────────────
+    │ module.sg_fsx is object with 6 attributes
 
-A data resource "aws_iam_role" "autoscaling_slr" has not been declared in the
-root module.
+This object does not have an attribute named "id".
+
+Error: Unsupported attribute
+
+  on outputs.tf line 80, in output "asg_name":
+  80:   value       = module.asg_windows.asg_name
+    ├────────────────
+    │ module.asg_windows is object with 1 attribute "app1"
+
+This object does not have an attribute named "asg_name".
+
+Error: Unsupported attribute
+
+  on outputs.tf line 85, in output "asg_arn":
+  85:   value       = module.asg_windows.asg_arn
+    ├────────────────
+    │ module.asg_windows is object with 1 attribute "app1"
+
+This object does not have an attribute named "asg_arn".
+
+Error: Unsupported attribute
+
+  on outputs.tf line 90, in output "launch_template_id":
+  90:   value       = module.asg_windows.launch_template_id
+    ├────────────────
+    │ module.asg_windows is object with 1 attribute "app1"
+
+This object does not have an attribute named "launch_template_id".
+
+Error: Invalid for_each argument
+
+  on .terraform/modules/asg_windows/main.tf line 125, in resource "aws_autoscaling_attachment" "this":
+ 125:   for_each = var.create_autoscaling_group ? toset(var.target_group_arns) : []
+    ├────────────────
+    │ var.create_autoscaling_group is true
+    │ var.target_group_arns is list of string with 1 element
+
+The "for_each" set includes values derived from resource attributes that
+cannot be determined until apply, and so Terraform cannot determine the full
+set of keys that will identify the instances of this resource.
+
+When working with unknown values in for_each, it's better to use a map value
+where the keys are defined statically in your configuration and where only
+the values contain apply-time results.
+
+Alternatively, you could use the -target planning option to first apply only
+the resources that the for_each value depends on, and then apply a second
+time to fully converge.
+
+Error: Invalid for_each argument
+
+  on .terraform/modules/sg_fsx/main.tf line 99, in resource "aws_vpc_security_group_ingress_rule" "security_groups":
+  99:   for_each = local.sg_ingress_rule_sg
+    ├────────────────
+    │ local.sg_ingress_rule_sg will be known only after apply
+
+The "for_each" map includes keys derived from resource attributes that cannot
+be determined until apply, and so Terraform cannot determine the full set of
+keys that will identify the instances of this resource.
+
+When working with unknown values in for_each, it's better to define the map
+keys statically in your configuration and place apply-time results only in
+the map values.
+
+Alternatively, you could use the -target planning option to first apply only
+the resources that the for_
