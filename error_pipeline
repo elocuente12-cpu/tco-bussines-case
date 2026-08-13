@@ -1,26 +1,32 @@
-rror: creating VPC Security Group Rule
+>>> Ejecutando Paso 1: Instalar IIS...
 
-  with module.sg_windows_asg["app1"].aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"],
-  on .terraform/modules/sg_windows_asg/main.tf line 134, in resource "aws_vpc_security_group_egress_rule" "eec_default":
- 134: resource "aws_vpc_security_group_egress_rule" "eec_default" {
+=========================================
 
-operation error EC2: AuthorizeSecurityGroupEgress, https response error
-StatusCode: 400, RequestID: b8217533-10ac-446b-9c73-1660cb639566, api error
-InvalidPermission.Duplicate: the specified rule "peer: 0.0.0.0/0, ALL, ALLOW"
-already exists
+PASO 1: Instalando IIS Web Server
 
-resource "aws_vpc_security_group_ingress_rule" "security_groups" {
-  for_each = local.sg_ingress_rule_sg
+=========================================
 
-  security_group_id            = aws_security_group.this.id
-  from_port                    = each.value.from_port
-  to_port                      = each.value.to_port
-  ip_protocol                  = each.value.ip_protocol
-  description                  = each.value.description
-  referenced_security_group_id = each.value.referenced_security_group_id
-  tags                         = each.value.tags
+Instalando 36 features...
+ 
+  IIS Roles: 31
 
-  depends_on = [
-    time_sleep.sg_rule_wait
-  ]
-}
+  WCF Services: 5
+ 
+Install-WindowsFeature : The server could not update the provided feature files in the time allowed.
+
+At C:\build\01-install-iis.ps1:84 char:1
+
++ Install-WindowsFeature -Name $allFeatures -IncludeManagementTools
+
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    + CategoryInfo          : OperationTimeout: (bd444be9-b495-4f0d-99f0-b186f80dbd44:Guid) [Install-WindowsFeature],
+
+   Exception
+
+    + FullyQualifiedErrorId : GetAlterationState__CallCycleTimeout,Microsoft.Windows.ServerManager.Commands.AddWindows
+
+   FeatureCommand
+
+PS C:\build>
+ 
