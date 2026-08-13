@@ -1,71 +1,47 @@
-Error: Invalid index
+Error: Unsupported attribute
 
-  on securitygroups.tf line 133, in module "sg_fsx":
- 133:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+  on outputs.tf line 16, in output "sg_windows_id":
+  16:   value       = module.sg_windows.id
     ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+    │ module.sg_windows is object with no attributes
 
-The given key does not identify an element in this collection value.
+This object does not have an attribute named "id".
 
-Error: Invalid index
+Error: Attempt to get attribute from null value
 
-  on securitygroups.tf line 133, in module "sg_fsx":
- 133:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+  on .terraform/modules/alb/alarms.tf line 39, in locals:
+  39:           threshold           = tg.target_alarm != null && tg.target_alarm.unhealthy_threshold != null ? tg.target_alarm.unhealthy_threshold : var.unhealthy_host_alarm_threshold
     ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+    │ tg.target_alarm is null
 
-The given key does not identify an element in this collection value.
+This value is null, so it does not have any attributes.
 
-Error: Invalid index
+Error: Attempt to get attribute from null value
 
-  on securitygroups.tf line 148, in module "sg_fsx":
- 148:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+  on .terraform/modules/alb/alarms.tf line 57, in locals:
+  57:           threshold           = tg.target_alarm != null && tg.target_alarm.healthy_threshold != null ? tg.target_alarm.healthy_threshold : var.healthy_host_alarm_threshold
     ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+    │ tg.target_alarm is null
 
-The given key does not identify an element in this collection value.
+This value is null, so it does not have any attributes.
 
-Error: Invalid index
+Error: Invalid count argument
 
-  on securitygroups.tf line 148, in module "sg_fsx":
- 148:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
+  on .terraform/modules/asg_windows/main.tf line 397, in resource "aws_iam_service_linked_role" "this":
+ 397:   count = var.create_autoscaling_group && var.existing_service_linked_role_arn == null ? 1 : 0
+
+The "count" value depends on resource attributes that cannot be determined
+until apply, so Terraform cannot predict how many instances will be created.
+To work around this, use the -target argument to first apply only the
+resources that the count depends on.
+
+Error: Invalid for_each argument
+
+  on .terraform/modules/sg_windows_asg/main.tf line 99, in resource "aws_vpc_security_group_ingress_rule" "security_groups":
+  99:   for_each = local.sg_ingress_rule_sg
     ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
+    │ local.sg_ingress_rule_sg will be known only after apply
 
-The given key does not identify an element in this collection value.
-
-Error: Invalid index
-
-  on securitygroups.tf line 155, in module "sg_fsx":
- 155:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
-    ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
-
-The given key does not identify an element in this collection value.
-
-Error: Invalid index
-
-  on securitygroups.tf line 155, in module "sg_fsx":
- 155:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
-    ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
-
-The given key does not identify an element in this collection value.
-
-Error: Invalid index
-
-  on securitygroups.tf line 162, in module "sg_fsx":
- 162:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
-    ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
-
-The given key does not identify an element in this collection value.
-
-Error: Invalid index
-
-  on securitygroups.tf line 162, in module "sg_fsx":
- 162:         security_groups = [module.sg_windows["PAHWPWSAPI01"].id, module.sg_windows["PAHWPWFINT01"].id]
-    ├────────────────
-    │ module.sg_windows is object with 1 attribute "USAEA1PAPWES33"
-
-The given key does not identify an element in this collection value.
+The "for_each" map includes keys derived from resource attributes that cannot
+be determined until apply, and so Terraform cannot determine the full set of
+keys that will identify the instances of this resource.
