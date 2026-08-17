@@ -1,1 +1,23 @@
 Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+
+# 1. Eliminar el ASG attachment al target group
+aws autoscaling detach-load-balancer-target-groups \
+  --auto-scaling-group-name "eec-aws-us-eits-intelisrcpa-prd-windows-app1-asg" \
+  --target-group-arns "arn:aws:elasticloadbalancing:us-east-1:274193347839:targetgroup/app1-tg/XXXX" \
+  --region us-east-1
+
+# 2. Eliminar el ASG (termina las instancias automáticamente)
+aws autoscaling delete-auto-scaling-group \
+  --auto-scaling-group-name "eec-aws-us-eits-intelisrcpa-prd-windows-app1-asg" \
+  --force-delete \
+  --region us-east-1
+
+# 3. Esperar a que las instancias terminen (~2 min)
+aws autoscaling describe-auto-scaling-groups \
+  --auto-scaling-group-names "eec-aws-us-eits-intelisrcpa-prd-windows-app1-asg" \
+  --region us-east-1 --query "AutoScalingGroups[0].Instances"
+
+# 4. Eliminar el Launch Template
+aws ec2 delete-launch-template \
+  --launch-template-name "eec-aws-us-eits-intelisrcpa-prd-windows-app1-lt" \
+  --region us-east-1
