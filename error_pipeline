@@ -9,3 +9,15 @@ Additional Information:
 Error: 9026 (The connection is invalid) 
 Connection ID: 5E9DD252-CAF3-483B-9637-1B4E0CE5ECF5 
 Replication Group ID: 073EB0E2-8EB4-4FFB-A628-B4D7D2437AC6
+
+
+The DFS Replication service failed to communicate with partner AMZNFSXSOKJTGSJ for replication group InteliSRC. This error can occur if the host is unreachable, or if the DFS Replication service is not running on the server. 
+Partner DNS Address: amznfsxsokjtgsj.gdc.local 
+Optional data if available: 
+Partner WINS Address: amznfsxsokjtgsj 
+Partner IP Address: 10.64.160.245 
+The service will retry the connection periodically. 
+Additional Information: 
+Error: 1722 (The RPC server is unavailable.) 
+Connection ID: 5E9DD252-CAF3-483B-9637-1B4E0CE5ECF5 
+Replication Group ID: 073EB0E2-8EB4-4FFB-A628-B4D7D2437AC6
