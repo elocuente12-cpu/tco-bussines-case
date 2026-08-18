@@ -1,42 +1,11 @@
-[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[0m[35m[40m[2J[01;01H[=3h[2J[01;01H[0m[37m[40m2026/08/17 17:41:59Z: Windows is being configured. 'SysprepState=IMAGE_STATE_UNDEPLOYABLE'
-[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[0m[35m[40m[2J[01;01H[=3h[2J[01;01H[0m[37m[40m2026/08/17 12:46:14Z: Windows is being configured. 'SysprepState=IMAGE_STATE_UNDEPLOYABLE'
-2026/08/17 17:46:54Z: Windows sysprep configuration complete.
-2026/08/17 17:46:57Z: Message: Meta-data is now available.
-2026/08/17 17:46:59Z: AMI Origin Version: 2026.07.15
-2026/08/17 17:46:59Z: AMI Origin Name: Windows_Server-2025-English-Full-Base
-2026/08/17 17:46:59Z: OS: Microsoft Windows NT 10.0.26100
-2026/08/17 17:46:59Z: OsVersion: 10.0
-2026/08/17 17:46:59Z: OsProductName: Windows Server 2025 Datacenter
-2026/08/17 17:46:59Z: OsBuildLabEx: 26100.1.amd64fre.ge_release.240331-1435
-2026/08/17 17:46:59Z: OsCurrentBuild: 26100
-2026/08/17 17:46:59Z: OsReleaseId: 2009
-2026/08/17 17:46:59Z: Language: en-US
-2026/08/17 17:46:59Z: TimeZone: UTC
-2026/08/17 17:46:59Z: Offset: UTC +0000
-2026/08/17 17:46:59Z: Launch: EC2 Launch v2.5.1
-2026/08/17 17:47:00Z: AMI-ID: ami-0faa0f7a04c6fd533
-2026/08/17 17:47:00Z: Instance-ID: i-08d65a9f4fb62db9d
-2026/08/17 17:47:00Z: Instance Type: r7a.medium
-2026/08/17 17:47:01Z: Driver: AWS NVMe Driver v1.8.2.53
-2026/08/17 17:47:01Z: SubComponent: 1.8.2.53; EnableSCSIPersistentReservations: 0
-2026/08/17 17:47:01Z: Driver: Amazon Elastic Network Adapter v2.11.0.0
-2026/08/17 17:47:02Z: Driver: EC2 Windows Utility Device v3.2.0.29
-2026/08/17 17:47:07Z: Waiting for RDP info.
-2026/08/17 17:48:28Z: HOSTNAME: EC2AMAZ-K9K652I
-2026/08/17 17:48:28Z: RDPCERTIFICATE-SUBJECTNAME: EC2AMAZ-K9K652I
-2026/08/17 17:48:28Z: RDPCERTIFICATE-THUMBPRINT: 8FBDE23EA93A698C4B1D98833E7A78486F4F53B4
-2026/08/17 17:48:28Z: SSM: Amazon SSM Agent v3.3.4793.0
-2026/08/17 17:48:47Z: Username: Administrator
-2026/08/17 17:49:00Z: User data format: yaml_1.1
-2026/08/17 17:49:00Z: EC2LaunchTelemetry: IsTelemetryEnabled=true
-2026/08/17 17:49:01Z: EC2LaunchTelemetry: AgentOsArch=windows_amd64
-2026/08/17 17:49:01Z: EC2LaunchTelemetry: IsAgentScheduledPerBoot=true
-2026/08/17 17:49:01Z: EC2LaunchTelemetry: AgentCommandErrorCode=0
-2026/08/17 17:49:01Z: EC2LaunchTelemetry: AdminPasswordTypeCode=0
-2026/08/17 17:49:01Z: Message: Windows is Ready to use
-{"agentId":"WindowsLaunchAgentV2","metrics":[{"AgentErrorLocation":"null","AgentErrorLocationDetailsMetric":1,"InstanceType":"r7a.medium","OsVersion":"10.0.26100","_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentErrorLocation","InstanceType","OsVersion","agentVersion"]],"Metrics":[{"Name":"AgentErrorLocationDetailsMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"}],"timestamp":1786988941869,"type":"EC2AgentTelemetry"}
-{"agentId":"WindowsLaunchAgentV2","metrics":[{"AgentCommandErrorCode":"0","LaunchAgentCommandErrorCodeMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentCommandErrorCode","agentVersion"]],"Metrics":[{"Name":"LaunchAgentCommandErrorCodeMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"},{"AdminPasswordTypeCode":"0","AdminPasswordTypeCodeMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["AdminPasswordTypeCode","agentVersion"]],"Metrics":[{"Name":"AdminPasswordTypeCodeMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"}],"timestamp":1786988941891,"type":"EC2AgentTelemetry"}
-{"agentId":"WindowsLaunchAgentV2","metrics":[{"AgentOsArch":"windows_amd64","AgentOsArchMetric":1,"InstanceType":"r7a.medium","OsVersion":"10.0.26100","_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentOsArch","InstanceType","OsVersion","agentVersion"]],"Metrics":[{"Name":"AgentOsArchMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"},{"OsVersion":"10.0.26100","OsVersionMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["OsVersion","agentVersion"]],"Metrics":[{"Name":"OsVersionMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"}],"timestamp":1786988941891,"type":"EC2AgentTelemetry"}
-{"agentId":"WindowsLaunchAgentV2","metrics":[{"InstanceType":"r7a.medium","InstanceTypeMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["InstanceType","agentVersion"]],"Metrics":[{"Name":"InstanceTypeMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"},{"AgentErrorLocation":"null","AgentErrorLocationMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentErrorLocation","agentVersion"]],"Metrics":[{"Name":"AgentErrorLocationMetric","Unit":"Count"}]}],"Timestamp":1786988941869},"agentVersion":"2.5.1"}],"timestamp":1786988941891,"type":"EC2AgentTelemetry"}
-2026/08/17 17:57:23Z: SSM Agent unable to acquire credentials: <error>unexpected error getting instance profile role credentials or calling UpdateInstanceInformation. Skipping default host management fallback: retrieved credentials failed to report to ssm. Error: RequestError: send request failed
-caused by: Post "https://ssm.us-east-1.amazonaws.com/": dial tcp 100.55.128.217:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.</error>
+The DFS Replication service failed to communicate with partner AMZNFSXSOKJTGSJ for replication group InteliSRC. The partner did not recognize the connection or the replication group configuration. 
+Partner DNS Address: amznfsxsokjtgsj.gdc.local 
+Optional data if available: 
+Partner WINS Address: amznfsxsokjtgsj 
+Partner IP Address: 10.64.160.245 
+
+The service will retry the connection periodically. 
+Additional Information: 
+Error: 9026 (The connection is invalid) 
+Connection ID: 5E9DD252-CAF3-483B-9637-1B4E0CE5ECF5 
+Replication Group ID: 073EB0E2-8EB4-4FFB-A628-B4D7D2437AC6
