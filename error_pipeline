@@ -23,3 +23,9 @@ Connection ID: 5E9DD252-CAF3-483B-9637-1B4E0CE5ECF5
 Replication Group ID: 073EB0E2-8EB4-4FFB-A628-B4D7D2437AC6
 
 dfsrdiag.exe Backlog /SendingMember:$onprem /ReceivingMember:amznfsxsokjtgsj.gdc.local /RGName:$rg /RFName:$rf
+
+fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
+| filter (dstAddr = "10.64.160.245" or srcAddr = "10.64.160.245")
+| filter protocol = 6
+| sort @timestamp desc
+| limit 200
