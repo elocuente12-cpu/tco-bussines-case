@@ -29,3 +29,55 @@ fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
 | filter protocol = 6
 | sort @timestamp desc
 | limit 200
+
+
+  # module.fsx_windows.aws_fsx_windows_file_system.this must be replaced
++/- resource "aws_fsx_windows_file_system" "this" {
+      - aliases                           = [] -> null
+      ~ arn                               = "arn:aws:fsx:us-east-1:274193347839:file-system/fs-0500c463907102bdc" -> (known after apply)
+      ~ daily_automatic_backup_start_time = "07:00" -> (known after apply)
+      ~ dns_name                          = "amznfsxsokjtgsj.gdc.local" -> (known after apply)
+      ~ id                                = "fs-0500c463907102bdc" -> (known after apply)
+      ~ network_interface_ids             = [
+          - "eni-0e88c71eed423adfc",
+        ] -> (known after apply)
+      ~ network_type                      = "IPV4" -> (known after apply)
+      ~ owner_id                          = "274193347839" -> (known after apply)
+      ~ preferred_file_server_ip          = "10.64.160.245" -> (known after apply)
+      ~ preferred_subnet_id               = "subnet-05de7fec64ff02357" -> (known after apply)
+      ~ remote_administration_endpoint    = "amznfsxsokjtgsj.gdc.local" -> (known after apply)
+      ~ security_group_ids                = [ # forces replacement
+          - "sg-0408642994236ae76",
+          - "sg-043d69b316dbafad6",
+          - "sg-045dce79077b41244",
+          - "sg-0cd3074a1a82fc072",
+            # (1 unchanged element hidden)
+        ]
+        tags                              = {
+            "Environment"          = "prod"
+            "Name"                 = "intelisrcpa-prd-fsx"
+            "eitsce:modulename"    = "eits-tf-aws-fsx-windows"
+            "eitsce:moduleversion" = "1.5.0"
+            "eitsce:tagschecked"   = "true"
+        }
+      ~ vpc_id                            = "vpc-0bf460f301efbc7e0" -> (known after apply)
+        # (13 unchanged attributes hidden)
+
+      ~ audit_log_configuration {
+          ~ audit_log_destination             = "arn:aws:logs:us-east-1:274193347839:log-group:/aws/fsx/intelisrcpa-prd:log-stream:audit_fs-0500c463907102bdc" -> "arn:aws:logs:us-east-1:274193347839:log-group:/aws/fsx/intelisrcpa-prd"
+            # (2 unchanged attributes hidden)
+        }
+
+      ~ disk_iops_configuration (known after apply)
+      - disk_iops_configuration {
+          - iops = 300 -> null
+          - mode = "AUTOMATIC" -> null
+        }
+
+      ~ self_managed_active_directory {
+          - password_wo_version                    = 0 -> null
+            # (7 unchanged attributes hidden)
+        }
+
+        # (1 unchanged block hidden)
+    }
