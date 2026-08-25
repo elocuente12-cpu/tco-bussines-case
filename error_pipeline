@@ -30,12 +30,52 @@ fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
 | sort @timestamp desc
 | limit 200
 
-
-PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-2026-08-24T21:52:00.9540545+00:00  === Inicio bootstrap ===
-2026-08-24T21:52:03.2943820+00:00  Instance ID: i-06a9c93048c20c530
-2026-08-24T21:52:08.6219472+00:00  Fase 1: Domain join...
-2026-08-24T21:54:32.7980835+00:00  Hostname numero 1 reclamado (intento 1).
-2026-08-24T21:54:32.8001165+00:00  Hostname asignado:  USAEA1PWBWES21 (objeto pre-creado en AD)
-2026-08-24T21:54:32.8021474+00:00  Renombrando: EC2AMAZ-D1BRSO3 ->  USAEA1PWBWES21
-2026-08-24T21:54:33.2887905+00:00  ERROR FATAL: Fail to rename computer 'EC2AMAZ-D1BRSO3' to ' USAEA1PWBWES21' due to the following exception: The parameter is incorrect.
+Successful
+Launching a new EC2 instance: i-0fc95a3cabd05d84c
+At 2026-08-25T16:52:03Z an instance was launched in response to an unhealthy instance needing to be replaced.
+2026 August 25, 11:52:05 AM -05:00
+2026 August 25, 11:52:10 AM -05:00
+Connection draining in progress
+Terminating EC2 instance: i-0e36c178a88eaef54 - Waiting For ELB Connection Draining.
+At 2026-08-25T16:52:03Z an instance was taken out of service in response to an ELB system health check failure.
+2026 August 25, 11:52:03 AM -05:00
+Successful
+Terminating EC2 instance: i-096733a7c30eb6614
+At 2026-08-25T16:28:25Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-08-25T16:29:51Z a user request update of AutoScalingGroup constraints to min: 1, max: 2, desired: 1 changing the desired capacity from 2 to 1. At 2026-08-25T16:30:25Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-08-25T16:46:07Z a user request update of AutoScalingGroup constraints to min: 1, max: 2, desired: 1 changing the desired capacity from 2 to 1. At 2026-08-25T16:46:14Z an instance was taken out of service in response to a difference between desired and actual capacity, shrinking the capacity from 2 to 1. At 2026-08-25T16:46:14Z instance i-096733a7c30eb6614 was selected for termination.
+2026 August 25, 11:46:14 AM -05:00
+2026 August 25, 11:52:17 AM -05:00
+Successful
+Launching a new EC2 instance: i-0e36c178a88eaef54
+At 2026-08-25T16:35:57Z an instance was launched in response to an instance refresh.
+2026 August 25, 11:35:59 AM -05:00
+2026 August 25, 11:46:07 AM -05:00
+Successful
+Terminating EC2 instance: i-03d7e84b7cafc0a74
+At 2026-08-25T16:35:57Z an instance was taken out of service in response to an instance refresh.
+2026 August 25, 11:35:57 AM -05:00
+2026 August 25, 11:42:40 AM -05:00
+Successful
+Launching a new EC2 instance: i-096733a7c30eb6614
+At 2026-08-25T16:25:31Z an instance was launched in response to an instance refresh.
+2026 August 25, 11:25:33 AM -05:00
+2026 August 25, 11:35:38 AM -05:00
+Successful
+Terminating EC2 instance: i-04332a789d375796a
+At 2026-08-25T16:25:20Z an instance was taken out of service in response to an ELB system health check failure.
+2026 August 25, 11:25:20 AM -05:00
+2026 August 25, 11:32:04 AM -05:00
+Successful
+Launching a new EC2 instance: i-03d7e84b7cafc0a74
+At 2026-08-25T16:13:25Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-08-25T16:13:29Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 1 to 2.
+2026 August 25, 11:13:31 AM -05:00
+2026 August 25, 11:23:36 AM -05:00
+Successful
+Terminating EC2 instance: i-06a9c93048c20c530
+At 2026-08-25T16:01:57Z an instance was taken out of service in response to an ELB system health check failure.
+2026 August 25, 11:01:57 AM -05:00
+2026 August 25, 11:08:00 AM -05:00
+Successful
+Launching a new EC2 instance: i-04332a789d375796a
+At 2026-08-25T15:59:54Z an instance was launched in response to an instance refresh.
+2026 August 25, 10:59:55 AM -05:00
+2026 August 25, 11:10:00 AM -05:00
