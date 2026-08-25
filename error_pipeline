@@ -30,52 +30,61 @@ fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
 | sort @timestamp desc
 | limit 200
 
-Successful
-Launching a new EC2 instance: i-0fc95a3cabd05d84c
-At 2026-08-25T16:52:03Z an instance was launched in response to an unhealthy instance needing to be replaced.
-2026 August 25, 11:52:05 AM -05:00
-2026 August 25, 11:52:10 AM -05:00
-Connection draining in progress
-Terminating EC2 instance: i-0e36c178a88eaef54 - Waiting For ELB Connection Draining.
-At 2026-08-25T16:52:03Z an instance was taken out of service in response to an ELB system health check failure.
-2026 August 25, 11:52:03 AM -05:00
-Successful
-Terminating EC2 instance: i-096733a7c30eb6614
-At 2026-08-25T16:28:25Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-08-25T16:29:51Z a user request update of AutoScalingGroup constraints to min: 1, max: 2, desired: 1 changing the desired capacity from 2 to 1. At 2026-08-25T16:30:25Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-08-25T16:46:07Z a user request update of AutoScalingGroup constraints to min: 1, max: 2, desired: 1 changing the desired capacity from 2 to 1. At 2026-08-25T16:46:14Z an instance was taken out of service in response to a difference between desired and actual capacity, shrinking the capacity from 2 to 1. At 2026-08-25T16:46:14Z instance i-096733a7c30eb6614 was selected for termination.
-2026 August 25, 11:46:14 AM -05:00
-2026 August 25, 11:52:17 AM -05:00
-Successful
-Launching a new EC2 instance: i-0e36c178a88eaef54
-At 2026-08-25T16:35:57Z an instance was launched in response to an instance refresh.
-2026 August 25, 11:35:59 AM -05:00
-2026 August 25, 11:46:07 AM -05:00
-Successful
-Terminating EC2 instance: i-03d7e84b7cafc0a74
-At 2026-08-25T16:35:57Z an instance was taken out of service in response to an instance refresh.
-2026 August 25, 11:35:57 AM -05:00
-2026 August 25, 11:42:40 AM -05:00
-Successful
-Launching a new EC2 instance: i-096733a7c30eb6614
-At 2026-08-25T16:25:31Z an instance was launched in response to an instance refresh.
-2026 August 25, 11:25:33 AM -05:00
-2026 August 25, 11:35:38 AM -05:00
-Successful
-Terminating EC2 instance: i-04332a789d375796a
-At 2026-08-25T16:25:20Z an instance was taken out of service in response to an ELB system health check failure.
-2026 August 25, 11:25:20 AM -05:00
-2026 August 25, 11:32:04 AM -05:00
-Successful
-Launching a new EC2 instance: i-03d7e84b7cafc0a74
-At 2026-08-25T16:13:25Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-08-25T16:13:29Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 1 to 2.
-2026 August 25, 11:13:31 AM -05:00
-2026 August 25, 11:23:36 AM -05:00
-Successful
-Terminating EC2 instance: i-06a9c93048c20c530
-At 2026-08-25T16:01:57Z an instance was taken out of service in response to an ELB system health check failure.
-2026 August 25, 11:01:57 AM -05:00
-2026 August 25, 11:08:00 AM -05:00
-Successful
-Launching a new EC2 instance: i-04332a789d375796a
-At 2026-08-25T15:59:54Z an instance was launched in response to an instance refresh.
-2026 August 25, 10:59:55 AM -05:00
-2026 August 25, 11:10:00 AM -05:00
+C:\Users\Administrator>nslookup
+Default Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+> PAHWPAPTUI03.gdc.local
+Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+Non-authoritative answer:
+Name:    PAHWPAPTUI03.gdc.local
+Addresses:  192.168.210.63
+          10.54.128.63
+ 
+> PAHWPAPTUI04.gdc.local
+Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+Non-authoritative answer:
+Name:    PAHWPAPTUI04.gdc.local
+Addresses:  192.168.210.64
+          10.54.128.64
+ 
+> PAHWPAPWSS03.gdc.local
+Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+Non-authoritative answer:
+Name:    PAHWPAPWSS03.gdc.local
+Addresses:  192.168.210.43
+          10.54.128.43
+ 
+> PAHWPAPWSS04.gdc.local
+Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+Non-authoritative answer:
+Name:    PAHWPAPWSS04.gdc.local
+Addresses:  192.168.210.44
+          10.54.128.44
+ 
+> PAHWPAPsrc03.gdc.local
+Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+Non-authoritative answer:
+Name:    PAHWPAPsrc03.gdc.local
+Addresses:  192.168.210.53
+          192.168.210.153
+ 
+> PAHWPAPsrc04.gdc.local
+Server:  ip-10-64-160-130.ec2.internal
+Address:  10.64.160.130
+ 
+Non-authoritative answer:
+Name:    PAHWPAPsrc04.gdc.local
+Address:  192.168.210.54
+ 
+> PAHWPAPWFC01.gdc.loca
