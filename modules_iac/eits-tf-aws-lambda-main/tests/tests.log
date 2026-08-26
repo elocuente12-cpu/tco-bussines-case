@@ -1,0 +1,1463 @@
+Tests started at 2026-07-01 13:33:19 UTC
+Branch: UKICLOENA-2995
+Pull Request ID: 32
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'create_role': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # data.aws_iam_policy_document.lambda_policy will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "lambda_policy" {
+      + id            = (known after apply)
+      + json          = (known after apply)
+      + minified_json = (known after apply)
+
+      + statement {
+          + actions   = [
+              + "kms:Decrypt",
+              + "kms:DescribeKey",
+              + "kms:Encrypt",
+              + "kms:GenerateDataKey",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+        }
+    }
+
+  # aws_iam_policy.permissions_boundary will be created
+  + resource "aws_iam_policy" "permissions_boundary" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "Permissions boundary policy for eits-tf-aws-lambda create_role test"
+      + id               = (known after apply)
+      + name             = (known after apply)
+      + name_prefix      = "eits-tf-aws-lambda-pb-"
+      + path             = "/"
+      + policy           = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = "*"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + policy_id        = (known after apply)
+      + tags_all         = (known after apply)
+    }
+
+  # module.kms_key.aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key to encrypt lambda vars, log group and s3 bucket for testing"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = [
+                          + "kms:GenerateDataKey",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                      + Resource  = "*"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:sts::077820194866:assumed-role/eec-aws-aura-iac-deployment-role/50950d79-1405-44de-8e29-35567279523b-0"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.lambda.aws_lambda_function.this will be created
+  + resource "aws_lambda_function" "this" {
+      + architectures                  = [
+          + "x86_64",
+        ]
+      + arn                            = (known after apply)
+      + code_sha256                    = (known after apply)
+      + filename                       = "test.zip"
+      + function_name                  = "uk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+      + handler                        = "test.lambda_handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + kms_key_arn                    = (known after apply)
+      + last_modified                  = (known after apply)
+      + layers                         = []
+      + memory_size                    = 128
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + region                         = "eu-west-2"
+      + reserved_concurrent_executions = 5
+      + response_streaming_invoke_arn  = (known after apply)
+      + role                           = (known after apply)
+      + runtime                        = "python3.11"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = (known after apply)
+      + source_code_size               = (known after apply)
+      + source_kms_key_arn             = (known after apply)
+      + tags                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-lambda"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                       = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-lambda"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + timeout                        = 3
+      + version                        = (known after apply)
+
+      + environment {
+          + variables = {
+              + "HTTPS_PROXY"  = "http://ukpcorp-proxy.uk.experian.local:9595"
+              + "HTTP_PROXY"   = "http://ukpcorp-proxy.uk.experian.local:9595"
+              + "NO_PROXY"     = "localhost,.eu-west-2.vpce.amazonaws.com,.eu-west-2.amazonaws.com,.internal,.local,.coaas.net,.experian.com,.experian.corp,.eeca,.eecm,.eeco,.eecg,10.0.0.0/8,127.0.0.1,169.254.169.254,172.16.0.0/12,192.168.0.0/16,194.60.160.0/19"
+              + "TEST_ENV_VAR" = "test_value"
+              + "no_proxy"     = "localhost,.eu-west-2.vpce.amazonaws.com,.eu-west-2.amazonaws.com,.internal,.local,.coaas.net,.experian.com,.experian.corp,.eeca,.eecm,.eeco,.eecg,10.0.0.0/8,127.0.0.1,169.254.169.254,172.16.0.0/12,192.168.0.0/16,194.60.160.0/19"
+            }
+        }
+
+      + ephemeral_storage (known after apply)
+
+      + logging_config {
+          + application_log_level = "INFO"
+          + log_format            = "JSON"
+          + log_group             = "/aws/lambda/lambda-test"
+          + system_log_level      = "INFO"
+        }
+
+      + tracing_config (known after apply)
+
+      + vpc_config {
+          + ipv6_allowed_for_dual_stack = false
+          + security_group_ids          = (known after apply)
+          + subnet_ids                  = [
+              + "subnet-0007176f4041512f4",
+              + "subnet-07f7f119f8527be21",
+              + "subnet-0f7f54f853d636f9a",
+            ]
+          + vpc_id                      = (known after apply)
+        }
+    }
+
+  # module.lambda.aws_lambda_function_recursion_config.this[0] will be created
+  + resource "aws_lambda_function_recursion_config" "this" {
+      + function_name  = "uk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+      + recursive_loop = "Allow"
+      + region         = "eu-west-2"
+    }
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "For eits-tf-aws-lambda testing"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-lambda-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-lambda-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.6.0"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-lambda-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.6.0"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["10.0.0.0/8_-1_0"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Allow outbound traffic to Experian network"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_-1"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = -1
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.lambda.module.alarm["concurrent_executions"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to monitor if the concurrency of the function is approaching the Region-level concurrency limit of your account."
+      + alarm_name                            = "AWS/Lambda ConcurrentExecutions FunctionName=uk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "FunctionName" = "uk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "ConcurrentExecutions"
+      + namespace                             = "AWS/Lambda"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 900
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.lambda.module.cloudwatch_log_group.aws_cloudwatch_log_group.this will be created
+  + resource "aws_cloudwatch_log_group" "this" {
+      + arn                         = (known after apply)
+      + deletion_protection_enabled = (known after apply)
+      + id                          = (known after apply)
+      + log_group_class             = "STANDARD"
+      + name                        = "/aws/lambda/uk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+      + name_prefix                 = (known after apply)
+      + region                      = "eu-west-2"
+      + retention_in_days           = 0
+      + skip_destroy                = false
+      + tags                        = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-logs"
+          + "eitsce:moduleversion" = "2.6.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                    = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-logs"
+          + "eitsce:moduleversion" = "2.6.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.lambda.module.lambda_iam_role[0].data.aws_iam_policy_document.default[0] will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "default" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + source_policy_documents = [
+          + (known after apply),
+        ]
+    }
+
+  # module.lambda.module.lambda_iam_role[0].aws_iam_policy.default[0] will be created
+  + resource "aws_iam_policy" "default" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "IAM policy for lambda execution"
+      + id               = (known after apply)
+      + name             = "BUPolicyForuk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+      + name_prefix      = (known after apply)
+      + path             = "/"
+      + policy           = (known after apply)
+      + policy_id        = (known after apply)
+      + tags             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.lambda.module.lambda_iam_role[0].aws_iam_role.default[0] will be created
+  + resource "aws_iam_role" "default" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                    },
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Condition = {
+                          + Bool            = {
+                              + "aws:PrincipalIsAWSService" = "false"
+                            }
+                          + StringNotEquals = {
+                              + "aws:PrincipalOrgID" = [
+                                  + "o-33fd8d019b",
+                                  + "o-m6fjxrdr7x",
+                                  + "o-c7zjgfu8y0",
+                                  + "o-yfj05rswby",
+                                  + "o-m5tvfoa2j3",
+                                  + "o-v4zenr53b5",
+                                  + "o-r4orxccey7",
+                                  + "o-72fonqzrib",
+                                  + "o-rhlgy4h75h",
+                                  + "o-sg7wkai3ne",
+                                  + "o-mw9tjv7zmd",
+                                  + "o-8jhc22ry8c",
+                                  + "o-khqbuhx1kx",
+                                  + "o-mtyumpp7ml",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Sid       = "DenyNonExperianAccountAccess"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + description           = "IAM role for lambda execution"
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "BURoleForuk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + permissions_boundary  = (known after apply)
+      + tags                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.lambda.module.lambda_iam_role[0].aws_iam_role_policy_attachment.default[0] will be created
+  + resource "aws_iam_role_policy_attachment" "default" {
+      + id         = (known after apply)
+      + policy_arn = (known after apply)
+      + role       = "BURoleForuk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+    }
+
+  # module.lambda.module.lambda_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      + role       = "BURoleForuk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+    }
+
+  # module.lambda.module.lambda_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+      + role       = "BURoleForuk-cloudenablement-sbx-eits-tf-aws-lambda-lambda"
+    }
+
+Plan: 15 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'create_role': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a4517-6a0b-8967-be3c-4627d9e58001%252A2c2026-07-01T13%2525%25252A3a34%2525%25252A3a44.478682886Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'existing_role': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # data.aws_iam_policy_document.lambda_policy will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "lambda_policy" {
+      + id            = (known after apply)
+      + json          = (known after apply)
+      + minified_json = (known after apply)
+
+      + statement {
+          + actions   = [
+              + "kms:Decrypt",
+              + "kms:DescribeKey",
+              + "kms:Encrypt",
+              + "kms:GenerateDataKey",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+        }
+    }
+
+  # module.iam_role.data.aws_iam_policy_document.default[0] will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "default" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + source_policy_documents = [
+          + (known after apply),
+        ]
+    }
+
+  # module.iam_role.aws_iam_policy.default[0] will be created
+  + resource "aws_iam_policy" "default" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "IAM policy for lambda execution"
+      + id               = (known after apply)
+      + name             = "BUPolicyForeits-tf-aws-lambda"
+      + name_prefix      = (known after apply)
+      + path             = "/"
+      + policy           = (known after apply)
+      + policy_id        = (known after apply)
+      + tags             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.iam_role.aws_iam_role.default[0] will be created
+  + resource "aws_iam_role" "default" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                    },
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Condition = {
+                          + Bool            = {
+                              + "aws:PrincipalIsAWSService" = "false"
+                            }
+                          + StringNotEquals = {
+                              + "aws:PrincipalOrgID" = [
+                                  + "o-33fd8d019b",
+                                  + "o-m6fjxrdr7x",
+                                  + "o-c7zjgfu8y0",
+                                  + "o-yfj05rswby",
+                                  + "o-m5tvfoa2j3",
+                                  + "o-v4zenr53b5",
+                                  + "o-r4orxccey7",
+                                  + "o-72fonqzrib",
+                                  + "o-rhlgy4h75h",
+                                  + "o-sg7wkai3ne",
+                                  + "o-mw9tjv7zmd",
+                                  + "o-8jhc22ry8c",
+                                  + "o-khqbuhx1kx",
+                                  + "o-mtyumpp7ml",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Sid       = "DenyNonExperianAccountAccess"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + description           = "IAM role for lambda execution"
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "BURoleForeits-tf-aws-lambda"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.iam_role.aws_iam_role_policy_attachment.default[0] will be created
+  + resource "aws_iam_role_policy_attachment" "default" {
+      + id         = (known after apply)
+      + policy_arn = (known after apply)
+      + role       = "BURoleForeits-tf-aws-lambda"
+    }
+
+  # module.iam_role.aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+      + role       = "BURoleForeits-tf-aws-lambda"
+    }
+
+  # module.iam_role.aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"
+      + role       = "BURoleForeits-tf-aws-lambda"
+    }
+
+  # module.iam_role.aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      + role       = "BURoleForeits-tf-aws-lambda"
+    }
+
+  # module.iam_role.aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+      + role       = "BURoleForeits-tf-aws-lambda"
+    }
+
+  # module.kms_key.aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key to encrypt lambda vars, log group and s3 bucket for testing"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = [
+                          + "kms:GenerateDataKey",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                      + Resource  = "*"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.lambda.data.aws_caller_identity.this will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_caller_identity" "this" {
+      + account_id = (known after apply)
+      + arn        = (known after apply)
+      + id         = (known after apply)
+      + user_id    = (known after apply)
+    }
+
+  # module.lambda.data.aws_default_tags.this will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_default_tags" "this" {
+      + id   = (known after apply)
+      + tags = (known after apply)
+    }
+
+  # module.lambda.data.aws_iam_policy_document.assume_role_policy will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_iam_policy_document" "assume_role_policy" {
+      + id            = (known after apply)
+      + json          = (known after apply)
+      + minified_json = (known after apply)
+
+      + statement {
+          + actions = [
+              + "sts:AssumeRole",
+            ]
+
+          + principals {
+              + identifiers = [
+                  + "lambda.amazonaws.com",
+                ]
+              + type        = "Service"
+            }
+        }
+    }
+
+  # module.lambda.data.aws_partition.this will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_partition" "this" {
+      + dns_suffix         = (known after apply)
+      + id                 = (known after apply)
+      + partition          = (known after apply)
+      + reverse_dns_prefix = (known after apply)
+    }
+
+  # module.lambda.data.aws_region.this will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_region" "this" {
+      + description = (known after apply)
+      + endpoint    = (known after apply)
+      + id          = (known after apply)
+      + name        = (known after apply)
+      + region      = (known after apply)
+    }
+
+  # module.lambda.aws_lambda_alias.this[0] will be created
+  + resource "aws_lambda_alias" "this" {
+      + arn              = (known after apply)
+      + function_name    = (known after apply)
+      + function_version = (known after apply)
+      + id               = (known after apply)
+      + invoke_arn       = (known after apply)
+      + name             = "cloud_enablement_test_latest"
+      + region           = "eu-west-2"
+    }
+
+  # module.lambda.aws_lambda_function.this will be created
+  + resource "aws_lambda_function" "this" {
+      + architectures                  = [
+          + "x86_64",
+        ]
+      + arn                            = (known after apply)
+      + code_sha256                    = (known after apply)
+      + filename                       = "test.zip"
+      + function_name                  = (known after apply)
+      + handler                        = "test.lambda_handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + kms_key_arn                    = (known after apply)
+      + last_modified                  = (known after apply)
+      + layers                         = []
+      + memory_size                    = 128
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + region                         = "eu-west-2"
+      + reserved_concurrent_executions = 5
+      + response_streaming_invoke_arn  = (known after apply)
+      + role                           = (known after apply)
+      + runtime                        = "python3.11"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = (known after apply)
+      + source_code_size               = (known after apply)
+      + tags                           = (known after apply)
+      + tags_all                       = (known after apply)
+      + timeout                        = 3
+      + version                        = (known after apply)
+
+      + environment {
+          + variables = {
+              + "NO_PROXY" = "test.no.proxy,localhost"
+            }
+        }
+
+      + ephemeral_storage (known after apply)
+
+      + logging_config {
+          + log_format = "Text"
+          + log_group  = (known after apply)
+        }
+
+      + tracing_config (known after apply)
+
+      + vpc_config {
+          + ipv6_allowed_for_dual_stack = false
+          + security_group_ids          = (known after apply)
+          + subnet_ids                  = [
+              + "subnet-0007176f4041512f4",
+              + "subnet-07f7f119f8527be21",
+              + "subnet-0f7f54f853d636f9a",
+            ]
+          + vpc_id                      = (known after apply)
+        }
+    }
+
+  # module.lambda.aws_lambda_function_url.this[0] will be created
+  + resource "aws_lambda_function_url" "this" {
+      + authorization_type = "AWS_IAM"
+      + function_arn       = (known after apply)
+      + function_name      = (known after apply)
+      + function_url       = (known after apply)
+      + id                 = (known after apply)
+      + invoke_mode        = "BUFFERED"
+      + region             = "eu-west-2"
+      + url_id             = (known after apply)
+
+      + cors {
+          + allow_credentials = true
+          + allow_headers     = [
+              + "*",
+            ]
+          + allow_methods     = [
+              + "GET",
+              + "POST",
+            ]
+          + allow_origins     = [
+              + "*",
+            ]
+          + expose_headers    = [
+              + "X-Amzn-Trace-Id",
+            ]
+          + max_age           = 3600
+        }
+    }
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "For eits-tf-aws-lambda testing"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-lambda-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-lambda-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.6.0"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-lambda-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.6.0"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.cidr_ipv4["10.0.0.0/8_-1_0"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Allow outbound traffic to Experian network"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_-1"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = -1
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.lambda.module.alarm["concurrent_executions"].data.aws_default_tags.this will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_default_tags" "this" {
+      + id   = (known after apply)
+      + tags = (known after apply)
+    }
+
+  # module.lambda.module.alarm["concurrent_executions"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to monitor if the concurrency of the function is approaching the Region-level concurrency limit of your account."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "ConcurrentExecutions"
+      + namespace                             = "AWS/Lambda"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = (known after apply)
+      + tags_all                              = (known after apply)
+      + threshold                             = 900
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.lambda.module.cloudwatch_log_group.aws_cloudwatch_log_group.this will be created
+  + resource "aws_cloudwatch_log_group" "this" {
+      + arn                         = (known after apply)
+      + deletion_protection_enabled = (known after apply)
+      + id                          = (known after apply)
+      + log_group_class             = "STANDARD"
+      + name                        = (known after apply)
+      + name_prefix                 = (known after apply)
+      + region                      = "eu-west-2"
+      + retention_in_days           = 0
+      + skip_destroy                = false
+      + tags                        = (known after apply)
+      + tags_all                    = (known after apply)
+    }
+
+  # module.lambda.module.eits_ce_common.data.aws_default_tags.account_tags will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_default_tags" "account_tags" {
+      + id   = (known after apply)
+      + tags = (known after apply)
+    }
+
+  # module.lambda.module.eits_ce_common.data.aws_iam_account_alias.current will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_iam_account_alias" "current" {
+      + account_alias = (known after apply)
+      + id            = (known after apply)
+    }
+
+  # module.lambda.module.alarm["concurrent_executions"].module.eits_ce_common.data.aws_default_tags.account_tags will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_default_tags" "account_tags" {
+      + id   = (known after apply)
+      + tags = (known after apply)
+    }
+
+  # module.lambda.module.alarm["concurrent_executions"].module.eits_ce_common.data.aws_iam_account_alias.current will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_iam_account_alias" "current" {
+      + account_alias = (known after apply)
+      + id            = (known after apply)
+    }
+
+  # module.lambda.module.cloudwatch_log_group.module.eits_ce_common.data.aws_default_tags.account_tags will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_default_tags" "account_tags" {
+      + id   = (known after apply)
+      + tags = (known after apply)
+    }
+
+  # module.lambda.module.cloudwatch_log_group.module.eits_ce_common.data.aws_iam_account_alias.current will be read during apply
+  # (depends on a resource or a module with changes pending)
+ <= data "aws_iam_account_alias" "current" {
+      + account_alias = (known after apply)
+      + id            = (known after apply)
+    }
+
+Plan: 17 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + function_url = (known after apply)
+
+
+Wiz.io IaC scan result for 'existing_role': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a4517-a80b-8fdc-b634-15409e448001%252A2c2026-07-01T13%2525%25252A3a35%2525%25252A3a46.828224154Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
