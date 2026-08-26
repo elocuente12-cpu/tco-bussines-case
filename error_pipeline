@@ -30,4 +30,17 @@ fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
 | sort @timestamp desc
 | limit 200
 
-2026-08-25T20:20:50.3463382+00:00  ERROR FATAL: Computer 'USAEA1PWBWES22' failed to join domain 'gdc.local' from its current workgroup 'WORKGROUP' with following error message: An account with the same name exists in Active Directory. Re-using the account was blocked by security policy.
++ tflint
+2 issue(s) found:
+
+Warning: Missing version constraint for provider "archive" in `required_providers` (terraform_required_providers)
+
+  on asg_lifecycle.tf line 71:
+  71: data "archive_file" "leave_domain_lambda" {
+
+Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.15.0/docs/rules/terraform_required_providers.md
+
+Error: "python3.14" is an invalid value as runtime (aws_lambda_function_invalid_runtime)
+
+  on asg_lifecycle.tf line 256:
+ 256:   runtime          = "python3.14"
