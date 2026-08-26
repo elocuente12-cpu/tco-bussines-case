@@ -40,7 +40,50 @@ Warning: Missing version constraint for provider "archive" in `required_provider
 
 Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.15.0/docs/rules/terraform_required_providers.md
 
-Error: "python3.14" is an invalid value as runtime (aws_lambda_function_invalid_runtime)
+2026-08-26T17:50:32.169-05:00
+[INFO]	2026-08-26T22:50:32.169Z	cf2f7308-bd4c-4cb1-973d-9cc27e008b19	Event: 
+{
+    "version": "0",
+    "id": "5b060f74-d772-97e6-9ddd-524e64392e99",
+    "detail-type": "EC2 Instance-terminate Lifecycle Action",
+    "source": "aws.autoscaling",
+    "account": "274193347839",
+    "time": "2026-08-26T22:50:31Z",
+    "region": "us-east-1",
+    "resources": [
+        "arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:251057a1-71d9-48dd-a451-c130d5b89b54:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app1-asg"
+    ],
+    "detail": {
+        "LifecycleActionToken": "680a0873-9b41-451e-82a5-bcdd17454f3a",
+        "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app1-asg",
+        "LifecycleHookName": "leave-domain",
+        "EC2InstanceId": "i-0841389387cfc5a0f",
+        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+        "Origin": "AutoScalingGroup",
+        "Destination": "EC2",
+        "Action": "Terminate"
+    }
+}
 
-  on asg_lifecycle.tf line 256:
- 256:   runtime          = "python3.14"
+
+[INFO] 2026-08-26T22:50:32.169Z cf2f7308-bd4c-4cb1-973d-9cc27e008b19 Event: {"version": "0", "id": "5b060f74-d772-97e6-9ddd-524e64392e99", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-08-26T22:50:31Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:251057a1-71d9-48dd-a451-c130d5b89b54:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app1-asg"], "detail": {"LifecycleActionToken": "680a0873-9b41-451e-82a5-bcdd17454f3a", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app1-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-0841389387cfc5a0f", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-08-26T17:50:32.169-05:00
+[INFO]	2026-08-26T22:50:32.169Z	cf2f7308-bd4c-4cb1-973d-9cc27e008b19	Processing leave-domain for i-0841389387cfc5a0f in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
+
+[INFO] 2026-08-26T22:50:32.169Z cf2f7308-bd4c-4cb1-973d-9cc27e008b19 Processing leave-domain for i-0841389387cfc5a0f in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
+2026-08-26T17:50:32.455-05:00
+[ERROR]	2026-08-26T22:50:32.455Z	cf2f7308-bd4c-4cb1-973d-9cc27e008b19	SSM failed: An error occurred (AccessDeniedException) when calling the SendCommand operation: User: arn:aws:sts::274193347839:assumed-role/BURoleForus-intelisrcpa-prd-leave-domain-lambda/us-intelisrcpa-prd-leave-domain-lambda is not authorized to perform: ssm:SendCommand on resource: arn:aws:ssm:us-east-1::document/AWS-RunPowerShellScript because no identity-based policy allows the ssm:SendCommand action
+
+[ERROR] 2026-08-26T22:50:32.455Z cf2f7308-bd4c-4cb1-973d-9cc27e008b19 SSM failed: An error occurred (AccessDeniedException) when calling the SendCommand operation: User: arn:aws:sts::274193347839:assumed-role/BURoleForus-intelisrcpa-prd-leave-domain-lambda/us-intelisrcpa-prd-leave-domain-lambda is not authorized to perform: ssm:SendCommand on resource: arn:aws:ssm:us-east-1::document/AWS-RunPowerShellScript because no identity-based policy allows the ssm:SendCommand action
+2026-08-26T17:50:32.761-05:00
+[INFO]	2026-08-26T22:50:32.761Z	cf2f7308-bd4c-4cb1-973d-9cc27e008b19	Lifecycle action completed for i-0841389387cfc5a0f
+
+[INFO] 2026-08-26T22:50:32.761Z cf2f7308-bd4c-4cb1-973d-9cc27e008b19 Lifecycle action completed for i-0841389387cfc5a0f
+2026-08-26T17:50:32.763-05:00
+END RequestId: cf2f7308-bd4c-4cb1-973d-9cc27e008b19
+
+END RequestId: cf2f7308-bd4c-4cb1-973d-9cc27e008b19
+2026-08-26T17:50:32.763-05:00
+REPORT RequestId: cf2f7308-bd4c-4cb1-973d-9cc27e008b19	Duration: 594.27 ms	Billed Duration: 1063 ms	Memory Size: 128 MB	Max Memory Used: 97 MB	Init Duration: 468.47 ms	
+
+REPORT RequestId: cf2f7308-bd4c-4cb1-973d-9cc27e008b19 Duration: 594.27 ms Billed Duration: 1063 ms Memory Size: 128 MB Max Memory Used: 97 MB Init Duration: 468.47 ms
