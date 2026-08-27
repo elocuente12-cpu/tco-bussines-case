@@ -30,65 +30,30 @@ fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
 | sort @timestamp desc
 | limit 200
 
-+ tflint
-2 issue(s) found:
-
-Warning: Missing version constraint for provider "archive" in `required_providers` (terraform_required_providers)
-
-  on asg_lifecycle.tf line 71:
-  71: data "archive_file" "leave_domain_lambda" {
-
-Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0.15.0/docs/rules/terraform_required_providers.md
-
-2026-08-26T17:50:32.169-05:00
-[INFO]	2026-08-26T22:50:32.169Z	cf2f7308-bd4c-4cb1-973d-9cc27e008b19	Event: 
-{
-    "version": "0",
-    "id": "5b060f74-d772-97e6-9ddd-524e64392e99",
-    "detail-type": "EC2 Instance-terminate Lifecycle Action",
-    "source": "aws.autoscaling",
-    "account": "274193347839",
-    "time": "2026-08-26T22:50:31Z",
-    "region": "us-east-1",
-    "resources": [
-        "arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:251057a1-71d9-48dd-a451-c130d5b89b54:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app1-asg"
-    ],
-    "detail": {
-        "LifecycleActionToken": "680a0873-9b41-451e-82a5-bcdd17454f3a",
-        "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app1-asg",
-        "LifecycleHookName": "leave-domain",
-        "EC2InstanceId": "i-0841389387cfc5a0f",
-        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
-        "Origin": "AutoScalingGroup",
-        "Destination": "EC2",
-        "Action": "Terminate"
-    }
-}
-
-
-2026-08-27T11:43:51.296-05:00
-[INFO]	2026-08-27T16:43:51.296Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	Processing leave-domain for i-04d076aced94d4094 in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
-
-[INFO] 2026-08-27T16:43:51.296Z d6186da4-fcc6-403e-baa1-0a637c1d2007 Processing leave-domain for i-04d076aced94d4094 in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
-2026-08-27T11:43:51.713-05:00
-[INFO]	2026-08-27T16:43:51.713Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	SSM Command sent: 34de7b1b-7342-46da-82d0-4a227fbe1609
-
-[INFO] 2026-08-27T16:43:51.713Z d6186da4-fcc6-403e-baa1-0a637c1d2007 SSM Command sent: 34de7b1b-7342-46da-82d0-4a227fbe1609
-2026-08-27T11:44:57.100-05:00
-[INFO]	2026-08-27T16:44:57.100Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	SSM Command Success: 2026-08-27T12:43:52.4905959-04:00  === Leave-Domain iniciado ===
-2026-08-27T12:43:52.5007405-04:00  Computer: USAEA1PWBWES22
-2026-08-27T12:44:18.9058212-04:00  Usando credenciales de: gdc.local\paawsas_svc
-2026-08-27T12:44:30.5076772-04:00  Computer object 'USAEA1PWBWES22' ELIMINADO del AD.
-2026-08-27T12:44:30.6078255-04:00  Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES22' from domain 'gdc.local' with the following error message: The specified network name is no longer avail
-
-[INFO] 2026-08-27T16:44:57.100Z d6186da4-fcc6-403e-baa1-0a637c1d2007 SSM Command Success: 2026-08-27T12:43:52.4905959-04:00 === Leave-Domain iniciado === 2026-08-27T12:43:52.5007405-04:00 Computer: USAEA1PWBWES22 2026-08-27T12:44:18.9058212-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-08-27T12:44:30.5076772-04:00 Computer object 'USAEA1PWBWES22' ELIMINADO del AD. 2026-08-27T12:44:30.6078255-04:00 Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES22' from domain 'gdc.local' with the following error message: The specified network name is no longer avail
-2026-08-27T11:44:57.375-05:00
-[INFO]	2026-08-27T16:44:57.375Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	Lifecycle action completed for i-04d076aced94d4094
-
-[INFO] 2026-08-27T16:44:57.375Z d6186da4-fcc6-403e-baa1-0a637c1d2007 Lifecycle action completed for i-04d076aced94d4094
-2026-08-27T11:44:57.388-05:00
-END RequestId: d6186da4-fcc6-403e-baa1-0a637c1d2007
-
-END RequestId: d6186da4-fcc6-403e-baa1-0a637c1d2007
-2026-08-27T11:44:57.388-05:00
-REPORT RequestId: d6186da4-fcc6-403e-baa1-0a637c1d2007	Duration: 66092.48 ms	Billed Duration: 66544 ms	Memory Size: 128 MB	Max Memory Used: 96 MB	Init Duration: 450.95 ms
+2026-08-27T16:02:15.8282854+00:00  === Inicio bootstrap ===
+2026-08-27T16:02:18.7172574+00:00  Instance ID: i-0efec0ecbb2c3176d
+2026-08-27T16:02:26.9403037+00:00  Fase 1: Domain join...
+2026-08-27T16:04:29.5734246+00:00  Hostname numero 1 reclamado (intento 1).
+2026-08-27T16:04:29.5774775+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
+2026-08-27T16:04:29.5795061+00:00  Renombrando: EC2AMAZ-CQQVSAT -> USAEA1PWBWES21
+2026-08-27T16:04:30.0071381+00:00  Rename OK. Exit 3010 para reboot.
+2026-08-27T16:06:07.6470224+00:00  === Inicio bootstrap ===
+2026-08-27T16:06:08.6012793+00:00  Instance ID: i-0efec0ecbb2c3176d
+2026-08-27T16:06:10.6577786+00:00  Fase 1: Domain join...
+2026-08-27T16:06:38.2996825+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
+2026-08-27T16:06:40.9574245+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
+2026-08-27T16:06:50.1759628+00:00  Domain join OK. Exit 3010 para reboot.
+2026-08-27T16:08:14.5923770+00:00  === Inicio bootstrap ===
+2026-08-27T16:08:14.8064001+00:00  Instance ID: i-0efec0ecbb2c3176d
+2026-08-27T16:08:15.3784166+00:00  Fase 2: Montaje FSx (ya en dominio)...
+2026-08-27T16:08:45.0108911+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-08-27T16:08:51.2021094+00:00  Fase 3: IIS Sites config...
+2026-08-27T16:09:12.0689006+00:00  Default Web Site removido.
+2026-08-27T16:09:12.7691341+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (Host: mobile.apc.com.pa, Port: 80)
+2026-08-27T16:09:12.7755422+00:00  IIS Site 'mobile' iniciado.
+2026-08-27T16:09:13.2654068+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (Host: tuintelidat.com, Port: 80)
+2026-08-27T16:09:13.2684798+00:00  IIS Site 'tuintelidat' iniciado.
+2026-08-27T16:09:13.5298619+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (Host: apcexperian.com, Port: 80)
+2026-08-27T16:09:13.5329571+00:00  IIS Site 'apcexperian' iniciado.
+2026-08-27T16:09:13.8487340+00:00  Health-check site creado (catch-all, puerto 80).
+2026-08-27T16:09:13.85419
