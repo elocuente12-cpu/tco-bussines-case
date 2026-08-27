@@ -66,8 +66,22 @@ Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0
 }
 
 
-[INFO]	2026-08-26T23:39:45.482Z	b2f9099c-3035-4d93-8b48-b9e6323bbb12	SSM Command Success: 2026-08-26T19:38:51.1988248-04:00  === Leave-Domain iniciado ===
-2026-08-26T19:38:51.2107669-04:00  Computer: USAEA1PWBWES22
-2026-08-26T19:39:18.4211797-04:00  Usando credenciales de: gdc.local\paawsas_svc
-2026-08-26T19:39:20.2869406-04:00  Computer object 'USAEA1PWBWES22' no encontrado en AD.
-2026-08-26T19:39:20.7394368-04:00  Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES22' from domain 'gdc.local' with the following error message: The specified network name is no longer av
+2026-08-26T19:27:42.924-05:00
+[INFO]	2026-08-27T00:27:42.923Z	05894956-8685-4e5f-b8a1-94a788f0fddc	SSM Command Success: 2026-08-27T00:27:18.7806137+00:00  === Leave-Domain iniciado ===
+2026-08-27T00:27:18.7882594+00:00  Computer: USAEA1PWBWES22
+2026-08-27T00:27:40.5563215+00:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-08-27T00:27:40.5988612+00:00  Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted.
+"
+2026-08-27T00:27:40.7079598+00:00  Remove-Computer fallo: Cannot remove computer 'USAEA1PWBWES22'
+
+[INFO] 2026-08-27T00:27:42.923Z 05894956-8685-4e5f-b8a1-94a788f0fddc SSM Command Success: 2026-08-27T00:27:18.7806137+00:00 === Leave-Domain iniciado === 2026-08-27T00:27:18.7882594+00:00 Computer: USAEA1PWBWES22 2026-08-27T00:27:40.5563215+00:00 Usando credenciales de: gdc.local\paawsas_svc 2026-08-27T00:27:40.5988612+00:00 Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted. " 2026-08-27T00:27:40.7079598+00:00 Remove-Computer fallo: Cannot remove computer 'USAEA1PWBWES22'
+2026-08-26T19:27:43.166-05:00
+[INFO]	2026-08-27T00:27:43.166Z	05894956-8685-4e5f-b8a1-94a788f0fddc	Lifecycle action completed for i-0077ba2392d7da93d
+
+[INFO] 2026-08-27T00:27:43.166Z 05894956-8685-4e5f-b8a1-94a788f0fddc Lifecycle action completed for i-0077ba2392d7da93d
+2026-08-26T19:27:43.170-05:00
+END RequestId: 05894956-8685-4e5f-b8a1-94a788f0fddc
+
+END RequestId: 05894956-8685-4e5f-b8a1-94a788f0fddc
+2026-08-26T19:27:43.171-05:00
+REPORT RequestId: 05894956-8685-4e5f-b8a1-94a788f0fddc	Duration: 25761.28 ms	Billed Duration: 26279 ms	Memory Size: 128 MB	Max Memory Used: 92 MB	Init Duration: 517.61 ms
