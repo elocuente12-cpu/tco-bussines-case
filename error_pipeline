@@ -66,22 +66,29 @@ Reference: https://github.com/terraform-linters/tflint-ruleset-terraform/blob/v0
 }
 
 
-2026-08-26T19:27:42.924-05:00
-[INFO]	2026-08-27T00:27:42.923Z	05894956-8685-4e5f-b8a1-94a788f0fddc	SSM Command Success: 2026-08-27T00:27:18.7806137+00:00  === Leave-Domain iniciado ===
-2026-08-27T00:27:18.7882594+00:00  Computer: USAEA1PWBWES22
-2026-08-27T00:27:40.5563215+00:00  Usando credenciales de: gdc.local\paawsas_svc
-2026-08-27T00:27:40.5988612+00:00  Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted.
-"
-2026-08-27T00:27:40.7079598+00:00  Remove-Computer fallo: Cannot remove computer 'USAEA1PWBWES22'
+2026-08-27T11:43:51.296-05:00
+[INFO]	2026-08-27T16:43:51.296Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	Processing leave-domain for i-04d076aced94d4094 in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
 
-[INFO] 2026-08-27T00:27:42.923Z 05894956-8685-4e5f-b8a1-94a788f0fddc SSM Command Success: 2026-08-27T00:27:18.7806137+00:00 === Leave-Domain iniciado === 2026-08-27T00:27:18.7882594+00:00 Computer: USAEA1PWBWES22 2026-08-27T00:27:40.5563215+00:00 Usando credenciales de: gdc.local\paawsas_svc 2026-08-27T00:27:40.5988612+00:00 Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted. " 2026-08-27T00:27:40.7079598+00:00 Remove-Computer fallo: Cannot remove computer 'USAEA1PWBWES22'
-2026-08-26T19:27:43.166-05:00
-[INFO]	2026-08-27T00:27:43.166Z	05894956-8685-4e5f-b8a1-94a788f0fddc	Lifecycle action completed for i-0077ba2392d7da93d
+[INFO] 2026-08-27T16:43:51.296Z d6186da4-fcc6-403e-baa1-0a637c1d2007 Processing leave-domain for i-04d076aced94d4094 in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
+2026-08-27T11:43:51.713-05:00
+[INFO]	2026-08-27T16:43:51.713Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	SSM Command sent: 34de7b1b-7342-46da-82d0-4a227fbe1609
 
-[INFO] 2026-08-27T00:27:43.166Z 05894956-8685-4e5f-b8a1-94a788f0fddc Lifecycle action completed for i-0077ba2392d7da93d
-2026-08-26T19:27:43.170-05:00
-END RequestId: 05894956-8685-4e5f-b8a1-94a788f0fddc
+[INFO] 2026-08-27T16:43:51.713Z d6186da4-fcc6-403e-baa1-0a637c1d2007 SSM Command sent: 34de7b1b-7342-46da-82d0-4a227fbe1609
+2026-08-27T11:44:57.100-05:00
+[INFO]	2026-08-27T16:44:57.100Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	SSM Command Success: 2026-08-27T12:43:52.4905959-04:00  === Leave-Domain iniciado ===
+2026-08-27T12:43:52.5007405-04:00  Computer: USAEA1PWBWES22
+2026-08-27T12:44:18.9058212-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-08-27T12:44:30.5076772-04:00  Computer object 'USAEA1PWBWES22' ELIMINADO del AD.
+2026-08-27T12:44:30.6078255-04:00  Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES22' from domain 'gdc.local' with the following error message: The specified network name is no longer avail
 
-END RequestId: 05894956-8685-4e5f-b8a1-94a788f0fddc
-2026-08-26T19:27:43.171-05:00
-REPORT RequestId: 05894956-8685-4e5f-b8a1-94a788f0fddc	Duration: 25761.28 ms	Billed Duration: 26279 ms	Memory Size: 128 MB	Max Memory Used: 92 MB	Init Duration: 517.61 ms
+[INFO] 2026-08-27T16:44:57.100Z d6186da4-fcc6-403e-baa1-0a637c1d2007 SSM Command Success: 2026-08-27T12:43:52.4905959-04:00 === Leave-Domain iniciado === 2026-08-27T12:43:52.5007405-04:00 Computer: USAEA1PWBWES22 2026-08-27T12:44:18.9058212-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-08-27T12:44:30.5076772-04:00 Computer object 'USAEA1PWBWES22' ELIMINADO del AD. 2026-08-27T12:44:30.6078255-04:00 Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES22' from domain 'gdc.local' with the following error message: The specified network name is no longer avail
+2026-08-27T11:44:57.375-05:00
+[INFO]	2026-08-27T16:44:57.375Z	d6186da4-fcc6-403e-baa1-0a637c1d2007	Lifecycle action completed for i-04d076aced94d4094
+
+[INFO] 2026-08-27T16:44:57.375Z d6186da4-fcc6-403e-baa1-0a637c1d2007 Lifecycle action completed for i-04d076aced94d4094
+2026-08-27T11:44:57.388-05:00
+END RequestId: d6186da4-fcc6-403e-baa1-0a637c1d2007
+
+END RequestId: d6186da4-fcc6-403e-baa1-0a637c1d2007
+2026-08-27T11:44:57.388-05:00
+REPORT RequestId: d6186da4-fcc6-403e-baa1-0a637c1d2007	Duration: 66092.48 ms	Billed Duration: 66544 ms	Memory Size: 128 MB	Max Memory Used: 96 MB	Init Duration: 450.95 ms
