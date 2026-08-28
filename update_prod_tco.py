@@ -156,6 +156,13 @@ last = 1 + len(rows)
 if ws.max_row > last:
     ws.delete_rows(last+1, ws.max_row - last)
 
+# Des-ocultar filas: el archivo original del assessment tenia filas marcadas
+# como hidden que ocultaban recursos (RDS/FSx/DMS). Aseguramos que todas las
+# filas de datos sean visibles.
+for _r, _dim in list(ws.row_dimensions.items()):
+    if _dim.hidden:
+        _dim.hidden = False
+
 wb.save(FILEPATH)
 
 print(f"TCO productivo reconstruido con {len(rows)} filas.")
