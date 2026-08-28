@@ -1,219 +1,184 @@
+"""
+Actualiza el TCO del ambiente PRODUCTIVO (intelisrcpa/pro) para reflejar el
+estado REAL de la IaC desplegada.
+
+Enfoque (confirmado con el usuario - Opcion A):
+  El TCO original listaba 20 servidores del assessment lift-and-shift. La IaC
+  realmente desplegada es una arquitectura re-diseñada (ASG + ALB + 2 RDS +
+  FSx + AMI Builder + DMS). Se REEMPLAZA el inventario del assessment por los
+  componentes reales desplegados, preservando la estructura de columnas y los
+  estilos del encabezado.
+
+Parametros confirmados:
+  - ASG app1 (r7a.medium Windows): se costea desired_capacity = 2 instancias.
+  - Se INCLUYE el AMI Builder (m5.large, temporal).
+
+Fuente de precios: AWS Price List (us-east-1), shared tenancy, RI Standard
+No-Upfront. 730 h/mes, anualizado x12.
+Nota: RDS SQL Server SE License-included NO ofrece RI 3yr No-Upfront (solo
+All/Partial Upfront), por eso esas celdas quedan en NA.
+"""
 import openpyxl
-from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
 from copy import copy
 
-# Read the intermediate environments TCO to get the target format/headers
-ref_filepath = '/Users/javier.sepulveda/projects/experian/tco-bussines-case/Ambientes intermedios/Assessment-2026-03-04-1706/analysis_TCO.xlsx'
-ref_wb = openpyxl.load_workbook(ref_filepath)
-ref_ws = ref_wb['Shared Tenancy Analysis']
+FILEPATH = '/Users/javier.sepulveda/projects/experian/tco-bussines-case/Ambiente Productivo/Lift-and-Shift - 18 Servers/analysis_TCO.xlsx'
 
-# Get target headers and styles from reference
-target_headers = [cell.value for cell in ref_ws[1]]
-header_styles = []
-for cell in ref_ws[1]:
-    header_styles.append({
-        'font': copy(cell.font),
-        'alignment': copy(cell.alignment),
-        'border': copy(cell.border),
-        'fill': copy(cell.fill),
-        'number_format': cell.number_format,
+H = 730       # horas/mes
+M = 12        # meses/anio
+def yr(hr):   # anualizado desde $/hr
+    return None if hr is None else round(hr * H * M, 2)
+
+# ============ Precios reales AWS us-east-1 ($/hr salvo storage) ============
+EBS_GP3 = 0.08              # $/GB-mes
+FSX_SSD_SINGLE = 0.130     # $/GB-mes (Single-AZ SSD)
+FSX_TP_SINGLE = 2.20       # $/MBps-mes (Single-AZ)
+DMS_STORAGE = 0.115        # $/GB-mes
+
+def ebs_yr(gb, mult=1):
+    return round(gb * EBS_GP3 * M * mult, 2)
+
+# EC2 Windows r7a.medium (total con licencia Windows / infra sin licencia)
+r7a = {'od': 0.12208, 'ri1': 0.09632, 'ri3': 0.08051}
+r7a_infra = {'od': 0.07608, 'ri1': 0.05032, 'ri3': 0.03451}
+# EC2 Windows m5.large (AMI builder)
+m5 = {'od': 0.188, 'ri1': 0.152, 'ri3': 0.133}
+m5_infra = {'od': 0.096, 'ri1': 0.060, 'ri3': 0.041}
+# RDS SQL Server SE license-included
+rds4xl = {'od': 12.16, 'ri1': 11.4912}      # Multi-AZ
+rds4xl_nolic = {'od': 5.952}
+rds2xl = {'od': 3.04, 'ri1': 2.8728}        # Single-AZ
+rds2xl_nolic = {'od': 1.488}
+# DMS
+dms_hr = 0.476
+
+# ============ Filas reales segun IaC ============
+# Cada dict mapea a las 22 columnas (A..V) del Excel.
+servers = [
+    # 1-2) ASG app1 (desired = 2) - r7a.medium Windows, root 120GB gp3
+    *[{
+        'host': f'ASG app1 web #{i}', 'ec2_name': f'USAEA1PWBWES2{i}', 'env': 'PROD',
+        'cpus': 1, 'ram': 8, 'os_type': 'Windows', 'os_name': 'Microsoft Windows Server 2025 (ASG detras de ALB)',
+        'rec': 'r7a.medium', 'dep': 'r7a.medium', 'cores': 1, 'aws_ram': 8,
+        'ebs_root': 120, 'ebs_add': None, 'region': 'US East (N. Virginia)',
+        'ebs_cost': ebs_yr(120),
+        'od_total': yr(r7a['od']), 'lic': yr(r7a['od'] - r7a_infra['od']), 'od_excl': yr(r7a_infra['od']),
+        'ri1_total': yr(r7a['ri1']), 'ri1_excl': yr(r7a_infra['ri1']),
+        'ri3_total': yr(r7a['ri3']), 'ri3_excl': yr(r7a_infra['ri3']),
+    } for i in (1, 2)],
+
+    # 3) RDS produccion - db.r6i.4xlarge Multi-AZ, storage 1700GB (x2 por Multi-AZ)
+    {
+        'host': 'RDS produccion (multiaz1)', 'ec2_name': None, 'env': 'PROD',
+        'cpus': 16, 'ram': 128, 'os_type': 'SQL Server - Standard',
+        'os_name': 'SQL Server Standard Edition 15.x (Multi-AZ, license-included)',
+        'rec': 'db.r6i.4xlarge', 'dep': 'db.r6i.4xlarge', 'cores': 16, 'aws_ram': 128,
+        'ebs_root': 1700, 'ebs_add': None, 'region': 'US East (N. Virginia)',
+        'ebs_cost': ebs_yr(1700, 2),
+        'od_total': yr(rds4xl['od']), 'lic': yr(rds4xl['od'] - rds4xl_nolic['od']), 'od_excl': yr(rds4xl_nolic['od']),
+        'ri1_total': yr(rds4xl['ri1']), 'ri1_excl': None,
+        'ri3_total': 'NA', 'ri3_excl': 'NA',
+    },
+
+    # 4) RDS procesos - db.r6i.2xlarge Single-AZ, storage 2900GB
+    {
+        'host': 'RDS procesos (standalone1)', 'ec2_name': None, 'env': 'PROD',
+        'cpus': 8, 'ram': 64, 'os_type': 'SQL Server - Standard',
+        'os_name': 'SQL Server Standard Edition 15.x (Single-AZ, license-included)',
+        'rec': 'db.r6i.2xlarge', 'dep': 'db.r6i.2xlarge', 'cores': 8, 'aws_ram': 64,
+        'ebs_root': 2900, 'ebs_add': None, 'region': 'US East (N. Virginia)',
+        'ebs_cost': ebs_yr(2900, 1),
+        'od_total': yr(rds2xl['od']), 'lic': yr(rds2xl['od'] - rds2xl_nolic['od']), 'od_excl': yr(rds2xl_nolic['od']),
+        'ri1_total': yr(rds2xl['ri1']), 'ri1_excl': None,
+        'ri3_total': 'NA', 'ri3_excl': 'NA',
+    },
+
+    # 5) FSx Windows Single-AZ SSD 100GB + 64 MBps throughput
+    {
+        'host': 'FSx Windows (intelisrcpa-prd)', 'ec2_name': None, 'env': 'PROD',
+        'cpus': None, 'ram': None, 'os_type': 'Windows (FSx)',
+        'os_name': 'FSx Windows File Server Single-AZ SSD (64 MBps, backup 30d)',
+        'rec': 'FSx SINGLE_AZ_1', 'dep': 'FSx SINGLE_AZ_1', 'cores': None, 'aws_ram': None,
+        'ebs_root': 100, 'ebs_add': None, 'region': 'US East (N. Virginia)',
+        'ebs_cost': round(100 * FSX_SSD_SINGLE * M, 2),           # storage
+        'od_total': round(64 * FSX_TP_SINGLE * M, 2),             # throughput como costo del servicio
+        'lic': 0, 'od_excl': round(64 * FSX_TP_SINGLE * M, 2),
+        'ri1_total': None, 'ri1_excl': None, 'ri3_total': None, 'ri3_excl': None,
+    },
+
+    # 6) AMI Builder m5.large Windows (temporal)
+    {
+        'host': 'AMI Builder (temporal)', 'ec2_name': None, 'env': 'PROD',
+        'cpus': 2, 'ram': 8, 'os_type': 'Windows',
+        'os_name': 'Microsoft Windows Server 2025 (AMI Builder - temporal)',
+        'rec': 'm5.large', 'dep': 'm5.large', 'cores': 2, 'aws_ram': 8,
+        'ebs_root': 100, 'ebs_add': None, 'region': 'US East (N. Virginia)',
+        'ebs_cost': ebs_yr(100),
+        'od_total': yr(m5['od']), 'lic': yr(m5['od'] - m5_infra['od']), 'od_excl': yr(m5_infra['od']),
+        'ri1_total': yr(m5['ri1']), 'ri1_excl': yr(m5_infra['ri1']),
+        'ri3_total': yr(m5['ri3']), 'ri3_excl': yr(m5_infra['ri3']),
+    },
+
+    # 7) DMS replication c5.2xlarge Single-AZ 50GB
+    {
+        'host': 'DMS replication (poc)', 'ec2_name': None, 'env': 'PROD',
+        'cpus': 8, 'ram': 16, 'os_type': 'DMS',
+        'os_name': 'DMS c5.2xlarge Single-AZ (engine 3.6.1)',
+        'rec': 'dms.c5.2xlarge', 'dep': 'dms.c5.2xlarge', 'cores': 8, 'aws_ram': 16,
+        'ebs_root': 50, 'ebs_add': None, 'region': 'US East (N. Virginia)',
+        'ebs_cost': round(50 * DMS_STORAGE * M, 2),
+        'od_total': yr(dms_hr), 'lic': 0, 'od_excl': yr(dms_hr),
+        'ri1_total': None, 'ri1_excl': None, 'ri3_total': None, 'ri3_excl': None,
+    },
+]
+
+wb = openpyxl.load_workbook(FILEPATH)
+ws = wb['Shared Tenancy Analysis']
+
+# Capturar estilo de una celda de datos existente (fila 2) para replicarlo
+data_style = []
+for c in range(1, 23):
+    cell = ws.cell(2, c)
+    data_style.append({
+        'font': copy(cell.font), 'alignment': copy(cell.alignment),
+        'border': copy(cell.border), 'number_format': cell.number_format,
     })
 
-print(f"Target format headers ({len(target_headers)} cols): {target_headers}")
+# Limpiar TODAS las filas de datos (preservando encabezado, fila 1)
+for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
+    for cell in row:
+        cell.value = None
 
-# Read the production file
-prod_filepath = '/Users/javier.sepulveda/projects/experian/tco-bussines-case/Ambiente Productivo/Lift-and-Shift - 18 Servers/analysis.xlsx'
-prod_wb = openpyxl.load_workbook(prod_filepath, data_only=True)
+# Orden de columnas A..V (1..22)
+def row_values(s):
+    return [
+        s['host'], s['ec2_name'], s['env'], s['cpus'], s['ram'], s['os_type'], s['os_name'],
+        s['rec'], s['dep'], s['cores'], s['aws_ram'], s['ebs_root'], s['ebs_add'], s['region'],
+        s['ebs_cost'], s['od_total'], s['lic'], s['od_excl'],
+        s['ri1_total'], s['ri1_excl'], s['ri3_total'], s['ri3_excl'],
+    ]
 
-# Read On-Demand sheet for cost data
-ws_od = prod_wb['Shared Tenancy - On-Demand']
-# Read 1yr NU for 1yr costs
-ws_1yr = prod_wb['Shared Tenancy - 1yr NU']
-# Read 3yr NU for 3yr costs
-ws_3yr = prod_wb['Shared Tenancy - 3yr NU']
+for idx, s in enumerate(servers, start=2):
+    vals = row_values(s)
+    for c, v in enumerate(vals, start=1):
+        cell = ws.cell(row=idx, column=c)
+        cell.value = v
+        st = data_style[c - 1]
+        cell.font = st['font']; cell.alignment = st['alignment']
+        cell.border = st['border']; cell.number_format = st['number_format']
 
-# Extract server data from On-Demand (rows 2-19 are the 18 assessment servers)
-# Columns in source: 0:Server Id, 1:Server Name, 2:Host Name, 3:Cluster Name, 4:Hypervisor,
-# 5:Environment, 6:Application, 7:Server Type, 8:Number of CPUs, 9:Cores per CPU,
-# 10:Total Cores, 11:RAM (GB), 12:Operating System Type, 13:Operating System Name,
-# 14:Peak CPU %, 15:Avg CPU %, 16:Peak RAM %, 17:Avg RAM %, 18:Uptime %,
-# 19:EC2 Instance Recommended, 20:EC2 Total Cores, 21:EC2 RAM (GB), 22:AWS Region,
-# 23:Annualized Total Cost, 24:Annualized Network Cost, 25:Annualized License Only Cost,
-# 26:Annualized EC2 Cost Excl. License Cost
+# Eliminar filas sobrantes del inventario anterior (assessment tenia 20 filas).
+last_data_row = 1 + len(servers)
+if ws.max_row > last_data_row:
+    ws.delete_rows(last_data_row + 1, ws.max_row - last_data_row)
 
-# The last 3 rows (20-22 in sheet, rows 31 area) have different format:
-# Server-Hostname | IP | vCPU | Memory (GiB) | General Purpose (GB) | Environment Type | OS Name | OS Version | APP Description
+wb.save(FILEPATH)
 
-servers_data = []
-
-# Process the 18 assessment servers (rows 2-19)
-for row_idx in range(2, 20):
-    row = [cell.value for cell in ws_od[row_idx]]
-    
-    server_name = row[1]  # Server Name
-    cpus = row[8] if row[8] else row[10]  # Number of CPUs or Total Cores
-    ram = row[11]  # RAM (GB)
-    os_type = row[12]  # Operating System Type
-    os_name = row[13]  # Operating System Name
-    instance_recommended = row[19]  # EC2 Instance Recommended
-    ec2_cores = row[20]  # EC2 Total Cores
-    ec2_ram = row[21]  # EC2 RAM (GB)
-    region = row[22]  # AWS Region
-
-    # Cost from On-Demand
-    od_total_cost = row[23]
-    od_license_cost = row[25]
-    od_ec2_cost = row[26]
-
-    # Cost from 1yr NU
-    row_1yr = [cell.value for cell in ws_1yr[row_idx]]
-    yr1_total_cost = row_1yr[23]
-    yr1_ec2_cost = row_1yr[26]
-
-    # Cost from 3yr NU
-    row_3yr = [cell.value for cell in ws_3yr[row_idx]]
-    yr3_total_cost = row_3yr[23]
-    yr3_ec2_cost = row_3yr[26]
-
-    servers_data.append({
-        'host_name': server_name,
-        'ec2_name': '',
-        'environment': 'PROD',
-        'cpus': cpus,
-        'ram': ram,
-        'os_type': os_type,
-        'os_name': os_name,
-        'instance_recommended': instance_recommended,
-        'instance_deploy': instance_recommended,  # Same as recommended for prod
-        'total_cores': ec2_cores,
-        'aws_ram': ec2_ram,
-        'ebs_root': None,  # Will fill from EBS data
-        'ebs_additional': None,
-        'region': 'US East (N. Virginia)' if region == 'us-east-1' else region,
-        'od_total_cost': od_total_cost,
-        'od_license_cost': od_license_cost,
-        'od_ec2_cost': od_ec2_cost,
-        'yr1_total_cost': yr1_total_cost,
-        'yr1_ec2_cost': yr1_ec2_cost,
-        'yr3_total_cost': yr3_total_cost,
-        'yr3_ec2_cost': yr3_ec2_cost,
-    })
-
-# Process the 3 additional servers (rows 20-22 in the sheet, different format)
-for row_idx in range(20, 23):
-    row = [cell.value for cell in ws_od[row_idx]]
-    if row[0] is None:
-        continue
-    # Format: Server-Hostname | IP | vCPU | Memory (GiB) | General Purpose (GB) | Environment Type | OS Name | OS Version | APP Description
-    server_name = row[0]
-    vcpu = row[2]
-    memory = row[3]
-    ebs_size = row[4]
-    env_type = row[5]
-    os_name_short = row[6]
-    os_version = row[7]
-
-    # Determine OS type
-    if os_name_short and 'Windows' in str(os_name_short):
-        os_type = 'Windows'
-        os_full = f"{os_version}" if os_version else os_name_short
-    elif os_name_short and 'Linux' in str(os_name_short):
-        os_type = 'Linux'
-        os_full = f"{os_version}" if os_version else os_name_short
-    else:
-        os_type = str(os_name_short) if os_name_short else ''
-        os_full = str(os_version) if os_version else ''
-
-    servers_data.append({
-        'host_name': server_name,
-        'ec2_name': '',
-        'environment': 'PROD',
-        'cpus': vcpu,
-        'ram': memory,
-        'os_type': os_type,
-        'os_name': os_full,
-        'instance_recommended': '',  # Not assessed
-        'instance_deploy': '',  # Not assessed
-        'total_cores': vcpu,
-        'aws_ram': memory,
-        'ebs_root': ebs_size,
-        'ebs_additional': None,
-        'region': 'US East (N. Virginia)',
-        'od_total_cost': None,
-        'od_license_cost': None,
-        'od_ec2_cost': None,
-        'yr1_total_cost': None,
-        'yr1_ec2_cost': None,
-        'yr3_total_cost': None,
-        'yr3_ec2_cost': None,
-    })
-
-# Now create the output file with the same format as intermedios
-# We'll overwrite the production analysis.xlsx with a new "Shared Tenancy Analysis" sheet
-# but keep the original sheets (Read Me, Glossary, etc.)
-
-# Reload production file (not data_only) so we can modify it
-prod_wb_write = openpyxl.load_workbook(prod_filepath)
-
-# Create new sheet with the target format
-if 'Shared Tenancy Analysis' in prod_wb_write.sheetnames:
-    del prod_wb_write['Shared Tenancy Analysis']
-
-# Insert after 'Glossary' if possible
-glossary_idx = prod_wb_write.sheetnames.index('Glossary') if 'Glossary' in prod_wb_write.sheetnames else 1
-ws_new = prod_wb_write.create_sheet('Shared Tenancy Analysis', glossary_idx + 1)
-
-# Write headers matching the intermedios format
-for col_idx, header in enumerate(target_headers, start=1):
-    cell = ws_new.cell(row=1, column=col_idx, value=header)
-    if col_idx - 1 < len(header_styles):
-        style = header_styles[col_idx - 1]
-        cell.font = style['font']
-        cell.alignment = style['alignment']
-        cell.border = style['border']
-        cell.fill = style['fill']
-
-# Write server data
-# Target columns: Host Name Onpremise | EC2 Name | Environment | Number of CPUs | RAM (GB) |
-# Operation System Type | Operation System Name | AWS Instance Recommended | AWS Instance Deploy |
-# AWS Total Cores | AWS RAM (GB) | EBS Size (GB) Root | EBS Size (GB) Additional | AWS Region |
-# Annualized 1 Yr EBS Cost | Annualized On-Demand Total EC2 - RDS Cost | Annualized License Only Cost |
-# Annualized On-Demand EC2 Cost Excl. License Cost | Annualized 1 Yr NURI Total EC2 - RDS Cost |
-# Annualized 1 Yr NURI EC2 Cost, Excl. License Costs | Annualized 3 Yr NURI Total EC2 Cost |
-# Annualized 3 Yr NURI EC2 Cost Excl. License Cost
-
-for idx, server in enumerate(servers_data, start=2):
-    ws_new.cell(row=idx, column=1, value=server['host_name'])
-    ws_new.cell(row=idx, column=2, value=server['ec2_name'])
-    ws_new.cell(row=idx, column=3, value=server['environment'])
-    ws_new.cell(row=idx, column=4, value=server['cpus'])
-    ws_new.cell(row=idx, column=5, value=server['ram'])
-    ws_new.cell(row=idx, column=6, value=server['os_type'])
-    ws_new.cell(row=idx, column=7, value=server['os_name'])
-    ws_new.cell(row=idx, column=8, value=server['instance_recommended'])
-    ws_new.cell(row=idx, column=9, value=server['instance_deploy'])
-    ws_new.cell(row=idx, column=10, value=server['total_cores'])
-    ws_new.cell(row=idx, column=11, value=server['aws_ram'])
-    ws_new.cell(row=idx, column=12, value=server['ebs_root'])
-    ws_new.cell(row=idx, column=13, value=server['ebs_additional'])
-    ws_new.cell(row=idx, column=14, value=server['region'])
-    # Cost columns (15-22)
-    ws_new.cell(row=idx, column=15, value=None)  # EBS Cost - not available from source
-    ws_new.cell(row=idx, column=16, value=server['od_total_cost'])
-    ws_new.cell(row=idx, column=17, value=server['od_license_cost'])
-    ws_new.cell(row=idx, column=18, value=server['od_ec2_cost'])
-    ws_new.cell(row=idx, column=19, value=server['yr1_total_cost'])
-    ws_new.cell(row=idx, column=20, value=server['yr1_ec2_cost'])
-    ws_new.cell(row=idx, column=21, value=server['yr3_total_cost'])
-    ws_new.cell(row=idx, column=22, value=server['yr3_ec2_cost'])
-
-# Save
-prod_wb_write.save(prod_filepath)
-print(f"\nArchivo de produccion actualizado exitosamente.")
-print(f"Se agrego sheet 'Shared Tenancy Analysis' con formato homologado.")
-print(f"Total servidores: {len(servers_data)}")
-print(f"  - Windows: {sum(1 for s in servers_data if 'Win' in str(s['os_type']))}")
-print(f"  - Linux/RHEL: {sum(1 for s in servers_data if s['os_type'] in ['RHEL', 'Linux'])}")
-print(f"\nServidores incluidos:")
-for s in servers_data:
-    print(f"  {s['host_name']:<20} {s['environment']:<6} {s['os_type']:<10} {str(s['instance_recommended']):<15} EBS={s['ebs_root']}")
+print(f"TCO productivo actualizado con {len(servers)} componentes reales de la IaC.")
+print("Componentes:")
+for s in servers:
+    print(f"  {s['host']:<32} {str(s['dep']):<16} EBS/stor={s['ebs_root']}GB  OD/yr={s['od_total']}  RI1/yr={s['ri1_total']}")
+tot_ebs = sum((s['ebs_cost'] or 0) for s in servers)
+tot_od = sum((s['od_total'] or 0) for s in servers)
+tot_lic = sum((s['lic'] or 0) for s in servers)
+print(f"\nTotales anuales: EBS/storage=${tot_ebs:,.2f}  OD(EC2+RDS+DMS+FSx)=${tot_od:,.2f}  License-only=${tot_lic:,.2f}")
+print(f"Gran total anual (OD + storage) = ${tot_od + tot_ebs:,.2f}")
