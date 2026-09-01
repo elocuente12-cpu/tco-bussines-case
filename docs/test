@@ -1,4 +1,0 @@
-
-# Reset Password — obligatorio para reusar un computer object existente
-# Write servicePrincipalName — para que el join pueda actualizar los SPNs
-# Write userAccountControl — para habilitar/deshabilitar el objeto
