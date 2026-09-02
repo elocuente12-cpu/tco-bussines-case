@@ -1,0 +1,239 @@
+{
+  "name": "acm",
+  "tags": [
+    "acm",
+    "certificate"
+  ],
+  "summary": "Terraform module for AWS ACM",
+  "description": "Terraform module for AWS Certificate Manager, designed to import an existing certificate or request a new certificate to AWS. This module provides a streamlined process for certificate management, ensuring secure and efficient handling of your AWS certificates.",
+  "minimum_example": {
+    "account_id": "123456789",
+    "external_id": "YOUR_IAM_ROLE_EXTERNAL_ID",
+    "region": "eu-west-2",
+    "resources": [
+      {
+        "template": "acm",
+        "inputs": {
+          "action": "import",
+          "import_certificate": {
+            "private_key": "KEY",
+            "certificate_body": "CERT"
+          },
+          "tags": {
+            "CostString": "2000.GB.123.456789",
+            "AppID": 12345,
+            "Environment": "sbx"
+          }
+        }
+      }
+    ]
+  },
+  "skeleton": {
+    "account_id": "",
+    "external_id": "",
+    "region": "eu-west-2",
+    "resources": [
+      {
+        "template": "acm",
+        "inputs": {
+          "action": "import",
+          "alarm_sns_topics": [],
+          "certificate_transparency_logging": true,
+          "cloudwatch_tags": {},
+          "disable_default_alarms": false,
+          "enable_route53_alarms": false,
+          "external_domain_validation": false,
+          "import_certificate": {
+            "private_key": "",
+            "certificate_body": ""
+          },
+          "request_certificate": {
+            "hosted_zone_name": "",
+            "domain_name": "",
+            "validation_method": ""
+          },
+          "route53_recordset_overwrite": true,
+          "route53_recordset_ttl": 60,
+          "subject_alternative_names": [],
+          "tags": {},
+          "validation_option": {}
+        }
+      }
+    ]
+  },
+  "docs": {
+    "inputs": [
+      {
+        "name": "action",
+        "type": "string",
+        "description": "Action to perform. Valid values are 'import' and 'request'",
+        "default": "import",
+        "required": false
+      },
+      {
+        "name": "alarm_sns_topics",
+        "type": "list(string)",
+        "description": "List of SNS topics triggered by alarm events. providing a list will automatically enable alarm actions",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "certificate_transparency_logging",
+        "type": "bool",
+        "description": "Certificate transparency logging preference, only applicable for requested certificates",
+        "default": true,
+        "required": false
+      },
+      {
+        "name": "cloudwatch_tags",
+        "type": "map(string)",
+        "description": "Cloudwatch Alarm tags. See https://pages.experian.com/pages/viewpage.action?pageId=400041906 for all available tags",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "disable_default_alarms",
+        "type": "bool",
+        "description": "To disable the best practice AWS alarms as outlined here in [AWS Best Practices](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Best_Practice_Recommended_Alarms_AWS_Services.html#CertificateManager)",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "enable_all_alarm_actions",
+        "type": "bool",
+        "description": "Set to `true` to enable alarm actions for `INSUFFICIENT_DATA` and `OK` state for all default alarms. By default, only `ALARM` states will trigger actions",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "enable_route53_alarms",
+        "type": "bool",
+        "description": "Enable Route53 alarms, only applicable for requested certificates",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "external_domain_validation",
+        "type": "bool",
+        "description": "Set to `true` if the DNS domain validation is external. See README for more details",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "import_certificate",
+        "type": "object({\n    private_key       = string\n    certificate_body  = string\n    certificate_chain = optional(string, \"\")\n  })",
+        "description": "Certificate to import in PEM format",
+        "default": {
+          "certificate_body": "",
+          "private_key": ""
+        },
+        "required": false
+      },
+      {
+        "name": "request_certificate",
+        "type": "object({\n    hosted_zone_name  = string\n    domain_name       = string\n    validation_method = string\n  })",
+        "description": "Certificate to request",
+        "default": {
+          "domain_name": "",
+          "hosted_zone_name": "",
+          "validation_method": ""
+        },
+        "required": false
+      },
+      {
+        "name": "route53_recordset_overwrite",
+        "type": "bool",
+        "description": "Allow overwriting of existing Route53 record set, only applicable for requested certificates",
+        "default": true,
+        "required": false
+      },
+      {
+        "name": "route53_recordset_ttl",
+        "type": "number",
+        "description": "TTL for the Route53 record set, only applicable for requested certificates",
+        "default": 60,
+        "required": false
+      },
+      {
+        "name": "subject_alternative_names",
+        "type": "list(string)",
+        "description": "Subject alternative names for the certificate, only applicable for requested certificates",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "tags",
+        "type": "map(string)",
+        "description": "Tags for AWS resources. See https://pages.experian.com/pages/viewpage.action?pageId=400041906 for all available tags",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "validation_option",
+        "type": "any",
+        "description": "Validation options for the certificate request",
+        "default": {},
+        "required": false
+      }
+    ],
+    "modules": [
+      {
+        "name": "alarm",
+        "source": "git::https://code.experian.local/scm/EUCES/eits-tf-aws-cloudwatch-alarm.git",
+        "version": "1.3.0",
+        "description": null
+      },
+      {
+        "name": "eits_ce_common",
+        "source": "git::https://code.experian.local/scm/EUCES/eits-tf-aws-ce-common.git",
+        "version": "v1",
+        "description": null
+      },
+      {
+        "name": "route53",
+        "source": "git::https://code.experian.local/scm/EUCES/eits-tf-aws-route53.git",
+        "version": "1.7.1",
+        "description": null
+      }
+    ],
+    "outputs": [
+      {
+        "name": "arn",
+        "description": "The ARN of the Certificate."
+      },
+      {
+        "name": "domain_name",
+        "description": "The domain name of the Certificate."
+      },
+      {
+        "name": "domain_validation_options",
+        "description": "The domain validation options of the Certificate."
+      },
+      {
+        "name": "expiration",
+        "description": "The expiration of the Certificate."
+      },
+      {
+        "name": "status",
+        "description": "The status of the Certificate."
+      }
+    ],
+    "providers": [
+      {
+        "name": "aws",
+        "alias": null,
+        "version": "6.60.0"
+      }
+    ],
+    "requirements": [
+      {
+        "name": "terraform",
+        "version": ">= 1.9"
+      },
+      {
+        "name": "aws",
+        "version": ">= 6.51.0"
+      }
+    ]
+  }
+}

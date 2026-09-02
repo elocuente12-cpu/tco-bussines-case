@@ -1,0 +1,18 @@
+#!/usr/bin/groovy
+@Library('ukclen-jenkins-library') _
+
+// run on devsecops Linux node
+node ("Linux") {
+
+  // set pipeline properties
+  properties([
+    disableConcurrentBuilds()
+  ])
+
+  // make sure we clean workspace when build is finished
+  cleanWs()
+
+  // run terraform tests
+  terraformTest()
+
+}

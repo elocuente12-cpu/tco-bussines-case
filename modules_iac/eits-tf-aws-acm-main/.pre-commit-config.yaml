@@ -1,0 +1,8 @@
+repos:
+  - repo: https://code.experian.local/scm/ukclen/pre-commit-hooks
+    rev: "1.4.0" # Confirm latest version from CHANGELOG.md
+    hooks:
+      - id: check-for-newer-hooks
+      - id: terraform-checks-pass-files
+      - id: terraform-checks-pass-no-files
+      - id: cda-json-update
