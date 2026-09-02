@@ -60,3 +60,76 @@ fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
 
 
 https://calculator.aws/#/estimate?id=ba859c329889c143cccf943bb871af57d0c16062
+
+https://www.automatesql.com/blog/how-to-set-up-replication-using-sql-aliases
+Automating SQL Server Alias Configurations With Ansible
+The following is a sample playbook we could use to ensure an alias is configured on multiple servers. This is a simplification but gives you an idea of how this can be done automatically during the build phase of your SQL Server instances or client machines.
+
+The playbook will use the win_copy and win_dsc ansible modules. It will create both the 32-bit and 64-bit aliases.
+
+
+
+Environment:
+
+---------------------------------------
+
+Working with SQL Client Aliases
+Chrissy LeMaire
+•
+January 10, 2020
+•
+Updated: October 29, 2025
+SQL Client Aliases allow you to connect to a SQL Server instance using another name. This is especially useful during migrations. Want your servers to connect to the new SQL Server without modifying connection strings within your application? Or what if you could use easy-to-remember names for your docker containers? SQL Client Aliases can help.
+
+image
+
+For the longest time, I managed these aliases using cliconfg for 64-bit applications (C:\Windows\System32\cliconfg.exe) or cliconfg for 32-bit applications (C:\Windows\SysWOW64\cliconfg.exe).
+
+When I’d remember and if it was available, I’d also manage SQL Client Aliases using SQL Server Configuration Manager, which surfaces aliases for both 32-bit applications and 64-bit applications in a single pane. Here’s a screenshot of both SQL Server Configuration Manager and cliconfg. Note they both show the same aliases, confirming that you can manage aliases using whichever you prefer.
+
+cliconfg
+
+SQL Native Client provides cliconfg.exe but I think it’s also built into Windows. I’ve yet to find an OS that doesn’t have cliconfg on it - and I tried all the way back to Windows 2003! So if SQL Client Aliases seem useful to you, you’re in luck.
+
+While you can manage SQL Client Aliases using the GUI, I prefer using dbatools which helps me avoid logging into multiple servers at once, and creates both the 32-bit and 64-bit aliases at once.
+
+Using dbatools
+I find SQL Client Aliases most useful for facilitating easy migrations and using them is even recommended as a best practice in the SharePoint world.
+
+First, I check all of my servers to see which aliases are currently setup.
+
+Get-DbaClientAlias -ComputerName web01, web02, web03
+Then, I’ll either remove old ones using something like this, which allows me to select the aliases I want to remove.
+
+Get-DbaClientAlias -ComputerName web01, web02, web03 | Out-GridView -Passthru |  Remove-DbaClientAlias
+
+Copy
+Then I create my aliases as required. Note that the aliases and server names can be formatted in a number of ways. Both named instances and specifying a port numbers is supported.
+
+New-DbaClientAlias -ComputerName web01, web02, web03 -ServerName sql02 -Alias sql01
+New-DbaClientAlias -ComputerName web01, web02, web03 -ServerName sql02\sqlexpress19 -Alias sql01\sqlexpress14
+New-DbaClientAlias -ComputerName web01, web02, web03 -ServerName 'sql02,2383' -Alias 'sql01,2383'
+By default, connections are created as TCP/IP. Want to use named pipes? That’s also possible.
+
+New-DbaClientAlias -ServerName sqlcluster\sharepoint -Alias sp -Protocol NamedPipes
+If you’re familiar with named pipe aliases, you may remember that it creates a funky string. Don’t worry, we take care of that for you. Just pass the ServerName and Alias as you would with TCP/IP and we’ll build the named pipe string for you.
+
+Now that I’ve created all of my required aliases, let’s take a look at them using Get-DbaClientAlias and Out-GridView. Note that when I don’t specify -ComputerName, the command executes against my local machine, in this case, WORKSTATIONX.
+
+getclientalias
+
+Try It Out
+Test this out yourself - create a new alias, then use dbatools, Azure Data Studio or SSMS to connect to the new server using the old name. In the example below, I’ve migrated sql2014 to sql2016 then will use the sql2014 alias to connect.
+
+image
+
+Automating your migrations just got even easier! For more information, check out our built-in help using Get-Help Get-DbaClientAlias -Detailed.
+
+
+
+configuracion server alias.
+
+server alias: vaonsql
+Network Libraries: TCP/IP
+Server name: eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com
+port Number: 1433
