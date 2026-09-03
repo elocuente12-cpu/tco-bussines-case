@@ -1,22 +1,59 @@
-# 1. Skew real contra el DC (lo más importante)
-w32tm /query /status
-w32tm /query /source
-w32tm /stripchart /computer:gdc.local /samples:3 /dataonly
-
-# 2. ¿El share FSx responde y resuelve?
-$fsx = "<fsx_dns_name>"   # el mismo que usa el userdata
-Resolve-DnsName $fsx
-Test-NetConnection $fsx -Port 445
-
-# 3. Probar el mapeo manualmente con credenciales explícitas para ver el error crudo
-$sec = Get-SECSecretValue -SecretId "<secret_id>" -Region us-east-1
-$sec.SecretString    # confirmar que username/password están poblados (NO lo pegues aquí, solo verifica que no estén vacíos)
-Mientras tanto, mi hipótesis de fix (pendiente de confirmar con lo de arriba) es endurecer el sync de tiempo en la Fase 2 apuntando explícitamente al DC antes del mount, en lugar de confiar en w32tm /resync /force:
-
-powershell
-
-# Apuntar W32Time al DC del dominio y resincronizar de verdad
+PS C:\Windows\system32> $sec = Get-SECSecretValue -SecretId "arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP" -Region us-east-1
+PS C:\Windows\system32> $sec.SecretString
+{"SELF_MANAGED_ACTIVE_DIRECTORY_USERNAME":"<user>","SELF_MANAGED_ACTIVE_DIRECTORY_PASSWORD":"<passwd>"}
+PS C:\Windows\system32> w32tm /query /status
+Leap Indicator: 0(no warning)
+Stratum: 4 (secondary reference - syncd by (S)NTP)
+Precision: -23 (119.209ns per tick)
+Root Delay: 0.0857634s
+Root Dispersion: 0.0820688s
+ReferenceId: 0x0ABC1501 (source IP:  10.188.21.1)
+Last Successful Sync Time: 9/3/2026 11:42:19 AM
+Source: CORP-NOT-GDC01.gdc.local
+Poll Interval: 9 (512s)
+ 
+PS C:\Windows\system32> w32tm /query /source
+CORP-NOT-GDC01.gdc.local
+PS C:\Windows\system32> w32tm /stripchart /computer:gdc.local /samples:3 /dataonly
+Tracking gdc.local [10.156.252.165:123].
+Collecting 3 samples.
+The current time is 9/3/2026 11:44:01 AM.
+11:44:01, +00.1146691s
+11:44:04, +00.1134381s
+11:44:06, +00.1135060s
+PS C:\Windows\system32> $fsx = "amznfsxsokjtgsj.gdc.local"
+PS C:\Windows\system32> Resolve-DnsName $fsx
+ 
+Name                                          Type   TTL   Section   IPAddress
+----                                          ----   ---   -------   ---------
+amznfsxsokjtgsj.gdc.local                      A      55   Answer     10.64.160.245
+ 
+ 
+PS C:\Windows\system32> Test-NetConnection $fsx -Port 445
+ 
+ 
+ComputerName     : amznfsxsokjtgsj.gdc.local
+RemoteAddress    : 10.64.160.245
+RemotePort       : 445
+InterfaceAlias   : Ethernet 2
+SourceAddress    : 10.64.160.248
+TcpTestSucceeded : True
+ 
 w32tm /config /manualpeerlist:"gdc.local" /syncfromflags:manual /update
 Restart-Service W32Time
 w32tm /resync /rediscover /force
-# Verificar skew < 5 min antes de intentar el mount
+ 
+PS C:\Windows\system32> w32tm /config /manualpeerlist:"gdc.local" /syncfromflags:manual /update
+
+The command completed successfully.
+
+PS C:\Windows\system32> Restart-Service W32Time
+
+PS C:\Windows\system32> w32tm /resync /rediscover /force
+
+The following arguments were unexpected:
+
+/force
+
+The following error occurred: The parameter is incorrect. (0x80070057)
+ 
