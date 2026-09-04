@@ -1,0 +1,392 @@
+PS C:\tmp> .\Diag-FSxMount.ps1
+
+cmdlet Diag-FSxMount.ps1 at command pipeline position 1
+Supply values for the following parameters:
+SecretId: arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP
+
+===================================================================
+ 0. Contexto de ejecucion
+===================================================================
+  Usuario actual              : usaea1pwbwes21\ss000la
+  Hostname                    : USAEA1PWBWES21
+  Fecha/hora local            : 2026-09-04T13:26:05.0937499-04:00
+  Timezone                    : Eastern Standard Time
+  FSx remote                  : \\amznfsxsokjtgsj.gdc.local\share
+  PartOfDomain                : True
+  Dominio                     : gdc.local
+
+===================================================================
+ 1. Recuperando credenciales desde Secrets Manager
+===================================================================
+  Secret leido via AWS.Tools (Get-SECSecretValue).
+  Usuario del secret          : gdc.local\paawsas_svc
+  Credencial construida OK.
+
+===================================================================
+ 2. Estado actual de mapeos y credenciales (ANTES)
+===================================================================
+--- Get-SmbGlobalMapping ---
+
+--- SmbMappings persistentes en registro (HKLM) ---
+  [HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters]
+    EnablePlainTextPassword
+    EnableSecuritySignature
+    ServiceDll
+    ServiceDllUnloadOnStop
+    requiresecuritysignature
+--- cmdkey /list (credenciales guardadas) ---
+
+Currently stored credentials:
+
+    Target: WindowsLive:target=virtualapp/didlogical
+    Type: Generic
+    User: 02pmvmspaxrdqybn
+    Local machine persistence
+
+
+--- net use ---
+New connections will be remembered.
+
+There are no entries in the list.
+
+
+
+===================================================================
+ 3. Canal seguro con el DC y estado Kerberos (hipotesis reuso de objeto)
+===================================================================
+--- nltest /sc_verify (valida machine password contra el DC) ---
+Flags: 400000b0 HAS_IP  HAS_TIMESERV  Authentication Service: Netlogon
+Trusted DC Name \\INMBPDCGDC01.gdc.local
+Trusted DC Connection Status Status = 0 0x0 NERR_Success
+Trust Verification Status = 0 0x0 NERR_Success
+The command completed successfully
+
+--- nltest /sc_query (que DC esta atendiendo) ---
+Flags: 30 HAS_IP  HAS_TIMESERV  Authentication Service: Netlogon
+Trusted DC Name \\INMBPDCGDC01.gdc.local
+Trusted DC Connection Status Status = 0 0x0 NERR_Success
+The command completed successfully
+
+--- Test-ComputerSecureChannel (True = machine key consistente) ---
+  SecureChannel OK            : True
+--- klist -li 0x3e7 (tickets Kerberos de LocalSystem) ---
+
+Current LogonId is 0:0x2aa5d22
+Targeted LogonId is 0:0x3e7
+
+Cached Tickets: (27)
+
+#0>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: krbtgt/GDC.LOCAL @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x60a10000 -> forwardable forwarded renewable pre_authent name_canonicalize
+        Start Time: 9/4/2026 11:25:32 (local)
+        End Time:   9/4/2026 21:18:16 (local)
+        Renew Time: 9/11/2026 11:18:16 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x2 -> DELEGATION
+        Kdc Called: MYCBPDCGDC01.gdc.local
+
+#1>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: krbtgt/GDC.LOCAL @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40e10000 -> forwardable renewable initial pre_authent name_canonicalize
+        Start Time: 9/4/2026 11:18:16 (local)
+        End Time:   9/4/2026 21:18:16 (local)
+        Renew Time: 9/11/2026 11:18:16 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0x1 -> PRIMARY
+        Kdc Called: MYCBPDCGDC01.gdc.local
+
+#2>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: krbtgt/COLLABORATIVE.GDC.LOCAL @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:50 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#3>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: krbtgt/BDL.GDC.LOCAL @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:47 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#4>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: krbtgt/SHAREDREMOTE.GDC.LOCAL @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:46 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#5>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: cifs/COBOPDCGDC02.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 12:19:29 (local)
+        End Time:   9/4/2026 21:18:16 (local)
+        Renew Time: 9/11/2026 11:18:16 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: MYCBPDCGDC01.gdc.local
+
+#6>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: cifs/AUX1GDC01.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:25:31 (local)
+        End Time:   9/4/2026 21:18:16 (local)
+        Renew Time: 9/11/2026 11:18:16 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: MYCBPDCGDC01.gdc.local
+
+#7>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: LDAP/AUX1GDC01.gdc.local/gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:18:17 (local)
+        End Time:   9/4/2026 21:18:16 (local)
+        Renew Time: 9/11/2026 11:18:16 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: MYCBPDCGDC01.gdc.local
+
+#8>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: cifs/amznfsxsokjtgsj.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a10000 -> forwardable renewable pre_authent name_canonicalize
+        Start Time: 9/4/2026 11:08:23 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#9>     Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: LDAP/zamza1pdcwes01.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:06:57 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#10>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: cifs/zamza1pdcwes01.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:55 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#11>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: LDAP/zamza1pdcwes01.gdc.local/gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:54 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#12>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: ldap/UKFHPDCGDC01.collaborative.gdc.local/collaborative.gdc.local @ COLLABORATIVE.GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:50 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: UKFHPDCGDC01.collaborative.gdc.local
+
+#13>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: GC/USAEA1PBDLDCW02.bdl.gdc.local/gdc.local @ BDL.GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:47 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: USALPBDLDC01.bdl.gdc.local
+
+#14>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: ldap/corp-not-gdc01.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:46 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#15>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: ldap/UKFHPDCECX02.sharedremote.gdc.local/sharedremote.gdc.local @ SHAREDREMOTE.GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:46 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: UKFHPDCECX02.sharedremote.gdc.local
+
+#16>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: ldap/USMKPBDLDC01.bdl.gdc.local/bdl.gdc.local @ BDL.GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:45 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: USALPBDLDC01.bdl.gdc.local
+
+#17>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: ldap/COBOPDCGDC02.gdc.local/ForestDnsZones.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:41 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#18>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: LDAP/INMBPDCGDC01.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:31 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#19>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: cifs/COBOPDCGDC02.gdc.local/gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:27 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#20>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: USAEA1PWBWES21$ @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a10000 -> forwardable renewable pre_authent name_canonicalize
+        Start Time: 9/4/2026 11:05:26 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#21>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: ldap/cobopdcgdc02.gdc.local/gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:25 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#22>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: LDAP/COBOPDCGDC02.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:24 (local)
+        End Time:   9/4/2026 21:05:20 (local)
+        Renew Time: 9/11/2026 11:05:20 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0
+        Kdc Called: INMBPDCGDC01.gdc.local
+
+#23>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: cifs/INMBPDCGDC01.gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96
+        Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize
+        Start Time: 9/4/2026 11:05:22 (local)
+        End Time:   9/4/2026 21:05:20 (local)                                                                                                                                                                Renew Time: 9/11/2026 11:05:20 (local)                                                                                                                                                               Session Key Type: AES-256-CTS-HMAC-SHA1-96                                                                                                                                                           Cache Flags: 0                                                                                                                                                                                       Kdc Called: INMBPDCGDC01.gdc.local                                                                                                                                                                                                                                                                                                                                                                #24>    Client: usaea1pwbwes21$ @ GDC.LOCAL
+        Server: netlogon/INMBPDCGDC01.gdc.local/gdc.local @ GDC.LOCAL
+        KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96                                                                                                                                                 Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize                                                                                                        Start Time: 9/4/2026 11:05:20 (local)                                                                                                                                                                End Time:   9/4/2026 21:05:20 (local)                                                                                                                                                                Renew Time: 9/11/2026 11:05:20 (local)                                                                                                                                                               Session Key Type: AES-256-CTS-HMAC-SHA1-96                                                                                                                                                           Cache Flags: 0                                                                                                                                                                                       Kdc Called: INMBPDCGDC01.gdc.local                                                                                                                                                                                                                                                                                                                                                                #25>    Client: usaea1pwbwes21$ @ GDC.LOCAL                                                                                                                                                                  Server: LDAP/INMBPDCGDC01.gdc.local/gdc.local @ GDC.LOCAL                                                                                                                                            KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96                                                                                                                                                 Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize                                                                                                        Start Time: 9/4/2026 11:05:20 (local)                                                                                                                                                                End Time:   9/4/2026 21:05:19 (local)                                                                                                                                                                Renew Time: 9/11/2026 11:05:19 (local)                                                                                                                                                               Session Key Type: AES-256-CTS-HMAC-SHA1-96                                                                                                                                                           Cache Flags: 0                                                                                                                                                                                       Kdc Called: INMBPDCGDC01.gdc.local                                                                                                                                                                                                                                                                                                                                                                #26>    Client: usaea1pwbwes21$ @ GDC.LOCAL                                                                                                                                                                  Server: ldap/CORP-NOT-GDC01.gdc.local/gdc.local @ GDC.LOCAL                                                                                                                                          KerbTicket Encryption Type: AES-256-CTS-HMAC-SHA1-96                                                                                                                                                 Ticket Flags 0x40a50000 -> forwardable renewable pre_authent ok_as_delegate name_canonicalize                                                                                                        Start Time: 9/4/2026 11:05:19 (local)                                                                                                                                                                End Time:   9/4/2026 21:05:19 (local)                                                                                                                                                                Renew Time: 9/11/2026 11:05:19 (local)
+        Session Key Type: AES-256-CTS-HMAC-SHA1-96
+        Cache Flags: 0                                                                                                                                                                                       Kdc Called: INMBPDCGDC01.gdc.local                                                                                                                                                                                                                                                                                                                                                                --- Resolucion DNS del FSx ---                                                                                                                                                                                                                                                                                                                                                                            Name                      Type IPAddress                                                                                                                                                             ----                      ---- ---------                                                                                                                                                             amznfsxsokjtgsj.gdc.local    A 10.64.160.245                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        --- Conectividad SMB (445) al FSx ---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ComputerName     : amznfsxsokjtgsj.gdc.local                                                                                                                                                         RemotePort       : 445                                                                                                                                                                               TcpTestSucceeded : True                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ===================================================================                                                                                                                                   4. Limpieza de mapeos/credenciales residuales                                                                                                                                                       ===================================================================                                                                                                                                    Remove-SmbGlobalMapping ejecutado sobre Z: / \\amznfsxsokjtgsj.gdc.local\share.                                                                                                                    There are no entries in the list.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Credenciales guardadas del FSx purgadas (si existian).                                                                                                                                                                                                                                                                                                                                                  ===================================================================                                                                                                                                   5. PRUEBA A: New-SmbGlobalMapping SIN privacy, SIN persistencia                                                                                                                                     ===================================================================                                                                                                                                                                                                                                                                                                                                       Status Local Path Remote Path                                                                                                                                                                        ------ ---------- -----------                                                                                                                                                                        OK     Z:         \\amznfsxsokjtgsj.gdc.local\share
+  [OK] Mount SIN privacy funciono.
+  Test-Path Z:\               : True
+
+Name
+----
+API_PA
+CrediWeb
+ECS_Chile
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 (mapeo de prueba A eliminado)                                                                                                                                                                                                                                                                                                                                                                           ===================================================================                                                                                                                                   6. PRUEBA B: New-SmbGlobalMapping CON privacy (-RequirePrivacy), SIN persistencia                                                                                                                   ===================================================================                                                                                                                                  OK     Z:         \\amznfsxsokjtgsj.gdc.local\share                                                                                                                                                    [OK] Mount CON privacy funciono (sin persistencia).                                                                                                                                                  Test-Path Z:\               : True                                                                                                                                                                   (mapeo de prueba B eliminado)                                                                                                                                                                                                                                                                                                                                                                           ===================================================================                                                                                                                                   7. PRUEBA C: net use con credencial explicita                                                                                                                                                       ===================================================================                                                                                                                                    Ejecutando: net use Z: \\amznfsxsokjtgsj.gdc.local\share /user:gdc.local\paawsas_svc ******                                                                                                        The command completed successfully.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Test-Path Z:\               : True                                                                                                                                                                 Z: was deleted successfully.                                                                                                                                                                         
+
+
+===================================================================
+ 8. PRUEBA D: replica EXACTA de prod (-Persistent + -RequirePrivacy)
+===================================================================
+  [FALLO] Mount EXACTO de prod: A specified logon session does not exist. It may already have been terminated.
+
+===================================================================
+ 9. Resumen / interpretacion
+===================================================================
+  Interpreta asi los resultados:
+
+  - Si PRUEBA A/B/C/D FUNCIONAN tras la limpieza del paso 4
+      => la causa es un mapeo/credencial HUERFANO residual. Fix: limpiar antes de montar.
+
+  - Si A funciona pero B/D (con -RequirePrivacy) FALLAN
+      => el problema es SMB cifrado / Kerberos en el contexto recien unido.
+         Refuerza la hipotesis de reuso de objeto / clave de maquina.
+
+  - Si nltest /sc_verify o Test-ComputerSecureChannel FALLAN
+      => canal seguro roto: machine password desincronizada entre DCs.
+         Confirma la hipotesis de reuso intensivo de los 2 objetos.
+
+  - Si TODO falla (incluido net use)
+      => FSx/AD cachea la identidad previa del nombre reusado, o hay
+         bloqueo a nivel de GPO/SG especifico de prod.
+
+===================================================================
+ FIN del diagnostico
+===================================================================
+End
+wait : The term 'wait' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is
+correct and try again.
+At C:\tmp\Diag-FSxMount.ps1:256 char:1
++ wait
++ ~~~~
+    + CategoryInfo          : ObjectNotFound: (wait:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+
+
+PS C:\tmp>

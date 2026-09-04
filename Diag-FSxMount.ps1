@@ -251,4 +251,4 @@ Write-Output @"
 "@
 
 Section "FIN del diagnostico"
-Write-Output "  Copia TODO este output y compartelo para analizar."
+Write-Output "End"
