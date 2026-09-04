@@ -31,3 +31,22 @@ PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
 2026-09-03T19:50:42.6116421+00:00  ERROR FATAL: A specified logon session does not exist. It may already have been terminated.
 PS C:\Windows\system32>
 
+
+
+# 1. Confirmar que NO hay mapeo persistente huerfano (esperado: vacio)
+Get-SmbGlobalMapping | Format-Table LocalPath, RemotePath, Status
+cmdkey /list
+
+# 2. Probar el mount SIN cifrado (aisla si el problema es Kerberos/privacy)
+$cred = <credencial svc-ec2>
+New-SmbGlobalMapping -LocalPath "Z:" -RemotePath "\\amznfsxsokjtgsj.gdc.local\share" -Credential $cred -Persistent $false
+
+# 3. Si el paso 2 falla igual, probar con net use (otra pila de auth)
+net use Z: \\amznfsxsokjtgsj.gdc.local\share /user:gdc.local\svc-ec2 *
+
+# 4. Verificar el estado Kerberos de la maquina recien unida
+klist -li 0x3e7          # tickets de LocalSystem
+nltest /sc_verify:gdc.local   # valida el canal seguro con el DC
+
+
+.\Diag-FSxMount.ps1 -SecretId "arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP"
