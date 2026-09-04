@@ -1,52 +1,112 @@
-ayudame a analizar este error es parte del log.
+Windows PowerShell
 
-
-
-Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
-
- 
-
+Copyright (C) Microsoft Corporation. All rights reserved.
+ 
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+ 
 PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-2026-09-03T19:42:10.0147308+00:00  === Inicio bootstrap ===
-2026-09-03T19:42:14.0091269+00:00  Instance ID: i-0f72184bedd986614
-2026-09-03T19:42:19.6341264+00:00  Fase 1: Domain join...
-2026-09-03T19:44:19.5249437+00:00  Hostname numero 1 reclamado (intento 1).
-2026-09-03T19:44:19.5290139+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
-2026-09-03T19:44:19.5406944+00:00  Renombrando: EC2AMAZ-43VD3LV -> USAEA1PWBWES21
-2026-09-03T19:44:19.9342883+00:00  Rename OK. Exit 3010 para reboot.
-2026-09-03T19:46:09.6277416+00:00  === Inicio bootstrap ===
-2026-09-03T19:46:10.3447847+00:00  Instance ID: i-0f72184bedd986614
-2026-09-03T19:46:10.9925341+00:00  Fase 1: Domain join...
-2026-09-03T19:46:40.3564366+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
-2026-09-03T19:46:42.3865031+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
-2026-09-03T19:47:10.9610017+00:00  Domain join OK. Exit 3010 para reboot.
-2026-09-03T19:48:48.0804511+00:00  === Inicio bootstrap ===
-2026-09-03T19:48:48.3190461+00:00  Instance ID: i-0f72184bedd986614
-2026-09-03T19:48:48.9862413+00:00  Fase 2: Montaje FSx (ya en dominio)...
-2026-09-03T19:49:18.2604535+00:00  Reintento montaje FSx (1): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:49:38.3428765+00:00  Reintento montaje FSx (2): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:00.6187744+00:00  Reintento montaje FSx (3): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:20.6397534+00:00  Reintento montaje FSx (4): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:42.6096141+00:00  Reintento montaje FSx (5): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:42.6116421+00:00  ERROR FATAL: A specified logon session does not exist. It may already have been terminated.
+
+2026-09-04T17:59:54.8926868+00:00  === Inicio bootstrap ===
+
+2026-09-04T17:59:58.7290635+00:00  Instance ID: i-074671bb4313d0b23
+
+2026-09-04T18:00:11.5846457+00:00  Fase 1: Domain join...
+
+2026-09-04T18:01:55.1540768+00:00  Hostname numero 2 reclamado (intento 1).
+
+2026-09-04T18:01:55.1561066+00:00  Hostname asignado: USAEA1PWBWES22 (objeto pre-creado en AD)
+
+2026-09-04T18:01:55.1581349+00:00  Renombrando: EC2AMAZ-SGUCP6K -> USAEA1PWBWES22
+
+2026-09-04T18:01:55.4667556+00:00  Rename OK. Exit 3010 para reboot.
+
+2026-09-04T18:03:25.2592881+00:00  === Inicio bootstrap ===
+
+2026-09-04T18:03:25.9880566+00:00  Instance ID: i-074671bb4313d0b23
+
+2026-09-04T18:03:26.7575748+00:00  Fase 1: Domain join...
+
+2026-09-04T18:03:55.8527605+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES22
+
+2026-09-04T18:03:57.7216919+00:00  Domain join: USAEA1PWBWES22 -> gdc.local
+
+2026-09-04T18:04:09.5137981+00:00  ERROR FATAL: Computer 'USAEA1PWBWES22' failed to join domain 'gdc.local' from its current workgroup 'WORKGROUP' with following error message: An account wit
+
+h the same name exists in Active Directory. Re-using the account was blocked by security policy.
+
 PS C:\Windows\system32>
+Preguntas más frecuentes sobre el mensaje de actualización de Windows PowerShell - PowerShell | Microsoft Learn
+En este artículo se explica la intención del mensaje de notificación de actualización en Windows PowerShell.
+ 
+Windows PowerShell
 
+Copyright (C) Microsoft Corporation. All rights reserved.
+ 
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+ 
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
 
+2026-09-04T18:32:51.7150035+00:00  === Inicio bootstrap ===
 
-# 1. Confirmar que NO hay mapeo persistente huerfano (esperado: vacio)
-Get-SmbGlobalMapping | Format-Table LocalPath, RemotePath, Status
-cmdkey /list
+2026-09-04T18:32:54.9250376+00:00  Instance ID: i-0421c3b5da73fd1aa
 
-# 2. Probar el mount SIN cifrado (aisla si el problema es Kerberos/privacy)
-$cred = <credencial svc-ec2>
-New-SmbGlobalMapping -LocalPath "Z:" -RemotePath "\\amznfsxsokjtgsj.gdc.local\share" -Credential $cred -Persistent $false
+2026-09-04T18:33:01.0148212+00:00  Fase 1: Domain join...
 
-# 3. Si el paso 2 falla igual, probar con net use (otra pila de auth)
-net use Z: \\amznfsxsokjtgsj.gdc.local\share /user:gdc.local\svc-ec2 *
+2026-09-04T18:35:02.4913154+00:00  Hostname numero 1 reclamado (intento 1).
 
-# 4. Verificar el estado Kerberos de la maquina recien unida
-klist -li 0x3e7          # tickets de LocalSystem
-nltest /sc_verify:gdc.local   # valida el canal seguro con el DC
+2026-09-04T18:35:02.5029656+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
 
+2026-09-04T18:35:02.5041284+00:00  Renombrando: EC2AMAZ-NHPQNOO -> USAEA1PWBWES21
 
-.\Diag-FSxMount.ps1 -SecretId "arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP"
+2026-09-04T18:35:02.9304636+00:00  Rename OK. Exit 3010 para reboot.
+
+2026-09-04T18:36:38.1500963+00:00  === Inicio bootstrap ===
+
+2026-09-04T18:36:39.4527726+00:00  Instance ID: i-0421c3b5da73fd1aa
+
+2026-09-04T18:36:41.3790094+00:00  Fase 1: Domain join...
+
+2026-09-04T18:37:09.0107675+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
+
+2026-09-04T18:37:11.4875110+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
+
+2026-09-04T18:37:16.3188998+00:00  Domain join OK. Exit 3010 para reboot.
+
+2026-09-04T18:38:29.7796617+00:00  === Inicio bootstrap ===
+
+2026-09-04T18:38:30.4315717+00:00  Instance ID: i-0421c3b5da73fd1aa
+
+2026-09-04T18:38:38.7969637+00:00  Fase 2: Montaje FSx (ya en dominio)...
+
+2026-09-04T18:39:14.3575924+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+
+2026-09-04T18:39:14.7698851+00:00  Fase 3: IIS Sites config...
+
+2026-09-04T18:39:36.4802198+00:00  Default Web Site removido.
+
+2026-09-04T18:39:37.3687522+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (Host: mobile.apc.com.pa, Port: 80)
+
+2026-09-04T18:39:37.4084968+00:00  IIS Site 'mobile' iniciado.
+
+2026-09-04T18:39:38.3548950+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (Host: tuintelidat.com, Port: 80)
+
+2026-09-04T18:39:38.4047360+00:00  IIS Site 'tuintelidat' iniciado.
+
+2026-09-04T18:39:38.7407994+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (Host: apcexperian.com, Port: 80)
+
+2026-09-04T18:39:38.7453439+00:00  IIS Site 'apcexperian' iniciado.
+
+2026-09-04T18:39:39.1011403+00:00  Health-check site creado (catch-all, puerto 80).
+
+2026-09-04T18:39:39.1055357+00:00  Fase 4: SQL Client Alias config...
+
+2026-09-04T18:39:39.1991950+00:00  SQL Client Alias 'vaonsql' -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64-bit + 32-bit)
+
+2026-09-04T13:39:39.2172423-05:00  Fase 5: Timezone ajustada a SA Pacific Standard Time (UTC-5)
+
+2026-09-04T13:39:39.2233320-05:00  === Bootstrap completado ===
+
+PS C:\Windows\system32>
+Preguntas más frecuentes sobre el mensaje de actualización de Windows PowerShell - PowerShell | Microsoft Learn
+En este artículo se explica la intención del mensaje de notificación de actualización en Windows PowerShell.
+ 
