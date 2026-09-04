@@ -1,24 +1,33 @@
+ayudame a analizar este error es parte del log.
+
+
+
+Attempting to perform the InitializeDefaultDrives operation on the 'FileSystem' provider failed.
+
+ 
+
 PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-2026-09-03T19:42:10.0147308+00:00  === Inicio bootstrap ===
-2026-09-03T19:42:14.0091269+00:00  Instance ID: i-0f72184bedd986614
-2026-09-03T19:42:19.6341264+00:00  Fase 1: Domain join...
-2026-09-03T19:44:19.5249437+00:00  Hostname numero 1 reclamado (intento 1).
-2026-09-03T19:44:19.5290139+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
-2026-09-03T19:44:19.5406944+00:00  Renombrando: EC2AMAZ-43VD3LV -> USAEA1PWBWES21
-2026-09-03T19:44:19.9342883+00:00  Rename OK. Exit 3010 para reboot.
-2026-09-03T19:46:09.6277416+00:00  === Inicio bootstrap ===
-2026-09-03T19:46:10.3447847+00:00  Instance ID: i-0f72184bedd986614
-2026-09-03T19:46:10.9925341+00:00  Fase 1: Domain join...
-2026-09-03T19:46:40.3564366+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
-2026-09-03T19:46:42.3865031+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
-2026-09-03T19:47:10.9610017+00:00  Domain join OK. Exit 3010 para reboot.
-2026-09-03T19:48:48.0804511+00:00  === Inicio bootstrap ===
-2026-09-03T19:48:48.3190461+00:00  Instance ID: i-0f72184bedd986614
-2026-09-03T19:48:48.9862413+00:00  Fase 2: Montaje FSx (ya en dominio)...
-2026-09-03T19:49:18.2604535+00:00  Reintento montaje FSx (1): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:49:38.3428765+00:00  Reintento montaje FSx (2): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:00.6187744+00:00  Reintento montaje FSx (3): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:20.6397534+00:00  Reintento montaje FSx (4): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:42.6096141+00:00  Reintento montaje FSx (5): A specified logon session does not exist. It may already have been terminated.
-2026-09-03T19:50:42.6116421+00:00  ERROR FATAL: A specified logon session does not exist. It may already have been terminated.
+2026-09-03T19:42:10.0147308+00:00  === Inicio bootstrap ===
+2026-09-03T19:42:14.0091269+00:00  Instance ID: i-0f72184bedd986614
+2026-09-03T19:42:19.6341264+00:00  Fase 1: Domain join...
+2026-09-03T19:44:19.5249437+00:00  Hostname numero 1 reclamado (intento 1).
+2026-09-03T19:44:19.5290139+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
+2026-09-03T19:44:19.5406944+00:00  Renombrando: EC2AMAZ-43VD3LV -> USAEA1PWBWES21
+2026-09-03T19:44:19.9342883+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-03T19:46:09.6277416+00:00  === Inicio bootstrap ===
+2026-09-03T19:46:10.3447847+00:00  Instance ID: i-0f72184bedd986614
+2026-09-03T19:46:10.9925341+00:00  Fase 1: Domain join...
+2026-09-03T19:46:40.3564366+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
+2026-09-03T19:46:42.3865031+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
+2026-09-03T19:47:10.9610017+00:00  Domain join OK. Exit 3010 para reboot.
+2026-09-03T19:48:48.0804511+00:00  === Inicio bootstrap ===
+2026-09-03T19:48:48.3190461+00:00  Instance ID: i-0f72184bedd986614
+2026-09-03T19:48:48.9862413+00:00  Fase 2: Montaje FSx (ya en dominio)...
+2026-09-03T19:49:18.2604535+00:00  Reintento montaje FSx (1): A specified logon session does not exist. It may already have been terminated.
+2026-09-03T19:49:38.3428765+00:00  Reintento montaje FSx (2): A specified logon session does not exist. It may already have been terminated.
+2026-09-03T19:50:00.6187744+00:00  Reintento montaje FSx (3): A specified logon session does not exist. It may already have been terminated.
+2026-09-03T19:50:20.6397534+00:00  Reintento montaje FSx (4): A specified logon session does not exist. It may already have been terminated.
+2026-09-03T19:50:42.6096141+00:00  Reintento montaje FSx (5): A specified logon session does not exist. It may already have been terminated.
+2026-09-03T19:50:42.6116421+00:00  ERROR FATAL: A specified logon session does not exist. It may already have been terminated.
 PS C:\Windows\system32>
+
