@@ -371,3 +371,35 @@ Value
 USAEA1PWBWES|1
 Version
 1
+
+
+Y este es el de la app1.
+
+/intelisrcpa/app1/hostname-mapping/i-0af97fb9b840a5ce6
+Edit
+Delete
+
+Overview
+
+History
+
+Tags
+Parameter details
+Name
+/intelisrcpa/app1/hostname-mapping/i-0af97fb9b840a5ce6
+Description
+-
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app1/hostname-mapping/i-0af97fb9b840a5ce6
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-0af97fb9b840a5ce6
+Type
+String
+Last modified date
+Mon, 07 Sep 2026 16:25:01 GMT
+Value
+USAEA1PWBWES|1
