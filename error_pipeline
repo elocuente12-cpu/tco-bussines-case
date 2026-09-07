@@ -1,135 +1,373 @@
-The DFS Replication service failed to communicate with partner AMZNFSXSOKJTGSJ for replication group InteliSRC. The partner did not recognize the connection or the replication group configuration. 
-Partner DNS Address: amznfsxsokjtgsj.gdc.local 
-Optional data if available: 
-Partner WINS Address: amznfsxsokjtgsj 
-Partner IP Address: 10.64.160.245 
+version: 1.1
+tasks:
+- task: executeScript
+  inputs:
+  - frequency: always
+    type: powershell
+    runAs: localSystem
+    content: |-
+      # ============================================================
+      # Bootstrap Windows ASG - InteliSrcPA
+      # EC2Launch v2 YAML format con frequency: always
+      # Exit 3010 = reboot necesario, EC2Launch re-ejecuta al volver
+      #
+      # Flujo (3 boots):
+      #   Boot 1: Hostname claim (SSM mapping) + Rename -> exit 3010
+      #   Boot 2: Domain join (computer object pre-creado) -> exit 3010
+      #   Boot 3: FSx mount + IIS check -> completado
+      #
+      # Pre-requisitos AD (KB5020276 / CVE-2022-38042):
+      #   - Computer objects pre-creados por la MISMA cuenta de servicio
+      #     que hace el domain join (owner = svc-ec2). Sin esto, el join
+      #     falla con "Re-using the account was blocked by security policy".
+      #   - Permisos delegados sobre la OU (dsacls /I:S):
+      #     * CA;Reset Password;computer
+      #     * WP;servicePrincipalName;computer
+      #     * WP;userAccountControl;computer
+      #     * CC;computer; (para crear objetos nuevos si se escala)
+      #
+      # ============================================================
+      $ErrorActionPreference = "Stop"
+      $log = "C:\ProgramData\intelisrcpa-bootstrap.log"
+      function Write-Log($m) { "$(Get-Date -Format o)  $m" | Out-File -Append -Encoding utf8 $log }
 
-The service will retry the connection periodically. 
-Additional Information: 
-Error: 9026 (The connection is invalid) 
-Connection ID: 5E9DD252-CAF3-483B-9637-1B4E0CE5ECF5 
-Replication Group ID: 073EB0E2-8EB4-4FFB-A628-B4D7D2437AC6
+      # --- Helper: Obtener SecretString con retry ---
+      function Get-AdSecret {
+        for ($i = 1; $i -le 5; $i++) {
+          try {
+            if (Get-Command Get-SECSecretValue -ErrorAction SilentlyContinue) {
+              return (Get-SECSecretValue -SecretId "arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP" -Region "us-east-1").SecretString
+            }
+            $awsExe = (Get-Command aws -ErrorAction SilentlyContinue).Source
+            if (-not $awsExe) { $awsExe = "C:\Program Files\Amazon\AWSCLIV2\aws.exe" }
+            if (Test-Path $awsExe) {
+              $val = & $awsExe secretsmanager get-secret-value --secret-id "arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP" --region "us-east-1" --query SecretString --output text
+              if ($LASTEXITCODE -eq 0 -and $val) { return $val }
+            }
+            throw "AWS CLI / AWS Tools no disponibles aun"
+          } catch {
+            Write-Log "Reintento lectura secret ($i): $($_.Exception.Message)"
+            Start-Sleep -Seconds 15
+          }
+        }
+        throw "No se pudo leer el secret AD tras varios intentos."
+      }
+
+      # --- Helper: PSCredential de la cuenta de servicio AD ---
+      function Get-AdCredential {
+        $secret = (Get-AdSecret) | ConvertFrom-Json
+        $user = if ($secret.username) { $secret.username } else { $secret.SELF_MANAGED_ACTIVE_DIRECTORY_USERNAME }
+        $pass = if ($secret.password) { $secret.password } else { $secret.SELF_MANAGED_ACTIVE_DIRECTORY_PASSWORD }
+        if (-not $user -or -not $pass) { throw "Secret AD sin credenciales pobladas." }
+        if ($user -notlike "*\*") { $user = "gdc.local\$user" }
+        $secPass = ConvertTo-SecureString $pass -AsPlainText -Force
+        return New-Object System.Management.Automation.PSCredential($user, $secPass)
+      }
+
+      # --- Helper: Obtener instance-id via IMDSv2 ---
+      function Get-InstanceId {
+        for ($i = 1; $i -le 5; $i++) {
+          try {
+            $token = Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" -Headers @{"X-aws-ec2-metadata-token-ttl-seconds" = "300"} -TimeoutSec 5
+            return (Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" -Headers @{"X-aws-ec2-metadata-token" = $token} -TimeoutSec 5)
+          } catch {
+            Write-Log "Reintento IMDSv2 ($i): $($_.Exception.Message)"
+            Start-Sleep -Seconds 10
+          }
+        }
+        throw "No se pudo obtener instance-id via IMDSv2."
+      }
+
+      # --- Helper: hostname ya reclamado por esta instancia ---
+      function Get-OwnHostname {
+        param([string]$Prefix, [string]$Region, [string]$InstanceId, [int]$StartOffset)
+        try {
+          $val = (Get-SSMParameter -Name "/intelisrcpa/app3/hostname-mapping/$InstanceId" -Region $Region).Value
+          if ($val -like "$Prefix|*") {
+            [string]$h = "{0}{1:D2}" -f $Prefix, ([int]$val.Split("|")[1] + $StartOffset - 1)
+            return $h
+          }
+        } catch {}
+        return $null
+      }
+
+      # --- Helper: Asignar hostname del bloque reservado ---
+      function Get-NextHostname {
+        param([string]$Prefix, [string]$Region, [int]$PoolSize, [string]$InstanceId, [int]$StartOffset)
+        # Namespace SSM aislado por ASG (app3): evita que pools de ASG
+        # distintos que comparten el mismo hostname_prefix se contaminen entre si.
+        $mappingPath = "/intelisrcpa/app3/hostname-mapping"
+        $ownParam = "$mappingPath/$InstanceId"
+
+        for ($attempt = 1; $attempt -le 5; $attempt++) {
+          # Leer numeros actualmente en uso
+          $used = @{}
+          try {
+            $params = Get-SSMParametersByPath -Path $mappingPath -Region $Region
+            foreach ($p in $params) {
+              if ($p.Value -notlike "$Prefix|*") { continue }
+              $id = ($p.Name -split "/")[-1]
+              if ($id -eq $InstanceId) { continue }
+              $num = [int]$p.Value.Split("|")[1]
+              $used[$num] = $true
+            }
+          } catch {}
+
+          # Primer numero libre del pool
+          $assignedNumber = 0
+          for ($n = 1; $n -le $PoolSize; $n++) {
+            if (-not $used.ContainsKey($n)) { $assignedNumber = $n; break }
+          }
+          if ($assignedNumber -eq 0) { throw "Sin numeros libres en bloque $Prefix 01..$PoolSize." }
+
+          # Reclamar
+          Write-SSMParameter -Name $ownParam -Value "$Prefix|$assignedNumber" -Type String -Overwrite $true -Region $Region | Out-Null
+          Start-Sleep -Seconds (5 + (Get-Random -Maximum 10))
+
+          # Verificar conflicto (arranque simultaneo de varias instancias)
+          $conflict = $false
+          try {
+            $params = Get-SSMParametersByPath -Path $mappingPath -Region $Region
+            foreach ($p in $params) {
+              if ($p.Value -notlike "$Prefix|*") { continue }
+              $id = ($p.Name -split "/")[-1]
+              $num = [int]$p.Value.Split("|")[1]
+              if ($id -ne $InstanceId -and $num -eq $assignedNumber -and $id -lt $InstanceId) {
+                $conflict = $true; break
+              }
+            }
+          } catch {}
+
+          if (-not $conflict) {
+            Write-Log "Hostname numero $assignedNumber reclamado (intento $attempt)."
+            [string]$result = "{0}{1:D2}" -f $Prefix, ($assignedNumber + $StartOffset - 1)
+            return $result
+          }
+          Write-Log "Conflicto SSM por numero $assignedNumber; reintentando."
+          Remove-SSMParameter -Name $ownParam -Region $Region -Force -ErrorAction SilentlyContinue | Out-Null
+          Start-Sleep -Seconds (Get-Random -Maximum 10)
+        }
+        throw "No se pudo reclamar hostname del bloque $Prefix tras varios intentos."
+      }
+
+      # === MAIN ===
+      try {
+        Write-Log "=== Inicio bootstrap ==="
+        $instanceId = Get-InstanceId
+        Write-Log "Instance ID: $instanceId"
+
+        $partOfDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+
+        # --- FASE 1: Hostname + Domain Join ---
+        if (-not $partOfDomain) {
+          Write-Log "Fase 1: Domain join..."
+
+          # Esperar a que el AD responda (el DNS de la VPC ya resuelve el dominio)
+          for ($i = 1; $i -le 20; $i++) {
+            if (Resolve-DnsName "gdc.local" -DnsOnly -ErrorAction SilentlyContinue) { break }
+            Write-Log "Esperando AD... $i"
+            Start-Sleep -Seconds 15
+          }
+
+          # Hostname del bloque reservado
+          [string]$hostname = Get-OwnHostname -Prefix "USAEA1PWBWES" -Region "us-east-1" -InstanceId $instanceId -StartOffset 25
+          if ($hostname) {
+            Write-Log "Hostname reutilizado del mapping existente: $hostname"
+          } else {
+            [string]$hostname = Get-NextHostname -Prefix "USAEA1PWBWES" -Region "us-east-1" -PoolSize 3 -InstanceId $instanceId -StartOffset 25
+            Write-Log "Hostname asignado: $hostname (objeto pre-creado en AD)"
+          }
+
+          # Rename (boot separado del join para que ActiveComputerName sea correcto)
+          if ($env:COMPUTERNAME -ne $hostname) {
+            Write-Log "Renombrando: $env:COMPUTERNAME -> $hostname"
+            Rename-Computer -NewName $hostname -Force
+            Write-Log "Rename OK. Exit 3010 para reboot."
+            exit 3010
+          }
+
+          # Domain join (nombre ya activo, reutiliza computer object pre-creado)
+          $cred = Get-AdCredential
+          Write-Log "Domain join: $env:COMPUTERNAME -> gdc.local"
+          $ou = "OU=AutoScaling,OU=Panama,OU=SP LATAM Servers,OU=Windows Server 2025 Member Servers,OU=Servers,OU=Systems,DC=gdc,DC=local"
+          if ([string]::IsNullOrEmpty($ou)) {
+            Add-Computer -DomainName "gdc.local" -Credential $cred -Force
+          } else {
+            Add-Computer -DomainName "gdc.local" -Credential $cred -OUPath $ou -Force
+          }
+          Write-Log "Domain join OK. Exit 3010 para reboot."
+          exit 3010
+        }
+
+        # --- FASE 2: Mount FSx (ya en dominio) ---
+        Write-Log "Fase 2: Montaje FSx (ya en dominio)..."
+
+        $remote = "\\amznfsxsokjtgsj.gdc.local\share"
+        $mapped = Get-SmbGlobalMapping -ErrorAction SilentlyContinue | Where-Object { $_.LocalPath -eq "Z:" }
+
+        if (-not $mapped) {
+          $cred = Get-AdCredential
+          for ($i = 1; $i -le 5; $i++) {
+            try {
+              # NOTA: -Persistent $true provoca "A specified logon session does not exist"
+              # cuando el mapeo se crea en contexto LocalSystem (sin sesion de logon donde
+              # persistir la credencial cifrada). Se usa NO-persistente y se re-monta en
+              # cada boot via frequency:always (EC2Launch re-ejecuta este UserData).
+              # Validado en prod: mismo comando con -Persistent $false monta OK.
+              New-SmbGlobalMapping -LocalPath "Z:" -RemotePath $remote -Credential $cred -Persistent $false -RequirePrivacy $true
+              Write-Log "FSx montado en Z: ($remote)"
+              break
+            } catch {
+              Write-Log "Reintento montaje FSx ($i): $($_.Exception.Message)"
+              if ($i -eq 5) { throw }
+              Start-Sleep -Seconds 20
+            }
+          }
+        } else {
+          Write-Log "FSx ya montado en Z:"
+        }
+
+        # IIS check
+        $w3svc = Get-Service -Name W3SVC -ErrorAction SilentlyContinue
+        if ($w3svc -and $w3svc.Status -ne "Running") { Start-Service W3SVC; Write-Log "W3SVC iniciado." }
+
+        # --- FASE 3: Configurar IIS Sites desde FSx ---
+        Write-Log "Fase 3: IIS Sites config..."
+        Import-Module WebAdministration -ErrorAction SilentlyContinue
+
+        $sitesJson = '[{"host_header":"webfolder.intelidat.com","name":"webfolder","path":"WFApcExperian\\WebFolderPortal","port":80}]'
+        $sites = ConvertFrom-Json $sitesJson
+
+        if ($sites.Count -gt 0) {
+          # Remover Default Web Site para liberar puerto 80
+          Stop-Website -Name "Default Web Site" -ErrorAction SilentlyContinue
+          Remove-Website -Name "Default Web Site" -ErrorAction SilentlyContinue
+          Write-Log "Default Web Site removido."
+
+          foreach ($site in $sites) {
+            $siteName = $site.name
+            $sitePath = "Z:\$($site.path)"
+            $hostHeader = $site.host_header
+            $sitePort = [int]$site.port
+
+            # Crear directorio en FSx si no existe (DFS-R lo replicara)
+            if (-not (Test-Path $sitePath)) {
+              New-Item -Path $sitePath -ItemType Directory -Force | Out-Null
+              # Crear index.html basico para evitar 403 mientras DFS-R replica
+              $indexFile = Join-Path $sitePath "index.html"
+              if (-not (Test-Path $indexFile)) {
+                "<html><body><h1>$siteName</h1><p>Host: $hostHeader</p><p>Server: $env:COMPUTERNAME</p></body></html>" | Out-File $indexFile -Encoding utf8
+              }
+              Write-Log "Directorio creado en FSx: $sitePath"
+            }
+
+            # Crear o actualizar el site IIS
+            $existingSite = Get-Website -Name $siteName -ErrorAction SilentlyContinue
+            if (-not $existingSite) {
+              New-Website -Name $siteName -PhysicalPath $sitePath -Port $sitePort -HostHeader $hostHeader -Force
+              Write-Log "IIS Site creado: $siteName -> $sitePath (Host: $hostHeader, Port: $sitePort)"
+            } else {
+              Set-ItemProperty "IIS:\Sites\$siteName" -Name physicalPath -Value $sitePath
+              Write-Log "IIS Site actualizado: $siteName -> $sitePath"
+            }
+
+            Start-Website -Name $siteName -ErrorAction SilentlyContinue
+            Write-Log "IIS Site '$siteName' iniciado."
+          }
+        }
+
+        # --- Health-check site para ALB (catch-all sin host header) ---
+        # El ALB health check hace GET /index.html en puerto 80 sin Host header.
+        $healthPath = "C:\inetpub\health"
+        New-Item -Path $healthPath -ItemType Directory -Force | Out-Null
+        "OK" | Out-File "$healthPath\index.html" -Encoding utf8
+        $healthSite = Get-Website -Name "health-check" -ErrorAction SilentlyContinue
+        if (-not $healthSite) {
+          New-Website -Name "health-check" -PhysicalPath $healthPath -Port 80 -Force
+          Write-Log "Health-check site creado (catch-all, puerto 80)."
+        }
+
+        # --- FASE 4: SQL Client Alias (para failover DR) ---
+        # Los web.config usan "vaonsql" como Data Source. Este alias apunta a
+        # RDS en AWS. En DR on-premise el mismo alias apunta a los SQL locales,
+        # asi no hay que tocar los web.config al hacer failover.
+        $sqlAliasServer = "eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com"
+        if ($sqlAliasServer) {
+          Write-Log "Fase 4: SQL Client Alias config..."
+          $aliasName  = "vaonsql"
+          $aliasValue = "DBMSSOCN,$sqlAliasServer,1433"
+
+          # 64-bit
+          $key64 = "HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client\ConnectTo"
+          if (-not (Test-Path $key64)) { New-Item -Path $key64 -Force | Out-Null }
+          Set-ItemProperty -Path $key64 -Name $aliasName -Value $aliasValue
+
+          # 32-bit (WoW64)
+          $key32 = "HKLM:\SOFTWARE\Wow6432Node\Microsoft\MSSQLServer\Client\ConnectTo"
+          if (-not (Test-Path $key32)) { New-Item -Path $key32 -Force | Out-Null }
+          Set-ItemProperty -Path $key32 -Name $aliasName -Value $aliasValue
+
+          Write-Log "SQL Client Alias '$aliasName' -> $aliasValue (64-bit + 32-bit)"
+        } else {
+          Write-Log "Fase 4: SQL Client Alias omitido (sql_alias_server vacio)."
+        }
+
+        # --- FASE 5: Timezone Bogota UTC-5 (SA Pacific Standard Time) ---
+        $tzMarker = "C:\ProgramData\intelisrcpa-tz.flag"
+        if (-not (Test-Path $tzMarker)) {
+          if ((Get-TimeZone).Id -ne "SA Pacific Standard Time") {
+            Set-TimeZone -Id "SA Pacific Standard Time"
+            Write-Log "Fase 5: Timezone ajustada a SA Pacific Standard Time (UTC-5)"
+          }
+          "done $(Get-Date -Format o)" | Out-File $tzMarker -Encoding utf8
+        }
+
+        Write-Log "=== Bootstrap completado ==="
+      }
+      catch {
+        Write-Log ("ERROR FATAL: " + $_.Exception.Message)
+      }
 
 
-The DFS Replication service failed to communicate with partner AMZNFSXSOKJTGSJ for replication group InteliSRC. This error can occur if the host is unreachable, or if the DFS Replication service is not running on the server. 
-Partner DNS Address: amznfsxsokjtgsj.gdc.local 
-Optional data if available: 
-Partner WINS Address: amznfsxsokjtgsj 
-Partner IP Address: 10.64.160.245 
-The service will retry the connection periodically. 
-Additional Information: 
-Error: 1722 (The RPC server is unavailable.) 
-Connection ID: 5E9DD252-CAF3-483B-9637-1B4E0CE5ECF5 
-Replication Group ID: 073EB0E2-8EB4-4FFB-A628-B4D7D2437AC6
+      Este es el userdata para la app3.
 
-dfsrdiag.exe Backlog /SendingMember:$onprem /ReceivingMember:amznfsxsokjtgsj.gdc.local /RGName:$rg /RFName:$rf
+      sin embargo detectamos que en parameter store no respeto el hostname_start   = 25
+      sino que creo el parameter 
 
-fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action
-| filter (dstAddr = "10.64.160.245" or srcAddr = "10.64.160.245")
-| filter protocol = 6
-| sort @timestamp desc
-| limit 200
+      me-mapping/i-01a64add573e7625b
+Overview
+AWS Systems Manager
+Parameter Store
+/intelisrcpa/app3/hostname-mapping/i-01a64add573e7625b
+Overview
 
-2026-08-27T16:02:15.8282854+00:00  === Inicio bootstrap ===
-2026-08-27T16:02:18.7172574+00:00  Instance ID: i-0efec0ecbb2c3176d
-2026-08-27T16:02:26.9403037+00:00  Fase 1: Domain join...
-2026-08-27T16:04:29.5734246+00:00  Hostname numero 1 reclamado (intento 1).
-2026-08-27T16:04:29.5774775+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
-2026-08-27T16:04:29.5795061+00:00  Renombrando: EC2AMAZ-CQQVSAT -> USAEA1PWBWES21
-2026-08-27T16:04:30.0071381+00:00  Rename OK. Exit 3010 para reboot.
-2026-08-27T16:06:07.6470224+00:00  === Inicio bootstrap ===
-2026-08-27T16:06:08.6012793+00:00  Instance ID: i-0efec0ecbb2c3176d
-2026-08-27T16:06:10.6577786+00:00  Fase 1: Domain join...
-2026-08-27T16:06:38.2996825+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
-2026-08-27T16:06:40.9574245+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
-2026-08-27T16:06:50.1759628+00:00  Domain join OK. Exit 3010 para reboot.
-2026-08-27T16:08:14.5923770+00:00  === Inicio bootstrap ===
-2026-08-27T16:08:14.8064001+00:00  Instance ID: i-0efec0ecbb2c3176d
-2026-08-27T16:08:15.3784166+00:00  Fase 2: Montaje FSx (ya en dominio)...
-2026-08-27T16:08:45.0108911+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
-2026-08-27T16:08:51.2021094+00:00  Fase 3: IIS Sites config...
-2026-08-27T16:09:12.0689006+00:00  Default Web Site removido.
-2026-08-27T16:09:12.7691341+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (Host: mobile.apc.com.pa, Port: 80)
-2026-08-27T16:09:12.7755422+00:00  IIS Site 'mobile' iniciado.
-2026-08-27T16:09:13.2654068+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (Host: tuintelidat.com, Port: 80)
-2026-08-27T16:09:13.2684798+00:00  IIS Site 'tuintelidat' iniciado.
-2026-08-27T16:09:13.5298619+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (Host: apcexperian.com, Port: 80)
-2026-08-27T16:09:13.5329571+00:00  IIS Site 'apcexperian' iniciado.
-2026-08-27T16:09:13.8487340+00:00  Health-check site creado (catch-all, puerto 80).
-2026-08-27T16:09:13.85419
+/intelisrcpa/app3/hostname-mapping/i-01a64add573e7625b
+Edit
+Delete
 
+Overview
 
-https://calculator.aws/#/estimate?id=ba859c329889c143cccf943bb871af57d0c16062
+History
 
-https://www.automatesql.com/blog/how-to-set-up-replication-using-sql-aliases
-Automating SQL Server Alias Configurations With Ansible
-The following is a sample playbook we could use to ensure an alias is configured on multiple servers. This is a simplification but gives you an idea of how this can be done automatically during the build phase of your SQL Server instances or client machines.
-
-The playbook will use the win_copy and win_dsc ansible modules. It will create both the 32-bit and 64-bit aliases.
-
-
-
-Environment:
-
----------------------------------------
-
-Working with SQL Client Aliases
-Chrissy LeMaire
-•
-January 10, 2020
-•
-Updated: October 29, 2025
-SQL Client Aliases allow you to connect to a SQL Server instance using another name. This is especially useful during migrations. Want your servers to connect to the new SQL Server without modifying connection strings within your application? Or what if you could use easy-to-remember names for your docker containers? SQL Client Aliases can help.
-
-image
-
-For the longest time, I managed these aliases using cliconfg for 64-bit applications (C:\Windows\System32\cliconfg.exe) or cliconfg for 32-bit applications (C:\Windows\SysWOW64\cliconfg.exe).
-
-When I’d remember and if it was available, I’d also manage SQL Client Aliases using SQL Server Configuration Manager, which surfaces aliases for both 32-bit applications and 64-bit applications in a single pane. Here’s a screenshot of both SQL Server Configuration Manager and cliconfg. Note they both show the same aliases, confirming that you can manage aliases using whichever you prefer.
-
-cliconfg
-
-SQL Native Client provides cliconfg.exe but I think it’s also built into Windows. I’ve yet to find an OS that doesn’t have cliconfg on it - and I tried all the way back to Windows 2003! So if SQL Client Aliases seem useful to you, you’re in luck.
-
-While you can manage SQL Client Aliases using the GUI, I prefer using dbatools which helps me avoid logging into multiple servers at once, and creates both the 32-bit and 64-bit aliases at once.
-
-Using dbatools
-I find SQL Client Aliases most useful for facilitating easy migrations and using them is even recommended as a best practice in the SharePoint world.
-
-First, I check all of my servers to see which aliases are currently setup.
-
-Get-DbaClientAlias -ComputerName web01, web02, web03
-Then, I’ll either remove old ones using something like this, which allows me to select the aliases I want to remove.
-
-Get-DbaClientAlias -ComputerName web01, web02, web03 | Out-GridView -Passthru |  Remove-DbaClientAlias
-
-Copy
-Then I create my aliases as required. Note that the aliases and server names can be formatted in a number of ways. Both named instances and specifying a port numbers is supported.
-
-New-DbaClientAlias -ComputerName web01, web02, web03 -ServerName sql02 -Alias sql01
-New-DbaClientAlias -ComputerName web01, web02, web03 -ServerName sql02\sqlexpress19 -Alias sql01\sqlexpress14
-New-DbaClientAlias -ComputerName web01, web02, web03 -ServerName 'sql02,2383' -Alias 'sql01,2383'
-By default, connections are created as TCP/IP. Want to use named pipes? That’s also possible.
-
-New-DbaClientAlias -ServerName sqlcluster\sharepoint -Alias sp -Protocol NamedPipes
-If you’re familiar with named pipe aliases, you may remember that it creates a funky string. Don’t worry, we take care of that for you. Just pass the ServerName and Alias as you would with TCP/IP and we’ll build the named pipe string for you.
-
-Now that I’ve created all of my required aliases, let’s take a look at them using Get-DbaClientAlias and Out-GridView. Note that when I don’t specify -ComputerName, the command executes against my local machine, in this case, WORKSTATIONX.
-
-getclientalias
-
-Try It Out
-Test this out yourself - create a new alias, then use dbatools, Azure Data Studio or SSMS to connect to the new server using the old name. In the example below, I’ve migrated sql2014 to sql2016 then will use the sql2014 alias to connect.
-
-image
-
-Automating your migrations just got even easier! For more information, check out our built-in help using Get-Help Get-DbaClientAlias -Detailed.
-
-
-
-configuracion server alias.
-
-server alias: vaonsql
-Network Libraries: TCP/IP
-Server name: eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com
-port Number: 1433
+Tags
+Parameter details
+Name
+/intelisrcpa/app3/hostname-mapping/i-01a64add573e7625b
+Description
+-
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app3/hostname-mapping/i-01a64add573e7625b
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-01a64add573e7625b
+Type
+String
+Last modified date
+Mon, 07 Sep 2026 16:25:10 GMT
+Value
+USAEA1PWBWES|1
+Version
+1
