@@ -1,0 +1,132 @@
+2026-09-07T15:04:03.980-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-07T15:04:04.247-05:00
+[INFO] 2026-09-07T20:04:04.247Z Found credentials in environment variables.
+2026-09-07T15:04:04.401-05:00
+START RequestId: 2d5a0c92-f1c3-42b1-a310-c619289083c4 Version: $LATEST
+2026-09-07T15:04:04.402-05:00
+[INFO] 2026-09-07T20:04:04.402Z 2d5a0c92-f1c3-42b1-a310-c619289083c4 Event: {"version": "0", "id": "0afa4f6f-d2b6-4234-01f7-78da39858ce2", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-07T20:04:03Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:c8504b24-bbe9-4b98-82af-6c8c8d4b5915:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app3-asg"], "detail": {"LifecycleActionToken": "a9cd3238-1d9c-4ec9-9de0-008cce8ebbc5", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app3-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-0e0e79c15071b58a1", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-07T15:04:04.402-05:00
+[INFO] 2026-09-07T20:04:04.402Z 2d5a0c92-f1c3-42b1-a310-c619289083c4 Processing leave-domain for i-0e0e79c15071b58a1 in eec-aws-us-eits-intelisrcpa-prd-web-app3-asg
+2026-09-07T15:04:04.402-05:00
+[INFO] 2026-09-07T20:04:04.402Z 2d5a0c92-f1c3-42b1-a310-c619289083c4 Derived asg_key='app3' -> mapping path '/intelisrcpa/app3/hostname-mapping'
+2026-09-07T15:04:04.815-05:00
+[INFO] 2026-09-07T20:04:04.815Z 2d5a0c92-f1c3-42b1-a310-c619289083c4 SSM Command sent: e32efa25-cdd7-4c91-a623-4f011490f33b
+2026-09-07T15:05:15.414-05:00
+[INFO]	2026-09-07T20:05:15.414Z	2d5a0c92-f1c3-42b1-a310-c619289083c4	SSM Command Success: 2026-09-07T16:04:05.8692231-04:00  === Leave-Domain iniciado ===
+2026-09-07T16:04:05.8753071-04:00  Computer: USAEA1PWBWES26
+2026-09-07T16:04:39.4449775-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-07T16:04:49.7874503-04:00  Computer object 'USAEA1PWBWES26' ELIMINADO del AD.
+2026-09-07T16:04:49.8649012-04:00  Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES26' from domain 'gdc.local' with the following error message: The specified network name is no longer avail
+
+[INFO] 2026-09-07T20:05:15.414Z 2d5a0c92-f1c3-42b1-a310-c619289083c4 SSM Command Success: 2026-09-07T16:04:05.8692231-04:00 === Leave-Domain iniciado === 2026-09-07T16:04:05.8753071-04:00 Computer: USAEA1PWBWES26 2026-09-07T16:04:39.4449775-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-07T16:04:49.7874503-04:00 Computer object 'USAEA1PWBWES26' ELIMINADO del AD. 2026-09-07T16:04:49.8649012-04:00 Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES26' from domain 'gdc.local' with the following error message: The specified network name is no longer avail
+2026-09-07T15:05:15.766-05:00
+[INFO] 2026-09-07T20:05:15.766Z 2d5a0c92-f1c3-42b1-a310-c619289083c4 Lifecycle action completed for i-0e0e79c15071b58a1
+2026-09-07T15:05:15.776-05:00
+END RequestId: 2d5a0c92-f1c3-42b1-a310-c619289083c4
+2026-09-07T15:05:15.777-05:00
+REPORT RequestId: 2d5a0c92-f1c3-42b1-a310-c619289083c4 Duration: 71374.40 ms Billed Duration: 71793 ms Memory Size: 128 MB Max Memory Used: 95 MB Init Duration: 418.36 ms
+
+
+
+2026-09-07T15:24:02.385-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-07T15:24:02.657-05:00
+[INFO] 2026-09-07T20:24:02.657Z Found credentials in environment variables.
+2026-09-07T15:24:02.799-05:00
+START RequestId: d733ccb0-18e0-4598-a60c-400ce2d69499 Version: $LATEST
+2026-09-07T15:24:02.799-05:00
+[INFO] 2026-09-07T20:24:02.799Z d733ccb0-18e0-4598-a60c-400ce2d69499 Event: {"version": "0", "id": "c214aec8-0373-5e8a-7404-0c86c39ac37d", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-07T20:24:02Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:c8504b24-bbe9-4b98-82af-6c8c8d4b5915:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app3-asg"], "detail": {"LifecycleActionToken": "f4814763-5523-4918-8860-dedba50a3a07", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app3-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-0c5cf50417fdc6577", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-07T15:24:02.799-05:00
+[INFO] 2026-09-07T20:24:02.799Z d733ccb0-18e0-4598-a60c-400ce2d69499 Processing leave-domain for i-0c5cf50417fdc6577 in eec-aws-us-eits-intelisrcpa-prd-web-app3-asg
+2026-09-07T15:24:02.799-05:00
+[INFO] 2026-09-07T20:24:02.799Z d733ccb0-18e0-4598-a60c-400ce2d69499 Derived asg_key='app3' -> mapping path '/intelisrcpa/app3/hostname-mapping'
+2026-09-07T15:24:03.114-05:00
+[INFO] 2026-09-07T20:24:03.114Z d733ccb0-18e0-4598-a60c-400ce2d69499 SSM Command sent: b1eb71a9-efdd-4c88-907d-2b014495bdc8
+2026-09-07T15:25:03.619-05:00
+[INFO]	2026-09-07T20:25:03.619Z	d733ccb0-18e0-4598-a60c-400ce2d69499	SSM Command Success: 2026-09-07T16:24:04.0767049-04:00  === Leave-Domain iniciado ===
+2026-09-07T16:24:04.0909714-04:00  Computer: USAEA1PWBWES26
+2026-09-07T16:24:37.8875284-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-07T16:24:39.2124496-04:00  Computer object 'USAEA1PWBWES26' no encontrado en AD.
+2026-09-07T16:24:39.3236578-04:00  Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES26' from domain 'gdc.local' with the following error message: The specified network name is no longer av
+
+[INFO] 2026-09-07T20:25:03.619Z d733ccb0-18e0-4598-a60c-400ce2d69499 SSM Command Success: 2026-09-07T16:24:04.0767049-04:00 === Leave-Domain iniciado === 2026-09-07T16:24:04.0909714-04:00 Computer: USAEA1PWBWES26 2026-09-07T16:24:37.8875284-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-07T16:24:39.2124496-04:00 Computer object 'USAEA1PWBWES26' no encontrado en AD. 2026-09-07T16:24:39.3236578-04:00 Remove-Computer fallo: Failed to unjoin computer 'USAEA1PWBWES26' from domain 'gdc.local' with the following error message: The specified network name is no longer av
+2026-09-07T15:25:03.888-05:00
+[INFO] 2026-09-07T20:25:03.888Z d733ccb0-18e0-4598-a60c-400ce2d69499 Lifecycle action completed for i-0c5cf50417fdc6577
+2026-09-07T15:25:03.898-05:00
+END RequestId: d733ccb0-18e0-4598-a60c-400ce2d69499
+2026-09-07T15:25:03.898-05:00
+REPORT RequestId: d733ccb0-18e0-4598-a60c-400ce2d69499 Duration: 61098.88 ms Billed Duration: 61509 ms Memory Size: 128 MB Max Memory Used: 96 MB Init Duration: 410.01 ms
+No newer events at this moment. 
+Auto retry paused.
+ 
+Resume
+ 
+
+
+
+/intelisrcpa/app1/hostname-mapping/i-0af97fb9b840a5ce6
+Standard
+String
+Mon, 07 Sep 2026 16:25:01 GMT
+
+/intelisrcpa/app2/hostname-mapping/i-0061b368376030788
+Standard
+String
+Mon, 07 Sep 2026 20:37:16 GMT
+
+/intelisrcpa/app2/hostname-mapping/i-0242bf192ab546cdd
+Standard
+String
+Mon, 07 Sep 2026 20:48:01 GMT
+
+/intelisrcpa/app2/hostname-mapping/i-06280b1adf009fe7c
+Standard
+String
+Mon, 07 Sep 2026 21:08:11 GMT
+
+/intelisrcpa/app3/hostname-mapping/i-00e78e51229e8c344
+Standard
+String
+Mon, 07 Sep 2026 21:25:33 GMT
+
+/intelisrcpa/app3/hostname-mapping/i-0479d18713ac243ba
+Standard
+String
+Mon, 07 Sep 2026 20:28:55 GMT
+
+/intelisrcpa/app3/hostname-mapping/i-08abedaf1b5fdd1f0
+Standard
+String
+Mon, 07 Sep 2026 20:47:51 GMT
+
+/intelisrcpa/app3/hostname-mapping/i-08e6f9be3f33259d8
+Standard
+String
+Mon, 07 Sep 2026 21:07:45 GMT
+
+/intelisrcpa/app3/hostname-mapping/i-0f8ebde12879d98c0
+Standard
+String
+Mon, 07 Sep 2026 20:58:40 GMT
+
+/intelisrcpa/app4/hostname-mapping/i-075b5da3f829396d8
+Standard
+String
+Mon, 07 Sep 2026 21:08:21 GMT
+
+/intelisrcpa/app4/hostname-mapping/i-0c457dcafe6bba725
+Standard
+String
+Mon, 07 Sep 2026 21:35:45 GMT
+
+/intelisrcpa/app5/hostname-mapping/i-01ebeee0dae9300c9
+Standard
+String
+Mon, 07 Sep 2026 21:08:14 GMT
+
+/intelisrcpa/app6/hostname-mapping/i-0c943820fdc735f73
+Standard
+String
+Mon, 07 Sep 2026 21:17:37 GMT
+
