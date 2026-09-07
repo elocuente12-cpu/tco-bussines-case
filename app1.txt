@@ -1,0 +1,108 @@
+2026-09-07T12:02:44.864-05:00
+[INFO]	2026-09-07T17:02:44.864Z	6d47e764-69e7-4943-8bb8-0161451f39f2	Event: 
+{
+    "version": "0",
+    "id": "e43141c7-b21d-dd20-00c5-d122992e4583",
+    "detail-type": "EC2 Instance-terminate Lifecycle Action",
+    "source": "aws.autoscaling",
+    "account": "274193347839",
+    "time": "2026-09-07T17:02:44Z",
+    "region": "us-east-1",
+    "resources": [
+        "arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:c8504b24-bbe9-4b98-82af-6c8c8d4b5915:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app3-asg"
+    ],
+    "detail": {
+        "LifecycleActionToken": "3f6dfe3d-354f-4460-9c62-6efddc9d2800",
+        "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app3-asg",
+        "LifecycleHookName": "leave-domain",
+        "EC2InstanceId": "i-0d0631b3a31e023b3",
+        "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING",
+        "Origin": "AutoScalingGroup",
+        "Destination": "EC2",
+        "Action": "Terminate"
+    }
+}
+
+
+[INFO] 2026-09-07T17:02:44.864Z 6d47e764-69e7-4943-8bb8-0161451f39f2 Event: {"version": "0", "id": "e43141c7-b21d-dd20-00c5-d122992e4583", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-07T17:02:44Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:c8504b24-bbe9-4b98-82af-6c8c8d4b5915:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app3-asg"], "detail": {"LifecycleActionToken": "3f6dfe3d-354f-4460-9c62-6efddc9d2800", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app3-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-0d0631b3a31e023b3", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-07T12:02:44.864-05:00
+[INFO]	2026-09-07T17:02:44.864Z	6d47e764-69e7-4943-8bb8-0161451f39f2	Processing leave-domain for i-0d0631b3a31e023b3 in eec-aws-us-eits-intelisrcpa-prd-web-app3-asg
+
+[INFO] 2026-09-07T17:02:44.864Z 6d47e764-69e7-4943-8bb8-0161451f39f2 Processing leave-domain for i-0d0631b3a31e023b3 in eec-aws-us-eits-intelisrcpa-prd-web-app3-asg
+2026-09-07T12:02:44.864-05:00
+[INFO]	2026-09-07T17:02:44.864Z	6d47e764-69e7-4943-8bb8-0161451f39f2	Derived asg_key='app3-asg' -> mapping path '/intelisrcpa/app3-asg/hostname-mapping'
+
+[INFO] 2026-09-07T17:02:44.864Z 6d47e764-69e7-4943-8bb8-0161451f39f2 Derived asg_key='app3-asg' -> mapping path '/intelisrcpa/app3-asg/hostname-mapping'
+2026-09-07T12:02:45.171-05:00
+[INFO]	2026-09-07T17:02:45.171Z	6d47e764-69e7-4943-8bb8-0161451f39f2	SSM Command sent: 3da664e2-f9c1-48a1-adfb-4a508514df9f
+
+
+
+
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-09-07T16:55:10.1658455+00:00  === Inicio bootstrap ===
+2026-09-07T16:55:10.6602355+00:00  Instance ID: i-0aae82393d45ed446
+2026-09-07T16:55:16.3836398+00:00  Fase 1: Domain join...
+2026-09-07T16:57:53.4715608+00:00  Hostname numero 2 reclamado (intento 1).
+2026-09-07T16:57:53.6070701+00:00  Hostname asignado: USAEA1PWBWES22 (objeto pre-creado en AD)
+2026-09-07T16:57:53.6589172+00:00  Renombrando: EC2AMAZ-IMLQ379 -> USAEA1PWBWES22
+2026-09-07T16:57:57.0292213+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-07T16:59:27.5884999+00:00  === Inicio bootstrap ===
+2026-09-07T16:59:27.7699664+00:00  Instance ID: i-0aae82393d45ed446
+2026-09-07T16:59:28.6233572+00:00  Fase 1: Domain join...
+2026-09-07T17:00:00.5990213+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES22
+2026-09-07T17:00:27.1759071+00:00  Domain join: USAEA1PWBWES22 -> gdc.local
+2026-09-07T17:00:32.4641094+00:00  Domain join OK. Exit 3010 para reboot.
+2026-09-07T17:02:24.4989050+00:00  === Inicio bootstrap ===
+2026-09-07T17:02:24.8802639+00:00  Instance ID: i-0aae82393d45ed446
+2026-09-07T17:02:26.2181878+00:00  Fase 2: Montaje FSx (ya en dominio)...
+2026-09-07T17:03:05.1652966+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-09-07T17:03:05.4562357+00:00  Fase 3: IIS Sites config...
+2026-09-07T17:03:27.9624183+00:00  Default Web Site removido.
+2026-09-07T17:03:29.5952239+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (Host: mobile.apc.com.pa, Port: 80)
+2026-09-07T17:03:29.7144944+00:00  IIS Site 'mobile' iniciado.
+2026-09-07T17:03:32.1757115+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (Host: tuintelidat.com, Port: 80)
+2026-09-07T17:03:32.3480093+00:00  IIS Site 'tuintelidat' iniciado.
+2026-09-07T17:03:34.5530965+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (Host: apcexperian.com, Port: 80)
+2026-09-07T17:03:34.7892354+00:00  IIS Site 'apcexperian' iniciado.
+2026-09-07T17:03:36.8295165+00:00  Health-check site creado (catch-all, puerto 80).
+2026-09-07T17:03:36.8489095+00:00  Fase 4: SQL Client Alias config...
+2026-09-07T17:03:37.0899209+00:00  SQL Client Alias 'vaonsql' -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64-bit + 32-bit)
+2026-09-07T12:03:37.1458454-05:00  Fase 5: Timezone ajustada a SA Pacific Standard Time (UTC-5)
+2026-09-07T12:03:37.1897539-05:00  === Bootstrap completado ===
+PS C:\Windows\system32>
+ 
+
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-09-07T16:23:20.2445699+00:00  === Inicio bootstrap ===
+2026-09-07T16:23:23.5275410+00:00  Instance ID: i-0af97fb9b840a5ce6
+2026-09-07T16:23:35.1691083+00:00  Fase 1: Domain join...
+2026-09-07T16:25:11.2006450+00:00  Hostname numero 1 reclamado (intento 1).
+2026-09-07T16:25:11.2026730+00:00  Hostname asignado: USAEA1PWBWES21 (objeto pre-creado en AD)
+2026-09-07T16:25:11.2145725+00:00  Renombrando: EC2AMAZ-AQUQ3VR -> USAEA1PWBWES21
+2026-09-07T16:25:11.5317252+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-07T16:26:46.8726626+00:00  === Inicio bootstrap ===
+2026-09-07T16:26:48.5763851+00:00  Instance ID: i-0af97fb9b840a5ce6
+2026-09-07T16:26:49.7004958+00:00  Fase 1: Domain join...
+2026-09-07T16:27:18.6322331+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWES21
+2026-09-07T16:27:20.5963757+00:00  Domain join: USAEA1PWBWES21 -> gdc.local
+2026-09-07T16:27:54.6335395+00:00  Domain join OK. Exit 3010 para reboot.
+2026-09-07T16:29:22.8717700+00:00  === Inicio bootstrap ===
+2026-09-07T16:29:23.2991229+00:00  Instance ID: i-0af97fb9b840a5ce6
+2026-09-07T16:29:23.8534873+00:00  Fase 2: Montaje FSx (ya en dominio)...
+2026-09-07T16:30:02.3274011+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-09-07T16:30:12.0183128+00:00  Fase 3: IIS Sites config...
+2026-09-07T16:30:32.6993970+00:00  Default Web Site removido.
+2026-09-07T16:30:33.1115002+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (Host: mobile.apc.com.pa, Port: 80)
+2026-09-07T16:30:33.1178018+00:00  IIS Site 'mobile' iniciado.
+2026-09-07T16:30:33.3903470+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (Host: tuintelidat.com, Port: 80)
+2026-09-07T16:30:33.4108391+00:00  IIS Site 'tuintelidat' iniciado.
+2026-09-07T16:30:33.7157158+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (Host: apcexperian.com, Port: 80)
+2026-09-07T16:30:33.7272375+00:00  IIS Site 'apcexperian' iniciado.
+2026-09-07T16:30:33.9999702+00:00  Health-check site creado (catch-all, puerto 80).
+2026-09-07T16:30:34.0012796+00:00  Fase 4: SQL Client Alias config...
+2026-09-07T16:30:34.0962278+00:00  SQL Client Alias 'vaonsql' -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64-bit + 32-bit)
+2026-09-07T11:30:34.1081778-05:00  Fase 5: Timezone ajustada a SA Pacific Standard Time (UTC-5)
+2026-09-07T11:30:34.1102039-05:00  === Bootstrap completado ===
+PS C:\Windows\system32>
+
