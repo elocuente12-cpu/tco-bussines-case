@@ -1,15 +1,5 @@
-2026-09-09T15:45:26.7132619+00:00  === Inicio bootstrap ===
-2026-09-09T15:45:30.5473200+00:00  Instance ID: i-0188391a7c6a53601
-2026-09-09T15:45:35.2437775+00:00  Fase 1: Domain join...
-2026-09-09T15:46:57.4110402+00:00  Hostname numero 1 reclamado (intento 1).
-2026-09-09T15:46:57.4130705+00:00  Hostname asignado: USAEA1PWBWESPC1 (objeto pre-creado en AD)
-2026-09-09T15:46:57.4130705+00:00  Renombrando: EC2AMAZ-O9FR9HH -> USAEA1PWBWESPC1
-2026-09-09T15:46:57.9125855+00:00  Rename OK. Exit 3010 para reboot.
-2026-09-09T15:48:29.2445622+00:00  === Inicio bootstrap ===
-2026-09-09T15:48:30.0024747+00:00  Instance ID: i-0188391a7c6a53601
-2026-09-09T15:48:31.0817541+00:00  Fase 1: Domain join...
-2026-09-09T15:48:59.9949747+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWESPC1
-2026-09-09T15:49:02.1236419+00:00  Domain join: USAEA1PWBWESPC1 -> gdc.local
-2026-09-09T15:49:13.9542298+00:00  ERROR FATAL: Computer 'USAEA1PWBWESPC1' failed to join domain 'gdc.local' from its current workgroup 'WORKGROUP' with following error message: An account with the same name exists in Active Direct
-ory. Re-using the account was blocked by security policy.
-PS C:\Windows\system32>
+Error: creating EC2 Launch Template (lt-0d645ac4f8c2b07e0) Version: operation error EC2: CreateLaunchTemplateVersion, https response error StatusCode: 400, RequestID: 893f169b-c4d1-4ae4-ba51-e4809ff204e9, api error InvalidUserData.Malformed: User data is limited to 16384 bytes.
+
+  with module.asg_windows_web["app6"].aws_launch_template.this[0],
+  on .terraform/modules/asg_windows_web/main.tf line 177, in resource "aws_launch_template" "this":
+ 177: resource "aws_launch_template" "this" {
