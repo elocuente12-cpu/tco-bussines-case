@@ -1,43 +1,15 @@
-2026-09-09T09:33:45.353-05:00
-[INFO]	2026-09-09T14:33:45.353Z	3ae76e26-fcd5-4cf5-af71-f0b805b6758d	SSM Command Success: 2026-09-09T10:33:20.9087923-04:00  === Leave-Domain iniciado ===
-2026-09-09T10:33:20.9169062-04:00  Computer: USAEA1PWBWESPC1
-2026-09-09T10:33:43.9050816-04:00  Usando credenciales de: gdc.local\paawsas_svc
-2026-09-09T10:33:43.9722040-04:00  Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted.
-
-e-mapping/i-08ae6a8b0acc0eb1a
-Overview
-AWS Systems Manager
-Parameter Store
-/intelisrcpa/app3/hostname-mapping/i-08ae6a8b0acc0eb1a
-Overview
-
-/intelisrcpa/app3/hostname-mapping/i-08ae6a8b0acc0eb1a
-Edit
-Delete
-
-Overview
-
-History
-
-Tags
-Parameter details
-Name
-/intelisrcpa/app3/hostname-mapping/i-08ae6a8b0acc0eb1a
-Description
-USAEA1PWBWESPC1
-ARN
-arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app3/hostname-mapping/i-08ae6a8b0acc0eb1a
-Data type
-text
-Tier
-Standard
-Last modified user
-arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-08ae6a8b0acc0eb1a
-Type
-String
-Last modified date
-Wed, 09 Sep 2026 14:39:02 GMT
-Value
-USAEA1PWBWESPC|1
-Version
-1
+2026-09-09T15:45:26.7132619+00:00  === Inicio bootstrap ===
+2026-09-09T15:45:30.5473200+00:00  Instance ID: i-0188391a7c6a53601
+2026-09-09T15:45:35.2437775+00:00  Fase 1: Domain join...
+2026-09-09T15:46:57.4110402+00:00  Hostname numero 1 reclamado (intento 1).
+2026-09-09T15:46:57.4130705+00:00  Hostname asignado: USAEA1PWBWESPC1 (objeto pre-creado en AD)
+2026-09-09T15:46:57.4130705+00:00  Renombrando: EC2AMAZ-O9FR9HH -> USAEA1PWBWESPC1
+2026-09-09T15:46:57.9125855+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-09T15:48:29.2445622+00:00  === Inicio bootstrap ===
+2026-09-09T15:48:30.0024747+00:00  Instance ID: i-0188391a7c6a53601
+2026-09-09T15:48:31.0817541+00:00  Fase 1: Domain join...
+2026-09-09T15:48:59.9949747+00:00  Hostname reutilizado del mapping existente: USAEA1PWBWESPC1
+2026-09-09T15:49:02.1236419+00:00  Domain join: USAEA1PWBWESPC1 -> gdc.local
+2026-09-09T15:49:13.9542298+00:00  ERROR FATAL: Computer 'USAEA1PWBWESPC1' failed to join domain 'gdc.local' from its current workgroup 'WORKGROUP' with following error message: An account with the same name exists in Active Direct
+ory. Re-using the account was blocked by security policy.
+PS C:\Windows\system32>
