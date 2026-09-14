@@ -1,3 +1,11 @@
-Get-Content C:\ProgramData\intelisrcpa-bootstrap.log | Select-String "Fase 5|Timezone|Bootstrap completado|ERROR"
-Get-Item C:\ProgramData\intelisrcpa-tz.flag | Select-Object CreationTime, LastWriteTime
-Get-Content C:\ProgramData\intelisrcpa-tz.flag
+PS C:\Users\Administrator> Get-Content C:\ProgramData\intelisrcpa-bootstrap.log | Select-String "Fase 5|Timezone|Bootstrap completado|ERROR"
+ 
+2026-09-11T17:30:04.8715313+00:00  ERROR FATAL: Computer 'USAEA1PWBWESPF1' failed to join domain 'gdc.local' from its
+current workgroup 'WORKGROUP' with following error message: An account with the same name exists in Active Directory.
+Re-using the account was blocked by security policy.
+ 
+PS C:\Users\Administrator> Get-Item C:\ProgramData\intelisrcpa-tz.flag | Select-Object CreationTime, LastWriteTime
+Get-Item: Cannot find path 'C:\ProgramData\intelisrcpa-tz.flag' because it does not exist.
+PS C:\Users\Administrator> Get-Content C:\ProgramData\intelisrcpa-tz.flag
+Get-Content: Cannot find path 'C:\ProgramData\intelisrcpa-tz.flag' because it does not exist.
+PS C:\Users\Administrator>
