@@ -318,7 +318,11 @@ PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
 2026-09-14T22:03:41.4199323+00:00  Health-check site creado.
 2026-09-14T22:03:41.4210184+00:00  Fase 4: SQL Client Alias config...
 2026-09-14T22:03:41.5125160+00:00  SQL Client Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64+32-bit)
-2026-09-14T17:03:41.5255674-05:00  Fase 5: Timezone corregida a UTC-5
+2026-09-14T17:03:41.5255674-05:00  
+Fase 5: Timezone corregida a UTC-5
+Fase 5: TZ=SA Pacific Standard Time | Hora Local=2026-09-14 17:39:57 -05:00 | UTC=22:39:57
+Aviso Formato fecha (no critico): Provider operation stopped because the provider does not support this operation.
+ === Bootstrap completado ===
 2026-09-14T17:03:41.5324287-05:00  ERROR FATAL: Provider operation stopped because the provider does not support this operation.
 PS C:\Windows\system32>
 
