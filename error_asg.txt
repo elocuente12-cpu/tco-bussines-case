@@ -1,11 +1,613 @@
-PS C:\Users\Administrator> Get-Content C:\ProgramData\intelisrcpa-bootstrap.log | Select-String "Fase 5|Timezone|Bootstrap completado|ERROR"
+Log events 
+
+Actions
+Start tailing
+Create metric filter
+You can use the filter bar below to search for and match terms, phrases, or values in your log events. Learn more about filter patterns 
+
+Clear
+1m
+30m
+1h
+12h
+
+Custom
+
+Local timezone
+Display
+
+Timestamp
+	
+Message
+
+Timestamp
+	
+Message
+
+No older events at this moment. 
+Retry
+2026-09-14T11:24:04.605-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-14T11:24:04.969-05:00
+[INFO] 2026-09-14T16:24:04.969Z Found credentials in environment variables.
+2026-09-14T11:24:05.147-05:00
+START RequestId: 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 Version: $LATEST
+2026-09-14T11:24:05.147-05:00
+[INFO] 2026-09-14T16:24:05.147Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 Event: {"version": "0", "id": "72432d66-d421-04e3-738b-0d41ec0a96dd", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T16:24:04Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:6e382eb1-d3d9-4cd1-b548-7964d6426792:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app4-asg"], "detail": {"LifecycleActionToken": "487d79d5-d3ad-414f-8656-913454675970", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app4-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-036551a645113b821", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T11:24:05.147-05:00
+[INFO] 2026-09-14T16:24:05.147Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 Processing leave-domain for i-036551a645113b821 in eec-aws-us-eits-intelisrcpa-prd-web-app4-asg
+2026-09-14T11:24:05.147-05:00
+[INFO] 2026-09-14T16:24:05.147Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 Derived asg_key='app4' -> mapping path '/intelisrcpa/app4/hostname-mapping'
+2026-09-14T11:24:05.485-05:00
+[INFO] 2026-09-14T16:24:05.485Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 SSM Command sent: a3479711-0eb7-4a91-8e2b-d57dd772ef01
+2026-09-14T11:24:45.816-05:00
+[INFO]	2026-09-14T16:24:45.816Z	5ec0b409-c13f-4029-9a0d-00d1ef2985a4	SSM Command Success: 2026-09-14T12:24:06.4925605-04:00  === Leave-Domain iniciado ===
+2026-09-14T12:24:06.5052800-04:00  Computer: USAEA1PWBWESPD1
+2026-09-14T12:24:30.4570235-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T12:24:42.5735950-04:00  Computer object 'USAEA1PWBWESPD1' ELIMINADO del AD.
+2026-09-14T12:24:42.7528878-04:00  Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado).
+2026-09-14T12:24:42.7546865-04:00  === Leave-Domain completado ===
+
+
+[INFO] 2026-09-14T16:24:45.816Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 SSM Command Success: 2026-09-14T12:24:06.4925605-04:00 === Leave-Domain iniciado === 2026-09-14T12:24:06.5052800-04:00 Computer: USAEA1PWBWESPD1 2026-09-14T12:24:30.4570235-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T12:24:42.5735950-04:00 Computer object 'USAEA1PWBWESPD1' ELIMINADO del AD. 2026-09-14T12:24:42.7528878-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-09-14T12:24:42.7546865-04:00 === Leave-Domain completado ===
+2026-09-14T11:24:45.911-05:00
+[INFO] 2026-09-14T16:24:45.911Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 SSM Parameter '/intelisrcpa/app4/hostname-mapping/i-036551a645113b821' eliminado por la Lambda.
+2026-09-14T11:24:46.198-05:00
+[INFO] 2026-09-14T16:24:46.198Z 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 Lifecycle action completed for i-036551a645113b821
+2026-09-14T11:24:46.211-05:00
+END RequestId: 5ec0b409-c13f-4029-9a0d-00d1ef2985a4
+2026-09-14T11:24:46.211-05:00
+REPORT RequestId: 5ec0b409-c13f-4029-9a0d-00d1ef2985a4 Duration: 41063.52 ms Billed Duration: 41602 ms Memory Size: 128 MB Max Memory Used: 96 MB Init Duration: 537.69 ms
+
+
+Log events 
+
+Actions
+Start tailing
+Create metric filter
+You can use the filter bar below to search for and match terms, phrases, or values in your log events. Learn more about filter patterns 
+
+Clear
+1m
+30m
+1h
+12h
+
+Custom
+
+Local timezone
+Display
+
+Timestamp
+	
+Message
+
+Timestamp
+	
+Message
+
+No older events at this moment. 
+Retry
+2026-09-14T11:24:00.700-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-14T11:24:01.036-05:00
+[INFO] 2026-09-14T16:24:01.036Z Found credentials in environment variables.
+2026-09-14T11:24:01.201-05:00
+START RequestId: e7f71df8-5ade-4016-9c05-2f5006135e51 Version: $LATEST
+2026-09-14T11:24:01.202-05:00
+[INFO] 2026-09-14T16:24:01.201Z e7f71df8-5ade-4016-9c05-2f5006135e51 Event: {"version": "0", "id": "6c0cfdeb-dc9f-6bfd-84e4-c31ec421e984", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T16:24:00Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:251057a1-71d9-48dd-a451-c130d5b89b54:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app1-asg"], "detail": {"LifecycleActionToken": "20077877-9795-4d2b-bfe3-859da5e11105", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app1-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-074b7f5631a884c70", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T11:24:01.202-05:00
+[INFO] 2026-09-14T16:24:01.202Z e7f71df8-5ade-4016-9c05-2f5006135e51 Processing leave-domain for i-074b7f5631a884c70 in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
+2026-09-14T11:24:01.202-05:00
+[INFO] 2026-09-14T16:24:01.202Z e7f71df8-5ade-4016-9c05-2f5006135e51 Derived asg_key='app1' -> mapping path '/intelisrcpa/app1/hostname-mapping'
+2026-09-14T11:24:01.529-05:00
+[INFO] 2026-09-14T16:24:01.529Z e7f71df8-5ade-4016-9c05-2f5006135e51 SSM Command sent: 2fe66ae9-0866-4bb2-88a6-e2be61bffd1a
+2026-09-14T11:24:36.830-05:00
+[INFO]	2026-09-14T16:24:36.830Z	e7f71df8-5ade-4016-9c05-2f5006135e51	SSM Command Success: 2026-09-14T12:24:02.5344747-04:00  === Leave-Domain iniciado ===
+2026-09-14T12:24:02.5446116-04:00  Computer: USAEA1PWBWESPA1
+2026-09-14T12:24:26.3888125-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T12:24:32.5326263-04:00  Computer object 'USAEA1PWBWESPA1' ELIMINADO del AD.
+2026-09-14T12:24:32.7040482-04:00  Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado).
+2026-09-14T12:24:32.7116073-04:00  === Leave-Domain completado ===
+
+
+[INFO] 2026-09-14T16:24:36.830Z e7f71df8-5ade-4016-9c05-2f5006135e51 SSM Command Success: 2026-09-14T12:24:02.5344747-04:00 === Leave-Domain iniciado === 2026-09-14T12:24:02.5446116-04:00 Computer: USAEA1PWBWESPA1 2026-09-14T12:24:26.3888125-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T12:24:32.5326263-04:00 Computer object 'USAEA1PWBWESPA1' ELIMINADO del AD. 2026-09-14T12:24:32.7040482-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-09-14T12:24:32.7116073-04:00 === Leave-Domain completado ===
+2026-09-14T11:24:36.941-05:00
+[INFO] 2026-09-14T16:24:36.941Z e7f71df8-5ade-4016-9c05-2f5006135e51 SSM Parameter '/intelisrcpa/app1/hostname-mapping/i-074b7f5631a884c70' eliminado por la Lambda.
+2026-09-14T11:24:37.242-05:00
+[INFO] 2026-09-14T16:24:37.242Z e7f71df8-5ade-4016-9c05-2f5006135e51 Lifecycle action completed for i-074b7f5631a884c70
+2026-09-14T11:24:37.249-05:00
+END RequestId: e7f71df8-5ade-4016-9c05-2f5006135e51
+2026-09-14T11:24:37.249-05:00
+REPORT RequestId: e7f71df8-5ade-4016-9c05-2f5006135e51 Duration: 36047.82 ms Billed Duration: 36545 ms Memory Size: 128 MB Max Memory Used: 96 MB Init Duration: 497.15 ms
+No newer events at this moment. 
+Auto retry paused.
  
-2026-09-11T17:30:04.8715313+00:00  ERROR FATAL: Computer 'USAEA1PWBWESPF1' failed to join domain 'gdc.local' from its
-current workgroup 'WORKGROUP' with following error message: An account with the same name exists in Active Directory.
-Re-using the account was blocked by security policy.
+Resume
  
-PS C:\Users\Administrator> Get-Item C:\ProgramData\intelisrcpa-tz.flag | Select-Object CreationTime, LastWriteTime
-Get-Item: Cannot find path 'C:\ProgramData\intelisrcpa-tz.flag' because it does not exist.
-PS C:\Users\Administrator> Get-Content C:\ProgramData\intelisrcpa-tz.flag
-Get-Content: Cannot find path 'C:\ProgramData\intelisrcpa-tz.flag' because it does not exist.
-PS C:\Users\Administrator>
+
+
+ Log events 
+
+Actions
+Start tailing
+Create metric filter
+You can use the filter bar below to search for and match terms, phrases, or values in your log events. Learn more about filter patterns 
+
+Clear
+1m
+30m
+1h
+12h
+
+Custom
+
+Local timezone
+Display
+
+Timestamp
+	
+Message
+
+Timestamp
+	
+Message
+
+No older events at this moment. 
+Retry
+2026-09-14T11:23:59.168-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-14T11:23:59.531-05:00
+[INFO] 2026-09-14T16:23:59.531Z Found credentials in environment variables.
+2026-09-14T11:23:59.720-05:00
+START RequestId: 761575dd-75c9-47d7-bc01-5cdbdcb14160 Version: $LATEST
+2026-09-14T11:23:59.721-05:00
+[INFO] 2026-09-14T16:23:59.720Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 Event: {"version": "0", "id": "f181a124-9cee-ba3f-1e22-5afc05b589d2", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T16:23:58Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:36061bff-385e-469b-bbd0-84eff3fc9162:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app2-asg"], "detail": {"LifecycleActionToken": "3ee5c035-aaf7-4592-ae2b-5b0880f98322", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app2-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-0212d74babaa49917", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T11:23:59.721-05:00
+[INFO] 2026-09-14T16:23:59.721Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 Processing leave-domain for i-0212d74babaa49917 in eec-aws-us-eits-intelisrcpa-prd-web-app2-asg
+2026-09-14T11:23:59.721-05:00
+[INFO] 2026-09-14T16:23:59.721Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 Derived asg_key='app2' -> mapping path '/intelisrcpa/app2/hostname-mapping'
+2026-09-14T11:24:00.012-05:00
+[INFO] 2026-09-14T16:24:00.012Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 SSM Command sent: f3e33b46-210e-40b2-b3d4-4b7ef48c7ce5
+2026-09-14T11:24:40.345-05:00
+[INFO]	2026-09-14T16:24:40.345Z	761575dd-75c9-47d7-bc01-5cdbdcb14160	SSM Command Success: 2026-09-14T12:24:01.2341606-04:00  === Leave-Domain iniciado ===
+2026-09-14T12:24:01.2493784-04:00  Computer: USAEA1PWBWESPB1
+2026-09-14T12:24:24.9547752-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T12:24:38.0162588-04:00  Computer object 'USAEA1PWBWESPB1' ELIMINADO del AD.
+2026-09-14T12:24:38.1936193-04:00  Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado).
+2026-09-14T12:24:38.2075219-04:00  === Leave-Domain completado ===
+
+
+[INFO] 2026-09-14T16:24:40.345Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 SSM Command Success: 2026-09-14T12:24:01.2341606-04:00 === Leave-Domain iniciado === 2026-09-14T12:24:01.2493784-04:00 Computer: USAEA1PWBWESPB1 2026-09-14T12:24:24.9547752-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T12:24:38.0162588-04:00 Computer object 'USAEA1PWBWESPB1' ELIMINADO del AD. 2026-09-14T12:24:38.1936193-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-09-14T12:24:38.2075219-04:00 === Leave-Domain completado ===
+2026-09-14T11:24:40.443-05:00
+[INFO] 2026-09-14T16:24:40.443Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 SSM Parameter '/intelisrcpa/app2/hostname-mapping/i-0212d74babaa49917' eliminado por la Lambda.
+2026-09-14T11:24:40.718-05:00
+[INFO] 2026-09-14T16:24:40.718Z 761575dd-75c9-47d7-bc01-5cdbdcb14160 Lifecycle action completed for i-0212d74babaa49917
+2026-09-14T11:24:40.723-05:00
+END RequestId: 761575dd-75c9-47d7-bc01-5cdbdcb14160
+2026-09-14T11:24:40.724-05:00
+REPORT RequestId: 761575dd-75c9-47d7-bc01-5cdbdcb14160 Duration: 41002.74 ms Billed Duration: 41551 ms Memory Size: 128 MB Max Memory Used: 90 MB Init Duration: 548.24 ms
+No newer events at this moment. 
+Auto retry paused.
+ 
+Resume
+ 
+
+ Log events 
+
+Actions
+Start tailing
+Create metric filter
+You can use the filter bar below to search for and match terms, phrases, or values in your log events. Learn more about filter patterns 
+
+Clear
+1m
+30m
+1h
+12h
+
+Custom
+
+Local timezone
+Display
+
+Timestamp
+	
+Message
+
+Timestamp
+	
+Message
+
+No older events at this moment. 
+Retry
+2026-09-14T11:23:58.935-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-14T11:23:59.255-05:00
+[INFO] 2026-09-14T16:23:59.255Z Found credentials in environment variables.
+2026-09-14T11:23:59.423-05:00
+START RequestId: 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 Version: $LATEST
+2026-09-14T11:23:59.423-05:00
+[INFO] 2026-09-14T16:23:59.423Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 Event: {"version": "0", "id": "2f9746b9-0bad-c266-2f94-bca26af9fd50", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T16:23:58Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:9e4fac09-4726-4558-a831-26b93ef3a544:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app5-asg"], "detail": {"LifecycleActionToken": "fd1a71c3-8abd-4a09-a4e7-c508b7cdfc11", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app5-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-00bac3af5f55f6a5b", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T11:23:59.423-05:00
+[INFO] 2026-09-14T16:23:59.423Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 Processing leave-domain for i-00bac3af5f55f6a5b in eec-aws-us-eits-intelisrcpa-prd-web-app5-asg
+2026-09-14T11:23:59.423-05:00
+[INFO] 2026-09-14T16:23:59.423Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 Derived asg_key='app5' -> mapping path '/intelisrcpa/app5/hostname-mapping'
+2026-09-14T11:23:59.740-05:00
+[INFO] 2026-09-14T16:23:59.740Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 SSM Command sent: 91cb2b10-5907-4c0c-866b-1897d13d99e5
+2026-09-14T11:24:30.011-05:00
+[INFO]	2026-09-14T16:24:30.011Z	43734b76-5e83-4505-8e4c-b1fac2f6d3e0	SSM Command Success: 2026-09-14T12:23:58.5204974-04:00  === Leave-Domain iniciado ===
+2026-09-14T12:23:58.5362465-04:00  Computer: USAEA1PWBWESPE3
+2026-09-14T12:24:22.1122263-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T12:24:24.0188434-04:00  Computer object 'USAEA1PWBWESPE3' no encontrado en AD.
+2026-09-14T12:24:24.2708615-04:00  Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado).
+2026-09-14T12:24:24.2728916-04:00  === Leave-Domain completado ===
+
+
+[INFO] 2026-09-14T16:24:30.011Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 SSM Command Success: 2026-09-14T12:23:58.5204974-04:00 === Leave-Domain iniciado === 2026-09-14T12:23:58.5362465-04:00 Computer: USAEA1PWBWESPE3 2026-09-14T12:24:22.1122263-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T12:24:24.0188434-04:00 Computer object 'USAEA1PWBWESPE3' no encontrado en AD. 2026-09-14T12:24:24.2708615-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-09-14T12:24:24.2728916-04:00 === Leave-Domain completado ===
+2026-09-14T11:24:30.094-05:00
+[INFO] 2026-09-14T16:24:30.094Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 SSM Parameter '/intelisrcpa/app5/hostname-mapping/i-00bac3af5f55f6a5b' eliminado por la Lambda.
+2026-09-14T11:24:30.390-05:00
+[INFO] 2026-09-14T16:24:30.390Z 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 Lifecycle action completed for i-00bac3af5f55f6a5b
+2026-09-14T11:24:30.400-05:00
+END RequestId: 43734b76-5e83-4505-8e4c-b1fac2f6d3e0
+2026-09-14T11:24:30.400-05:00
+REPORT RequestId: 43734b76-5e83-4505-8e4c-b1fac2f6d3e0 Duration: 30977.08 ms Billed Duration: 31462 ms Memory Size: 128 MB Max Memory Used: 93 MB Init Duration: 484.79 ms
+2026-09-14T11:24:36.531-05:00
+START RequestId: 1fc37565-6ea2-486b-a93f-063f2ef7b2ff Version: $LATEST
+2026-09-14T11:24:36.532-05:00
+[INFO] 2026-09-14T16:24:36.532Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff Event: {"version": "0", "id": "56fe1384-a084-dacc-7cb4-50312b7773ae", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T16:24:05Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:cfeba18d-228e-4597-a01f-2569fdca6d81:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app3-asg"], "detail": {"LifecycleActionToken": "8052a205-686b-4c9a-aab4-082c7600986b", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app3-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-0ca773dd66dc4762e", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T11:24:36.532-05:00
+[INFO] 2026-09-14T16:24:36.532Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff Processing leave-domain for i-0ca773dd66dc4762e in eec-aws-us-eits-intelisrcpa-prd-web-app3-asg
+2026-09-14T11:24:36.532-05:00
+[INFO] 2026-09-14T16:24:36.532Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff Derived asg_key='app3' -> mapping path '/intelisrcpa/app3/hostname-mapping'
+2026-09-14T11:24:36.612-05:00
+[INFO] 2026-09-14T16:24:36.612Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff SSM Command sent: 389ae9d2-e8fc-4f9a-87bb-a9e66268c9af
+2026-09-14T11:25:06.858-05:00
+[INFO]	2026-09-14T16:25:06.858Z	1fc37565-6ea2-486b-a93f-063f2ef7b2ff	SSM Command Success: 2026-09-14T12:24:37.8795497-04:00  === Leave-Domain iniciado ===
+2026-09-14T12:24:37.8995701-04:00  Computer: USAEA1PWBWESPC1
+2026-09-14T12:25:00.9344878-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T12:25:02.4582339-04:00  Computer object 'USAEA1PWBWESPC1' ELIMINADO del AD.
+2026-09-14T12:25:02.5680812-04:00  Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado).
+2026-09-14T12:25:02.5701112-04:00  === Leave-Domain completado ===
+
+
+[INFO] 2026-09-14T16:25:06.858Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff SSM Command Success: 2026-09-14T12:24:37.8795497-04:00 === Leave-Domain iniciado === 2026-09-14T12:24:37.8995701-04:00 Computer: USAEA1PWBWESPC1 2026-09-14T12:25:00.9344878-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T12:25:02.4582339-04:00 Computer object 'USAEA1PWBWESPC1' ELIMINADO del AD. 2026-09-14T12:25:02.5680812-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-09-14T12:25:02.5701112-04:00 === Leave-Domain completado ===
+2026-09-14T11:25:06.949-05:00
+[INFO] 2026-09-14T16:25:06.949Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff SSM Parameter '/intelisrcpa/app3/hostname-mapping/i-0ca773dd66dc4762e' eliminado por la Lambda.
+2026-09-14T11:25:07.234-05:00
+[INFO] 2026-09-14T16:25:07.234Z 1fc37565-6ea2-486b-a93f-063f2ef7b2ff Lifecycle action completed for i-0ca773dd66dc4762e
+2026-09-14T11:25:07.236-05:00
+END RequestId: 1fc37565-6ea2-486b-a93f-063f2ef7b2ff
+2026-09-14T11:25:07.236-05:00
+REPORT RequestId: 1fc37565-6ea2-486b-a93f-063f2ef7b2ff Duration: 30703.75 ms Billed Duration: 30704 ms Memory Size: 128 MB Max Memory Used: 94 MB
+No newer events at this moment. 
+Auto retry paused.
+ 
+Resume
+ 
+
+ Log events 
+
+Actions
+Start tailing
+Create metric filter
+You can use the filter bar below to search for and match terms, phrases, or values in your log events. Learn more about filter patterns 
+
+Clear
+1m
+30m
+1h
+12h
+
+Custom
+
+Local timezone
+Display
+
+Timestamp
+	
+Message
+
+Timestamp
+	
+Message
+
+No older events at this moment. 
+Retry
+2026-09-14T11:23:57.500-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-14T11:23:57.847-05:00
+[INFO] 2026-09-14T16:23:57.847Z Found credentials in environment variables.
+2026-09-14T11:23:58.029-05:00
+START RequestId: 24f26f26-b9dc-4581-9033-4f202d5c3b1d Version: $LATEST
+2026-09-14T11:23:58.030-05:00
+[INFO] 2026-09-14T16:23:58.030Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d Event: {"version": "0", "id": "eb532f60-857a-357f-402d-94981573729c", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T16:23:57Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:2159d376-68d6-4deb-8704-9e01882b9cd9:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app6-asg"], "detail": {"LifecycleActionToken": "00a63261-25a3-4644-ac34-6350d120613c", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app6-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-078ba2d6fdc59cffa", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T11:23:58.030-05:00
+[INFO] 2026-09-14T16:23:58.030Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d Processing leave-domain for i-078ba2d6fdc59cffa in eec-aws-us-eits-intelisrcpa-prd-web-app6-asg
+2026-09-14T11:23:58.030-05:00
+[INFO] 2026-09-14T16:23:58.030Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d Derived asg_key='app6' -> mapping path '/intelisrcpa/app6/hostname-mapping'
+2026-09-14T11:23:58.356-05:00
+[INFO] 2026-09-14T16:23:58.356Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d SSM Command sent: 8f891754-6324-45d2-a1e1-fd8a669689fe
+2026-09-14T11:24:23.560-05:00
+[INFO]	2026-09-14T16:24:23.560Z	24f26f26-b9dc-4581-9033-4f202d5c3b1d	SSM Command Success: 2026-09-14T12:23:59.3430513-04:00  === Leave-Domain iniciado ===
+2026-09-14T12:23:59.3521941-04:00  Computer: USAEA1PWBWESPF1
+2026-09-14T12:24:22.9958735-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T12:24:23.0363456-04:00  Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted.
+"
+2026-09-14T12:24:23.1509860-04:00  Remove-Computer fallo: Cannot remove computer 'USAEA1PWBWESPF
+
+[INFO] 2026-09-14T16:24:23.560Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d SSM Command Success: 2026-09-14T12:23:59.3430513-04:00 === Leave-Domain iniciado === 2026-09-14T12:23:59.3521941-04:00 Computer: USAEA1PWBWESPF1 2026-09-14T12:24:22.9958735-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T12:24:23.0363456-04:00 Error eliminando computer object: Exception calling "FindOne" with "0" argument(s): "The specified domain either does not exist or could not be contacted. " 2026-09-14T12:24:23.1509860-04:00 Remove-Computer fallo: Cannot remove computer 'USAEA1PWBWESPF
+2026-09-14T11:24:23.675-05:00
+[INFO] 2026-09-14T16:24:23.675Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d SSM Parameter '/intelisrcpa/app6/hostname-mapping/i-078ba2d6fdc59cffa' eliminado por la Lambda.
+2026-09-14T11:24:23.935-05:00
+[INFO] 2026-09-14T16:24:23.935Z 24f26f26-b9dc-4581-9033-4f202d5c3b1d Lifecycle action completed for i-078ba2d6fdc59cffa
+2026-09-14T11:24:23.937-05:00
+END RequestId: 24f26f26-b9dc-4581-9033-4f202d5c3b1d
+2026-09-14T11:24:23.939-05:00
+REPORT RequestId: 24f26f26-b9dc-4581-9033-4f202d5c3b1d Duration: 25907.30 ms Billed Duration: 26433 ms Memory Size: 128 MB Max Memory Used: 93 MB Init Duration: 525.64 ms
+No newer events at this moment. 
+Auto retry paused.
+ 
+Resume
+ 
+
+ AWS Systems Manager
+Parameter Store
+AWS Systems Manager
+Parameter Store
+
+
+Parameter Store
+
+My parameters
+
+Public parameters
+
+Settings
+Ready to scale? Enable higher throughput to handle more API calls - Manage Settings to increase TPS.
+Manage settings
+My parameters
+
+View details
+Edit
+Delete
+Create parameter
+Name : /int
+
+Clear filters
+
+1
+
+
+Name
+	
+Tier
+	
+Type
+	
+Last modified
+
+Name
+	
+Tier
+	
+Type
+	
+Last modified
+
+/intelisrcpa/app5/hostname-mapping/i-059dabc06a506d00d
+Standard
+String
+Fri, 11 Sep 2026 17:21:06 GMT
+
+
+
+AWS Systems Manager
+Parameter Store
+/intelisrcpa/app5/hostname-mapping/i-059dabc06a506d00d
+Overview
+AWS Systems Manager
+Parameter Store
+/intelisrcpa/app5/hostname-mapping/i-059dabc06a506d00d
+Overview
+
+/intelisrcpa/app5/hostname-mapping/i-059dabc06a506d00d
+Edit
+Delete
+
+Overview
+
+History
+
+Tags
+Parameter details
+Name
+/intelisrcpa/app5/hostname-mapping/i-059dabc06a506d00d
+Description
+USAEA1PWBWESPE2
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app5/hostname-mapping/i-059dabc06a506d00d
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-059dabc06a506d00d
+Type
+String
+Last modified date
+Fri, 11 Sep 2026 17:21:06 GMT
+Value
+USAEA1PWBWESPE|2
+Version
+1
+
+
+Instances (1/6) Info
+Last updated
+less than a minute ago
+
+
+Connect
+Instance state
+Actions
+Launch instances
+
+Saved filter sets
+
+
+1
+
+
+Name
+	
+Instance ID
+	
+Instance state
+	
+Instance type
+	
+Status check
+	
+Availability Zone
+	
+Monitoring
+	
+Security group name
+	
+Key name
+	
+Launch time
+	
+Platform details
+	
+Managed
+	
+Operator
+	
+Private DNS name
+	
+Private IP address
+
+Name
+	
+Instance ID
+	
+Instance state
+	
+Instance type
+	
+Status check
+	
+Availability Zone
+	
+Monitoring
+	
+Security group name
+	
+Key name
+	
+Launch time
+	
+Platform details
+	
+Managed
+	
+Operator
+	
+Private DNS name
+	
+Private IP address
+
+eec-aws-us-eits-intelisrcpa-prd-web-app1
+i-074b7f5631a884c70
+Terminated
+
+r7a.medium
+–
+us-east-1b
+enabled
+–
+–
+2026/09/11 13:38 GMT-5
+Windows
+false
+–
+–
+–
+eec-aws-us-eits-intelisrcpa-prd-web-app2
+i-0212d74babaa49917
+Terminated
+
+r7a.medium
+–
+us-east-1a
+enabled
+–
+–
+2026/09/11 11:13 GMT-5
+Windows
+false
+–
+–
+–
+eec-aws-us-eits-intelisrcpa-prd-web-app3
+i-0ca773dd66dc4762e
+Terminated
+
+r7a.medium
+–
+us-east-1a
+enabled
+–
+–
+2026/09/11 13:18 GMT-5
+Windows
+false
+–
+–
+–
+eec-aws-us-eits-intelisrcpa-prd-web-app4
+i-036551a645113b821
+Terminated
+
+r7a.medium
+–
+us-east-1b
+enabled
+–
+–
+2026/09/11 11:40 GMT-5
+Windows
+false
+–
+–
+–
+eec-aws-us-eits-intelisrcpa-prd-web-app5
+i-00bac3af5f55f6a5b
+Terminated
+
+r7a.medium
+–
+us-east-1b
+enabled
+–
+–
+2026/09/11 13:11 GMT-5
+Windows
+false
+–
+–
+–
+eec-aws-us-eits-intelisrcpa-prd-web-app6
+i-078ba2d6fdc59cffa
+Terminated
+
+r7a.medium
+–
+us-east-1b
+enabled
+–
+–
+2026/09/11 12:16 GMT-5
