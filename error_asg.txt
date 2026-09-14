@@ -1,189 +1,357 @@
-version: 1.1
-tasks:
-- task: executeScript
-  inputs:
-  - frequency: always
-    type: powershell
-    runAs: localSystem
-    content: |-
-      # Bootstrap ASG InteliSrcPA. Boot1: hostname+rename. Boot2: join (salta nombre si
-      # hay objeto AD huerfano). Boot3: auto-limpieza huerfanos + FSx + IIS + SQL + TZ.
-      $ErrorActionPreference="Stop"
-      $L="C:\ProgramData\intelisrcpa-bootstrap.log"
-      function W($m){"$(Get-Date -Format o)  $m"|Out-File -Append -Encoding utf8 $L}
-      $SID="arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP";$RG="us-east-1";$FQ="gdc.local";$OU="OU=AutoScaling,OU=Panama,OU=SP LATAM Servers,OU=Windows Server 2025 Member Servers,OU=Servers,OU=Systems,DC=gdc,DC=local"
-      $PF="USAEA1PWBWESPA";$ST=1;$PS=5;$DR="Z"
-      $MP="/intelisrcpa/app1/hostname-mapping";$OP="/intelisrcpa/app1/orphaned"
-      function Sec{
-        for($i=1;$i -le 5;$i++){
-          try{
-            if(Get-Command Get-SECSecretValue -EA SilentlyContinue){return (Get-SECSecretValue -SecretId $SID -Region $RG).SecretString}
-            $a="C:\Program Files\Amazon\AWSCLIV2\aws.exe"
-            if(Test-Path $a){$v=& $a secretsmanager get-secret-value --secret-id $SID --region $RG --query SecretString --output text;if($LASTEXITCODE -eq 0 -and $v){return $v}}
-            throw "AWS tools no disponibles aun"
-          }catch{W "Retry secret ($i): $($_.Exception.Message)";Start-Sleep 15}
-        }
-        throw "No se pudo leer el secret AD."
-      }
-      function Cred{
-        $s=(Sec)|ConvertFrom-Json
-        $u=if($s.username){$s.username}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_USERNAME}
-        $p=if($s.password){$s.password}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_PASSWORD}
-        if(-not $u -or -not $p){throw "Secret AD sin credenciales."}
-        if($u -notlike "*\*"){$u="$FQ\$u"}
-        New-Object System.Management.Automation.PSCredential($u,(ConvertTo-SecureString $p -AsPlainText -Force))
-      }
-      function IID{
-        for($i=1;$i -le 5;$i++){
-          try{
-            $t=Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" -Headers @{"X-aws-ec2-metadata-token-ttl-seconds"="300"} -TimeoutSec 5
-            return (Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" -Headers @{"X-aws-ec2-metadata-token"=$t} -TimeoutSec 5)
-          }catch{W "Retry IMDSv2 ($i)";Start-Sleep 10}
-        }
-        throw "No se pudo obtener instance-id."
-      }
-      function HN($n){"{0}{1:D1}" -f $PF,($n+$ST-1)}
-      function Own($id){
-        try{$v=(Get-SSMParameter -Name "$MP/$id" -Region $RG).Value
-        if($v -like "$PF|*"){return HN ([int]$v.Split("|")[1])}}catch{}
-        $null
-      }
-      function Next($id){
-        for($a=1;$a -le 5;$a++){
-          $u=@{}
-          try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
-            if($p.Value -notlike "$PF|*"){continue}
-            $i=($p.Name -split "/")[-1];if($i -eq $id){continue}
-            $u[[int]$p.Value.Split("|")[1]]=$true}}catch{}
-          try{foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG)){
-            $n=[int](($o.Name -split "/")[-1] -replace [regex]::Escape($PF),"")
-            if($n -ge 1 -and $n -le $PS){$u[$n]=$true}}}catch{}
-          $k=0;for($n=1;$n -le $PS;$n++){if(-not $u.ContainsKey($n)){$k=$n;break}}
-          if($k -eq 0){throw "POOL AGOTADO $($PF): sin nombres libres (en uso u huerfanos). Requiere intervencion AD."}
-          Write-SSMParameter -Name "$MP/$id" -Value "$PF|$k" -Description (HN $k) -Type String -Overwrite $true -Region $RG|Out-Null
-          Start-Sleep (5+(Get-Random -Max 10))
-          $c=$false
-          try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
-            if($p.Value -notlike "$PF|*"){continue}
-            $i=($p.Name -split "/")[-1]
-            if($i -ne $id -and [int]$p.Value.Split("|")[1] -eq $k -and $i -lt $id){$c=$true;break}}}catch{}
-          if(-not $c){W "Hostname numero $k reclamado (intento $a).";return HN $k}
-          W "Conflicto SSM por $k; reintentando."
-          Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
-          Start-Sleep (Get-Random -Max 10)
-        }
-        throw "No se pudo reclamar hostname del bloque $PF."
-      }
-      try{
-        W "=== Inicio bootstrap ==="
-        $id=IID;W "Instance ID: $id"
-        if(-not (Get-CimInstance Win32_ComputerSystem).PartOfDomain){
-          W "Fase 1: Domain join..."
-          for($i=1;$i -le 20;$i++){if(Resolve-DnsName $FQ -DnsOnly -EA SilentlyContinue){break};W "Esperando AD... $i";Start-Sleep 15}
-          $h=Own $id
-          if($h){W "Hostname reutilizado del mapping: $h"}else{$h=Next $id;W "Hostname asignado: $h"}
-          if($env:COMPUTERNAME -ne $h){W "Renombrando: $env:COMPUTERNAME -> $h";Rename-Computer -NewName $h -Force;W "Rename OK. Exit 3010 para reboot.";exit 3010}
-          $c=Cred
-          W "Domain join: $env:COMPUTERNAME -> $FQ"
-          try{
-            if([string]::IsNullOrEmpty($OU)){Add-Computer -DomainName $FQ -Credential $c -Force -EA Stop}
-            else{Add-Computer -DomainName $FQ -Credential $c -OUPath $OU -Force -EA Stop}
-            W "Domain join OK. Exit 3010 para reboot.";exit 3010
-          }catch{
-            $m=$_.Exception.Message
-            # Salto de nombre: objeto AD huerfano (Leave-Domain fallo) bloquea el reuso
-            # (KB5020276). Marcamos el nombre y saltamos al siguiente libre del pool.
-            if($m -like "*Re-using the account was blocked*" -or $m -like "*account with the same name exists*"){
-              W "Join bloqueado por objeto AD huerfano ($env:COMPUTERNAME). Marco y salto."
-              Write-SSMParameter -Name "$OP/$env:COMPUTERNAME" -Value "$id|$(Get-Date -Format o)" -Type String -Overwrite $true -Region $RG -EA SilentlyContinue|Out-Null
-              Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
-              $n=Next $id
-              W "Nuevo hostname tras salto: $n (era $env:COMPUTERNAME)"
-              Rename-Computer -NewName $n -Force;W "Rename OK. Exit 3010 para reintentar join con $n.";exit 3010
-            }
-            throw
-          }
-        }
-        # Auto-limpieza de huerfanos del pool (ya en dominio => conectividad AD solida).
-        # Barandillas: (1) prefijo del ASG, (2) numero dentro del rango del pool,
-        # (3) solo lo marcado en $OP, (4) nunca si el nombre esta en uso por instancia viva.
-        try{
-          $cc=Cred;$cu=$cc.UserName;$cp=$cc.GetNetworkCredential().Password
-          $hi=$ST+$PS-1;$rx="^"+[regex]::Escape($PF)+"([0-9]+)$";$live=@{}
-          try{foreach($m in (Get-SSMParametersByPath -Path $MP -Region $RG)){
-            if($m.Value -like "$PF|*"){$live[(HN ([int]$m.Value.Split("|")[1]))]=$true}}}catch{}
-          foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG -EA SilentlyContinue)){
-            $nm=($o.Name -split "/")[-1];$mt=[regex]::Match($nm,$rx)
-            if(-not $mt.Success){W "Orphan $nm ignorado (prefijo no coincide).";continue}
-            $nu=[int]$mt.Groups[1].Value
-            if($nu -lt $ST -or $nu -gt $hi){W "Orphan $nm ignorado (fuera de rango $ST-$hi).";continue}
-            if($live.ContainsKey($nm)){W "Orphan $nm en uso por instancia viva; solo quito marca.";Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null;continue}
-            try{
-              $de=New-Object DirectoryServices.DirectoryEntry("LDAP://$FQ",$cu,$cp)
-              $ds=New-Object DirectoryServices.DirectorySearcher($de);$ds.Filter="(&(objectClass=computer)(cn=$nm))"
-              $f=$ds.FindOne()
-              if($f){$e=$f.GetDirectoryEntry();$e.Username=$cu;$e.Password=$cp;$e.DeleteTree();W "Objeto AD huerfano $nm eliminado."}else{W "Objeto AD $nm ya no existe."}
-              Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
-            }catch{W "No se pudo limpiar $nm (se reintenta luego): $($_.Exception.Message)"}
-          }
-        }catch{W "Aviso auto-limpieza huerfanos: $($_.Exception.Message)"}
-        W "Fase 2: Montaje FSx..."
-        $rm="\\amznfsxsokjtgsj.gdc.local\share"
-        if(-not (Get-SmbGlobalMapping -EA SilentlyContinue|?{$_.LocalPath -eq "$DR`:"})){
-          $c=Cred
-          for($i=1;$i -le 5;$i++){
-            # -Persistent $false: con $true falla "logon session does not exist" en
-            # contexto LocalSystem. Se re-monta en cada boot via frequency:always.
-            try{New-SmbGlobalMapping -LocalPath "$DR`:" -RemotePath $rm -Credential $c -Persistent $false -RequirePrivacy $true;W "FSx montado en $DR`: ($rm)";break}
-            catch{W "Reintento FSx ($i): $($_.Exception.Message)";if($i -eq 5){throw};Start-Sleep 20}
-          }
-        }else{W "FSx ya montado en $DR`:"}
-        $w=Get-Service W3SVC -EA SilentlyContinue
-        if($w -and $w.Status -ne "Running"){Start-Service W3SVC;W "W3SVC iniciado."}
-        W "Fase 3: IIS Sites config..."
-        Import-Module WebAdministration -EA SilentlyContinue
-        $ss=ConvertFrom-Json '[{"host_header":"mobile.apc.com.pa","name":"mobile","path":"TuIntelidat\\intelidat_App_wsv5","port":80},{"host_header":"tuintelidat.com","name":"tuintelidat","path":"TuIntelidat\\TuIntelidat","port":80},{"host_header":"apcexperian.com","name":"apcexperian","path":"TuIntelidat\\Apcexperian","port":80}]'
-        if($ss.Count -gt 0){
-          Stop-Website "Default Web Site" -EA SilentlyContinue;Remove-Website "Default Web Site" -EA SilentlyContinue
-          W "Default Web Site removido."
-          foreach($s in $ss){
-            $sp="$DR`:\$($s.path)"
-            if(-not (Test-Path $sp)){
-              New-Item $sp -ItemType Directory -Force|Out-Null
-              $f=Join-Path $sp "index.html"
-              if(-not (Test-Path $f)){"<html><body><h1>$($s.name)</h1><p>Host: $($s.host_header)</p><p>Server: $env:COMPUTERNAME</p></body></html>"|Out-File $f -Encoding utf8}
-              W "Directorio creado en FSx: $sp"
-            }
-            if(-not (Get-Website -Name $s.name -EA SilentlyContinue)){
-              New-Website -Name $s.name -PhysicalPath $sp -Port ([int]$s.port) -HostHeader $s.host_header -Force
-              W "IIS Site creado: $($s.name) -> $sp ($($s.host_header):$($s.port))"
-            }else{Set-ItemProperty "IIS:\Sites\$($s.name)" -Name physicalPath -Value $sp;W "IIS Site actualizado: $($s.name)"}
-            Start-Website -Name $s.name -EA SilentlyContinue;W "IIS Site $($s.name) iniciado."
-          }
-        }
-        $hp="C:\inetpub\health";New-Item $hp -ItemType Directory -Force|Out-Null
-        "OK"|Out-File "$hp\index.html" -Encoding utf8
-        if(-not (Get-Website -Name "health-check" -EA SilentlyContinue)){New-Website -Name "health-check" -PhysicalPath $hp -Port 80 -Force;W "Health-check site creado."}
-        $sa="eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com"
-        if($sa){
-          W "Fase 4: SQL Client Alias config..."
-          $av="DBMSSOCN,$sa,1433"
-          foreach($k in @("HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client\ConnectTo","HKLM:\SOFTWARE\Wow6432Node\Microsoft\MSSQLServer\Client\ConnectTo")){
-            if(-not (Test-Path $k)){New-Item $k -Force|Out-Null}
-            Set-ItemProperty $k -Name "vaonsql" -Value $av
-          }
-          W "SQL Client Alias vaonsql -> $av (64+32-bit)"
-        }
-        if((Get-TimeZone).Id -ne "SA Pacific Standard Time"){Set-TimeZone -Id "SA Pacific Standard Time";W "Fase 5: Timezone corregida a UTC-5"}
-        $tf="C:\ProgramData\intelisrcpa-tz.flag"
-        if(-not (Test-Path $tf)){
-          function SI($r){reg add "$r\Control Panel\International" /v sShortDate /t REG_SZ /d "MM/dd/yyyy" /f 2>$null|Out-Null
-          reg add "$r\Control Panel\International" /v sLongDate /t REG_SZ /d "dddd, MMMM dd, yyyy" /f 2>$null|Out-Null}
-          SI "HKCU";SI "HKU\.DEFAULT"
-          reg load "HKU\DEF" "C:\Users\Default\NTUSER.DAT" 2>$null|Out-Null
-          if($LASTEXITCODE -eq 0){SI "HKU\DEF";[gc]::Collect();reg unload "HKU\DEF" 2>$null|Out-Null}
-          W "Fase 5: Fecha MM/dd/yyyy aplicada"
-          "done $(Get-Date -Format o)"|Out-File $tf -Encoding utf8
-        }
-        W "=== Bootstrap completado ==="
-      }catch{W ("ERROR FATAL: "+$_.Exception.Message)}
+1. se lanzo una nueva instance con el instance refresh. con estos datos en parameter store.
+
+/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Edit
+Delete
+
+Overview
+
+History
+
+Tags
+Parameter details
+Name
+/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Description
+USAEA1PWBWESPA1
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-0a3fa966f187a604f
+Type
+String
+Last modified date
+Mon, 14 Sep 2026 21:31:54 GMT
+Value
+USAEA1PWBWESPA|1
+Version
+1
+
+2. luego de que esa instancia subio se hizo el Lifecycle de la siguiente instancia.
+
+logs de cloudwatch 
+
+Log events 
+
+Actions
+Start tailing
+Create metric filter
+You can use the filter bar below to search for and match terms, phrases, or values in your log events. Learn more about filter patterns 
+
+Clear
+1m
+30m
+1h
+12h
+
+Custom
+
+Local timezone
+Display
+
+Timestamp
+	
+Message
+
+Timestamp
+	
+Message
+
+No older events at this moment. 
+Retry
+2026-09-14T16:39:23.090-05:00
+INIT_START Runtime Version: python:3.12.mainlinev2.v31 Runtime Version ARN: arn:aws:lambda:us-east-1::runtime:c1ab740f3656a72d7917665a940f8634df245489445f5a660de5a634d06c5433
+2026-09-14T16:39:23.414-05:00
+[INFO] 2026-09-14T21:39:23.414Z Found credentials in environment variables.
+2026-09-14T16:39:23.583-05:00
+START RequestId: d1a047a8-6254-433b-bacf-866c836138b4 Version: $LATEST
+2026-09-14T16:39:23.584-05:00
+[INFO] 2026-09-14T21:39:23.584Z d1a047a8-6254-433b-bacf-866c836138b4 Event: {"version": "0", "id": "6f7204d5-fa20-5ada-122f-d22b70d5c1e5", "detail-type": "EC2 Instance-terminate Lifecycle Action", "source": "aws.autoscaling", "account": "274193347839", "time": "2026-09-14T21:39:22Z", "region": "us-east-1", "resources": ["arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:251057a1-71d9-48dd-a451-c130d5b89b54:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app1-asg"], "detail": {"LifecycleActionToken": "0bb1ecc9-7473-465e-b8d7-199631cf85a9", "AutoScalingGroupName": "eec-aws-us-eits-intelisrcpa-prd-web-app1-asg", "LifecycleHookName": "leave-domain", "EC2InstanceId": "i-04941a8c8ad794d2e", "LifecycleTransition": "autoscaling:EC2_INSTANCE_TERMINATING", "Origin": "AutoScalingGroup", "Destination": "EC2", "Action": "Terminate"}}
+2026-09-14T16:39:23.584-05:00
+[INFO] 2026-09-14T21:39:23.584Z d1a047a8-6254-433b-bacf-866c836138b4 Processing leave-domain for i-04941a8c8ad794d2e in eec-aws-us-eits-intelisrcpa-prd-web-app1-asg
+2026-09-14T16:39:23.584-05:00
+[INFO] 2026-09-14T21:39:23.584Z d1a047a8-6254-433b-bacf-866c836138b4 Derived asg_key='app1' -> mapping path '/intelisrcpa/app1/hostname-mapping'
+2026-09-14T16:39:23.913-05:00
+[INFO] 2026-09-14T21:39:23.913Z d1a047a8-6254-433b-bacf-866c836138b4 SSM Command sent: 86c50315-d2e3-434a-9a53-6eb73085b529
+2026-09-14T16:39:49.136-05:00
+[INFO]	2026-09-14T21:39:49.135Z	d1a047a8-6254-433b-bacf-866c836138b4	SSM Command Success: 2026-09-14T17:39:24.9464722-04:00  === Leave-Domain iniciado ===
+2026-09-14T17:39:24.9644667-04:00  Computer: USAEA1PWBWESPA2
+2026-09-14T17:39:47.7573038-04:00  Usando credenciales de: gdc.local\paawsas_svc
+2026-09-14T17:39:48.2872557-04:00  Computer object 'USAEA1PWBWESPA2' ELIMINADO del AD.
+2026-09-14T17:39:48.4243127-04:00  Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado).
+2026-09-14T17:39:48.4261278-04:00  === Leave-Domain completado ===
+
+
+[INFO] 2026-09-14T21:39:49.135Z d1a047a8-6254-433b-bacf-866c836138b4 SSM Command Success: 2026-09-14T17:39:24.9464722-04:00 === Leave-Domain iniciado === 2026-09-14T17:39:24.9644667-04:00 Computer: USAEA1PWBWESPA2 2026-09-14T17:39:47.7573038-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-09-14T17:39:48.2872557-04:00 Computer object 'USAEA1PWBWESPA2' ELIMINADO del AD. 2026-09-14T17:39:48.4243127-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-09-14T17:39:48.4261278-04:00 === Leave-Domain completado ===
+2026-09-14T16:39:49.220-05:00
+[INFO] 2026-09-14T21:39:49.220Z d1a047a8-6254-433b-bacf-866c836138b4 SSM Parameter '/intelisrcpa/app1/hostname-mapping/i-04941a8c8ad794d2e' eliminado por la Lambda.
+2026-09-14T16:39:49.537-05:00
+[INFO] 2026-09-14T21:39:49.536Z d1a047a8-6254-433b-bacf-866c836138b4 Lifecycle action completed for i-04941a8c8ad794d2e
+2026-09-14T16:39:49.539-05:00
+END RequestId: d1a047a8-6254-433b-bacf-866c836138b4
+2026-09-14T16:39:49.539-05:00
+REPORT RequestId: d1a047a8-6254-433b-bacf-866c836138b4 Duration: 25954.90 ms Billed Duration: 26445 ms Memory Size: 128 MB Max Memory Used: 96 MB Init Duration: 490.00 ms
+No newer events at this moment. 
+Auto retry paused.
+ 
+Resume
+ 
+
+3. luego de eso se genero el siguiente log en ASG Activity.
+
+Successful
+Launching a new EC2 instance: i-0b63246e140892b50
+At 2026-09-14T21:39:22Z a monitor alarm TargetTracking-eec-aws-us-eits-intelisrcpa-prd-web-app1-asg-AlarmHigh-8bb6c95c-cfeb-43b1-8661-0f4ce6c9489c in state ALARM triggered policy cpu-target-tracking changing the desired capacity from 1 to 2. At 2026-09-14T21:39:26Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 1 to 2.
+2026 September 14, 04:39:28 PM -05:00
+2026 September 14, 04:54:33 PM -05:00
+Successful
+Terminating EC2 instance: i-04941a8c8ad794d2e
+At 2026-09-14T21:34:21Z an instance was taken out of service in response to an instance refresh.
+2026 September 14, 04:34:21 PM -05:00
+2026 September 14, 04:41:31 PM -05:00
+Successful
+Launching a new EC2 instance: i-0a3fa966f187a604f
+At 2026-09-14T21:19:06Z an instance was launched in response to an instance refresh.
+2026 September 14, 04:19:08 PM -05:00
+2026 September 14, 04:34:13 PM -05:00
+
+4. validando parameter store se observa lo siguiente:
+
+Parameter Store
+
+My parameters
+
+Public parameters
+
+Settings
+Ready to scale? Enable higher throughput to handle more API calls - Manage Settings to increase TPS.
+Manage settings
+My parameters
+
+View details
+Edit
+Delete
+Create parameter
+Name : /int
+
+Clear filters
+
+1
+
+
+Name
+	
+Tier
+	
+Type
+	
+Last modified
+
+Name
+	
+Tier
+	
+Type
+	
+Last modified
+
+/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Standard
+String
+Mon, 14 Sep 2026 21:31:54 GMT
+
+/intelisrcpa/app1/hostname-mapping/i-0b63246e140892b50
+Standard
+String
+Mon, 14 Sep 2026 21:56:04 GMT
+
+/intelisrcpa/app1/orphaned/USAEA1PWBWESPA2
+Standard
+String
+Mon, 14 Sep 2026 21:56:02 GMT
+
+5. seguido me conecte a la instancia  i-0a3fa966f187a604f con mapping 
+
+/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Edit
+Delete
+
+Overview
+
+History
+
+Tags
+Parameter details
+Name
+/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Description
+USAEA1PWBWESPA1
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app1/hostname-mapping/i-0a3fa966f187a604f
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-0a3fa966f187a604f
+Type
+String
+Last modified date
+Mon, 14 Sep 2026 21:31:54 GMT
+Value
+USAEA1PWBWESPA|1
+Version
+1
+
+
+
+PS C:\Windows\system32> hostname
+USAEA1PWBWESPA1
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-09-14T21:29:37.1464598+00:00  === Inicio bootstrap ===
+2026-09-14T21:29:40.5345677+00:00  Instance ID: i-0a3fa966f187a604f
+2026-09-14T21:29:46.7823503+00:00  Fase 1: Domain join...
+2026-09-14T21:32:02.9457212+00:00  Hostname numero 1 reclamado (intento 1).
+2026-09-14T21:32:03.1985148+00:00  Hostname asignado: USAEA1PWBWESPA1
+2026-09-14T21:32:03.3657368+00:00  Renombrando: EC2AMAZ-VQE3KT9 -> USAEA1PWBWESPA1
+2026-09-14T21:32:07.7716641+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-14T21:33:46.3282818+00:00  === Inicio bootstrap ===
+2026-09-14T21:33:48.7942022+00:00  Instance ID: i-0a3fa966f187a604f
+2026-09-14T21:33:51.7111586+00:00  Fase 1: Domain join...
+2026-09-14T21:34:31.0690663+00:00  Hostname reutilizado del mapping: USAEA1PWBWESPA1
+2026-09-14T21:34:57.6948380+00:00  Domain join: USAEA1PWBWESPA1 -> gdc.local
+2026-09-14T21:35:24.0071512+00:00  Domain join OK. Exit 3010 para reboot.
+2026-09-14T21:37:03.6361929+00:00  === Inicio bootstrap ===
+2026-09-14T21:37:04.7093983+00:00  Instance ID: i-0a3fa966f187a604f
+2026-09-14T21:38:05.8741310+00:00  Fase 2: Montaje FSx...
+2026-09-14T21:38:35.5074187+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-09-14T21:38:35.5590820+00:00  Fase 3: IIS Sites config...
+2026-09-14T21:38:36.2655943+00:00  Default Web Site removido.
+2026-09-14T21:38:36.8618115+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (mobile.apc.com.pa:80)
+2026-09-14T21:38:36.8667630+00:00  IIS Site mobile iniciado.
+2026-09-14T21:38:37.3943260+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (tuintelidat.com:80)
+2026-09-14T21:38:37.3984916+00:00  IIS Site tuintelidat iniciado.
+2026-09-14T21:38:37.9133396+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (apcexperian.com:80)
+2026-09-14T21:38:37.9309280+00:00  IIS Site apcexperian iniciado.
+2026-09-14T21:38:38.2659288+00:00  Health-check site creado.
+2026-09-14T21:38:38.2670763+00:00  Fase 4: SQL Client Alias config...
+2026-09-14T21:38:38.3566338+00:00  SQL Client Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64+32-bit)
+2026-09-14T16:38:38.3683357-05:00  Fase 5: Timezone corregida a UTC-5
+2026-09-14T16:38:38.3791790-05:00  ERROR FATAL: Provider operation stopped because the provider does not support this operation.
+PS C:\Windows\system32>
+
+
+valide la nueva instancia que lanzo el asg.
+
+/intelisrcpa/app1/hostname-mapping/i-0b63246e140892b50
+Edit
+Delete
+
+Overview
+
+History
+
+Tags
+Parameter details
+Name
+/intelisrcpa/app1/hostname-mapping/i-0b63246e140892b50
+Description
+USAEA1PWBWESPA2
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app1/hostname-mapping/i-0b63246e140892b50
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-0b63246e140892b50
+Type
+String
+Last modified date
+Mon, 14 Sep 2026 21:52:08 GMT
+Value
+USAEA1PWBWESPA|2
+Version
+1
+
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-09-14T21:49:23.3737622+00:00  === Inicio bootstrap ===
+2026-09-14T21:49:26.5080937+00:00  Instance ID: i-0b63246e140892b50
+2026-09-14T21:49:35.4404644+00:00  Fase 1: Domain join...
+2026-09-14T21:52:13.6770938+00:00  Hostname numero 2 reclamado (intento 1).
+2026-09-14T21:52:13.6811498+00:00  Hostname asignado: USAEA1PWBWESPA2
+2026-09-14T21:52:13.6833357+00:00  Renombrando: EC2AMAZ-63S282H -> USAEA1PWBWESPA2
+2026-09-14T21:52:17.0752513+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-14T21:54:16.5128293+00:00  === Inicio bootstrap ===
+2026-09-14T21:54:19.0862000+00:00  Instance ID: i-0b63246e140892b50
+2026-09-14T21:54:20.9078509+00:00  Fase 1: Domain join...
+2026-09-14T21:55:19.0645118+00:00  Hostname reutilizado del mapping: USAEA1PWBWESPA2
+2026-09-14T21:55:46.7254917+00:00  Domain join: USAEA1PWBWESPA2 -> gdc.local
+2026-09-14T21:56:02.0995292+00:00  Join bloqueado por objeto AD huerfano (USAEA1PWBWESPA2). Marco y salto.
+2026-09-14T21:56:12.2149184+00:00  Hostname numero 3 reclamado (intento 1).
+2026-09-14T21:56:12.2827716+00:00  Nuevo hostname tras salto: USAEA1PWBWESPA3 (era USAEA1PWBWESPA2)
+2026-09-14T21:56:14.4709699+00:00  Rename OK. Exit 3010 para reintentar join con USAEA1PWBWESPA3.
+2026-09-14T21:58:02.1011505+00:00  === Inicio bootstrap ===
+2026-09-14T21:58:06.5720676+00:00  Instance ID: i-0b63246e140892b50
+2026-09-14T21:58:10.2470469+00:00  Fase 1: Domain join...
+2026-09-14T21:59:06.1624970+00:00  Hostname reutilizado del mapping: USAEA1PWBWESPA3
+2026-09-14T21:59:31.1226964+00:00  Domain join: USAEA1PWBWESPA3 -> gdc.local
+2026-09-14T21:59:59.9609271+00:00  Domain join OK. Exit 3010 para reboot.
+2026-09-14T22:01:49.2093303+00:00  === Inicio bootstrap ===
+2026-09-14T22:01:49.7677177+00:00  Instance ID: i-0b63246e140892b50
+2026-09-14T22:03:11.7019772+00:00  No se pudo limpiar USAEA1PWBWESPA2 (se reintenta luego): Exception setting "Username": "The following exception occurred while retrieving member "Username": "There is no such object on the server.
+""
+2026-09-14T22:03:11.7088724+00:00  Fase 2: Montaje FSx...
+2026-09-14T22:03:37.7135144+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-09-14T22:03:38.1378833+00:00  Fase 3: IIS Sites config...
+2026-09-14T22:03:39.6346077+00:00  Default Web Site removido.
+2026-09-14T22:03:40.6285821+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (mobile.apc.com.pa:80)
+2026-09-14T22:03:40.6342343+00:00  IIS Site mobile iniciado.
+2026-09-14T22:03:40.8365661+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (tuintelidat.com:80)
+2026-09-14T22:03:40.8509895+00:00  IIS Site tuintelidat iniciado.
+2026-09-14T22:03:41.1549134+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (apcexperian.com:80)
+2026-09-14T22:03:41.1615180+00:00  IIS Site apcexperian iniciado.
+2026-09-14T22:03:41.4199323+00:00  Health-check site creado.
+2026-09-14T22:03:41.4210184+00:00  Fase 4: SQL Client Alias config...
+2026-09-14T22:03:41.5125160+00:00  SQL Client Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64+32-bit)
+2026-09-14T17:03:41.5255674-05:00  Fase 5: Timezone corregida a UTC-5
+2026-09-14T17:03:41.5324287-05:00  ERROR FATAL: Provider operation stopped because the provider does not support this operation.
+PS C:\Windows\system32>
+
+
+y finalmente creo el orpham
+
+/intelisrcpa/app1/orphaned/USAEA1PWBWESPA2
+Edit
+Delete
+
+Overview
+
+History
+
+Tags
+Parameter details
+Name
+/intelisrcpa/app1/orphaned/USAEA1PWBWESPA2
+Description
+-
+ARN
+arn:aws:ssm:us-east-1:274193347839:parameter/intelisrcpa/app1/orphaned/USAEA1PWBWESPA2
+Data type
+text
+Tier
+Standard
+Last modified user
+arn:aws:sts::274193347839:assumed-role/BURoleForeec-aws-us-eits-intelisrcpa-prd-iam-ec2/i-0b63246e140892b50
+Type
+String
+Last modified date
+Mon, 14 Sep 2026 21:56:02 GMT
+Value
+i-0b63246e140892b50|2026-09-14T21:56:02.2254006+00:00
+Version
+1
