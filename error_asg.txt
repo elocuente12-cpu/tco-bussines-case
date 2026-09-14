@@ -1,14 +1,58 @@
-# 1. Que hora ve el sistema vs que deberia
-Get-Date
-[System.TimeZoneInfo]::Local.Id
-w32tm /query /status | Select-String "Source|Last"
-
-# 2. El registro real de timezone (esto es lo que necesito ver)
-Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
-
-# 3. Confirmar RealTimeIsUniversal (segun AWS ya deberia estar en 1)
-Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name RealTimeIsUniversal
-
-# 4. CLAVE: la hora UTC real vs la local
-[System.DateTime]::UtcNow
-Get-Date
+PowerShell 7.6.2
+PS C:\Users\Administrator> ;15;9;0;32;1_Get-Date
+15
+9
+0
+32
+1_Get-Date: The term '1_Get-Date' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+PS C:\Users\Administrator> [System.TimeZoneInfo]::Local.Id
+Eastern Standard Time
+PS C:\Users\Administrator> w32tm /query /status | Select-String "Source|Last"
+ 
+ReferenceId: 0xA9FEA97B (source IP:  169.254.169.123)
+Last Successful Sync Time: 9/14/2026 10:35:47 AM
+Source: 169.254.169.123,0x9
+ 
+PS C:\Users\Administrator>
+PS C:\Users\Administrator> Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
+ 
+Bias                        : 300
+DaylightBias                : 4294967236
+DaylightName                : Eastern Daylight Time
+DaylightStart               : {0, 0, 3, 0…}
+StandardBias                : 0
+StandardName                : Eastern Standard Time
+StandardStart               : {0, 0, 11, 0…}
+TimeZoneKeyName             : Eastern Standard Time
+DynamicDaylightTimeDisabled : 0
+ActiveTimeBias              : 0
+RealTimeIsUniversal         : 1
+PSPath                      : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\T
+                              imeZoneInformation
+PSParentPath                : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control
+PSChildName                 : TimeZoneInformation
+PSDrive                     : HKLM
+PSProvider                  : Microsoft.PowerShell.Core\Registry
+ 
+PS C:\Users\Administrator>
+PS C:\Users\Administrator> Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name RealTimeIsUniversal
+ 
+RealTimeIsUniversal : 1
+PSPath              : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneI
+                      nformation
+PSParentPath        : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control
+PSChildName         : TimeZoneInformation
+PSDrive             : HKLM
+PSProvider          : Microsoft.PowerShell.Core\Registry
+ 
+PS C:\Users\Administrator>
+PS C:\Users\Administrator> [System.DateTime]::UtcNow
+ 
+Monday, September 14, 2026 2:47:13 PM
+ 
+PS C:\Users\Administrator> Get-Date
+ 
+Monday, September 14, 2026 10:47:20 AM
+ 
+PS C:\Users\Administrator>
