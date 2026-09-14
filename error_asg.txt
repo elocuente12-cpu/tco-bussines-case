@@ -1,33 +1,14 @@
-Confirmado el escenario. Déjame recopilar los dominios exactos que tienes en alb_apps para armar un certificado por dominio raíz. Veo estos hostnames en los host_headers:
+# 1. Que hora ve el sistema vs que deberia
+Get-Date
+[System.TimeZoneInfo]::Local.Id
+w32tm /query /status | Select-String "Source|Last"
 
-mobile.apc.com.pa, webservices.apc.com.pa → dominio raíz apc.com.pa
-tuintelidat.com → tuintelidat.com
-apcexperian.com, webservices.apcexperian.com, api.apcexperian.com → apcexperian.com
-online.intelidat.com, webfolder.intelidat.com → intelidat.com
-www.miexperian.cl → miexperian.cl
-apiprodpa.experian.local → experian.local
-Antes de decidir el punto 4 y la granularidad de los certificados, necesito aclarar una cosa importante sobre "certificado por dominio", porque hay dos interpretaciones y cambian el resultado:
+# 2. El registro real de timezone (esto es lo que necesito ver)
+Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation"
 
-Opción A — un certificado por dominio raíz (6 certificados): cada cert cubre su dominio con los SAN necesarios. Ejemplo:
+# 3. Confirmar RealTimeIsUniversal (segun AWS ya deberia estar en 1)
+Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" -Name RealTimeIsUniversal
 
-Cert apc.com.pa → SANs: mobile.apc.com.pa, webservices.apc.com.pa
-Cert apcexperian.com → SANs: apcexperian.com, webservices.apcexperian.com, api.apcexperian.com
-Cert intelidat.com → SANs: online.intelidat.com, webfolder.intelidat.com
-Cert tuintelidat.com → tuintelidat.com
-Cert miexperian.cl → www.miexperian.cl
-Cert experian.local → apiprodpa.experian.local ⚠️
-Opción B — un certificado por hostname (FQDN): 9 certificados, uno por cada host_header.
-
-Recomiendo Opción A (por dominio raíz con SANs): menos recursos, menos CNAMEs de validación que crear manualmente, y es el uso natural de subject_alternative_names del módulo.
-
-Dos advertencias importantes:
-
-apiprodpa.experian.local no se puede validar con ACM público. ACM solo emite certificados para dominios públicos validables por DNS/EMAIL. .local es un TLD interno no enrutable públicamente, así que ACM nunca podrá validarlo y el listener no puede usar un cert ACM para ese host. Para ese dominio interno las opciones reales son: (a) importar un cert emitido por la CA interna de Experian vía action = "import", o (b) dejar ese host solo por HTTP. ¿Cómo quieres manejar experian.local?
-
-Punto 4 (listener :80): ¿lo dejamos activo (HTTP + HTTPS conviven) o lo cambiamos a redirect 80→443? Lo dejaste sin responder.
-
-Dime:
-
-¿Vamos con Opción A (cert por dominio raíz con SANs) o B (cert por FQDN)?
-¿Qué hacemos con experian.local (import de cert interno, o queda en HTTP)?
-Punto 4: ¿mantener :80 o redirect a :443?
+# 4. CLAVE: la hora UTC real vs la local
+[System.DateTime]::UtcNow
+Get-Date
