@@ -271,3 +271,169 @@ At line:1 char:1
 
 
 Get-Content C:\Scripts\Configure-Baseline\Time_Sync.ps1
+
+
+PS C:\Windows\system32> Get-Content C:\Scripts\Configure-Baseline\Time_Sync.ps1
+#Author: Michael Herron
+#Description: Configures time sync method and timezone
+ 
+#Get functions
+if (!(Get-Command Get-Metadata -ErrorAction SilentlyContinue)) {
+    Write-Host "[$($MyInvocation.MyCommand)] - $(Get-Date -Format 'yyyy-MM-dd_HH:mm:ss') - Importing functions..."
+    Import-Module "C:\Scripts\common\functions.psm1" -DisableNameChecking -Force
+    Identify-CSP
+    Get-Metadata
+}
+ 
+#Skip proxy config during Packer reboot
+Check-PackerMarker
+ 
+Start-Transcript "$logpath\TimeSync-$logdate.log"
+Write-Host "[$($myInvocation.MyCommand)] - $(get-date -Format "yyyy-MM-dd_HH:mm:ss") - TIME SYNC START"
+ 
+# Check if domain joined
+$domain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+$mode =  (gp "HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Parameters").Type
+if ($domain) {
+    if ($mode -ne "NT5DS") {
+        # Switch to NT5DS (AD hierarchy)
+        Write-Host "$(get-date -Format "yyyy-MM-dd_HH:mm:ss"): Setting time sync to NT5DS"
+        w32tm /config /syncfromflags:DOMHIER /update
+        net stop w32time
+        net start w32time
+        w32tm /resync
+        # Update log file
+        Add-Content "C:\Scripts\Configure-Baseline\Logs\TimeSyncSwitch.log" "$(get-date -Format "yyyy-MM-dd_HH:mm:ss"): Time sync switched to NT5DS"
+    }
+}
+else {
+    if ($mode -ne "NTP") {
+        $ntplist = @{
+            "AWS"      = "169.254.169.123,0x9"
+            "Azure"    = "time.windows.com,0x9"
+            "GCP"      = "metadata.google.internal,0x8"
+            "OCI"      = "169.254.169.254,0x9"
+            "AliCloud" = "ntp.cloud.aliyuncs.com,0x9"
+        }
+        # Set NTP server
+        if ($ntplist.ContainsKey($CloudProvider)) {
+            $ntpserver = $ntplist[$CloudProvider]
+            Write-Host "$(get-date -Format "yyyy-MM-dd_HH:mm:ss"): Setting time sync to NTP server $ntpserver"
+            w32tm /config /manualpeerlist:$($ntpserver) /syncfromflags:manual /reliable:YES /update
+            net stop w32time
+            net start w32time
+            w32tm /resync
+            # Update log file
+            Add-Content "C:\Scripts\Configure-Baseline\Logs\TimeSyncSwitch.log" "$(get-date -Format "yyyy-MM-dd_HH:mm:ss"): Time synced to NTP server $ntpserver"
+        }
+        else {
+            Write-Host "$(get-date -Format "yyyy-MM-dd_HH:mm:ss"): Cloud provider $CloudProvider not found in mapping"
+        }
+    }
+}
+ 
+# Configure time zone based on region
+function Get-TimeZoneFromRegion {
+    param(
+        [string]$Region
+    )
+ 
+    $Region = $Region.ToLower()
+ 
+    switch -Regex ($Region) {
+ 
+        # North America East
+        '^(us-east|eastus|eastus2|us-ashburn|ca-central|northamerica-northeast)' {
+            'Eastern Standard Time'
+            break
+        }
+ 
+        # North America Central
+        '^(us-central|centralus|northcentralus|southcentralus)' {
+            'Central Standard Time'
+            break
+        }
+ 
+        # North America West
+        '^(us-west|westus)' {
+            'Pacific Standard Time'
+            break
+        }
+ 
+        # UK
+        '^(uk-|uksouth|ukwest|europe-west2)' {
+            'GMT Standard Time'
+            break
+        }
+ 
+        # Europe
+        '^(eu-|europe-|westeurope|northeurope|france|germany|switzerland)' {
+            'W. Europe Standard Time'
+            break
+        }
+ 
+        # India
+        '^(ap-south|asia-south|india)' {
+            'India Standard Time'
+            break
+        }
+ 
+        # Singapore / Southeast Asia
+        '^(ap-southeast|asia-southeast|southeastasia|singapore)' {
+            'Singapore Standard Time'
+            break
+        }
+ 
+        # Japan
+        '^(ap-northeast-1|asia-northeast|japaneast|tokyo|osaka)' {
+            'Tokyo Standard Time'
+            break
+        }
+ 
+        # Korea
+        '^(ap-northeast-2|korea|seoul)' {
+            'Korea Standard Time'
+            break
+        }
+ 
+        # Australia
+        '^(australia|ap-sydney|sydney)' {
+            'AUS Eastern Standard Time'
+            break
+        }
+ 
+        # South America
+        '^(sa-|southamerica|brazilsouth)' {
+            'E. South America Standard Time'
+            break
+        }
+ 
+        default {
+            $null
+        }
+    }
+}
+ 
+# ---- MAIN EXECUTION ----
+ 
+if (!$region) {
+    Write-Host "[$($myInvocation.MyCommand)] - $(Get-Date -Format 'yyyy-MM-dd_HH:mm:ss') - Could not determine region. Exiting."
+    return
+}
+ 
+$desiredTZ = Get-TimeZoneFromRegion -Region $region
+ 
+if (!$desiredTZ) {
+    Write-Host "[$($myInvocation.MyCommand)] - $(Get-Date -Format 'yyyy-MM-dd_HH:mm:ss') - No timezone mapping found for region: $region"
+    return
+}
+ 
+$currentTZ = (Get-TimeZone).Id
+ 
+if ($currentTZ -ne $desiredTZ) {
+    Write-Host "[$($myInvocation.MyCommand)] - $(Get-Date -Format 'yyyy-MM-dd_HH:mm:ss') - Setting timezone to $desiredTZ"
+    Set-TimeZone -Id $desiredTZ
+}
+else {
+    Write-Host "[$($myInvocation.MyCommand)] - $(Get-Date -Format 'yyyy-MM-dd_HH:mm:ss') - Timezone already set to $desiredTZ"
+}
