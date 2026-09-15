@@ -45,3 +45,128 @@ Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows
 
 # 3. Ver todas las GPOs aplicadas al equipo
 gpresult /h C:\gpreport.html   # y revisar el HTML, buscar "Time Zone"
+
+
+PS C:\Windows\system32> gpresult /r /scope:computer | Select-String -Pattern "Applied|Time"
+ 
+    Last time Group Policy was applied: 9/15/2026 at 8:04:57 AM
+    Group Policy was applied from:      CNYZPDCGDC01.gdc.local
+    Applied Group Policy Objects
+    The following GPOs were not applied because they were filtered out
+            Filtering:  Not Applied (Empty)
+ 
+ 
+PS C:\Windows\system32>
+PS C:\Windows\system32>
+PS C:\Windows\system32> Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows-Kernel-General'} -MaxEvents 20 |
+>>   Where-Object {$_.Message -like "*time zone*"} | Format-List TimeCreated, Message
+ 
+ 
+TimeCreated : 9/14/2026 8:22:19 PM
+Message     : The system time has changed to ‎2026‎-‎09‎-‎15T00:22:19.419256700Z from ‎2026‎-‎09‎-‎15T00:22:19.419256700Z.
+              Time Delta: 0 ms
+ 
+              Change Reason: System time adjusted to the new time zone.
+              Process: '\Device\HarddiskVolume3\Program Files\PowerShell\7\pwsh.exe' (PID 7148).
+ 
+              RTC time: ‎2026‎-‎09‎-‎15T00:22:18.500000000Z
+              Current time zone bias: 240
+              RTC time is in UTC: true
+              System time was based on RTC time: false
+ 
+TimeCreated : 9/14/2026 8:22:19 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 240.
+ 
+TimeCreated : 9/14/2026 8:22:19 PM
+Message     : The time zone bias has changed to 240 from 300.
+ 
+TimeCreated : 9/14/2026 8:21:59 PM
+Message     : The system time has changed to ‎2026‎-‎09‎-‎15T00:21:59.738820600Z from ‎2026‎-‎09‎-‎15T00:21:59.737635900Z.
+              Time Delta: 1 ms
+ 
+              Change Reason: An application or system component changed the time.
+              Process: '\Device\HarddiskVolume3\Windows\System32\svchost.exe' (PID 1108).
+ 
+              RTC time: ‎2026‎-‎09‎-‎15T00:21:59.738820600Z
+              Current time zone bias: 300
+              RTC time is in UTC: true
+              System time was based on RTC time: false
+ 
+TimeCreated : 9/14/2026 8:21:59 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 300.
+ 
+TimeCreated : 9/14/2026 8:17:03 PM
+Message     : The system time has changed to ‎2026‎-‎09‎-‎15T00:17:03.428499300Z from ‎2026‎-‎09‎-‎15T00:17:03.428499300Z.
+              Time Delta: 0 ms
+ 
+              Change Reason: System time adjusted to the new time zone.
+              Process: '\Device\HarddiskVolume3\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' (PID 5432).
+ 
+              RTC time: ‎2026‎-‎09‎-‎15T00:17:02.500000000Z
+              Current time zone bias: 300
+              RTC time is in UTC: true
+              System time was based on RTC time: false
+ 
+TimeCreated : 9/14/2026 8:17:03 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 300.
+ 
+TimeCreated : 9/14/2026 8:17:03 PM
+Message     : The time zone bias has changed to 300 from 0.
+ 
+TimeCreated : 9/14/2026 8:14:53 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 0.
+ 
+TimeCreated : 9/14/2026 8:14:39 PM
+Message     : The system time has changed to ‎2026‎-‎09‎-‎15T00:14:39.651095700Z from ‎2026‎-‎09‎-‎15T00:14:39.649737400Z.
+              Time Delta: 1 ms
+ 
+              Change Reason: An application or system component changed the time.
+              Process: '\Device\HarddiskVolume3\Windows\System32\svchost.exe' (PID 3096).
+ 
+              RTC time: ‎2026‎-‎09‎-‎15T00:14:39.651095700Z
+              Current time zone bias: 0
+              RTC time is in UTC: true
+              System time was based on RTC time: false
+ 
+TimeCreated : 9/14/2026 8:14:39 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 0.
+ 
+TimeCreated : 9/14/2026 8:12:20 PM
+Message     : The system time has changed to ‎2026‎-‎09‎-‎15T00:12:20.683883200Z from ‎2026‎-‎09‎-‎15T00:12:20.682958500Z.
+              Time Delta: 0 ms
+ 
+              Change Reason: An application or system component changed the time.
+              Process: '\Device\HarddiskVolume3\Windows\System32\svchost.exe' (PID 3096).
+ 
+              RTC time: ‎2026‎-‎09‎-‎15T00:12:20.683883200Z
+              Current time zone bias: 0
+              RTC time is in UTC: true
+              System time was based on RTC time: false
+ 
+TimeCreated : 9/14/2026 8:12:20 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 0.
+ 
+TimeCreated : 9/14/2026 8:12:20 PM
+Message     : The system time has changed to ‎2026‎-‎09‎-‎15T00:12:20.681703700Z from ‎2026‎-‎09‎-‎15T00:12:19.330115000Z.
+              Time Delta: 1351 ms
+ 
+              Change Reason: An application or system component changed the time.
+              Process: '\Device\HarddiskVolume3\Windows\System32\svchost.exe' (PID 3096).
+ 
+              RTC time: ‎2026‎-‎09‎-‎15T00:12:20.681703700Z
+              Current time zone bias: 0
+              RTC time is in UTC: true
+              System time was based on RTC time: false
+ 
+TimeCreated : 9/14/2026 8:12:20 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 0.
+ 
+TimeCreated : 9/14/2026 8:11:27 PM
+Message     : The time zone information was refreshed with exit reason 0. Current time zone bias is 0.
+ 
+ 
+PS C:\Windows\system32>
+PS C:\Windows\system32>
+PS C:\Windows\system32> gpresult /h C:\gpreport.html
+INFO: The user does not have RSoP data.
+PS C:\Windows\system32>
