@@ -34,4 +34,14 @@ PS C:\Windows\system32> [System.TimeZoneInfo]::Local.Id
 Eastern Standard Time
 
 PS C:\Windows\system32>
- 
+
+
+# 1. Ver si hay una GPO aplicando timezone
+gpresult /r /scope:computer | Select-String -Pattern "Applied|Time"
+
+# 2. Ver el historial de cambios de la zona (Event Log)
+Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Microsoft-Windows-Kernel-General'} -MaxEvents 20 |
+  Where-Object {$_.Message -like "*time zone*"} | Format-List TimeCreated, Message
+
+# 3. Ver todas las GPOs aplicadas al equipo
+gpresult /h C:\gpreport.html   # y revisar el HTML, buscar "Time Zone"
