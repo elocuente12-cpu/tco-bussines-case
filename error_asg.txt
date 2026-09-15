@@ -268,3 +268,6 @@ At line:1 char:1
 + ~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : ObjectNotFound: (C:\gp.html:String) [Get-Content], ItemNotFoundException
     + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+
+
+Get-Content C:\Scripts\Configure-Baseline\Time_Sync.ps1
