@@ -170,3 +170,36 @@ PS C:\Windows\system32>
 PS C:\Windows\system32> gpresult /h C:\gpreport.html
 INFO: The user does not have RSoP data.
 PS C:\Windows\system32>
+
+
+# 1. Ver qué tareas programadas corren pwsh/powershell y podrían tocar timezone
+Get-ScheduledTask | Where-Object {$_.Actions.Execute -match "pwsh|powershell"} |
+  Select-Object TaskName, TaskPath, State
+
+# 2. Buscar cualquier script que mencione timezone/Eastern en el sistema
+Get-ChildItem C:\ -Recurse -Include *.ps1 -ErrorAction SilentlyContinue |
+  Select-String -Pattern "Eastern Standard Time|Set-TimeZone|tzutil" -ErrorAction SilentlyContinue |
+  Select-Object Path, LineNumber, Line
+
+# 3. Confirmar la zona actual y forzarla de vuelta para probar
+tzutil /g
+
+
+
+# 1. Tareas programadas que usan pwsh (PowerShell 7)
+Get-ScheduledTask | Where-Object {($_.Actions | ForEach-Object Execute) -match "pwsh"} |
+  Select-Object TaskName, TaskPath | Format-Table -Auto
+
+# 2. Scripts en el sistema que fuercen Eastern
+Get-ChildItem C:\ -Recurse -Include *.ps1 -ErrorAction SilentlyContinue |
+  Select-String "Eastern Standard Time" -ErrorAction SilentlyContinue |
+  Select-Object Path -Unique
+
+# 3. Startup scripts de GPO (aquí suelen esconderse)
+Get-ChildItem "C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup" -Recurse -EA SilentlyContinue
+Get-ChildItem "C:\Windows\System32\GroupPolicy\User\Scripts\Logon" -Recurse -EA SilentlyContinue
+
+# 4. El reporte completo de GPO (como admin) para ver políticas de timezone
+gpresult /h C:\gp.html /f
+# luego abrir C:\gp.html y buscar "Time"
+
