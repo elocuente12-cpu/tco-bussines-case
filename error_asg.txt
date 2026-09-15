@@ -9,3 +9,29 @@ Get-Date
 
 # 3. Lo que ve TU sesion RDP (puede diferir)
 [System.TimeZoneInfo]::Local.Id
+
+
+PS C:\Windows\system32> tzutil /g
+
+Eastern Standard Time
+
+PS C:\Windows\system32>
+
+PS C:\Windows\system32> Get-Date
+ 
+Tuesday, September 15, 2026 9:46:06 AM
+ 
+ 
+PS C:\Windows\system32> [DateTime]::UtcNow
+ 
+Tuesday, September 15, 2026 1:46:06 PM
+ 
+ 
+PS C:\Windows\system32>
+
+PS C:\Windows\system32> [System.TimeZoneInfo]::Local.Id
+
+Eastern Standard Time
+
+PS C:\Windows\system32>
+ 
