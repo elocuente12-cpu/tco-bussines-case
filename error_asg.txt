@@ -437,3 +437,30 @@ if ($currentTZ -ne $desiredTZ) {
 else {
     Write-Host "[$($myInvocation.MyCommand)] - $(Get-Date -Format 'yyyy-MM-dd_HH:mm:ss') - Timezone already set to $desiredTZ"
 }
+
+
++ /home/jenkins/workspace/SP-LATAM/EITS/Infrastructure/eec-aws-us-eits-intelisrcpa/1002/.bin/bin/terraform validate
+
+Error: Reference to undeclared module
+
+  on locals.tf line 186, in locals:
+ 186:   acm_cert_arns = { for key, mod in module.acm : key => mod.arn }
+
+No module call named "acm" is declared in the root module. Did you mean
+"alb"?
+
+Error: Reference to undeclared module
+
+  on outputs.tf line 67, in output "acm_certificate_status":
+  67:   value       = { for key, mod in module.acm : key => mod.status }
+
+No module call named "acm" is declared in the root module. Did you mean
+"alb"?
+
+Error: Reference to undeclared module
+
+  on outputs.tf line 76, in output "acm_domain_validation_options":
+  76:   value       = { for key, mod in module.acm : key => mod.domain_validation_options }
+
+No module call named "acm" is declared in the root module. Did you mean
+"alb"?
