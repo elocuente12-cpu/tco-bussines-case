@@ -471,3 +471,16 @@ Error: creating ELBv2 Listener (arn:aws:elasticloadbalancing:us-east-1:274193347
   with module.alb.aws_lb_listener.this["https_443"],
   on .terraform/modules/alb/main.tf line 154, in resource "aws_lb_listener" "this":
  154: resource "aws_lb_listener" "this" {
+
+
+    Error: Invalid value for variable
+
+  on sns.tf line 11, in module "sns_acm_alerts":
+  11:   display_name      = "ACM Certificate Expiration"
+    ├────────────────
+    │ var.display_name is "ACM Certificate Expiration"
+
+The name variable must have alphanumeric, underscore and hyphen characters
+
+This was checked by the validation rule at
+.terraform/modules/sns_acm_alerts/variables.tf:18,3-13.
