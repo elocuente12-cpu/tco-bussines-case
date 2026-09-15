@@ -1,2 +1,28 @@
-2026/09/15 19:10:21Z: SSM Agent unable to acquire credentials: <error>unexpected error getting instance profile role credentials or calling UpdateInstanceInformation. Skipping default host management fallback: retrieved credentials failed to report to ssm. Error: RequestError: send request failed
-caused by: Post "https://ssm.us-east-1.amazonaws.com/": dial tcp 100.55.129.238:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.</error>
+Error: Invalid for_each argument
+ 
+  on .terraform/modules/alb/main.tf line 155, in resource "aws_lb_listener" "this":
+
+155:   for_each = { for k, v in var.listeners : "${lower(v.protocol)}_${v.port}" => v }
+
+    ├────────────────
+
+    │ var.listeners is a list of object, known only after apply
+ 
+The "for_each" map includes keys derived from resource attributes that cannot
+
+be determined until apply, and so Terraform cannot determine the full set of
+
+keys that will identify the instances of this resource.
+ 
+When working with unknown values in for_each, it's better to define the map
+
+keys statically in your configuration and place apply-time results only in
+
+the map values.
+ 
+Alternatively, you could use the -target planning option to first apply only
+
+the resources that the for_each value depends on, and then apply a second
+
+time to fully converge.
+ 
