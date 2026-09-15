@@ -203,3 +203,68 @@ Get-ChildItem "C:\Windows\System32\GroupPolicy\User\Scripts\Logon" -Recurse -EA 
 gpresult /h C:\gp.html /f
 # luego abrir C:\gp.html y buscar "Time"
 
+
+PS C:\Windows\system32> Get-ScheduledTask | Where-Object {$_.Actions.Execute -match "pwsh|powershell"} |
+>>   Select-Object TaskName, TaskPath, State
+ 
+TaskName        TaskPath State
+--------        -------- -----
+Postbuild_tasks \        Ready
+Windows_Updates \        Ready
+ 
+ 
+PS C:\Windows\system32>
+PS C:\Windows\system32> Get-ChildItem C:\ -Recurse -Include *.ps1 -ErrorAction SilentlyContinue |
+>>   Select-String -Pattern "Eastern Standard Time|Set-TimeZone|tzutil" -ErrorAction SilentlyContinue |
+>>   Select-Object Path, LineNumber, Line
+ 
+Path                                        LineNumber Line
+----                                        ---------- ----
+C:\Build\Build-AMI.ps1                              62 Set-TimeZone -Id "SA Pacific Standard Time"
+C:\Scripts\Configure-Baseline\Time_Sync.ps1         71             'Eastern Standard Time'
+C:\Scripts\Configure-Baseline\Time_Sync.ps1        125             'AUS Eastern Standard Time'
+C:\Scripts\Configure-Baseline\Time_Sync.ps1        159     Set-TimeZone -Id $desiredTZ
+C:\Windows\System32\config\systemprofile...        176   if((Get-TimeZone).Id -ne "SA Pacific S...
+C:\Windows\System32\config\systemprofile...        176   if((Get-TimeZone).Id -ne "SA Pacific S...
+C:\Windows\System32\config\systemprofile...        176   if((Get-TimeZone).Id -ne "SA Pacific S...
+ 
+ 
+PS C:\Windows\system32>
+PS C:\Windows\system32> tzutil /g
+Eastern Standard Time
+PS C:\Windows\system32>
+PS C:\Windows\system32>
+PS C:\Windows\system32>
+PS C:\Windows\system32> Get-ScheduledTask | Where-Object {($_.Actions | ForEach-Object Execute) -match "pwsh"} |
+>>   Select-Object TaskName, TaskPath | Format-Table -Auto
+ 
+TaskName        TaskPath
+--------        --------
+Postbuild_tasks \
+ 
+ 
+PS C:\Windows\system32>
+PS C:\Windows\system32>
+PS C:\Windows\system32> Get-ChildItem C:\ -Recurse -Include *.ps1 -ErrorAction SilentlyContinue |
+>>   Select-String "Eastern Standard Time" -ErrorAction SilentlyContinue |
+>>   Select-Object Path -Unique
+ 
+Path
+----
+C:\Scripts\Configure-Baseline\Time_Sync.ps1
+ 
+ 
+PS C:\Windows\system32>
+PS C:\Windows\system32> Get-ChildItem "C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup" -Recurse -EA SilentlyContinue
+PS C:\Windows\system32> Get-ChildItem "C:\Windows\System32\GroupPolicy\User\Scripts\Logon" -Recurse -EA SilentlyContinue
+PS C:\Windows\system32>
+PS C:\Windows\system32> gpresult /h C:\gp.html /f
+INFO: The user does not have RSoP data.
+PS C:\Windows\system32>
+PS C:\Windows\system32> Get-Content C:\gp.html
+Get-Content : Cannot find path 'C:\gp.html' because it does not exist.
+At line:1 char:1
++ Get-Content C:\gp.html
++ ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\gp.html:String) [Get-Content], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
