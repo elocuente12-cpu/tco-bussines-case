@@ -464,3 +464,10 @@ Error: Reference to undeclared module
 
 No module call named "acm" is declared in the root module. Did you mean
 "alb"?
+
+
+Error: creating ELBv2 Listener (arn:aws:elasticloadbalancing:us-east-1:274193347839:loadbalancer/app/eec-aws-us-eits-prod-alb/58d1b5e22aa502cd): operation error Elastic Load Balancing v2: CreateListener, https response error StatusCode: 400, RequestID: 513300a6-ee9a-49c2-98a9-61750e80e5ae, api error UnsupportedCertificate: The certificate 'arn:aws:acm:us-east-1:274193347839:certificate/f2eb809f-4031-4ac0-af5c-d63a466d0d57' must have a fully-qualified domain name, a supported signature, and a supported key size.
+
+  with module.alb.aws_lb_listener.this["https_443"],
+  on .terraform/modules/alb/main.tf line 154, in resource "aws_lb_listener" "this":
+ 154: resource "aws_lb_listener" "this" {
