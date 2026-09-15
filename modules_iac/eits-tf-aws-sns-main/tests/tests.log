@@ -1,0 +1,1693 @@
+Tests started at 2026-02-05 08:45:02 UTC
+Branch: feature/UKICLOENA-2717-update-alarms
+Pull Request ID: 17
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'with_email_subscriber': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.sns.data.aws_iam_policy_document.this will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "this" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + policy_id               = "SNSTopicsPublish"
+      + source_policy_documents = []
+
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowedPrincipals"
+
+          + principals {
+              + identifiers = [
+                  + "backup.amazonaws.com",
+                ]
+              + type        = "Service"
+            }
+        }
+    }
+
+  # module.sns.aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + application_success_feedback_sample_rate = 10
+      + arn                                      = (known after apply)
+      + beginning_archive_time                   = (known after apply)
+      + content_based_deduplication              = false
+      + fifo_throughput_scope                    = (known after apply)
+      + fifo_topic                               = false
+      + firehose_success_feedback_sample_rate    = 10
+      + http_success_feedback_sample_rate        = 10
+      + id                                       = (known after apply)
+      + kms_master_key_id                        = "alias/aws/sns"
+      + lambda_success_feedback_sample_rate      = 20
+      + name                                     = "test-prefix-eits-tf-aws-sns-with-email-sns-topic"
+      + name_prefix                              = (known after apply)
+      + owner                                    = (known after apply)
+      + policy                                   = (known after apply)
+      + region                                   = "eu-west-2"
+      + signature_version                        = 2
+      + sqs_success_feedback_sample_rate         = 10
+      + tags                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tracing_config                           = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_policy.this[0] will be created
+  + resource "aws_sns_topic_policy" "this" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["emailme"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "eitsukicloud@experian.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_email_subscriber': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698459-050b-848c-b8ed-33a99b8b8001%252A2c2026-02-05T08%2525%25252A3a47%2525%25252A3a01.739652588Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'with_fifo': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.sns.data.aws_iam_policy_document.this will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "this" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + policy_id               = "SNSTopicsPublish"
+      + source_policy_documents = []
+
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowedPrincipals"
+
+          + condition {
+              + test     = "StringEquals"
+              + values   = [
+                  + "077820194866",
+                ]
+              + variable = "AWS:SourceOwner"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "AWS"
+            }
+        }
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "SecureTransport"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:SecureTransport"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "*"
+            }
+        }
+    }
+
+  # module.sns.aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + application_success_feedback_sample_rate = 10
+      + arn                                      = (known after apply)
+      + beginning_archive_time                   = (known after apply)
+      + content_based_deduplication              = true
+      + fifo_throughput_scope                    = (known after apply)
+      + fifo_topic                               = true
+      + firehose_success_feedback_sample_rate    = 10
+      + http_success_feedback_sample_rate        = 10
+      + id                                       = (known after apply)
+      + kms_master_key_id                        = "alias/aws/sns"
+      + lambda_success_feedback_sample_rate      = 10
+      + name                                     = "uk-cloudenablement-sbx-eits-tf-aws-sns-with-fifo-sns-topic.fifo"
+      + name_prefix                              = (known after apply)
+      + owner                                    = (known after apply)
+      + policy                                   = (known after apply)
+      + region                                   = "eu-west-2"
+      + signature_version                        = (known after apply)
+      + sqs_success_feedback_sample_rate         = 10
+      + tags                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tracing_config                           = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_policy.this[0] will be created
+  + resource "aws_sns_topic_policy" "this" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["admin_alerts"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 10
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "admin@yourdomain.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["order_handler"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "arn:aws:lambda:us-east-1:123456789012:function:order-handler"
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode(
+            {
+              + priority = [
+                  + "high",
+                ]
+            }
+        )
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "lambda"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["order_processing"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "arn:aws:sqs:us-east-1:123456789012:order-processing.fifo"
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode(
+            {
+              + event_type = [
+                  + "order_created",
+                  + "order_updated",
+                ]
+            }
+        )
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "sqs"
+      + raw_message_delivery            = true
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.module.alarm["FailedToRedriveToDlq"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect messages that couldn't be moved to a dead-letter queue."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFailedToRedriveToDlq"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["InvalidAttributes"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect if the published messages are not valid or if inappropriate filters have been applied to a subscriber."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFilteredOut-InvalidAttributes"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["InvalidMessageBody"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect if the published messages are not valid or if inappropriate filters have been applied to a subscriber."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFilteredOut-InvalidMessageBody"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["RedrivenToDlq"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect messages that moved to a dead-letter queue."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsRedrivenToDlq"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+Plan: 9 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_fifo': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698459-590b-88f2-9414-7d80c18f8001%252A2c2026-02-05T08%2525%25252A3a48%2525%25252A3a25.520882837Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'with_policy_json': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.sns.data.aws_iam_policy_document.this will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "this" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + policy_id               = "SNSTopicsPublish"
+      + source_policy_documents = [
+          + jsonencode(
+                {
+                  + Id        = "SNSTopicsPublish"
+                  + Statement = [
+                      + {
+                          + Action    = [
+                              + "SNS:Subscribe",
+                              + "SNS:SetTopicAttributes",
+                              + "SNS:RemovePermission",
+                              + "SNS:Receive",
+                              + "SNS:Publish",
+                              + "SNS:ListSubscriptionsByTopic",
+                              + "SNS:GetTopicAttributes",
+                              + "SNS:DeleteTopic",
+                              + "SNS:AddPermission",
+                            ]
+                          + Condition = {
+                              + StringEquals = {
+                                  + "AWS:SourceOwner" = "077820194866"
+                                }
+                            }
+                          + Effect    = "Allow"
+                          + Principal = {
+                              + AWS = "*"
+                            }
+                          + Resource  = "arn:aws:sns:us-east-2:077820194866:*eits-tf-aws-sns-with-policy-sns-topic"
+                          + Sid       = "SNSTopicsPublish"
+                        },
+                    ]
+                  + Version   = "2012-10-17"
+                }
+            ),
+        ]
+
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "SecureTransport"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:SecureTransport"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "*"
+            }
+        }
+    }
+
+  # module.sns.aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + application_success_feedback_sample_rate = 10
+      + arn                                      = (known after apply)
+      + beginning_archive_time                   = (known after apply)
+      + content_based_deduplication              = false
+      + fifo_throughput_scope                    = (known after apply)
+      + fifo_topic                               = false
+      + firehose_success_feedback_sample_rate    = 10
+      + http_success_feedback_sample_rate        = 10
+      + id                                       = (known after apply)
+      + kms_master_key_id                        = "alias/aws/sns"
+      + lambda_success_feedback_sample_rate      = 10
+      + name                                     = "uk-cloudenablement-sbx-eits-tf-aws-sns-with-policy-sns-topic"
+      + name_prefix                              = (known after apply)
+      + owner                                    = (known after apply)
+      + policy                                   = (known after apply)
+      + region                                   = "eu-west-2"
+      + signature_version                        = (known after apply)
+      + sqs_success_feedback_sample_rate         = 10
+      + tags                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tracing_config                           = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_policy.this[0] will be created
+  + resource "aws_sns_topic_policy" "this" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["admin_alerts"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 10
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "admin@yourdomain.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["order_handler"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "arn:aws:lambda:us-east-1:123456789012:function:order-handler"
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode(
+            {
+              + priority = [
+                  + "high",
+                ]
+            }
+        )
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "lambda"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["order_processing"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "arn:aws:sqs:us-east-1:123456789012:order-processing.fifo"
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode(
+            {
+              + event_type = [
+                  + "order_created",
+                  + "order_updated",
+                ]
+            }
+        )
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "sqs"
+      + raw_message_delivery            = true
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.module.alarm["FailedToRedriveToDlq"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect messages that couldn't be moved to a dead-letter queue."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFailedToRedriveToDlq"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["InvalidAttributes"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect if the published messages are not valid or if inappropriate filters have been applied to a subscriber."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFilteredOut-InvalidAttributes"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["InvalidMessageBody"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect if the published messages are not valid or if inappropriate filters have been applied to a subscriber."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFilteredOut-InvalidMessageBody"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["RedrivenToDlq"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The alarm is used to detect messages that moved to a dead-letter queue."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsRedrivenToDlq"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + treat_missing_data                    = "missing"
+    }
+
+Plan: 9 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_policy_json': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698459-950b-89da-a3c0-d36d6c5d8001%252A2c2026-02-05T08%2525%25252A3a49%2525%25252A3a25.181533485Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'with_sns_alarms': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.sns.data.aws_iam_policy_document.this will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "this" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + policy_id               = "SNSTopicsPublish"
+      + source_policy_documents = []
+
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowedPrincipals"
+
+          + principals {
+              + identifiers = [
+                  + "backup.amazonaws.com",
+                ]
+              + type        = "Service"
+            }
+        }
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "SecureTransport"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:SecureTransport"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "*"
+            }
+        }
+    }
+
+  # module.sns.aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + application_success_feedback_sample_rate = 10
+      + arn                                      = (known after apply)
+      + beginning_archive_time                   = (known after apply)
+      + content_based_deduplication              = false
+      + fifo_throughput_scope                    = (known after apply)
+      + fifo_topic                               = false
+      + firehose_success_feedback_sample_rate    = 10
+      + http_success_feedback_sample_rate        = 10
+      + id                                       = (known after apply)
+      + kms_master_key_id                        = "alias/aws/sns"
+      + lambda_success_feedback_sample_rate      = 10
+      + name                                     = "uk-cloudenablement-sbx-eits-tf-aws-sns-with-alarms-sns-topic"
+      + name_prefix                              = (known after apply)
+      + owner                                    = (known after apply)
+      + policy                                   = (known after apply)
+      + region                                   = "eu-west-2"
+      + signature_version                        = (known after apply)
+      + sqs_success_feedback_sample_rate         = 10
+      + tags                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tracing_config                           = (known after apply)
+    }
+
+  # module.sns.aws_sns_topic_policy.this[0] will be created
+  + resource "aws_sns_topic_policy" "this" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.sns.aws_sns_topic_subscription.this["emailme"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "eitsukicloud@experian.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns_alarms.data.aws_iam_policy_document.this will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "this" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + policy_id               = "SNSTopicsPublish"
+      + source_policy_documents = []
+
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowedPrincipals"
+
+          + condition {
+              + test     = "StringEquals"
+              + values   = [
+                  + "077820194866",
+                ]
+              + variable = "AWS:SourceOwner"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "AWS"
+            }
+        }
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "SecureTransport"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:SecureTransport"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "*"
+            }
+        }
+    }
+
+  # module.sns_alarms.aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + application_success_feedback_sample_rate = 10
+      + arn                                      = (known after apply)
+      + beginning_archive_time                   = (known after apply)
+      + content_based_deduplication              = false
+      + fifo_throughput_scope                    = (known after apply)
+      + fifo_topic                               = false
+      + firehose_success_feedback_sample_rate    = 10
+      + http_success_feedback_sample_rate        = 10
+      + id                                       = (known after apply)
+      + kms_master_key_id                        = "alias/aws/sns"
+      + lambda_success_feedback_sample_rate      = 10
+      + name                                     = "uk-cloudenablement-sbx-eits-tf-aws-sns-test-alarms-sns-topic"
+      + name_prefix                              = (known after apply)
+      + owner                                    = (known after apply)
+      + policy                                   = (known after apply)
+      + region                                   = "eu-west-2"
+      + signature_version                        = (known after apply)
+      + sqs_success_feedback_sample_rate         = 10
+      + tags                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tracing_config                           = (known after apply)
+    }
+
+  # module.sns_alarms.aws_sns_topic_policy.this[0] will be created
+  + resource "aws_sns_topic_policy" "this" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.sns_alarms.aws_sns_topic_subscription.this["admin_alerts"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 10
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "admin@yourdomain.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns_alarms.aws_sns_topic_subscription.this["order_handler"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "arn:aws:lambda:us-east-1:123456789012:function:order-handler"
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode(
+            {
+              + priority = [
+                  + "high",
+                ]
+            }
+        )
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "lambda"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns_alarms.aws_sns_topic_subscription.this["order_processing"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "arn:aws:sqs:us-east-1:123456789012:order-processing.fifo"
+      + endpoint_auto_confirms          = false
+      + filter_policy                   = jsonencode(
+            {
+              + event_type = [
+                  + "order_created",
+                  + "order_updated",
+                ]
+            }
+        )
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "sqs"
+      + raw_message_delivery            = true
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.sns.module.alarm["FailedToRedriveToDlq"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "The alarm is used to detect messages that couldn't be moved to a dead-letter queue."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFailedToRedriveToDlq"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["InvalidAttributes"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "The alarm is used to detect if the published messages are not valid or if inappropriate filters have been applied to a subscriber."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFilteredOut-InvalidAttributes"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["InvalidMessageBody"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "The alarm is used to detect if the published messages are not valid or if inappropriate filters have been applied to a subscriber."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFilteredOut-InvalidMessageBody"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["NumberOfMessagesPublished"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "This alarm can detect when the number of SNS messages published is too low. For troubleshooting, check why the publishers are sending less traffic."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfMessagesPublished"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["NumberOfNotificationsDelivered"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "This alarm helps you detect a drop in the volume of messages delivered. You should create this alarm if you expect your system to have a minimum traffic that it is serving."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsDelivered"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["NumberOfNotificationsFailed"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "This alarm helps you proactively find issues with the delivery of notifications and take appropriate actions to address them."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsFailed"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["RedrivenToDlq"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "The alarm is used to detect messages that moved to a dead-letter queue."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfNotificationsRedrivenToDlq"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["SMSMonthToDateSpentUSD"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "This alarm is used to detect if you have a sufficient quota in your account for your SMS messages to be delivered successfully."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "SMSMonthToDateSpentUSD"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 10
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.sns.module.alarm["SMSSuccessRate"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = true
+      + alarm_actions                         = (known after apply)
+      + alarm_description                     = "This alarm is used to detect failing SMS message deliveries."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 5
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 5
+      + id                                    = (known after apply)
+      + metric_name                           = "SMSSuccessRate"
+      + namespace                             = "AWS/SNS"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Average"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-sns"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 100
+      + treat_missing_data                    = "missing"
+    }
+
+Plan: 17 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'with_sns_alarms': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698459-d00b-86f5-b363-16a69b328001%252A2c2026-02-05T08%2525%25252A3a50%2525%25252A3a24.884112562Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 27,
+    "queriesExecuted": 27,
+    "queriesExecutionFailed": 0
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}
