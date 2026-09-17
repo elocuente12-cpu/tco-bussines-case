@@ -26,3 +26,5 @@ the resources that the for_each value depends on, and then apply a second
 
 time to fully converge.
  
+
+ netsh winhttp set proxy proxy-server="10.4.164.68:9595" bypass-list="169.254.169.254;*.gdc.local;*.us-east-1.amazonaws.com;localhost"
