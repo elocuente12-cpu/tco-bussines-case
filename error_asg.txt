@@ -27,4 +27,21 @@ the resources that the for_each value depends on, and then apply a second
 time to fully converge.
  
 
- netsh winhttp set proxy proxy-server="10.4.164.68:9595" bypass-list="169.254.169.254;*.gdc.local;*.us-east-1.amazonaws.com;localhost"
+1. Enable machine-wide proxy settings
+ 
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxySettingsPerUser /t REG_DWORD /d 0 /f
+ 
+Winsrv ver 2016 and hire ver.
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxySettingsPerUser /t REG_DWORD /d 0 /f
+ 
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f
+ 
+2. Configure the proxy
+ 
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f
+ 
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d "proxy-useast.us.experian.eeca:9595" /f
+ 
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyOverride /t REG_SZ /d "<local>;localhost;127.0.0.1;169.254.169.254" /f
+ 
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v AutoDetect /t REG_DWORD /d 0 /f
