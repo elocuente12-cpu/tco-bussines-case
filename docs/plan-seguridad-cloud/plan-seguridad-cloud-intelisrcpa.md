@@ -238,12 +238,10 @@ Esta parte establece el contexto organizacional y técnico que EITS Panamá nece
 
   **Importante**: Las 4 cuentas fueron provisionadas por EEC con controles de seguridad preconfigurados. Las solicitudes de nuevas cuentas o cambios estructurales en AWS Organizations se realizan exclusivamente a través de **ServiceNow** al equipo EEC. 
 
-  Fuente
+  Fuente https://pages.experian.local/spaces/INFRASTRUC/pages/1796753031/OnBoarding+New+Accounts+SpLatam+V2#OnBoardingNewAccountsSpLatamV2-Creaci%C3%B3ncuentasAWS
 
 3. # **GOBIERNO Y CONTROL DE ACCESO CORPORATIVO** {#gobierno-y-control-de-acceso-corporativo}
-
-   
-
+ 
    1. ## **Control Tower y Guardrails Automáticos** {#control-tower-y-guardrails-automáticos}
 
 AWS Control Tower es el servicio que EEC utiliza para aplicar **guardrails automáticos** sobre todas las cuentas de la organización. Estos guardrails son políticas preventivas y detectivas que aseguran el cumplimiento de los estándares de seguridad de Experian sin intervención manual.
@@ -256,17 +254,18 @@ AWS Control Tower es el servicio que EEC utiliza para aplicar **guardrails autom
 | **Detectivo** | Identifica configuraciones no conformes después de creadas | Detectar instancias sin tags obligatorios |
 | **Proactivo** | Valida configuraciones antes del despliegue vía IaC | Verificar templates de CloudFormation |
 
-            Fuente
 
 2. ## **SCPs — Restricciones** {#scps-—-restricciones}
 
 Los **Service Control Policies (SCPs)** son políticas aplicadas a nivel de AWS Organizations por EEC que restringen ciertas acciones **incluso cuando el rol activo tiene AdministratorAccess**. Estas restricciones son globales, no negociables a nivel local, y no pueden ser eludidas.  
- Fuente  
-> 
+
+
+Fuente https://pages.experian.local/spaces/CDPI/pages/1773562700/Spike+1+-+AWS+Control+Tower
 
 3. ## **Flujo de Autenticación Federada** {#flujo-de-autenticación-federada}
 
 El acceso a las cuentas AWS de EITS Panamá se realiza **exclusivamente** a través de un flujo de autenticación federada. No existen usuarios IAM locales para acceso interactivo — todo el acceso humano pasa por Okta y Active Directory antes de asumir un rol IAM en AWS.
+
 
 **Puntos clave del flujo**:
 
@@ -286,6 +285,8 @@ La **VPN corporativa de Experian es un prerrequisito obligatorio** para cualquie
 | **Aplica a** | Todo acceso: AWS Console, AWS CLI, EEC Secure Browser |
 | **Sin VPN** | Okta no resuelve los endpoints internos → autenticación falla |
 | **Alternativa** | EEC Secure Browser (navegador seguro corporativo) — también requiere autenticación corporativa |
+
+Fuente https://pages.experian.local/spaces/NETWORKBR/pages/2013185663/%F0%9F%94%90+VPN+Authentication+Modernization+SAML+2.0+with+Okta+Cloud
 
 5. ## **Matriz de roles IAM** {#matriz-de-roles-iam}
 
@@ -1374,28 +1375,21 @@ El siguiente índice consolida los **Knowledge Base articles (KBs)** de EEC. Cad
 
 | \# | KB de EEC | Fuente |
 | :---- | :---- | :---- |
-| 1 | How to login to an AWS Account in Experian Express Cloud | [pendiente URL oficial] |
-| 2 | How to use the AWS CLI with Okta authentication | [pendiente URL oficial] |
-| 3 | How to access the EEC Secure Browser | [pendiente URL oficial] |
-| 4 | How to request access to EEC AWS Accounts / How to revoke access | [pendiente URL oficial] |
-| 5 | How to use BreakGlass access for Standard Roles | [pendiente URL oficial] |
-| 6 | Users Vs Roles | [pendiente URL oficial] |
-| 7 | How to create IAM Roles and Policies | [pendiente URL oficial] |
-| 8 | Ways of Creating Credentials for Automations in EEC AWS Environments | [pendiente URL oficial] |
-| 9 | How to Rotate AWS IAM Keys Manually in CyberArk | [pendiente URL oficial] |
-| 10 | How to build EC2 instances using the Experian Golden AMIs | [pendiente URL oficial] |
-| 11 | How to use Terraform on EEC AWS Cloud Accounts | [pendiente URL oficial] |
-| 12 | How to Avoid and Resolve Common AWS WIZ Alerts | [pendiente URL oficial] |
-| 13 | How to Setup Dynatrace Monitoring in an EEC AWS Account | [Integration AWS Account-Dynatrace Monitoring](https://pages.experian.local/spaces/INFRASTRUC/pages/1130337587/Integration+AWS+Account-Dynatrace+Monitoring) |
-| 14 | How to Map VPC Traffic Using VPC Flow Logs | [pendiente URL oficial] |
-| 15 | How to Configure EEC AWS Account To Send CloudWatch logs to Splunk | [Self-Service Splunk Onboarding Guide](https://experian.sharepoint.com/sites/CloudOperationsServiceDesk/SitePages/Self-Service-Splunk-Onboarding-Guide.aspx) |
-| 16 | How to perform pentest against services hosted in AWS | [pendiente URL oficial] |
-| 17 | How to use EEC AWS Instance Scheduler Tags | [pendiente URL oficial] |
-| 18 | How to create an AWS SSM custom patch baseline and update Windows/Linux EC2 instances | [pendiente URL oficial] |
-| 19 | EEC-Created Resources on AWS Linked Accounts | [pendiente URL oficial] |
-| 20 | AWS GuardDuty Configuration | [pendiente URL oficial] |
-| 21 | Setting Up Patching on Your EEC Cloud Environment Resources | [pendiente URL oficial] |
-| 22 | Service Acceptance for EEC Environments | [pendiente URL oficial] |
+| 1 | How to login to an AWS Account in Experian Express Cloud | [https://pages.experian.local/spaces/SC/pages/435520116/How+to+login+to+an+AWS+Account+in+Experian+Express+Cloud] |
+| 2 | How to use the AWS CLI with Okta authentication | [https://pages.experian.local/spaces/ES/pages/840621355/OKTA+-+How+to+use+the+AWS+CLI+with+Okta+Authentication] |
+| 3 | How to access the EEC Secure Browser | [https://pages.experian.local/spaces/SC/pages/1758453431/How+to+access+the+EEC+Secure+Browser] |
+| 4 | How to request access to EEC AWS Accounts / How to revoke access | [https://pages.experian.local/spaces/SC/pages/525580331/How+to+request+access+to+EEC+AWS+Accounts] |
+| 5 | How to use BreakGlass access for Standard Roles | [https://pages.experian.local/spaces/SC/pages/1278224807/How+to+use+BreakGlass+access+for+Standard+Roles] |
+| 6 | Users Vs Roles | [https://pages.experian.local/spaces/SC/pages/1099544850/Users+Vs+Roles] |
+| 7 | How to create IAM Roles and Policies | [https://pages.experian.local/spaces/SC/pages/489734279/How+to+create+IAM+Roles+and+Policies] |
+| 8 | How to build EC2 instances using the Experian Golden AMIs | [https://pages.experian.local/spaces/SC/pages/444106125/How+to+build+EC2+instances+using+the+Experian+Golden+AMIs] |
+| 9 | How to use Terraform on EEC AWS Cloud Accounts | [https://pages.experian.local/spaces/SC/pages/748522619/How+to+use+Terraform+on+EEC+AWS+Cloud+Accounts] |
+| 10 | How to Avoid and Resolve Common AWS WIZ Alerts | [https://pages.experian.local/spaces/SC/pages/557161430/How+to+Avoid+and+Resolve+Common+AWS+WIZ+Alerts] |
+| 11 | How to Setup Dynatrace Monitoring in an EEC AWS Account | [Integration AWS Account-Dynatrace Monitoring](https://pages.experian.local/spaces/INFRASTRUC/pages/1130337587/Integration+AWS+Account-Dynatrace+Monitoring) |
+| 12 | How to Map VPC Traffic Using VPC Flow Logs | [https://pages.experian.local/spaces/SC/pages/1073281191/How+to+Map+VPC+Traffic+Using+VPC+Flow+Logs] |
+| 13 | How to Configure EEC AWS Account To Send CloudWatch logs to Splunk | [Self-Service Splunk Onboarding Guide](https://pages.experian.local/spaces/SC/pages/1089881002/How+to+Configure+EEC+AWS+Account+To+Send+Cloud+Watch+logs+to+Splunk) |
+| 14 | How to use EEC AWS Instance Scheduler Tags | [https://pages.experian.local/spaces/SC/pages/814354502/How+to+use+EEC+AWS+Instance+Scheduler+Tags] |
+| 15 | Service Acceptance for EEC Environments | [https://pages.experian.local/spaces/SC/pages/982902635/Service+Acceptance+for+EEC+Environments] |
 
 **Nota**: Los KBs son documentos vivos mantenidos por EEC. Ante cualquier duda sobre la vigencia de un KB, consultar al equipo EEC.
 
