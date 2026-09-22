@@ -1,330 +1,344 @@
 <mxfile host="Electron" agent="DrawioJSAPI/1.0.0">
-  <diagram id="diagram-1" name="InteliSrcPA - PRD (Production) Environment">
-    <mxGraphModel dx="3243" dy="943" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+  <diagram id="intelisrcpa-prd" name="InteliSrcPA - PRD (Production) Environment">
+    <mxGraphModel dx="6208" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1800" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="aws-cloud" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E" value="AWS Cloud - us-east-1 (N. Virginia) - InteliSrcPA PRD (Production)" vertex="1">
-          <mxGeometry height="2100" width="2300" x="50" y="30" as="geometry" />
+          <mxGeometry height="1850" width="1950" x="50" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="vpc" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc2;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#AAB7B8" value="EEC-VPC (Private Subnets - us-east-1a / us-east-1b)" vertex="1">
-          <mxGeometry height="1550" width="1600" x="80" y="80" as="geometry" />
+        <mxCell id="legend" parent="aws-cloud" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;" value="&lt;b&gt;InteliSrcPA - PRD (Production) Environment&lt;/b&gt;&lt;br&gt;App ID: 22272 | Owner: Fernando Hidalgo | CostString: 1741.PA.135.601000&lt;br&gt;Naming: eec-aws-us-eits-intelisrcpa-prd&lt;br&gt;&lt;br&gt;&lt;b&gt;Scheduling:&lt;/b&gt; EC2 = us-east-office-hours (ASG - CPU Target Tracking 70%)&lt;br&gt;&lt;b&gt;Encryption:&lt;/b&gt; All data at rest encrypted with KMS (auto-rotation, 30d deletion window)&lt;br&gt;&lt;b&gt;RDS Config:&lt;/b&gt; SQL Server SE 15, force_ssl=1, MAXDOP=8, License-Included, TZ=SA Pacific, Enhanced Monitoring 60s&lt;br&gt;&lt;b&gt;RDS Features:&lt;/b&gt; SSIS + SSRS (8443) + Backup/Restore; produccion tambien TDE&lt;br&gt;&lt;b&gt;ALB:&lt;/b&gt; HTTPS:443 (TLS termination, SNI) + HTTP:80 - host-based routing to 7 apps&lt;br&gt;&lt;b&gt;ACM:&lt;/b&gt; 11 certificates (1 per public host_header), external DNS validation&lt;br&gt;&lt;b&gt;Standalone EC2:&lt;/b&gt; 3 Windows instances (PFSWES08/09, PAPWES34) - fixed IP, no FSx&lt;br&gt;&lt;b&gt;FSx:&lt;/b&gt; 1x Single-AZ (DFS-R enabled) - AD Integrated (gdc.local) - 100GB SSD, 64 MB/s, own CMK&lt;br&gt;&lt;b&gt;DMS:&lt;/b&gt; CDC one-way On-Premises to RDS produccion - dms.c5.2xlarge, engine 3.6.1&lt;br&gt;&lt;b&gt;AD Integration:&lt;/b&gt; Self-managed AD (gdc.local) via Secrets Manager&lt;br&gt;&lt;b&gt;DR Strategy:&lt;/b&gt; DFS-R from FSx (AWS) to On-Premise File Servers via VPN/Direct Connect" vertex="1">
+          <mxGeometry height="235" width="600" x="630" y="1450" as="geometry" />
         </mxCell>
-        <mxCell id="alb-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF" value="Load Balancer Tier - Private Subnet" vertex="1">
-          <mxGeometry height="130" width="1550" x="100" y="130" as="geometry" />
+        <mxCell id="color-legend" parent="aws-cloud" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;" value="&lt;b&gt;Connection Legend:&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#ED7100&quot;&gt;━━&lt;/font&gt; Compute traffic (ALB/users to ASG instances)&lt;br&gt;&lt;font color=&quot;#C925D1&quot;&gt;━━&lt;/font&gt; Database connections (TCP 1433 / SSRS 8443)&lt;br&gt;&lt;font color=&quot;#3F8624&quot;&gt;━━&lt;/font&gt; Storage (RDS to S3, ASG to FSx SMB/DFS)&lt;br&gt;&lt;font color=&quot;#DD344C&quot;&gt;- - -&lt;/font&gt; Security (Secrets/KMS/AD/ACM)&lt;br&gt;&lt;font color=&quot;#E7157B&quot;&gt;━━&lt;/font&gt; Operations (Backup/ACM alerts to SNS, EventBridge to Lambda)&lt;br&gt;&lt;font color=&quot;#8C4FFF&quot;&gt;- - -&lt;/font&gt; DFS-R Replication (AWS to On-Premise)&lt;br&gt;&lt;font color=&quot;#01A88D&quot;&gt;━━&lt;/font&gt; DMS Replication (CDC On-Prem to RDS)&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#3F8624&quot;&gt;- - -&lt;/font&gt; AWS Backup target (tag-based selection)" vertex="1">
+          <mxGeometry height="165" width="300" x="630" y="1650" as="geometry" />
         </mxCell>
-        <mxCell id="alb" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.application_load_balancer;" value=" " vertex="1">
-          <mxGeometry height="50" width="50" x="830" y="165" as="geometry" />
+        <mxCell id="dms-target-note" parent="aws-cloud" style="text;html=1;strokeColor=#01A88D;fillColor=#E6F6F3;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;DMS - 8 CDC tasks (migration_type=cdc), one-way On-Prem to RDS produccion:&lt;/b&gt;&lt;br&gt;Databases: apcexperian, WebFolderPortal, AppDb, APC_GI, TuIntelidat,&lt;br&gt;DBECSConsumers, PortalAppsDB, SRC20&lt;br&gt;Source: On-Premises SQL Server (10.54.129.164:1433)&lt;br&gt;Target: RDS produccion (multiaz1) - SSL required&lt;br&gt;Creds: Secrets Manager (dms-rds + dms-onprem) | IAM: dms-vpc-role&lt;br&gt;NOTE: reverse direction (RDS -&gt; On-Prem) defined but commented out" vertex="1">
+          <mxGeometry height="110" width="420" x="1330" y="1560" as="geometry" />
         </mxCell>
-        <mxCell id="app-tier-win" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA" value="Application Tier - Windows (18 Servers) - Private Subnets" vertex="1">
-          <mxGeometry height="620" width="1550" x="100" y="290" as="geometry" />
+        <mxCell id="vpc" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc2;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#AAB7B8" value="EEC-VPC (Private Subnets - 10.64.160.128/26 + 10.64.160.192/26)" vertex="1">
+          <mxGeometry height="1400" width="1300" x="80" y="80" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-tui04" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="70" y="330" as="geometry" />
+        <mxCell id="alb-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF" value="Load Balancer Tier - Private Subnets (Multi-AZ: us-east-1a + us-east-1b)" vertex="1">
+          <mxGeometry height="150" width="1260" x="100" y="130" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-checs01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPCHECS01&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="60" y="450" as="geometry" />
+        <mxCell id="alb-listener-note" parent="alb-tier" style="text;html=1;strokeColor=#8C4FFF;fillColor=#F2EBFB;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Listeners:&lt;/b&gt;&lt;br&gt;HTTP:80 - default 404 / rules host-based&lt;br&gt;(optional 301 redirect to HTTPS)&lt;br&gt;HTTPS:443 - cert principal + SNI (additional_certs)&lt;br&gt;TLS terminates at ALB; backend IIS on HTTP:80" vertex="1">
+          <mxGeometry height="90" width="330" x="720" y="45" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-checs01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="70" y="510" as="geometry" />
+        <mxCell id="alb" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.application_load_balancer;labelPosition=center;" value="Internal ALB (eec-aws-us-eits-prod)&lt;br&gt;HTTPS:443 (TLS term., SNI) + HTTP:80&lt;br&gt;Host-based routing to 7 apps" vertex="1">
+          <mxGeometry height="50" width="50" x="620" y="170" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-tui04" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPTUI04&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="60" y="270" as="geometry" />
+        <mxCell id="app-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA" value="Application Tier - 7 Auto Scaling Groups (one per app) - Private Subnets - r7a.medium, min 1 / max 2, hostname pool 5" vertex="1">
+          <mxGeometry height="290" width="1260" x="100" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-wfc01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPWFC01&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="230" y="280" as="geometry" />
+        <mxCell id="nPo35oGcnRhY_RX5zmve-1" parent="app-tier" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.groupCenter;grIcon=mxgraph.aws4.group_auto_scaling_group;grStroke=1;strokeColor=#D86613;fillColor=none;verticalAlign=top;align=center;fontColor=#D86613;dashed=1;spacingTop=25;" value="Auto Scaling group by app" vertex="1">
+          <mxGeometry height="170" width="1210" x="10" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-wfc01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 80GB gp3&#xa;Add: 95GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="240" y="340" as="geometry" />
+        <mxCell id="app1" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app1&lt;br&gt;PWBWESPA&lt;br&gt;mobile.apc.com.pa&lt;br&gt;tuintelidat.com&lt;br&gt;apcexperian.com" vertex="1">
+          <mxGeometry height="45" width="45" x="30" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-checs02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPCHECS02&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="230" y="460" as="geometry" />
+        <mxCell id="app2" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app2&lt;br&gt;PWBWESPB&lt;br&gt;online.intelidat.com" vertex="1">
+          <mxGeometry height="45" width="45" x="210" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-checs02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="240" y="520" as="geometry" />
+        <mxCell id="app3" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app3&lt;br&gt;PWBWESPC&lt;br&gt;webfolder.intelidat.com" vertex="1">
+          <mxGeometry height="45" width="45" x="390" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-wfint01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 80GB gp3&#xa;Add: 300GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="410" y="330" as="geometry" />
+        <mxCell id="app4" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app4&lt;br&gt;PWBWESPD&lt;br&gt;webservices.apcexperian.com&lt;br&gt;webservices.apc.com.pa" vertex="1">
+          <mxGeometry height="45" width="45" x="570" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-fsasc01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPFSASC01&#xa;t3a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="400" y="450" as="geometry" />
+        <mxCell id="app5" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app5&lt;br&gt;PWBWESPE&lt;br&gt;api.apcexperian.com&lt;br&gt;apiprodpa.experian.local" vertex="1">
+          <mxGeometry height="45" width="45" x="750" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-fsasc01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 90GB gp3&#xa;Add: 150GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="410" y="510" as="geometry" />
+        <mxCell id="app6" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app6&lt;br&gt;PWBWESPF&lt;br&gt;www.miexperian.cl" vertex="1">
+          <mxGeometry height="45" width="45" x="930" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-wfint01" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPWFINT01&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="400" y="270" as="geometry" />
+        <mxCell id="app7" parent="nPo35oGcnRhY_RX5zmve-1" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;" value="ASG app7&lt;br&gt;PWBWESPG&lt;br&gt;apps.apcexperian.com&lt;br&gt;dashboard.apcexperian.com" vertex="1">
+          <mxGeometry height="45" width="45" x="1110" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-wfc02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPWFC02&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="570" y="270" as="geometry" />
+        <mxCell id="userdata-note" parent="app-tier" style="text;html=1;strokeColor=#ED7100;fillColor=#FFF2CC;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;spacingLeft=4;spacingTop=2;" value="&lt;b&gt;Per-app ASG:&lt;/b&gt; TG + listener rules (HTTP+HTTPS), Application AMI (IIS baked). &lt;b&gt;UserData:&lt;/b&gt; hostname (SSM pool) + domain join (gdc.local) + FSx mount (Z:) + configure IIS Sites. &lt;b&gt;Scaling:&lt;/b&gt; CPU Target Tracking 70%. &lt;b&gt;Root:&lt;/b&gt; 120GB gp3 KMS-encrypted." vertex="1">
+          <mxGeometry height="60" width="470" x="710" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-wfc02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 80GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="580" y="330" as="geometry" />
+        <mxCell id="ec2-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA" value="Standalone EC2 Tier - Windows (fixed hostname/IP, AD domain-joined, no FSx) - Private Subnet (10.64.160.192/26)" vertex="1">
+          <mxGeometry height="180" width="1260" x="100" y="610" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-ftpserver" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="FTPserverHO&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="570" y="450" as="geometry" />
+        <mxCell id="ec2-fsw08" parent="ec2-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="USAEA1PFSWES08&lt;br&gt;r5a.large&lt;br&gt;10.64.160.135" vertex="1">
+          <mxGeometry height="50" width="50" x="120" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-ftpserver" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 180GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="580" y="510" as="geometry" />
+        <mxCell id="ebs-fsw08" parent="ec2-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 240GB gp3&lt;br&gt;KMS Encrypted" vertex="1">
+          <mxGeometry height="30" width="30" x="130" y="125" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-app02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="pahqpapapp02&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="740" y="270" as="geometry" />
+        <mxCell id="ec2-fsw09" parent="ec2-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="USAEA1PFSWES09&lt;br&gt;r7a.medium&lt;br&gt;10.64.160.136" vertex="1">
+          <mxGeometry height="50" width="50" x="420" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-tfsint02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="pahqtfsint02&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="910" y="270" as="geometry" />
+        <mxCell id="ebs-fsw09" parent="ec2-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 100GB + Add: 300GB gp3&lt;br&gt;KMS Encrypted" vertex="1">
+          <mxGeometry height="30" width="30" x="430" y="125" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-app02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 280GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="750" y="330" as="geometry" />
+        <mxCell id="ec2-apw34" parent="ec2-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="USAEA1PAPWES34&lt;br&gt;r7a.medium&lt;br&gt;10.64.160.137" vertex="1">
+          <mxGeometry height="50" width="50" x="720" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-tfsint02" parent="app-tier-win" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 200GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="920" y="330" as="geometry" />
+        <mxCell id="ebs-apw34" parent="ec2-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 100GB + Add: 90GB gp3&lt;br&gt;KMS Encrypted" vertex="1">
+          <mxGeometry height="30" width="30" x="730" y="125" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-src03" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPSRC03&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="160" y="380" as="geometry" />
+        <mxCell id="tag-backup-ec2" parent="ec2-tier" style="text;html=1;strokeColor=none;fillColor=#FFF2CC;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;arcSize=50;" value="tag: backup=yes" vertex="1">
+          <mxGeometry height="20" width="100" x="1070" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-src03" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="170" y="440" as="geometry" />
+        <mxCell id="ec2-note" parent="ec2-tier" style="text;html=1;strokeColor=#147EBA;fillColor=#E6F2FF;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;spacingLeft=4;spacingTop=2;" value="&lt;b&gt;Standalone (module ec2_windows):&lt;/b&gt; misma Application AMI que el ASG. UserData: rename + domain join (OU EC2). Sin FSx mount ni ELB. Instance profile compartido; EBS KMS-encrypted." vertex="1">
+          <mxGeometry height="60" width="330" x="900" y="10" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-src04" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPSRC04&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="330" y="380" as="geometry" />
+        <mxCell id="storage-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#3F8624;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#3F8624" value="Storage Tier - FSx for Windows File Server (Single-AZ,)" vertex="1">
+          <mxGeometry height="210" width="1260" x="100" y="820" as="geometry" />
         </mxCell>
-        <mxCell id="ebs-src04" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="340" y="440" as="geometry" />
+        <mxCell id="fsx1" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fsx;fillColor=#3F8624" value="FSx Windows (intelisrcpa-prd)&lt;br&gt;Single-AZ 1 (us-east-1b)&lt;br&gt;100GB SSD | 64 MB/s | 30d backup&lt;br&gt;DFS-R | AD: gdc.local | own CMK&lt;br&gt;SG: fsx-1..fsx-5" vertex="1">
+          <mxGeometry height="50" width="50" x="560" y="890" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-wsapi01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPWSAPI01&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="500" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-wsapi01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="510" y="440" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-wsapi02" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPWSAPI02&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="670" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-wsapi02" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="680" y="440" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-wss03" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPWSS03&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="840" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-wss03" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="850" y="440" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-wss04" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPWSS04&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="1010" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-wss04" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="1020" y="440" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-wef02" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPWEF02&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="1180" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-wef02" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="1190" y="440" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-tui03" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPTUI03&#xa;r7a.medium&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="1350" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-tui03" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 120GB gp3&#xa;Add: 90GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="1360" y="440" as="geometry" />
-        </mxCell>
-        <mxCell id="app-tier-linux" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#ED7100;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#ED7100" value="Application Tier - Linux (RHEL 8 + Ubuntu 22.04) - Private Subnet" vertex="1">
-          <mxGeometry height="200" width="1550" x="100" y="950" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-ste01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPSTE01&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="600" y="1020" as="geometry" />
-        </mxCell>
-        <mxCell id="ec2-bof01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="pahwpapbof01&#xa;c5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="900" y="1020" as="geometry" />
-        </mxCell>
-        <mxCell id="db-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA" value="Database Tier - Private Subnet (Multi-AZ)" vertex="1">
-          <mxGeometry height="200" width="1550" x="100" y="1190" as="geometry" />
-        </mxCell>
-        <mxCell id="s3-backup" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="S3 RDS Backup (KMS Encrypted)" vertex="1">
-          <mxGeometry height="45" width="45" x="710" y="30" as="geometry" />
-        </mxCell>
-        <mxCell id="s3-ssis" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="S3 SSIS (KMS Encrypted)" vertex="1">
-          <mxGeometry height="45" width="45" x="930" y="110" as="geometry" />
+        <mxCell id="db-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA" value="Database Tier - Private Subnets" vertex="1">
+          <mxGeometry height="210" width="1260" x="100" y="1060" as="geometry" />
         </mxCell>
         <mxCell id="tag-backup-rds" parent="db-tier" style="text;html=1;strokeColor=none;fillColor=#FFF2CC;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;arcSize=50;" value="tag: backup=yes" vertex="1">
-          <mxGeometry height="20" width="100" x="1100" y="160" as="geometry" />
+          <mxGeometry height="20" width="100" x="220" y="130" as="geometry" />
         </mxCell>
-        <mxCell id="ec2-sts01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;fillColor=#ED7100;labelPosition=center;" value="PAHWPAPSTS01&#xa;r5a.large&#xa;x.x.x.x" vertex="1">
-          <mxGeometry height="50" width="50" x="300" y="1020" as="geometry" />
+        <mxCell id="s3-backup" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="S3 RDS Backup&lt;br&gt;(KMS Encrypted)" vertex="1">
+          <mxGeometry height="45" width="45" x="760" y="15" as="geometry" />
         </mxCell>
-        <mxCell id="rds" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;fillColor=#C925D1" value="RDS SQL Server SE 15 db.r5.large | &lt;br&gt;200GB gp3 Port 1433 | &lt;br&gt;Multi-AZ SSIS + SSRS (8443) &lt;br&gt;Encrypted (KMS)" vertex="1">
-          <mxGeometry height="50" width="50" x="400" y="1260" as="geometry" />
+        <mxCell id="s3-ssis" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="S3 SSIS&lt;br&gt;(KMS Encrypted)" vertex="1">
+          <mxGeometry height="45" width="45" x="940" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="tag-backup-win" parent="1" style="text;html=1;strokeColor=none;fillColor=#FFF2CC;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=8;fontColor=#333333;arcSize=50;" value="tag: backup=yes" vertex="1">
-          <mxGeometry height="20" width="100" x="700" y="880" as="geometry" />
+        <mxCell id="rds-prod" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;fillColor=#C925D1" value="RDS SQL Server SE 15&lt;br&gt;&lt;b&gt;produccion&lt;/b&gt; (multiaz1)&lt;br&gt;db.r6i.4xlarge | 1700GB gp3&lt;br&gt;Port 1433 | Multi-AZ&lt;br&gt;SSIS + SSRS (8443) + TDE&lt;br&gt;Encrypted (KMS)" vertex="1">
+          <mxGeometry height="50" width="50" x="150" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="storage-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#3F8624;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#3F8624" value=" " vertex="1">
-          <mxGeometry height="180" width="500" x="100" y="1430" as="geometry" />
+        <mxCell id="e-rds-s3-backup" edge="1" parent="db-tier" source="rds-prod" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;" target="s3-backup" value="Backup/Restore">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="80" />
+              <mxPoint x="340" y="40" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="fsx" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fsx;fillColor=#3F8624" value="Amazon FSx for Windows&lt;br&gt;Single-AZ 1&lt;br&gt;DFS-R enabled | DFS Namespaces&lt;br&gt;AD Integrated | KMS Encrypted" vertex="1">
-          <mxGeometry height="50" width="50" x="300" y="1490" as="geometry" />
+        <mxCell id="rds-proc" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;fillColor=#C925D1" value="RDS SQL Server SE 15&lt;br&gt;&lt;b&gt;procesos&lt;/b&gt; (standalone1)&lt;br&gt;db.r6i.2xlarge | 2900GB gp3&lt;br&gt;Port 1433 | Single-AZ&lt;br&gt;SSIS + SSRS (8443)&lt;br&gt;Encrypted (KMS)" vertex="1">
+          <mxGeometry height="50" width="50" x="470" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="e-rds-s3-ssis" edge="1" parent="db-tier" source="rds-proc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;" target="s3-ssis" value="SSIS">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="95" />
+              <mxPoint x="600" y="130" />
+              <mxPoint x="952" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dms-tier" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#01A88D;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#01A88D" value="Migration Tier - DMS (CDC one-way: On-Premises to RDS produccion)&amp;nbsp;" vertex="1">
+          <mxGeometry height="165" width="1260" x="100" y="1300" as="geometry" />
+        </mxCell>
+        <mxCell id="dms" parent="dms-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.database_migration_service;fillColor=#01A88D" value="DMS Replication Instance&lt;br&gt;dms.c5.2xlarge | 50GB | Single-AZ&lt;br&gt;Engine 3.6.1 | SG: dms-replication&lt;br&gt;CDC tasks (On-Prem -&amp;gt; RDS)" vertex="1">
+          <mxGeometry height="50" width="50" x="150" y="55" as="geometry" />
         </mxCell>
         <mxCell id="services-group" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#DD344C;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#DD344C" value="Security and Operations" vertex="1">
-          <mxGeometry height="600" width="500" x="1750" y="80" as="geometry" />
+          <mxGeometry height="710" width="480" x="1480" y="80" as="geometry" />
         </mxCell>
-        <mxCell id="kms" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;fillColor=#DD344C" value="KMS Keys &lt;br&gt;(EBS + RDS + S3 + FSx &lt;br&gt;+ Secrets + Backup + SNS) &lt;br&gt;Auto-rotation enabled" vertex="1">
-          <mxGeometry height="50" width="50" x="1820" y="150" as="geometry" />
+        <mxCell id="acm" parent="services-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.certificate_manager;fillColor=#DD344C" value="ACM (11 certificates)&lt;br&gt;1 per public host_header&lt;br&gt;External DNS validation&lt;br&gt;TLS termination at ALB" vertex="1">
+          <mxGeometry height="50" width="50" x="60" y="45" as="geometry" />
         </mxCell>
-        <mxCell id="iam" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.identity_and_access_management;fillColor=#DD344C" value="IAM Roles &lt;br&gt;(EC2 Profile, RDS Monitoring, &lt;br&gt;Backup, SSIS)" vertex="1">
-          <mxGeometry height="50" width="50" x="2060" y="150" as="geometry" />
+        <mxCell id="sns-acm" parent="services-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sns;fillColor=#E7157B" value="SNS: acm-cert-expiration&lt;br&gt;CloudWatch alarms (&lt;=44d)&lt;br&gt;Email: infra.apc@experian.com&lt;br&gt;KMS: kms_sns_acm" vertex="1">
+          <mxGeometry height="50" width="50" x="310" y="45" as="geometry" />
         </mxCell>
-        <mxCell id="secrets" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;fillColor=#DD344C" value="Secrets Manager (AD Credentials) &lt;br&gt;KMS Encrypted" vertex="1">
-          <mxGeometry height="50" width="50" x="1820" y="380" as="geometry" />
+        <mxCell id="e-acm-sns" edge="1" parent="services-group" source="acm" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E7157B;strokeWidth=1;" target="sns-acm" value="Expiration Alerts">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ssm" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;fillColor=#E7157B" value="SSM Patch Manager Windows&lt;br&gt;&amp;nbsp;+ Linux Scan daily &lt;br&gt;+ Install monthly" vertex="1">
-          <mxGeometry height="50" width="50" x="2060" y="380" as="geometry" />
+        <mxCell id="eventbridge" parent="services-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;fillColor=#E7157B" value="EventBridge Rule&lt;br&gt;asg-leave-domain&lt;br&gt;(EC2 Instance-terminate&lt;br&gt;Lifecycle Action)" vertex="1">
+          <mxGeometry height="50" width="50" x="60" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="ssm" parent="services-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;fillColor=#E7157B" value="SSM Parameter Store&lt;br&gt;(Hostname Pool + Mapping:&lt;br&gt;/intelisrcpa/*)&lt;br&gt;+ SSM Core (Patching)" vertex="1">
+          <mxGeometry height="50" width="50" x="310" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="kms" parent="services-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;fillColor=#DD344C" value="KMS Keys&lt;br&gt;(EBS + RDS + S3 + Secrets + SNS-ACM&lt;br&gt;+ Backup vault/s3/sns + FSx own CMK)&lt;br&gt;Auto-rotation enabled" vertex="1">
+          <mxGeometry height="50" width="50" x="310" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="iam" parent="services-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.identity_and_access_management;fillColor=#DD344C" value="IAM Roles&lt;br&gt;(EC2 Profile, RDS Monitoring/Backup/SSIS,&lt;br&gt;ASG SLR, DMS VPC + CloudWatch,&lt;br&gt;Backup, Lambda)" vertex="1">
+          <mxGeometry height="50" width="50" x="310" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="secrets" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;fillColor=#DD344C" value="Secrets Manager&lt;br&gt;(3x AD: FSx + RDS + EC2&lt;br&gt;2x DMS: rds + onprem)&lt;br&gt;KMS Encrypted" vertex="1">
+          <mxGeometry height="50" width="50" x="1540" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;fillColor=#ED7100" value="Lambda: Leave-Domain&lt;br&gt;Python 3.12 | 128MB | 180s&lt;br&gt;Removes AD computer object&lt;br&gt;+ SSM hostname mapping" vertex="1">
+          <mxGeometry height="50" width="50" x="1540" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="e-eventbridge-lambda" edge="1" parent="1" source="eventbridge" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E7157B;strokeWidth=1;" target="lambda" value="Invoke">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="backup-group" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=10;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#3F8624;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#3F8624" value="AWS Backup" vertex="1">
-          <mxGeometry height="300" width="500" x="1750" y="730" as="geometry" />
+          <mxGeometry height="330" width="500" x="80" y="1490" as="geometry" />
         </mxCell>
-        <mxCell id="backup-vault" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="Backup Vault KMS &lt;br&gt;Encrypted Retention: 7 days" vertex="1">
-          <mxGeometry height="45" width="45" x="1790" y="790" as="geometry" />
+        <mxCell id="backup-vault" parent="backup-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#7AA116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.backup_vault;" value="Backup Vault&lt;br&gt;KMS Encrypted&lt;br&gt;Lock: min 1d / max 1825d" vertex="1">
+          <mxGeometry height="45" width="45" x="40" y="50" as="geometry" />
         </mxCell>
-        <mxCell id="backup-plan" parent="1" style="text;html=1;strokeColor=#3F8624;fillColor=#D5E8D4;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=9;fontColor=#333333;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Backup Plan: Daily&lt;/b&gt;&lt;br&gt;Schedule: cron(0 22 ? * * *)&lt;br&gt;Start window: 60 min&lt;br&gt;Completion window: 720 min&lt;br&gt;Retention: 7 days&lt;br&gt;VSS: Enabled (Windows)&lt;br&gt;&lt;br&gt;&lt;b&gt;Selection:&lt;/b&gt; tag:backup = yes&lt;br&gt;(EC2 Windows + RDS)" vertex="1">
-          <mxGeometry height="150" width="200" x="1800" y="870" as="geometry" />
+        <mxCell id="backup-report" parent="backup-group" style="text;html=1;strokeColor=#E7157B;fillColor=#FCE4EC;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=9;fontColor=#333333;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Notifications (SNS):&lt;/b&gt;&lt;br&gt;Events: BACKUP_JOB_FAILED, BACKUP_JOB_EXPIRED&lt;br&gt;Email: infra.apc@experian.com&lt;br&gt;&lt;br&gt;&lt;b&gt;Vault Alarms (CloudWatch):&lt;/b&gt;&lt;br&gt;NumberOfBackupJobsAborted" vertex="1">
+          <mxGeometry height="110" width="210" x="270" y="210" as="geometry" />
         </mxCell>
-        <mxCell id="sns" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sns;fillColor=#E7157B" value="SNS Topic (Backup Alerts) KMS Encrypted" vertex="1">
-          <mxGeometry height="45" width="45" x="2060" y="790" as="geometry" />
+        <mxCell id="s3-reports" parent="backup-group" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="S3 Backup Reports" vertex="1">
+          <mxGeometry height="45" width="45" x="160" y="242.5" as="geometry" />
         </mxCell>
-        <mxCell id="users" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.users;" value="Internal Users (HTTPS / RDP / SSH)" vertex="1">
-          <mxGeometry height="50" width="50" x="-100" y="165" as="geometry" />
-        </mxCell>
-        <mxCell id="jenkins" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.traditional_server;" value="Jenkins CI/CD 10.31.192.0/24" vertex="1">
-          <mxGeometry height="50" width="50" x="-100" y="380" as="geometry" />
-        </mxCell>
-        <mxCell id="on-premise-ad" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.corporate_data_center;" value="On-Premise AD ena.us.experian.local &lt;br&gt;DNS: 10.28.243.113, 10.4.187.170" vertex="1">
-          <mxGeometry height="50" width="50" x="-100" y="1260" as="geometry" />
-        </mxCell>
-        <mxCell id="on-premise-dr" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.corporate_data_center;" value="On-Premise DR Datacenter (Alterno)&lt;br&gt;Windows File Server (DFS-R Target)&lt;br&gt;Replica via DFS-R (VPN/Direct Connect)" vertex="1">
-          <mxGeometry height="50" width="50" x="-100" y="1490" as="geometry" />
-        </mxCell>
-        <mxCell id="e-users-alb" edge="1" parent="1" source="users" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ED7100;strokeWidth=2;" target="alb" value="HTTPS">
+        <mxCell id="e-backup-s3r" edge="1" parent="backup-group" source="backup-report" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;" target="s3-reports" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-alb-ec2" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ED7100;strokeWidth=2;" target="ec2-wsapi01" value="HTTP/HTTPS">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="855" y="230" />
-              <mxPoint x="525" y="230" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="backup-plan" parent="backup-group" style="text;html=1;strokeColor=#3F8624;fillColor=#D5E8D4;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=9;fontColor=#333333;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Backup Plan: Daily&lt;/b&gt;&lt;br&gt;Schedule: cron(0 1 ? * * *)&lt;br&gt;Retention: 30 days&lt;br&gt;VSS: Enabled (Windows)&lt;br&gt;&lt;br&gt;&lt;b&gt;Backup Plan: Monthly&lt;/b&gt;&lt;br&gt;Schedule: cron(0 3 L * ? *)&lt;br&gt;Retention: 1825 days (5 years)&lt;br&gt;&lt;br&gt;&lt;b&gt;Selection:&lt;/b&gt; tag:backup = yes&lt;br&gt;(ASG + standalone EC2 + RDS + FSx)" vertex="1">
+          <mxGeometry height="185" width="210" x="270" y="10" as="geometry" />
         </mxCell>
-        <mxCell id="e-jenkins-ec2" edge="1" parent="1" source="jenkins" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ED7100;strokeWidth=1;dashed=1;" target="ec2-src03" value="Deploy (7180-8185)">
+        <mxCell id="sns" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sns;fillColor=#E7157B" value="SNS Topic&lt;br&gt;(Backup Alerts)&lt;br&gt;KMS Encrypted" vertex="1">
+          <mxGeometry height="45" width="45" x="120" y="1710" as="geometry" />
+        </mxCell>
+        <mxCell id="users" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.users;" value="Internal Users&lt;br&gt;(HTTPS&amp;nbsp;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(35, 47, 62), rgb(189, 199, 212));&quot;&gt;)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="50" width="50" x="-100" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="on-premise-ad" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.corporate_data_center;" value="On-Premise AD&lt;br&gt;gdc.local&lt;br&gt;DNS: 10.5.214.247, 10.8.18.167" vertex="1">
+          <mxGeometry height="50" width="50" x="-100" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="on-premise-dfsr" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.corporate_data_center;" value="On-Premise File Servers&lt;br&gt;(DFS-R Members)&lt;br&gt;10.54.128.53, 10.54.128.54&lt;br&gt;10.54.129.84, 10.54.129.94" vertex="1">
+          <mxGeometry height="50" width="50" x="-100" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="on-premise-sql" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.corporate_data_center;" value="On-Premise SQL Server&lt;br&gt;(DMS Source)&lt;br&gt;10.54.129.164:1433&lt;br&gt;8 DBs (apcexperian, SRC20, ...)" vertex="1">
+          <mxGeometry height="50" width="50" x="-100" y="1355" as="geometry" />
+        </mxCell>
+        <mxCell id="e-users-alb" edge="1" parent="1" source="users" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ED7100;strokeWidth=2;" target="alb" value="HTTPS:443">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-ec2-rds-1" edge="1" parent="1" source="ec2-wsapi01" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;" target="rds" value="TCP 1433">
-          <mxGeometry relative="1" as="geometry">
+        <mxCell id="e-alb-apps" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ED7100;strokeWidth=2;" target="app-tier" value="HTTP:80 (host-based to 7 TGs)">
+          <mxGeometry relative="1" x="0.5152" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
-              <mxPoint x="480" y="405" />
-              <mxPoint x="480" y="440" />
-              <mxPoint x="420" y="440" />
+              <mxPoint x="730" y="195" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-ec2-rds-2" edge="1" parent="1" source="ec2-src03" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;" target="rds" value="">
+        <mxCell id="e-apps-rds-prod" edge="1" parent="1" source="app-tier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=2;" target="rds-prod" value="TCP 1433">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="230" y="405" />
-              <mxPoint x="230" y="440" />
-              <mxPoint x="400" y="440" />
+              <mxPoint x="290" y="860" />
+              <mxPoint x="290" y="860" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-linux-rds" edge="1" parent="1" source="ec2-ste01" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=1;" target="rds" value="TCP 1433">
+        <mxCell id="e-ec2-rds-prod" edge="1" parent="1" source="ec2-fsw09" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=1;" target="rds-prod" value="TCP 1433">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="440" y="1045" />
+              <mxPoint x="610" y="695" />
+              <mxPoint x="610" y="860" />
+              <mxPoint x="300" y="860" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-rds-s3" edge="1" parent="1" source="rds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;" target="s3-backup" value="Backup/Restore">
-          <mxGeometry relative="1" as="geometry">
+        <mxCell id="e-apps-fsx1" edge="1" parent="1" source="app-tier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=2;" target="fsx1" value="SMB (Z: drive)">
+          <mxGeometry relative="1" x="0.2747" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
-              <mxPoint x="625" y="1285" />
-              <mxPoint x="625" y="1240" />
-              <mxPoint x="823" y="1240" />
+              <mxPoint x="740" y="915" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-rds-ssis" edge="1" parent="1" source="rds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;" target="s3-ssis" value="SSIS Integration">
+        <mxCell id="e-alb-acm" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="acm" value="TLS certs (SNI)">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="680" y="1285" />
-              <mxPoint x="680" y="1340" />
+              <mxPoint x="644.94" y="120.06" />
+              <mxPoint x="1420" y="120.06" />
+              <mxPoint x="1420" y="150.06" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-rds-secrets" edge="1" parent="1" source="rds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="secrets" value="AD Auth">
-          <mxGeometry relative="1" as="geometry">
+        <mxCell id="e-rds-secrets" edge="1" parent="1" source="rds-prod" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="secrets" value="AD Auth">
+          <mxGeometry relative="1" x="0.1861" y="-5" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
-              <mxPoint x="490" y="1270" />
-              <mxPoint x="490" y="1200" />
-              <mxPoint x="1710" y="1200" />
-              <mxPoint x="1710" y="405" />
+              <mxPoint x="350" y="1130" />
+              <mxPoint x="350" y="1045" />
+              <mxPoint x="1460" y="1045" />
+              <mxPoint x="1460" y="355" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-onprem-rds" edge="1" parent="1" source="on-premise-ad" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=1;dashed=1;" target="rds" value="AD Domain Join">
+        <mxCell id="e-fsx-secrets" edge="1" parent="1" source="fsx1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="secrets" value="AD Creds (FSx)">
+          <mxGeometry relative="1" x="0.0687" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="585" y="1000" />
+              <mxPoint x="1420" y="1000" />
+              <mxPoint x="1420" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-onprem-rds" edge="1" parent="1" source="on-premise-ad" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=1;dashed=1;" target="rds-prod" value="AD Domain Join">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="1155" />
+              <mxPoint x="170" y="1155" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-onprem-fsx" edge="1" parent="1" source="on-premise-ad" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="fsx1" value="AD Integration">
+          <mxGeometry relative="1" x="-0.7059" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="-75" y="1050" />
+              <mxPoint x="585" y="1050" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-dfsr-fsx1" edge="1" parent="1" source="on-premise-dfsr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8C4FFF;strokeWidth=2;dashed=1;" target="fsx1" value="DFS-R Replication&lt;br&gt;(SMB 445 + RPC + 5722)">
+          <mxGeometry relative="1" x="-0.7476" y="15" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="40" y="915" />
+              <mxPoint x="585" y="915" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-dms-onprem" edge="1" parent="1" source="dms" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#01A88D;strokeWidth=2;" target="on-premise-sql" value="Source (CDC 1433)">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-ec2-fsx" edge="1" parent="1" source="ec2-wfint01" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=2;" target="fsx" value="SMB / DFS Namespace">
+        <mxCell id="e-dms-rds" edge="1" parent="1" source="dms" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#01A88D;strokeWidth=2;" target="rds-prod" value="Target (SSL 1433)">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="460" y="590" />
-              <mxPoint x="460" y="1515" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e-fsx-dr" edge="1" parent="1" source="fsx" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#8C4FFF;strokeWidth=2;dashed=1;" target="on-premise-dr" value="DFS-R Replication&lt;br&gt;(via VPN/Direct Connect)">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-ad-fsx" edge="1" parent="1" source="on-premise-ad" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="fsx" value="AD Integration">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="310" y="1270" />
+              <mxPoint x="275" y="1325" />
+              <mxPoint x="275" y="1195" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="e-vault-sns" edge="1" parent="1" source="backup-vault" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E7157B;strokeWidth=1;" target="sns" value="Alerts">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-backup-win" edge="1" parent="1" source="backup-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;dashed=1;" target="tag-backup-win" value="Daily Backup">
-          <mxGeometry relative="1" as="geometry">
+        <mxCell id="e-backup-ec2" edge="1" parent="1" source="backup-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;dashed=1;" target="tag-backup-ec2" value="Daily + Monthly Backup">
+          <mxGeometry relative="1" x="0.9459" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
-              <mxPoint x="1550" y="890" />
-              <mxPoint x="1550" y="890" />
+              <mxPoint x="520" y="1390" />
+              <mxPoint x="1220" y="1390" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-backup-rds" edge="1" parent="1" source="backup-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;dashed=1;" target="tag-backup-rds" value="Daily Backup">
+        <mxCell id="e-backup-rds" edge="1" parent="1" source="backup-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;dashed=1;" target="tag-backup-rds" value="Daily + Monthly Backup">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1740" y="945" />
-              <mxPoint x="1740" y="1370" />
+              <mxPoint x="390" y="1550" />
+              <mxPoint x="390" y="1240" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="legend" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;" value="&lt;b&gt;InteliSrcPA - PRD (Production) Environment&lt;/b&gt;&lt;br&gt;App ID: 22272 | Owner: Fernando Hidalgo&lt;br&gt;Naming: eec-aws-us-eits-intelisrcpa-prd&lt;br&gt;&lt;br&gt;&lt;b&gt;Scheduling:&lt;/b&gt; EC2 = 24/7 (Production)&lt;br&gt;&lt;b&gt;Encryption:&lt;/b&gt; All data at rest encrypted with KMS (auto-rotation, 30d deletion window)&lt;br&gt;&lt;b&gt;RDS Config:&lt;/b&gt; SQL Server SE 15, force_ssl=1, MAXDOP=2, License-Included, TZ=SA Pacific, Enhanced Monitoring 60s, Multi-AZ&lt;br&gt;&lt;b&gt;RDS Features:&lt;/b&gt; SSIS + SSRS (port 8443, 30% max memory) + Backup/Restore&lt;br&gt;&lt;b&gt;Patching:&lt;/b&gt; Windows (Crit+Sec+Updates) + Linux RHEL 8 / Ubuntu 22.04 (Crit+Important)&lt;br&gt;&lt;b&gt;AD Integration:&lt;/b&gt; Self-managed AD (ena.us.experian.local) via Secrets Manager&lt;br&gt;&lt;b&gt;Storage:&lt;/b&gt; Amazon FSx for Windows (Single-AZ 1) - DFS Namespaces + DFS-R&lt;br&gt;&lt;b&gt;DR Strategy:&lt;/b&gt; DFS-R from FSx (AWS) to Windows File Server in DR Datacenter (Alterno) via VPN/DX" vertex="1">
-          <mxGeometry height="200" width="600" x="650" y="1700" as="geometry" />
+        <mxCell id="e-asg-lambda" edge="1" parent="1" source="app-tier" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E7157B;strokeWidth=1;dashed=1;" target="eventbridge" value="Lifecycle Hook: leave-domain&lt;br&gt;(EC2_INSTANCE_TERMINATING)">
+          <mxGeometry relative="1" x="0.5789" y="5" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1565" y="450" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="color-legend" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;" value="&lt;b&gt;Connection Legend:&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#ED7100&quot;&gt;━━&lt;/font&gt; Compute traffic (ALB/users/Jenkins to EC2)&lt;br&gt;&lt;font color=&quot;#C925D1&quot;&gt;━━&lt;/font&gt; Database connections (TCP 1433)&lt;br&gt;&lt;font color=&quot;#3F8624&quot;&gt;━━&lt;/font&gt; Storage (RDS to S3, EC2 to FSx SMB/DFS)&lt;br&gt;&lt;font color=&quot;#DD344C&quot;&gt;- - -&lt;/font&gt; Security (Secrets/KMS/AD)&lt;br&gt;&lt;font color=&quot;#E7157B&quot;&gt;━━&lt;/font&gt; Operations (Backup alerts to SNS)&lt;br&gt;&lt;font color=&quot;#8C4FFF&quot;&gt;- - -&lt;/font&gt; DFS-R / VPN / Direct Connect (DR)&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#3F8624&quot;&gt;- - -&lt;/font&gt; AWS Backup target (tag-based selection)" vertex="1">
-          <mxGeometry height="150" width="300" x="650" y="1910" as="geometry" />
+        <mxCell id="e-lambda-ssm" edge="1" parent="1" source="lambda" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#E7157B;strokeWidth=1;dashed=1;" target="ssm" value="SSM RunCommand&lt;br&gt;(Leave-Domain)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1750" y="705" />
+              <mxPoint x="1750" y="705" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="notes-dfs" parent="1" style="text;html=1;strokeColor=#147EBA;fillColor=#E6F2FF;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;rounded=1;arcSize=5;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;DFS / FSx / DR Architecture:&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. Amazon FSx for Windows &lt;b&gt;Single-AZ 1&lt;/b&gt; soporta DFS-R.&lt;br&gt;   (Multi-AZ y Single-AZ 2 NO lo soportan)&lt;br&gt;&lt;br&gt;2. FSx reemplaza el File Server del DC principal.&lt;br&gt;   El DC alterno mantiene su rol de DFS-R target (DR).&lt;br&gt;&lt;br&gt;3. Operaciones gestiona DFS-R desde la misma consola&lt;br&gt;   DFS Management que ya conocen (transparente).&lt;br&gt;&lt;br&gt;4. EC2 Windows acceden a FSx via SMB/DFS Namespaces.&lt;br&gt;&lt;br&gt;5. Puertos requeridos FSx &amp;lt;-&amp;gt; DC Alterno:&lt;br&gt;   SMB(445), RPC(135), DFS-R(5722), RPC dinamico.&lt;br&gt;&lt;br&gt;Ref: docs.aws.amazon.com/fsx/latest/WindowsGuide/dfs-r.html" vertex="1">
-          <mxGeometry height="240" width="380" x="1300" y="1700" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-sts01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 520GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="310" y="1080" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-ste01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 210GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="610" y="1080" as="geometry" />
-        </mxCell>
-        <mxCell id="ebs-bof01" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=8;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;fillColor=#3F8624" value="Root: 210GB gp3&#xa;KMS Encrypted" vertex="1">
-          <mxGeometry height="30" width="30" x="910" y="1080" as="geometry" />
+        <mxCell id="notes-dfs" parent="1" style="text;html=1;strokeColor=#147EBA;fillColor=#E6F2FF;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;rounded=1;arcSize=5;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Architecture Notes:&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. &lt;b&gt;ALB + 7 ASGs (one per app)&lt;/b&gt;. HTTPS:443 (TLS termination,&lt;br&gt;   SNI with ACM certs) + HTTP:80, host-based routing.&lt;br&gt;   Backend IIS on HTTP:80. Scaling: CPU Target Tracking 70%.&lt;br&gt;&lt;br&gt;2. &lt;b&gt;3 standalone EC2&lt;/b&gt; (module ec2_windows): fixed hostname/IP,&lt;br&gt;   AD domain-joined, no FSx mount, not behind ALB.&lt;br&gt;&lt;br&gt;3. &lt;b&gt;ACM&lt;/b&gt;: 11 certs (1 per public host_header), external DNS&lt;br&gt;   validation. Expiration alarms -&gt; SNS acm-cert-expiration.&lt;br&gt;&lt;br&gt;4. &lt;b&gt;ASG Lifecycle Hook (leave-domain)&lt;/b&gt;: on scale-in, EventBridge&lt;br&gt;   triggers Lambda that runs Leave-Domain via SSM.&lt;br&gt;&lt;br&gt;5. &lt;b&gt;1x FSx (Single-AZ 1)&lt;/b&gt; for DFS-R, with its own CMK.&lt;br&gt;&lt;br&gt;6. &lt;b&gt;2x RDS SQL Server SE&lt;/b&gt;: produccion (Multi-AZ, r6i.4xl, 1.7TB, TDE)&lt;br&gt;   + procesos (Single-AZ, r6i.2xl, 2.9TB).&lt;br&gt;&lt;br&gt;7. &lt;b&gt;DMS&lt;/b&gt;: 8 CDC tasks one-way On-Premises to RDS produccion&lt;br&gt;   (8 DBs) via VPN/Direct Connect. Reverse direction commented.&lt;br&gt;&lt;br&gt;8. On-Premise DFS-R to dedicated file servers for DR." vertex="1">
+          <mxGeometry height="340" width="410" x="1480" y="800" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
