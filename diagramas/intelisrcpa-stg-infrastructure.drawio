@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="DrawioJSAPI/1.0.0">
   <diagram id="intelisrcpa-stg" name="InteliSrcPA - STG (UAT) Environment">
-    <mxGraphModel dx="4434" dy="1143" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1080" math="0" shadow="0">
+    <mxGraphModel dx="3914" dy="885" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1080" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -124,10 +124,16 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="e-jenkins-ec2" edge="1" parent="1" source="jenkins" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ED7100;strokeWidth=1;dashed=1;" target="win2" value="Deploy">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" x="-0.4082" y="-5" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="755" y="340" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="e-ec2-rds" edge="1" parent="1" source="win0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#C925D1;strokeWidth=2;" target="rds" value="TCP 1433">
-          <mxGeometry relative="1" as="geometry">
+          <mxGeometry relative="1" x="-0.2743" as="geometry">
+            <mxPoint as="offset" />
             <Array as="points">
               <mxPoint x="275" y="250" />
             </Array>
@@ -159,7 +165,12 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e-backup-ec2" edge="1" parent="1" source="backup-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;dashed=1;" target="tag-backup-ec2" value="Daily Backup">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="850" />
+              <mxPoint x="875" y="850" />
+            </Array>
+          </mxGeometry>
         </mxCell>
         <mxCell id="e-backup-rds" edge="1" parent="1" source="backup-plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#3F8624;strokeWidth=1;dashed=1;" target="tag-backup-rds" value="Daily Backup">
           <mxGeometry relative="1" x="0.6842" as="geometry">

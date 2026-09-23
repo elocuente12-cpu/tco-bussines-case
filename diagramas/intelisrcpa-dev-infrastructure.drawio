@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="DrawioJSAPI/1.0.0">
   <diagram id="intelisrcpa-dev" name="InteliSrcPA - DEV Environment">
-    <mxGraphModel dx="4434" dy="1143" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1080" math="0" shadow="0">
+    <mxGraphModel dx="4048" dy="934" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1080" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -128,7 +128,8 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e-rds-secrets" edge="1" parent="1" source="rds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#DD344C;strokeWidth=1;dashed=1;" target="secrets" value="AD Auth">
-          <mxGeometry relative="1" as="geometry">
+          <mxGeometry relative="1" x="0.6683" as="geometry">
+            <mxPoint y="1" as="offset" />
             <Array as="points">
               <mxPoint x="1135" y="520" />
             </Array>

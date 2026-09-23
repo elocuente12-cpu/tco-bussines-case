@@ -45,3 +45,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v Pr
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyOverride /t REG_SZ /d "<local>;localhost;127.0.0.1;169.254.169.254" /f
  
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings" /v AutoDetect /t REG_DWORD /d 0 /f
+
+
+https://pages.experian.local/spaces/CEFI/pages/1919735933/FinOps+Tools+and+Training
+https://pages.experian.local/spaces/CEFI/pages/1919736740/FinOps+Tools
