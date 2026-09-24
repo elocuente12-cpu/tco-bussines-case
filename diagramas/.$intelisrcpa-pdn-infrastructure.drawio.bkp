@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="DrawioJSAPI/1.0.0">
   <diagram id="intelisrcpa-prd" name="InteliSrcPA - PRD (Production) Environment">
-    <mxGraphModel dx="5628" dy="1294" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1800" math="0" shadow="0">
+    <mxGraphModel dx="6208" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2100" pageHeight="1800" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -101,7 +101,7 @@
           <mxGeometry height="45" width="45" x="760" y="15" as="geometry" />
         </mxCell>
         <mxCell id="s3-ssis" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;fillColor=#3F8624" value="S3 SSIS&lt;br&gt;(KMS Encrypted)" vertex="1">
-          <mxGeometry height="45" width="45" x="760" y="105" as="geometry" />
+          <mxGeometry height="45" width="45" x="940" y="100" as="geometry" />
         </mxCell>
         <mxCell id="rds-prod" parent="db-tier" style="sketch=0;outlineConnect=0;fontColor=#232F3E;strokeColor=#ffffff;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;fillColor=#C925D1" value="RDS SQL Server SE 15&lt;br&gt;&lt;b&gt;produccion&lt;/b&gt; (multiaz1)&lt;br&gt;db.r6i.4xlarge | 1700GB gp3&lt;br&gt;Port 1433 | Multi-AZ&lt;br&gt;SSIS + SSRS (8443) + TDE&lt;br&gt;Encrypted (KMS)" vertex="1">
           <mxGeometry height="50" width="50" x="150" y="60" as="geometry" />
@@ -122,6 +122,7 @@
             <Array as="points">
               <mxPoint x="600" y="95" />
               <mxPoint x="600" y="130" />
+              <mxPoint x="952" y="130" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -247,8 +248,8 @@
             <mxPoint as="offset" />
             <Array as="points">
               <mxPoint x="350" y="1130" />
-              <mxPoint x="350" y="1070" />
-              <mxPoint x="1460" y="1070" />
+              <mxPoint x="350" y="1045" />
+              <mxPoint x="1460" y="1045" />
               <mxPoint x="1460" y="355" />
             </Array>
           </mxGeometry>
@@ -257,8 +258,7 @@
           <mxGeometry relative="1" x="0.0687" as="geometry">
             <mxPoint as="offset" />
             <Array as="points">
-              <mxPoint x="670" y="930" />
-              <mxPoint x="670" y="1000" />
+              <mxPoint x="585" y="1000" />
               <mxPoint x="1420" y="1000" />
               <mxPoint x="1420" y="340" />
             </Array>
@@ -277,8 +277,7 @@
             <mxPoint as="offset" />
             <Array as="points">
               <mxPoint x="-75" y="1050" />
-              <mxPoint x="470" y="1050" />
-              <mxPoint x="470" y="930" />
+              <mxPoint x="585" y="1050" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -338,7 +337,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="notes-dfs" parent="1" style="text;html=1;strokeColor=#147EBA;fillColor=#E6F2FF;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;rounded=1;arcSize=5;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Architecture Notes:&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. &lt;b&gt;ALB + 7 ASGs (one per app)&lt;/b&gt;. HTTPS:443 (TLS termination,&lt;br&gt;   SNI with ACM certs) + HTTP:80, host-based routing.&lt;br&gt;   Backend IIS on HTTP:80. Scaling: CPU Target Tracking 70%.&lt;br&gt;&lt;br&gt;2. &lt;b&gt;3 standalone EC2&lt;/b&gt; (module ec2_windows): fixed hostname/IP,&lt;br&gt;   AD domain-joined, no FSx mount, not behind ALB.&lt;br&gt;&lt;br&gt;3. &lt;b&gt;ACM&lt;/b&gt;: 11 certs (1 per public host_header), external DNS&lt;br&gt;   validation. Expiration alarms -&amp;gt; SNS acm-cert-expiration.&lt;br&gt;&lt;br&gt;4. &lt;b&gt;ASG Lifecycle Hook (leave-domain)&lt;/b&gt;: on scale-in, EventBridge&lt;br&gt;   triggers Lambda that runs Leave-Domain via SSM.&lt;br&gt;&lt;br&gt;5. &lt;b&gt;1x FSx (Single-AZ 1)&lt;/b&gt; for DFS-R, with its own CMK.&lt;br&gt;&lt;br&gt;6. &lt;b&gt;2x RDS SQL Server SE&lt;/b&gt;: produccion (Multi-AZ, r6i.4xl, 1.7TB, TDE)&lt;br&gt;   + procesos (Single-AZ, r6i.2xl, 2.9TB).&lt;br&gt;&lt;br&gt;7. &lt;b&gt;DMS&lt;/b&gt;: CDC tasks one-way On-Premises to RDS produccion&lt;br&gt;   (8 DBs) via VPN/Direct Connect.&lt;br&gt;&lt;br&gt;8. On-Premise DFS-R to dedicated file servers for DR." vertex="1">
+        <mxCell id="notes-dfs" parent="1" style="text;html=1;strokeColor=#147EBA;fillColor=#E6F2FF;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;fontSize=9;fontColor=#333333;rounded=1;arcSize=5;spacingLeft=5;spacingTop=3;" value="&lt;b&gt;Architecture Notes:&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. &lt;b&gt;ALB + 7 ASGs (one per app)&lt;/b&gt;. HTTPS:443 (TLS termination,&lt;br&gt;   SNI with ACM certs) + HTTP:80, host-based routing.&lt;br&gt;   Backend IIS on HTTP:80. Scaling: CPU Target Tracking 70%.&lt;br&gt;&lt;br&gt;2. &lt;b&gt;3 standalone EC2&lt;/b&gt; (module ec2_windows): fixed hostname/IP,&lt;br&gt;   AD domain-joined, no FSx mount, not behind ALB.&lt;br&gt;&lt;br&gt;3. &lt;b&gt;ACM&lt;/b&gt;: 11 certs (1 per public host_header), external DNS&lt;br&gt;   validation. Expiration alarms -&gt; SNS acm-cert-expiration.&lt;br&gt;&lt;br&gt;4. &lt;b&gt;ASG Lifecycle Hook (leave-domain)&lt;/b&gt;: on scale-in, EventBridge&lt;br&gt;   triggers Lambda that runs Leave-Domain via SSM.&lt;br&gt;&lt;br&gt;5. &lt;b&gt;1x FSx (Single-AZ 1)&lt;/b&gt; for DFS-R, with its own CMK.&lt;br&gt;&lt;br&gt;6. &lt;b&gt;2x RDS SQL Server SE&lt;/b&gt;: produccion (Multi-AZ, r6i.4xl, 1.7TB, TDE)&lt;br&gt;   + procesos (Single-AZ, r6i.2xl, 2.9TB).&lt;br&gt;&lt;br&gt;7. &lt;b&gt;DMS&lt;/b&gt;: 8 CDC tasks one-way On-Premises to RDS produccion&lt;br&gt;   (8 DBs) via VPN/Direct Connect. Reverse direction commented.&lt;br&gt;&lt;br&gt;8. On-Premise DFS-R to dedicated file servers for DR." vertex="1">
           <mxGeometry height="340" width="410" x="1480" y="800" as="geometry" />
         </mxCell>
       </root>
