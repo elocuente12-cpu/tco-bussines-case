@@ -1,6 +1,29 @@
-PS C:\Windows\system32> [DateTime]::UtcNow
- 
-Thursday, September 24, 2026 9:15:07 PM
- 
+PS C:\Windows\system32> w32tm /query /source
+
+USMEA2PDCWES01.gdc.local
+
+PS C:\Windows\system32>
+
+PS C:\Windows\system32> w32tm /query /status
+
+Leap Indicator: 0(no warning)
+
+Stratum: 4 (secondary reference - syncd by (S)NTP)
+
+Precision: -23 (119.209ns per tick)
+
+Root Delay: 0.1037166s
+
+Root Dispersion: 0.0884844s
+
+ReferenceId: 0x0A1DBB84 (source IP:  10.29.187.132)
+
+Last Successful Sync Time: 9/24/2026 6:05:01 PM
+
+Source: USMEA2PDCWES01.gdc.local
+
+Poll Interval: 10 (1024s)
  
 PS C:\Windows\system32>
+ 
+ 
