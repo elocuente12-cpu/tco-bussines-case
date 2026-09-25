@@ -21,3 +21,42 @@ PAHWPWSAPI02	10.54.129.94
 
 USAEA1PWBWES26
 PAHWPCHECS01	10.54.128.61	ECS Chile	https://www.miexperian.cl/	FSx
+
+
+
+Query básico: tráfico entrante al puerto 445
+sql
+
+fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, protocol, action, bytes
+| filter dstPort = 445 and protocol = 6
+| sort @timestamp desc
+| limit 100
+protocol = 6 es TCP (SMB usa TCP/445).
+dstPort = 445 limita al puerto del recurso compartido SMB de FSx.
+Query filtrando por la IP del FSx (recomendado)
+Reemplaza X.X.X.X con la IP privada del endpoint de tu FSx:
+
+sql
+
+fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, action, bytes
+| filter dstPort = 445 and protocol = 6 and dstAddr = "X.X.X.X"
+| sort @timestamp desc
+| limit 100
+Query agregado: ver los orígenes que más se conectan
+Muy útil para responder "¿de dónde viene el tráfico?":
+
+sql
+
+fields srcAddr, dstAddr, dstPort
+| filter dstPort = 445 and protocol = 6 and dstAddr = "X.X.X.X"
+| stats count(*) as conexiones, sum(bytes) as total_bytes by srcAddr
+| sort conexiones desc
+Query filtrando por la ENI del FSx
+Si prefieres filtrar por interfaz en lugar de IP:
+
+sql
+
+fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, action, bytes
+| filter dstPort = 445 and protocol = 6 and interfaceId = "eni-xxxxxxxx"
+| stats count(*) as conexiones by srcAddr
+| sort conexiones desc
