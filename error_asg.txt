@@ -1,47 +1,48 @@
-Error: ELBv2 Target Group (app6-tg) already exists
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-09-30T21:38:31.1580652+00:00  === Inicio bootstrap ===
+2026-09-30T21:38:32.6479571+00:00  Instance ID: i-03cb29f81301c5998
+2026-09-30T21:38:35.8210390+00:00  Fase 1: Domain join...
+2026-09-30T21:40:22.9488383+00:00  Hostname numero 1 reclamado (intento 1).
+2026-09-30T21:40:22.9538753+00:00  Hostname asignado: USAEA1PWBWESPA1
+2026-09-30T21:40:22.9558893+00:00  Renombrando: EC2AMAZ-I4HM7VU -> USAEA1PWBWESPA1
+2026-09-30T21:40:24.8117903+00:00  Rename OK. Exit 3010 para reboot.
+2026-09-30T21:41:32.6376305+00:00  === Inicio bootstrap ===
+2026-09-30T21:41:33.0673094+00:00  Instance ID: i-03cb29f81301c5998
+2026-09-30T21:41:33.4540883+00:00  Fase 1: Domain join...
+2026-09-30T21:42:30.6115624+00:00  Hostname reutilizado del mapping: USAEA1PWBWESPA1
+2026-09-30T21:42:58.2838115+00:00  Domain join: USAEA1PWBWESPA1 -> gdc.local
+2026-09-30T21:43:22.4805056+00:00  Domain join OK. Exit 3010 para reboot.
+2026-09-30T21:44:35.7160904+00:00  === Inicio bootstrap ===
+2026-09-30T21:44:37.2659229+00:00  Instance ID: i-03cb29f81301c5998
+2026-09-30T21:46:06.3765092+00:00  Fase 2: Montaje FSx...
+2026-09-30T21:46:12.6123815+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-09-30T21:46:13.0257468+00:00  Fase 3: IIS Sites config...
+2026-09-30T21:46:15.2034638+00:00  Default Web Site removido.
+2026-09-30T21:46:16.4681353+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (mobile.apc.com.pa:80)
+2026-09-30T21:46:16.4815064+00:00  IIS Site mobile iniciado.
+2026-09-30T21:46:18.1812122+00:00  Aviso BindHttps mobile/mobile-apc-com-pa (queda HTTP:80): The PFX file you are trying to import requires either a different password or membership in an Active Directory principal to which it is p
+rotected.
+2026-09-30T21:46:18.6142273+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (www.tuintelidat.com:80)
+2026-09-30T21:46:18.6508340+00:00  IIS Site tuintelidat iniciado.
+2026-09-30T21:46:18.7232804+00:00  Aviso BindHttps tuintelidat/www-tuintelidat-com (queda HTTP:80): The PFX file you are trying to import requires either a different password or membership in an Active Directory principal to which
+it is protected.
+2026-09-30T21:46:19.1575747+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (apcexperian.com:80)
+2026-09-30T21:46:19.2056755+00:00  IIS Site apcexperian iniciado.
+2026-09-30T21:46:21.1814355+00:00  HTTPS:443 SNI OK apcexperian [apcexperian.com] cert=96E2D3EBFE51333DAD1399F1CA1B9CE924666BDC
+2026-09-30T21:46:29.7298755+00:00  IIS reiniciado (re-mapear paths del FSx tras montaje).
+2026-09-30T21:46:30.1937141+00:00  Health-check site creado.
+2026-09-30T21:46:31.3889732+00:00  Cert autofirmado health-check: C98B16BBC804C72B1B2A118D9BAA1B33635AC1B1
+2026-09-30T21:46:32.6138477+00:00  Health-check HTTPS:443 (default autofirmado) OK.
+2026-09-30T21:46:32.6178769+00:00  Fase 4: SQL Client Alias config...
+2026-09-30T21:46:32.9110807+00:00  SQL Client Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64+32-bit)
+2026-09-30T21:46:34.2568856+00:00  Fase 5: Postbuild_tasks deshabilitada.
+2026-09-30T21:46:53.8236510+00:00  Fase 5: Time sync NT5DS.
+2026-09-30T16:46:53.8653672-05:00  Fase 5: Timezone corregida a UTC-5
+2026-09-30T16:46:53.8790838-05:00  Fase 5: TZ=SA Pacific Standard Time | Local=2026-09-30 16:46:53 -05:00 | UTC=21:46:53
+2026-09-30T16:46:54.1819085-05:00  Fase 6: Proxy WinINET machine-wide configurado (proxy-useast.us.experian.eeca:9595)
+2026-09-30T16:46:54.1859364-05:00  === Bootstrap completado ===
+PS C:\Windows\system32>
 
-  with module.alb.aws_lb_target_group.this["app6"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
+Este log fue tomado a las 04:55 pm hora colombia utc-5
 
-
-Error: ELBv2 Target Group (app7-tg) already exists
-
-  with module.alb.aws_lb_target_group.this["app7"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
-
-
-Error: ELBv2 Target Group (app5-tg) already exists
-
-  with module.alb.aws_lb_target_group.this["app5"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
-
-
-Error: ELBv2 Target Group (app4-tg) already exists
-
-  with module.alb.aws_lb_target_group.this["app4"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
-
-
-Error: ELBv2 Target Group (app3-tg) already exists
-
-  with module.alb.aws_lb_target_group.this["app3"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
-
-
-Error: ELBv2 Target Group (app2-tg) already exists
-
-  with module.alb.aws_lb_target_group.this["app2"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
-
-
-Error: ELBv2 Target Group (app1-tg) already exists
-
-  with module.alb.aws_lb_target_group.this["app1"],
-  on .terraform/modules/alb/main.tf line 104, in resource "aws_lb_target_group" "this":
- 104: resource "aws_lb_target_group" "this" {
+un minuto despues a las 4:56 pm nos conectamos a la instancia por rdp y el time zone muestra en la hora del sistema la hora:  4:57 y luego como que se actualizo automaticamente a las 5:58 
