@@ -52,3 +52,28 @@ un minuto despues a las 4:56 pm nos conectamos a la instancia por rdp y el time 
 Get-TimeZone → ¿dice SA Pacific Standard Time o algo de Eastern?
 Get-ScheduledTask -TaskName "Postbuild_tasks" | Select State → ¿sigue Disabled o se reactivó?
 w32tm /query /status 
+
+
+
+Id                         : Eastern Standard Time
+DisplayName                : (UTC-05:00) Eastern Time (US & Canada)
+StandardName               : Eastern Standard Time
+DaylightName               : Eastern Daylight Time
+BaseUtcOffset              : -05:00:00
+SupportsDaylightSavingTime : True
+ 
+Get-ScheduledTask : No MSFT_ScheduledTask objects found with property 'TaskName' equal to 'Postbuild_tasks'.  Verify the value of the property and retry.
+At line:2 char:1
++ Get-ScheduledTask -TaskName "Postbuild_tasks" | Select State
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Postbuild_tasks:String) [Get-ScheduledTask], CimJobException
+    + FullyQualifiedErrorId : CmdletizationQuery_NotFound_TaskName,Get-ScheduledTask
+Leap Indicator: 0(no warning)
+Stratum: 4 (secondary reference - syncd by (S)NTP)
+Precision: -23 (119.209ns per tick)
+Root Delay: 0.4159043s
+Root Dispersion: 1.8165225s
+ReferenceId: 0x0AA51784 (source IP:  10.165.23.132)
+Last Successful Sync Time: 9/30/2026 6:35:18 PM
+Source: zamza1pdcwes01.gdc.local 
+Poll Interval: 6 (64s)
