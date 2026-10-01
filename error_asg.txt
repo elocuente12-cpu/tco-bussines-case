@@ -77,3 +77,90 @@ ReferenceId: 0x0AA51784 (source IP:  10.165.23.132)
 Last Successful Sync Time: 9/30/2026 6:35:18 PM
 Source: zamza1pdcwes01.gdc.local 
 Poll Interval: 6 (64s)
+
+
+
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+
+2026-10-01T15:48:37.4535775+00:00  === Inicio bootstrap ===
+
+2026-10-01T15:48:40.0061958+00:00  Instance ID: i-0fa9e6bac69f53c75
+
+2026-10-01T15:48:43.6685230+00:00  Fase 1: Domain join...
+
+2026-10-01T15:49:52.4051936+00:00  Hostname numero 1 reclamado (intento 1).
+
+2026-10-01T15:49:52.4090620+00:00  Hostname asignado: USAEA1PWBWESPA1
+
+2026-10-01T15:49:52.4118365+00:00  Renombrando: EC2AMAZ-VS8NCQD -> USAEA1PWBWESPA1
+
+2026-10-01T15:49:53.4234373+00:00  Rename OK. Exit 3010 para reboot.
+
+2026-10-01T15:51:10.8003863+00:00  === Inicio bootstrap ===
+
+2026-10-01T15:51:12.4351259+00:00  Instance ID: i-0fa9e6bac69f53c75
+
+2026-10-01T15:51:12.8210301+00:00  Fase 1: Domain join...
+
+2026-10-01T15:52:08.7546184+00:00  Hostname reutilizado del mapping: USAEA1PWBWESPA1
+
+2026-10-01T15:52:41.3499922+00:00  Domain join: USAEA1PWBWESPA1 -> gdc.local
+
+2026-10-01T15:53:06.0308969+00:00  Domain join OK. Exit 3010 para reboot.
+
+2026-10-01T15:54:21.1384323+00:00  === Inicio bootstrap ===
+
+2026-10-01T15:54:21.4270785+00:00  Instance ID: i-0fa9e6bac69f53c75
+
+2026-10-01T15:55:38.0923749+00:00  Fase 2: Montaje FSx...
+
+2026-10-01T15:55:41.6526595+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+
+2026-10-01T15:55:42.0663105+00:00  Fase 3: IIS Sites config...
+
+2026-10-01T15:55:43.4669938+00:00  Default Web Site removido.
+
+2026-10-01T15:55:44.2214214+00:00  IIS Site creado: mobile -> Z:\TuIntelidat\intelidat_App_wsv5 (mobile.apc.com.pa:80)
+
+2026-10-01T15:55:44.2288808+00:00  IIS Site mobile iniciado.
+
+2026-10-01T15:55:47.5411488+00:00  HTTPS:443 SNI OK mobile [mobile.apc.com.pa] cert=7782990B946DF639546CAE7F6CA24374BFC12C1F
+
+2026-10-01T15:55:47.9549763+00:00  IIS Site creado: tuintelidat -> Z:\TuIntelidat\TuIntelidat (www.tuintelidat.com:80)
+
+2026-10-01T15:55:47.9590019+00:00  IIS Site tuintelidat iniciado.
+
+2026-10-01T15:55:49.2952934+00:00  HTTPS:443 SNI OK tuintelidat [www.tuintelidat.com] cert=1371CF69B74F23F5A55A57DFAB623E4143E03DCA
+
+2026-10-01T15:55:49.8986672+00:00  IIS Site creado: apcexperian -> Z:\TuIntelidat\Apcexperian (apcexperian.com:80)
+
+2026-10-01T15:55:49.9037773+00:00  IIS Site apcexperian iniciado.
+
+2026-10-01T15:55:51.2456059+00:00  HTTPS:443 SNI OK apcexperian [apcexperian.com] cert=96E2D3EBFE51333DAD1399F1CA1B9CE924666BDC
+
+2026-10-01T15:55:59.8814206+00:00  IIS reiniciado (re-mapear paths del FSx tras montaje).
+
+2026-10-01T15:56:01.7531938+00:00  Health-check site creado.
+
+2026-10-01T15:56:03.3316508+00:00  Cert autofirmado health-check: AFB52EC9976C5E1B2D5059E6C42E5BC9B915451F
+
+2026-10-01T15:56:04.5400494+00:00  Health-check HTTPS:443 (default autofirmado) OK.
+
+2026-10-01T15:56:04.5551941+00:00  Fase 4: SQL Client Alias config...
+
+2026-10-01T15:56:04.8616431+00:00  SQL Client Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433 (64+32-bit)
+
+2026-10-01T15:56:06.4566506+00:00  Fase 5: Postbuild_tasks deshabilitada.
+
+2026-10-01T15:56:11.3911792+00:00  Fase 5: Time sync NT5DS.
+
+2026-10-01T10:56:11.4712197-05:00  Fase 5: Timezone corregida a UTC-5
+
+2026-10-01T10:56:11.4883199-05:00  Fase 5: TZ=SA Pacific Standard Time | Local=2026-10-01 10:56:11 -05:00 | UTC=15:56:11
+
+2026-10-01T10:56:11.8338238-05:00  Fase 6: Proxy WinINET machine-wide configurado (proxy-useast.us.experian.eeca:9595)
+
+2026-10-01T10:56:11.8378468-05:00  === Bootstrap completado ===
+
+PS C:\Windows\system32>
+ 
