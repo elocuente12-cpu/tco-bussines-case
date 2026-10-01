@@ -164,3 +164,11 @@ PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
 
 PS C:\Windows\system32>
  
+
+ Get-Content : Cannot find path 'C:\ProgramData\intelisrcpa-bootstrap.log' because it does not exist.
+At line:1 char:1
++ Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\ProgramData\intelisrcpa-bootstrap.log:String) [Get-Content], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+PS C:\Windows\system32>
