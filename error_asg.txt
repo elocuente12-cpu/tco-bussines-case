@@ -406,3 +406,89 @@ tasks:
         }catch{W "Aviso proxy: $($_.Exception.Message)"}
         W "=== Bootstrap completado ==="
       }catch{W ("ERROR FATAL: "+$_.Exception.Message)}
+
+
+
+2026-10-01 18:17:36.670Z Info: Resyncing w32tm
+2026-10-01 18:17:37.562Z Console: AMI Origin Version: 2026.07.15
+2026-10-01 18:17:37.563Z Console: AMI Origin Name: Windows_Server-2025-English-Full-Base
+2026-10-01 18:17:37.593Z Console: OS: Microsoft Windows NT 10.0.26100
+2026-10-01 18:17:37.594Z Console: OsVersion: 10.0
+2026-10-01 18:17:37.594Z Console: OsProductName: Windows Server 2025 Datacenter
+2026-10-01 18:17:37.594Z Console: OsBuildLabEx: 26100.1.amd64fre.ge_release.240331-1435
+2026-10-01 18:17:37.594Z Console: OsCurrentBuild: 26100
+2026-10-01 18:17:37.594Z Console: OsReleaseId: 2009
+2026-10-01 18:17:37.594Z Console: Language: en-US
+2026-10-01 18:17:37.595Z Console: TimeZone: UTC
+2026-10-01 18:17:37.595Z Console: Offset: UTC +0000
+2026-10-01 18:17:37.595Z Console: Launch: EC2 Launch v2.5.1
+2026-10-01 18:17:37.607Z Console: AMI-ID: ami-0faa0f7a04c6fd533
+2026-10-01 18:17:37.607Z Console: Instance-ID: i-0d05da84a7ac7cd70
+2026-10-01 18:17:37.608Z Console: Instance Type: m5.large
+2026-10-01 18:17:37.608Z Info: No SQL billing codes associated with instance.
+2026-10-01 18:17:37.611Z Console: Driver: AWS NVMe Driver v1.8.2.53
+2026-10-01 18:17:37.617Z Console: SubComponent: 1.8.2.53; EnableSCSIPersistentReservations: 0
+2026-10-01 18:17:37.626Z Console: Driver: Amazon Elastic Network Adapter v2.11.0.0
+2026-10-01 18:17:37.680Z Console: Driver: EC2 Windows Utility Device v3.2.0.29
+2026-10-01 18:17:38.114Z Console: Waiting for RDP info.
+2026-10-01 18:17:38.114Z Info: Waiting for RDP info.
+2026-10-01 18:18:40.514Z Info: Still waiting for RDP info.
+2026-10-01 18:18:51.760Z Console: HOSTNAME: EC2AMAZ-KDE81KB
+2026-10-01 18:18:51.770Z Console: RDPCERTIFICATE-SUBJECTNAME: EC2AMAZ-KDE81KB
+2026-10-01 18:18:51.810Z Console: RDPCERTIFICATE-THUMBPRINT: ABE8D4277293356BF6B9629E864498545ED2F608
+2026-10-01 18:18:51.887Z Console: SSM: Amazon SSM Agent v3.3.4793.0
+2026-10-01 18:18:51.929Z Info: VSS manifest file not found. Skip step to write VSS agent version to the console.
+2026-10-01 18:18:51.949Z Info: Set monitor to always on.
+2026-10-01 18:18:52.186Z Info: Successfully set monitor to always on.
+2026-10-01 18:18:52.284Z Console: HibernationEnabled: false
+2026-10-01 18:18:52.300Z Info: Configuring Windows KMS settings.
+2026-10-01 18:18:52.306Z Info: Configuring IPv4 KMS endpoint: 169.254.169.251
+2026-10-01 18:18:52.307Z Info: Finished configuring Windows KMS settings. Windows will attempt activation using these settings.
+2026-10-01 18:18:52.311Z Info: Add DNS suffixes.
+2026-10-01 18:18:52.314Z Info: Current suffix list: us-east-1.ec2-utilities.amazonaws.com, ec2.internal
+2026-10-01 18:18:52.315Z Info: Optional registry key UseDomainNameDevolution doesn't exist. Skipping domain devolution.
+2026-10-01 18:18:52.318Z Info: Optional registry key NV Domain doesn't exist.
+2026-10-01 18:18:53.856Z Info: Finished adding DNS suffixes in search list.
+2026-10-01 18:18:53.867Z Info: Set administrator account.
+2026-10-01 18:18:55.511Z Console: Username: Administrator
+2026-10-01 18:18:55.716Z Info: The instance was launched without a public key. Unable to encrypt the password.
+2026-10-01 18:18:55.747Z Info: Run set wallpaper task.
+2026-10-01 18:18:55.765Z Info: Wallpaper path: C:\Windows\Web\Wallpaper\Windows\img0.jpg
+2026-10-01 18:18:55.773Z Info: Wallpaper attributes: hostName,instanceId,privateIpAddress,publicIpAddress,ipv6Address,instanceSize,availabilityZone,architecture
+2026-10-01 18:18:55.803Z Info: Default user startup folder path: C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+2026-10-01 18:18:57.619Z Info: Stage: preReady completed.
+2026-10-01 18:18:58.630Z Info: Getting user data
+2026-10-01 18:18:58.638Z Info: Try parsing user data in YAML format.
+2026-10-01 18:18:58.642Z Console: User data format: yaml_1.1
+2026-10-01 18:18:58.645Z Console: EC2LaunchTelemetry: IsTelemetryEnabled=true
+2026-10-01 18:18:58.650Z Console: EC2LaunchTelemetry: AgentOsArch=windows_amd64
+2026-10-01 18:18:58.652Z Console: EC2LaunchTelemetry: IsAgentScheduledPerBoot=true
+2026-10-01 18:18:58.659Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
+2026-10-01 18:18:58.682Z Console: EC2LaunchTelemetry: AdminPasswordTypeCode=0
+2026-10-01 18:18:58.692Z Console: Message: Windows is Ready to use
+2026-10-01 18:18:58.718Z Info: Initialize user-data state.
+2026-10-01 18:18:58.779Z Info: COM port closed successfully.
+2026-10-01 18:18:59.047Z Info: User-data state initialized successfully.
+2026-10-01 18:18:59.164Z Info: Start script.
+2026-10-01 18:18:59.279Z Info: Frequency: always
+2026-10-01 18:18:59.336Z Info: Type: powershell
+2026-10-01 18:18:59.388Z Info: Run as: localSystem
+2026-10-01 18:18:59.443Z Info: Not running as a detached process.
+2026-10-01 18:18:59.477Z Info: Script file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch2907096975\UserScript.ps1
+2026-10-01 18:18:59.529Z Info: Error file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch2907096975\err.tmp
+2026-10-01 18:18:59.614Z Info: Output file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch2907096975\output.tmp
+2026-10-01 18:19:03.271Z Error: Script produced error output.
+2026-10-01 18:19:03.351Z Info: Stage: postReadyUserData completed.
+2026-10-01 18:19:03.390Z Info: Run StartSsm task.
+2026-10-01 18:19:13.889Z Info: AmazonSSMAgent is not in running state, sleep for 2 seconds.
+2026-10-01 18:19:15.940Z Info: AmazonSSMAgent is not in running state, sleep for 2 seconds.
+2026-10-01 18:19:18.024Z Info: AmazonSSMAgent is running now.
+2026-10-01 18:19:18.064Z Info: Stage: postReady completed.
+2026-10-01 18:19:18.147Z Info: Creating C:\ProgramData\Amazon\EC2Launch\state\.run-once
+2026-10-01 18:19:18.230Z Info: C:\ProgramData\Amazon\EC2Launch\state\.run-once created successfully.
+2026-10-01 18:19:18.322Z Info: Replace C:\ProgramData\Amazon\EC2Launch\state\state.json with C:\ProgramData\Amazon\EC2Launch\state\previous-state.json
+2026-10-01 18:19:18.448Z Info: Success: C:\ProgramData\Amazon\EC2Launch\state\previous-state.json replaced C:\ProgramData\Amazon\EC2Launch\state\state.json
+2026-10-01 18:19:18.633Z Info: EC2Launch stopped
+PS C:\Windows\system32>
+
+      
