@@ -172,3 +172,237 @@ At line:1 char:1
     + CategoryInfo          : ObjectNotFound: (C:\ProgramData\intelisrcpa-bootstrap.log:String) [Get-Content], ItemNotFoundException
     + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
 PS C:\Windows\system32>
+
+
+
+version: 1.1
+tasks:
+- task: executeScript
+  inputs:
+  - frequency: always
+    type: powershell
+    runAs: localSystem
+    content: |-
+      $ErrorActionPreference="Stop"
+      $L="C:\ProgramData\intelisrcpa-bootstrap.log"
+      function W($m){"$(Get-Date -Format o)  $m"|Out-File -Append -Encoding utf8 $L}
+      $SID="arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP";$RG="us-east-1";$FQ="gdc.local";$OU="OU=AutoScaling,OU=Panama,OU=SP LATAM Servers,OU=Windows Server 2025 Member Servers,OU=Servers,OU=Systems,DC=gdc,DC=local"
+      $NP="eec-aws-us-eits-intelisrcpa-prd"
+      $PF="USAEA1PWBWESPA";$ST=1;$PS=5;$DR="Z"
+      $MP="/intelisrcpa/app1/hostname-mapping";$OP="/intelisrcpa/app1/orphaned"
+      function Sec($sid=$SID){
+        for($i=1;$i -le 5;$i++){
+          try{
+            if(Get-Command Get-SECSecretValue -EA SilentlyContinue){return (Get-SECSecretValue -SecretId $sid -Region $RG).SecretString}
+            $a="C:\Program Files\Amazon\AWSCLIV2\aws.exe"
+            if(Test-Path $a){$v=& $a secretsmanager get-secret-value --secret-id $sid --region $RG --query SecretString --output text;if($LASTEXITCODE -eq 0 -and $v){return $v}}
+            throw "AWS tools no disponibles aun"
+          }catch{W "Retry secret $sid ($i): $($_.Exception.Message)";Start-Sleep 15}
+        }
+        throw "No se pudo leer el secret $sid."
+      }
+      # PFX -> binding HTTPS:443 sin SNI + default 0.0.0.0!443 (primer cert OK). Tolerante.
+      function BindHttps($site,$certKey){
+        try{
+          $j=(Sec "$NP-sitecert-$certKey")|ConvertFrom-Json
+          if(-not $j.pfx_base64){W "Cert $certKey vacio. $($site.name) HTTP:80.";return}
+          $pfxPath="$env:TEMP\$certKey.pfx"
+          [IO.File]::WriteAllBytes($pfxPath,[Convert]::FromBase64String($j.pfx_base64))
+          $sec=ConvertTo-SecureString $j.password -AsPlainText -Force
+          $tp=(Import-PfxCertificate -FilePath $pfxPath -CertStoreLocation Cert:\LocalMachine\My -Password $sec).Thumbprint
+          Remove-Item $pfxPath -Force -EA SilentlyContinue
+          $h=$site.host_header
+          if(-not (Get-WebBinding -Name $site.name -Protocol https -Port 443 -HostHeader $h -EA SilentlyContinue)){New-WebBinding -Name $site.name -Protocol https -Port 443 -HostHeader $h -SslFlags 0 -EA Stop}
+          if(-not $script:defaultCertTp){
+            $script:defaultCertTp=$tp
+            if(-not (Get-Item "IIS:\SslBindings\0.0.0.0!443" -EA SilentlyContinue)){New-Item "IIS:\SslBindings\0.0.0.0!443" -Thumbprint $tp -SSLFlags 0 -EA Stop|Out-Null}
+            else{Set-Item "IIS:\SslBindings\0.0.0.0!443" -Thumbprint $tp -SSLFlags 0 -EA SilentlyContinue}
+            W "HTTPS:443 DEFAULT cert=$tp"
+          }
+          W "HTTPS:443 OK $($site.name) [$h] cert=$tp"
+        }catch{W "Aviso BindHttps $($site.name)/$certKey (HTTP:80): $($_.Exception.Message)"}
+      }
+      function Cred{
+        $s=(Sec)|ConvertFrom-Json
+        $u=if($s.username){$s.username}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_USERNAME}
+        $p=if($s.password){$s.password}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_PASSWORD}
+        if(-not $u -or -not $p){throw "Secret AD sin credenciales."}
+        if($u -notlike "*\*"){$u="$FQ\$u"}
+        New-Object System.Management.Automation.PSCredential($u,(ConvertTo-SecureString $p -AsPlainText -Force))
+      }
+      function IID{
+        for($i=1;$i -le 5;$i++){
+          try{
+            $t=Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" -Headers @{"X-aws-ec2-metadata-token-ttl-seconds"="300"} -TimeoutSec 5
+            return (Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" -Headers @{"X-aws-ec2-metadata-token"=$t} -TimeoutSec 5)
+          }catch{W "Retry IMDSv2 ($i)";Start-Sleep 10}
+        }
+        throw "No se pudo obtener instance-id."
+      }
+      function HN($n){"{0}{1:D1}" -f $PF,($n+$ST-1)}
+      function Own($id){
+        try{$v=(Get-SSMParameter -Name "$MP/$id" -Region $RG).Value
+        if($v -like "$PF|*"){return HN ([int]$v.Split("|")[1])}}catch{}
+        $null
+      }
+      function Next($id){
+        for($a=1;$a -le 5;$a++){
+          $u=@{}
+          try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+            if($p.Value -notlike "$PF|*"){continue}
+            $i=($p.Name -split "/")[-1];if($i -eq $id){continue}
+            $u[[int]$p.Value.Split("|")[1]]=$true}}catch{}
+          try{foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG)){
+            $n=[int](($o.Name -split "/")[-1] -replace [regex]::Escape($PF),"")
+            if($n -ge 1 -and $n -le $PS){$u[$n]=$true}}}catch{}
+          $k=0;for($n=1;$n -le $PS;$n++){if(-not $u.ContainsKey($n)){$k=$n;break}}
+          if($k -eq 0){throw "POOL AGOTADO $($PF): sin nombres libres. Requiere intervencion AD."}
+          Write-SSMParameter -Name "$MP/$id" -Value "$PF|$k" -Description (HN $k) -Type String -Overwrite $true -Region $RG|Out-Null
+          Start-Sleep (5+(Get-Random -Max 10))
+          $c=$false
+          try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+            if($p.Value -notlike "$PF|*"){continue}
+            $i=($p.Name -split "/")[-1]
+            if($i -ne $id -and [int]$p.Value.Split("|")[1] -eq $k -and $i -lt $id){$c=$true;break}}}catch{}
+          if(-not $c){W "Hostname $k reclamado ($a).";return HN $k}
+          W "Conflicto SSM por $k; reintento."
+          Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
+          Start-Sleep (Get-Random -Max 10)
+        }
+        throw "No se pudo reclamar hostname del bloque $PF."
+      }
+      try{
+        W "=== Inicio bootstrap ==="
+        $id=IID;W "Instance ID: $id"
+        if(-not (Get-CimInstance Win32_ComputerSystem).PartOfDomain){
+          W "Fase 1: Domain join..."
+          for($i=1;$i -le 20;$i++){if(Resolve-DnsName $FQ -DnsOnly -EA SilentlyContinue){break};W "Esperando AD... $i";Start-Sleep 15}
+          $h=Own $id
+          if($h){W "Hostname reutilizado: $h"}else{$h=Next $id;W "Hostname asignado: $h"}
+          if($env:COMPUTERNAME -ne $h){W "Renombrando: $env:COMPUTERNAME -> $h";Rename-Computer -NewName $h -Force;W "Rename OK. Exit 3010.";exit 3010}
+          $c=Cred
+          W "Domain join: $env:COMPUTERNAME -> $FQ"
+          try{
+            if([string]::IsNullOrEmpty($OU)){Add-Computer -DomainName $FQ -Credential $c -Force -EA Stop}
+            else{Add-Computer -DomainName $FQ -Credential $c -OUPath $OU -Force -EA Stop}
+            W "Domain join OK. Exit 3010.";exit 3010
+          }catch{
+            $m=$_.Exception.Message
+            if($m -like "*Re-using the account was blocked*" -or $m -like "*account with the same name exists*"){
+              W "Join bloqueado por objeto AD huerfano ($env:COMPUTERNAME). Marco y salto."
+              Write-SSMParameter -Name "$OP/$env:COMPUTERNAME" -Value "$id|$(Get-Date -Format o)" -Type String -Overwrite $true -Region $RG -EA SilentlyContinue|Out-Null
+              Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
+              $n=Next $id
+              W "Nuevo hostname tras salto: $n (era $env:COMPUTERNAME)"
+              Rename-Computer -NewName $n -Force;W "Rename OK. Exit 3010.";exit 3010
+            }
+            throw
+          }
+        }
+        try{
+          $cc=Cred;$cu=$cc.UserName;$cp=$cc.GetNetworkCredential().Password
+          $hi=$ST+$PS-1;$rx="^"+[regex]::Escape($PF)+"([0-9]+)$";$live=@{}
+          try{foreach($m in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+            if($m.Value -like "$PF|*"){$live[(HN ([int]$m.Value.Split("|")[1]))]=$true}}}catch{}
+          foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG -EA SilentlyContinue)){
+            $nm=($o.Name -split "/")[-1];$mt=[regex]::Match($nm,$rx)
+            if(-not $mt.Success){W "Orphan $nm ignorado (prefijo).";continue}
+            $nu=[int]$mt.Groups[1].Value
+            if($nu -lt $ST -or $nu -gt $hi){W "Orphan $nm ignorado (rango).";continue}
+            if($live.ContainsKey($nm)){W "Orphan $nm vivo; quito marca.";Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null;continue}
+            try{
+              $de=New-Object DirectoryServices.DirectoryEntry("LDAP://$FQ",$cu,$cp)
+              $ds=New-Object DirectoryServices.DirectorySearcher($de);$ds.Filter="(&(objectClass=computer)(cn=$nm))"
+              $f=$ds.FindOne()
+              if($f){$e=$f.GetDirectoryEntry();$e.Username=$cu;$e.Password=$cp;$e.DeleteTree();W "Objeto AD huerfano $nm eliminado."}else{W "Objeto AD $nm ya no existe."}
+              Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
+            }catch{
+              if($_.Exception.Message -like "*no such object*" -or $_.Exception.Message -like "*does not exist*"){
+                W "Objeto AD $nm ya no existe; quito marca."
+                Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
+              }else{W "No se pudo limpiar $nm: $($_.Exception.Message)"}
+            }
+          }
+        }catch{W "Aviso auto-limpieza huerfanos: $($_.Exception.Message)"}
+        W "Fase 2: Montaje FSx..."
+        $rm="\\amznfsxsokjtgsj.gdc.local\share"
+        if(-not (Get-SmbGlobalMapping -EA SilentlyContinue|?{$_.LocalPath -eq "$DR`:"})){
+          $c=Cred
+          for($i=1;$i -le 5;$i++){
+            try{New-SmbGlobalMapping -LocalPath "$DR`:" -RemotePath $rm -Credential $c -Persistent $false -RequirePrivacy $true;W "FSx montado en $DR`: ($rm)";break}
+            catch{W "Reintento FSx ($i): $($_.Exception.Message)";if($i -eq 5){throw};Start-Sleep 20}
+          }
+        }else{W "FSx ya montado en $DR`:"}
+        $w=Get-Service W3SVC -EA SilentlyContinue
+        if($w -and $w.Status -ne "Running"){Start-Service W3SVC;W "W3SVC iniciado."}
+        W "Fase 3: IIS Sites config..."
+        Import-Module WebAdministration -EA SilentlyContinue
+        try{
+          if(-not (Get-WindowsFeature Web-AppInit -EA SilentlyContinue).Installed){Install-WindowsFeature Web-AppInit -EA Stop|Out-Null;W "Feature Web-AppInit instalada."}
+        }catch{W "Aviso Web-AppInit: $($_.Exception.Message)"}
+        $ss=ConvertFrom-Json '[{"cert_secret_name":"mobile-apc-com-pa","host_header":"mobile.apc.com.pa","name":"mobile","path":"TuIntelidat\\intelidat_App_wsv5","port":80},{"cert_secret_name":"www-tuintelidat-com","host_header":"www.tuintelidat.com","name":"tuintelidat","path":"TuIntelidat\\TuIntelidat","port":80},{"cert_secret_name":"apcexperian-com","host_header":"apcexperian.com","name":"apcexperian","path":"TuIntelidat\\Apcexperian","port":80}]'
+        if($ss.Count -gt 0){
+          Stop-Website "Default Web Site" -EA SilentlyContinue;Remove-Website "Default Web Site" -EA SilentlyContinue
+          W "Default Web Site removido."
+          foreach($s in $ss){
+            $sp="$DR`:\$($s.path)"
+            if(-not (Test-Path $sp)){
+              New-Item $sp -ItemType Directory -Force|Out-Null
+              $f=Join-Path $sp "index.html"
+              if(-not (Test-Path $f)){"<html><body><h1>$($s.name)</h1><p>Host: $($s.host_header)</p><p>Server: $env:COMPUTERNAME</p></body></html>"|Out-File $f -Encoding utf8}
+              W "Dir creado en FSx: $sp"
+            }
+            if(-not (Get-Website -Name $s.name -EA SilentlyContinue)){
+              New-Website -Name $s.name -PhysicalPath $sp -Port ([int]$s.port) -HostHeader $s.host_header -Force
+              W "IIS Site creado: $($s.name) -> $sp ($($s.host_header):$($s.port))"
+            }else{Set-ItemProperty "IIS:\Sites\$($s.name)" -Name physicalPath -Value $sp;W "IIS Site actualizado: $($s.name)"}
+            Start-Website -Name $s.name -EA SilentlyContinue;W "IIS Site $($s.name) iniciado."
+            if($s.cert_secret_name){BindHttps $s $s.cert_secret_name}
+            try{
+              $ap=(Get-Item "IIS:\Sites\$($s.name)").applicationPool
+              Set-ItemProperty "IIS:\AppPools\$ap" -Name startMode -Value "AlwaysRunning" -EA SilentlyContinue
+              Set-ItemProperty "IIS:\Sites\$($s.name)" -Name applicationDefaults.preloadEnabled -Value $true -EA SilentlyContinue
+              W "Warm-up: $($s.name) (pool $ap AlwaysRunning + preload)"
+            }catch{W "Aviso warm-up $($s.name): $($_.Exception.Message)"}
+          }
+        }
+        if($ss.Count -gt 0 -and (Test-Path "$DR`:\")){
+          try{iisreset /restart|Out-Null;W "IIS reiniciado (re-mapear FSx)."}
+          catch{W "Aviso iisreset: $($_.Exception.Message)"}
+        }
+        # Health-check HTTP:80 (disco local, sin FSx ni SNI). TG chequea por HTTP:80.
+        $hp="C:\inetpub\health";New-Item $hp -ItemType Directory -Force|Out-Null
+        "OK"|Out-File "$hp\index.html" -Encoding utf8
+        if(-not (Get-Website -Name "health-check" -EA SilentlyContinue)){New-Website -Name "health-check" -PhysicalPath $hp -Port 80 -Force;W "Health-check site creado (HTTP:80)."}
+        $sa="eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com"
+        if($sa){
+          W "Fase 4: SQL Client Alias config..."
+          $av="DBMSSOCN,$sa,1433"
+          foreach($k in @("HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client\ConnectTo","HKLM:\SOFTWARE\Wow6432Node\Microsoft\MSSQLServer\Client\ConnectTo")){
+            if(-not (Test-Path $k)){New-Item $k -Force|Out-Null}
+            Set-ItemProperty $k -Name "vaonsql" -Value $av
+          }
+          W "SQL Client Alias vaonsql -> $av (64+32-bit)"
+        }
+        try{ Disable-ScheduledTask -TaskName "Postbuild_tasks" -EA SilentlyContinue | Out-Null; W "Fase 5: Postbuild_tasks deshabilitada." }catch{ W "Aviso Postbuild_tasks: $($_.Exception.Message)" }
+        try{
+          if((Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Parameters" -EA SilentlyContinue).Type -ne "NT5DS"){
+            & w32tm /config /syncfromflags:DOMHIER /update | Out-Null
+            & net stop w32time | Out-Null; & net start w32time | Out-Null
+            & w32tm /resync | Out-Null; W "Fase 5: Time sync NT5DS."
+          }
+        }catch{ W "Aviso time sync: $($_.Exception.Message)" }
+        if((Get-TimeZone).Id -ne "SA Pacific Standard Time"){Set-TimeZone -Id "SA Pacific Standard Time";W "Fase 5: Timezone UTC-5"}
+        W "Fase 5: TZ=$((Get-TimeZone).Id) | Local=$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss zzz')"
+        try{
+          $isk="HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings"
+          $pol="HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings"
+          $null = & reg add "$pol" /v ProxySettingsPerUser /t REG_DWORD /d 0 /f
+          $null = & reg add "$isk" /v ProxyEnable /t REG_DWORD /d 1 /f
+          $null = & reg add "$isk" /v ProxyServer /t REG_SZ /d "proxy-useast.us.experian.eeca:9595" /f
+          $null = & reg add "$isk" /v ProxyOverride /t REG_SZ /d "<local>;localhost;127.0.0.1;169.254.169.254" /f
+          $null = & reg add "$isk" /v AutoDetect /t REG_DWORD /d 0 /f
+          W "Fase 6: Proxy WinINET machine-wide OK"
+        }catch{W "Aviso proxy: $($_.Exception.Message)"}
+        W "=== Bootstrap completado ==="
+      }catch{W ("ERROR FATAL: "+$_.Exception.Message)}
