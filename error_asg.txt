@@ -1,23 +1,10 @@
-
 aspnet_client = Z:\CrediWeb\WS\wwwroot\aspnet_client
- 
- 
 customModelsService = Z:\CrediWeb\WS\CustomModelsService
- 
- 
 IntelicheckService = Z:\CrediWeb\WS\IntelicheckService
- 
- 
 Logs = Z:\CrediWeb\WS\wwwroot\Logs
- 
-
- 
 PCF = Z:\CrediWeb\WS\PcEssentialsService
- 
-
- 
 SCOREPLUS = Z:\CrediWeb\WS\SCOREPLUS\Produccion\SCOREAPCWS
- 
- 
 WsContactsAPC = Z:\CrediWeb\WS\WsCrmContacts
  
+Get-WebApplication -Site "WS_apcexperian" | Select-Object Path, PhysicalPath, applicationPool
+Get-WebApplication -Site "Apc Web Services" | Select-Object Path, PhysicalPath, applicationPool
