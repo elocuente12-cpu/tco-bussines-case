@@ -1,114 +1,179 @@
-AWS Systems Manager
-Run Command
-Command ID: 78e33f95-55cc-48f8-b812-1097d39f7be2
-AWS Systems Manager
-Run Command
-Command ID: 78e33f95-55cc-48f8-b812-1097d39f7be2
-
-
-AWS Systems Manager
-Review node insights
-Explore nodes
-Diagnose and remediate
-Just-in-time node access
-Hybrid and Multicloud nodes
-
-New
-Settings
-Node Tools
-Compliance
-Distributor
-Fleet Manager
-Hybrid Activations
-Inventory
-Patch Manager
-Run Command
-Session Manager
-State Manager
-Change Management Tools
-Automation
-Change Calendar
-Change Manager
-Documents
-Maintenance Windows
-Quick Setup
-Application Tools
-AppConfig
-Application Manager
-Parameter Store
-Operations Tools
-Explorer
-Incident Manager
-OpsCenter
-Command ID: 78e33f95-55cc-48f8-b812-1097d39f7be2
-
-Cancel command
-Rerun
-Copy to new
-Command status
-Overall status
-Failed
-Detailed status
-Failed
-# targets
-2
-# completed
-2
-# error
-1
-# delivery timed out
-0
-Targets and outputs
-View output
-
-1
-
-Command invocation selection	
-Instance ID
-Instance name
-Status
-Detailed Status
-Start time
-Finish time
-i-035df45b5907a70eb
-EC2AMAZ-9GQEFSE.WORKGROUP
-Failed
-Terminated
-i-08c4bb843f617f39f
-EC2AMAZ-DAAMP3H.WORKGROUP
-Failed
-Failed
-Mon, 05 Oct 2026 22:34:28 GMT
-Mon, 05 Oct 2026 22:34:30 GMT
-CloudWatch alarm
-Alarm
--
-Continue command if alarm status is unavailable
--
-Command description
-Command ID
-78e33f95-55cc-48f8-b812-1097d39f7be2
-Command steps
-1
-Command document
-eec-aws-us-eits-intelisrcpa-prd-iis-configure
-Comment
-c1e4a340-c649-45ac-9a2f-967391f6e37a:091718ce-b4ec-4c4d-921f-b23a176934c4
-Document version
-2
-Date requested
-Mon, 05 Oct 2026 22:34:28 GMT
-Command parameters
-Parameters
-CertSecretPrefix
-"eec-aws-us-eits-intelisrcpa-prd"
-FsxDrive
-"Z"
-IisSitesJson
-"[{"apps":[],"cert_secret_name":"api-apcexperian-com","host_header":"api.apcexperian.com","name":"api","path":"API_PA\\wwwroot","port":80},{"apps":[],"cert_secret_name":"apiprodpa-experian-local","host_header":"apiprodpa.experian.local","name":"apiprodpa","path":"API_PA\\wwwroot","port":80}]"
-Region
-"us-east-1"
-Delivery timeout (seconds)
-600
-Execution timeout (seconds)
-3600
+version: 1.1
+tasks:
+- task: executeScript
+  inputs:
+  - frequency: always
+    type: powershell
+    runAs: localSystem
+    content: |-
+      $ErrorActionPreference="Stop"
+      $L="C:\ProgramData\intelisrcpa-bootstrap.log"
+      function W($m){"$(Get-Date -Format o)  $m"|Out-File -Append -Encoding utf8 $L}
+      $SID="arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP";$RG="us-east-1";$FQ="gdc.local";$OU="OU=AutoScaling,OU=Panama,OU=SP LATAM Servers,OU=Windows Server 2025 Member Servers,OU=Servers,OU=Systems,DC=gdc,DC=local"
+      $PF="USAEA1PWBWESPD";$ST=1;$PS=5;$DR="Z"
+      $MP="/intelisrcpa/app4/hostname-mapping";$OP="/intelisrcpa/app4/orphaned"
+      function Sec($sid=$SID){
+        for($i=1;$i -le 5;$i++){
+          try{
+            if(Get-Command Get-SECSecretValue -EA SilentlyContinue){return (Get-SECSecretValue -SecretId $sid -Region $RG).SecretString}
+            $a="C:\Program Files\Amazon\AWSCLIV2\aws.exe"
+            if(Test-Path $a){$v=& $a secretsmanager get-secret-value --secret-id $sid --region $RG --query SecretString --output text;if($LASTEXITCODE -eq 0 -and $v){return $v}}
+            throw "AWS tools no disp."
+          }catch{W "Retry secret $sid ($i): $($_.Exception.Message)";Start-Sleep 15}
+        }
+        throw "No se pudo leer secret $sid."
+      }
+      function Cred{
+        $s=(Sec)|ConvertFrom-Json
+        $u=if($s.username){$s.username}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_USERNAME}
+        $p=if($s.password){$s.password}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_PASSWORD}
+        if(-not $u -or -not $p){throw "Secret AD sin credenciales."}
+        if($u -notlike "*\*"){$u="$FQ\$u"}
+        New-Object System.Management.Automation.PSCredential($u,(ConvertTo-SecureString $p -AsPlainText -Force))
+      }
+      function IID{
+        for($i=1;$i -le 5;$i++){
+          try{
+            $t=Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" -Headers @{"X-aws-ec2-metadata-token-ttl-seconds"="300"} -TimeoutSec 5
+            return (Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" -Headers @{"X-aws-ec2-metadata-token"=$t} -TimeoutSec 5)
+          }catch{W "Retry IMDSv2 ($i)";Start-Sleep 10}
+        }
+        throw "No se pudo obtener instance-id."
+      }
+      function HN($n){"{0}{1:D1}" -f $PF,($n+$ST-1)}
+      function Own($id){
+        try{$v=(Get-SSMParameter -Name "$MP/$id" -Region $RG).Value
+        if($v -like "$PF|*"){return HN ([int]$v.Split("|")[1])}}catch{}
+        $null
+      }
+      function Next($id){
+        for($a=1;$a -le 5;$a++){
+          $u=@{}
+          try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+            if($p.Value -notlike "$PF|*"){continue}
+            $i=($p.Name -split "/")[-1];if($i -eq $id){continue}
+            $u[[int]$p.Value.Split("|")[1]]=$true}}catch{}
+          try{foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG)){
+            $n=[int](($o.Name -split "/")[-1] -replace [regex]::Escape($PF),"")
+            if($n -ge 1 -and $n -le $PS){$u[$n]=$true}}}catch{}
+          $k=0;for($n=1;$n -le $PS;$n++){if(-not $u.ContainsKey($n)){$k=$n;break}}
+          if($k -eq 0){throw "POOL AGOTADO $($PF): sin libres. Requiere AD."}
+          Write-SSMParameter -Name "$MP/$id" -Value "$PF|$k" -Description (HN $k) -Type String -Overwrite $true -Region $RG|Out-Null
+          Start-Sleep (5+(Get-Random -Max 10))
+          $c=$false
+          try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+            if($p.Value -notlike "$PF|*"){continue}
+            $i=($p.Name -split "/")[-1]
+            if($i -ne $id -and [int]$p.Value.Split("|")[1] -eq $k -and $i -lt $id){$c=$true;break}}}catch{}
+          if(-not $c){W "Hostname $k reclamado ($a).";return HN $k}
+          W "Conflicto SSM $k; reintento."
+          Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
+          Start-Sleep (Get-Random -Max 10)
+        }
+        throw "No se pudo reclamar hostname de $PF."
+      }
+      try{
+        W "=== Inicio bootstrap ==="
+        $id=IID;W "Instance ID: $id"
+        if(-not (Get-CimInstance Win32_ComputerSystem).PartOfDomain){
+          W "Fase 1: Domain join..."
+          for($i=1;$i -le 20;$i++){if(Resolve-DnsName $FQ -DnsOnly -EA SilentlyContinue){break};W "Esperando AD... $i";Start-Sleep 15}
+          $h=Own $id
+          if($h){W "Hostname reutilizado: $h"}else{$h=Next $id;W "Hostname asignado: $h"}
+          if($env:COMPUTERNAME -ne $h){W "Renombrando: $env:COMPUTERNAME -> $h";Rename-Computer -NewName $h -Force;W "Rename OK. Exit 3010.";exit 3010}
+          $c=Cred
+          W "Domain join: $env:COMPUTERNAME -> $FQ"
+          try{
+            if([string]::IsNullOrEmpty($OU)){Add-Computer -DomainName $FQ -Credential $c -Force -EA Stop}
+            else{Add-Computer -DomainName $FQ -Credential $c -OUPath $OU -Force -EA Stop}
+            W "Domain join OK. Exit 3010.";exit 3010
+          }catch{
+            $m=$_.Exception.Message
+            if($m -like "*Re-using the account was blocked*" -or $m -like "*account with the same name exists*"){
+              W "Join bloqueado por huerfano ($env:COMPUTERNAME); salto."
+              Write-SSMParameter -Name "$OP/$env:COMPUTERNAME" -Value "$id|$(Get-Date -Format o)" -Type String -Overwrite $true -Region $RG -EA SilentlyContinue|Out-Null
+              Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
+              $n=Next $id
+              W "Nuevo hostname tras salto: $n (era $env:COMPUTERNAME)"
+              Rename-Computer -NewName $n -Force;W "Rename OK. Exit 3010.";exit 3010
+            }
+            throw
+          }
+        }
+        try{
+          $cc=Cred;$cu=$cc.UserName;$cp=$cc.GetNetworkCredential().Password
+          $hi=$ST+$PS-1;$rx="^"+[regex]::Escape($PF)+"([0-9]+)$";$live=@{}
+          try{foreach($m in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+            if($m.Value -like "$PF|*"){$live[(HN ([int]$m.Value.Split("|")[1]))]=$true}}}catch{}
+          foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG -EA SilentlyContinue)){
+            $nm=($o.Name -split "/")[-1];$mt=[regex]::Match($nm,$rx)
+            if(-not $mt.Success){W "Orphan $nm ignorado (prefijo).";continue}
+            $nu=[int]$mt.Groups[1].Value
+            if($nu -lt $ST -or $nu -gt $hi){W "Orphan $nm ignorado (rango).";continue}
+            if($live.ContainsKey($nm)){W "Orphan $nm vivo; quito marca.";Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null;continue}
+            try{
+              $de=New-Object DirectoryServices.DirectoryEntry("LDAP://$FQ",$cu,$cp)
+              $ds=New-Object DirectoryServices.DirectorySearcher($de);$ds.Filter="(&(objectClass=computer)(cn=$nm))"
+              $f=$ds.FindOne()
+              if($f){$e=$f.GetDirectoryEntry();$e.Username=$cu;$e.Password=$cp;$e.DeleteTree();W "Objeto AD huerfano $nm eliminado."}else{W "Objeto AD $nm ya no existe."}
+              Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
+            }catch{
+              if($_.Exception.Message -like "*no such object*" -or $_.Exception.Message -like "*does not exist*"){
+                W "Objeto AD $nm ya no existe; quito marca."
+                Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
+              }else{W "No se pudo limpiar $nm: $($_.Exception.Message)"}
+            }
+          }
+        }catch{W "Aviso limpieza huerfanos: $($_.Exception.Message)"}
+        W "Fase 2: Montaje FSx..."
+        $rm="\\amznfsxsokjtgsj.gdc.local\share"
+        if(-not (Get-SmbGlobalMapping -EA SilentlyContinue|?{$_.LocalPath -eq "$DR`:"})){
+          $c=Cred
+          for($i=1;$i -le 5;$i++){
+            try{New-SmbGlobalMapping -LocalPath "$DR`:" -RemotePath $rm -Credential $c -Persistent $false -RequirePrivacy $true;W "FSx montado en $DR`: ($rm)";break}
+            catch{W "Reintento FSx ($i): $($_.Exception.Message)";if($i -eq 5){throw};Start-Sleep 20}
+          }
+        }else{W "FSx ya montado en $DR`:"}
+        $w=Get-Service W3SVC -EA SilentlyContinue
+        if($w -and $w.Status -ne "Running"){Start-Service W3SVC;W "W3SVC iniciado."}
+        # IIS Sites/bindings/apps se configuran via documento SSM (iis-config.tf),
+        # no aqui, por el limite de 16 KB del user data. El SSM Agent corre despues
+        # del user data y aplica la config de IIS (idempotente, State Manager).
+        # Aqui solo queda el sitio health-check HTTP:80 (target del Target Group).
+        W "Fase 3: Health-check HTTP:80..."
+        Import-Module WebAdministration -EA SilentlyContinue
+        $hp="C:\inetpub\health";New-Item $hp -ItemType Directory -Force|Out-Null
+        "OK"|Out-File "$hp\index.html" -Encoding utf8
+        if(-not (Get-Website -Name "health-check" -EA SilentlyContinue)){New-Website -Name "health-check" -PhysicalPath $hp -Port 80 -Force;W "Health-check creado."}
+        $sa="eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com"
+        if($sa){
+          W "Fase 4: SQL Client Alias config..."
+          $av="DBMSSOCN,$sa,1433"
+          foreach($k in @("HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client\ConnectTo","HKLM:\SOFTWARE\Wow6432Node\Microsoft\MSSQLServer\Client\ConnectTo")){
+            if(-not (Test-Path $k)){New-Item $k -Force|Out-Null}
+            Set-ItemProperty $k -Name "vaonsql" -Value $av
+          }
+          W "SQL Alias vaonsql -> $av"
+        }
+        try{ Disable-ScheduledTask -TaskName "Postbuild_tasks" -EA SilentlyContinue | Out-Null; W "Fase 5: Postbuild_tasks deshabilitada." }catch{ W "Aviso Postbuild_tasks: $($_.Exception.Message)" }
+        try{
+          if((Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\W32Time\Parameters" -EA SilentlyContinue).Type -ne "NT5DS"){
+            & w32tm /config /syncfromflags:DOMHIER /update | Out-Null
+            & net stop w32time | Out-Null; & net start w32time | Out-Null
+            & w32tm /resync | Out-Null; W "Fase 5: Time sync NT5DS."
+          }
+        }catch{ W "Aviso time sync: $($_.Exception.Message)" }
+        if((Get-TimeZone).Id -ne "SA Pacific Standard Time"){Set-TimeZone -Id "SA Pacific Standard Time";W "Fase 5: Timezone UTC-5"}
+        W "Fase 5: TZ=$((Get-TimeZone).Id)"
+        try{
+          $isk="HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings"
+          $pol="HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings"
+          $null = & reg add "$pol" /v ProxySettingsPerUser /t REG_DWORD /d 0 /f
+          $null = & reg add "$isk" /v ProxyEnable /t REG_DWORD /d 1 /f
+          $null = & reg add "$isk" /v ProxyServer /t REG_SZ /d "proxy-useast.us.experian.eeca:9595" /f
+          $null = & reg add "$isk" /v ProxyOverride /t REG_SZ /d "<local>;localhost;127.0.0.1;169.254.169.254" /f
+          $null = & reg add "$isk" /v AutoDetect /t REG_DWORD /d 0 /f
+          W "Fase 6: Proxy WinINET OK"
+        }catch{W "Aviso proxy: $($_.Exception.Message)"}
+        W "=== Bootstrap completado ==="
+      }catch{W ("ERROR FATAL: "+$_.Exception.Message)}
