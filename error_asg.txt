@@ -1,9 +1,45 @@
-EC2AMAZ-GIUMRMB
-PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-Get-Content : Cannot find path 'C:\ProgramData\intelisrcpa-bootstrap.log' because it does not exist.
-At line:1 char:1
-+ Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (C:\ProgramData\intelisrcpa-bootstrap.log:String) [Get-Content], ItemNotFoundException
-    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
-PS C:\Windows\system32>
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[0m[35m[40m[2J[01;01H[=3h[2J[01;01H[0m[37m[40m2026/10/05 22:00:56Z: Windows is being configured. 'SysprepState=IMAGE_STATE_UNDEPLOYABLE'
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[0m[35m[40m[2J[01;01H[=3h[2J[01;01H[0m[37m[40m2026/10/05 17:04:29Z: Windows is being configured. 'SysprepState=IMAGE_STATE_UNDEPLOYABLE'
+2026/10/05 22:05:01Z: Windows sysprep configuration complete.
+2026/10/05 22:05:04Z: Message: Meta-data is now available.
+2026/10/05 22:05:06Z: AMI Origin Version: 2026.07.15
+2026/10/05 22:05:06Z: AMI Origin Name: Windows_Server-2025-English-Full-Base
+2026/10/05 22:05:06Z: OS: Microsoft Windows NT 10.0.26100
+2026/10/05 22:05:06Z: OsVersion: 10.0
+2026/10/05 22:05:06Z: OsProductName: Windows Server 2025 Datacenter
+2026/10/05 22:05:06Z: OsBuildLabEx: 26100.1.amd64fre.ge_release.240331-1435
+2026/10/05 22:05:06Z: OsCurrentBuild: 26100
+2026/10/05 22:05:06Z: OsReleaseId: 2009
+2026/10/05 22:05:06Z: Language: en-US
+2026/10/05 22:05:06Z: TimeZone: UTC
+2026/10/05 22:05:06Z: Offset: UTC +0000
+2026/10/05 22:05:06Z: Launch: EC2 Launch v2.5.1
+2026/10/05 22:05:06Z: AMI-ID: ami-0faa0f7a04c6fd533
+2026/10/05 22:05:06Z: Instance-ID: i-036270be53d91da1b
+2026/10/05 22:05:06Z: Instance Type: m5.large
+2026/10/05 22:05:06Z: Driver: AWS NVMe Driver v1.8.2.53
+2026/10/05 22:05:06Z: SubComponent: 1.8.2.53; EnableSCSIPersistentReservations: 0
+2026/10/05 22:05:06Z: Driver: Amazon Elastic Network Adapter v2.11.0.0
+2026/10/05 22:05:06Z: Driver: EC2 Windows Utility Device v3.2.0.29
+2026/10/05 22:05:07Z: Waiting for RDP info.
+2026/10/05 22:05:53Z: HOSTNAME: EC2AMAZ-PH7FO5C
+2026/10/05 22:05:53Z: RDPCERTIFICATE-SUBJECTNAME: EC2AMAZ-PH7FO5C
+2026/10/05 22:05:53Z: RDPCERTIFICATE-THUMBPRINT: EFED695DFB4643A80C1A63DBBF4482D82258B6D0
+2026/10/05 22:05:53Z: SSM: Amazon SSM Agent v3.3.4793.0
+2026/10/05 22:05:56Z: Username: Administrator
+2026/10/05 22:05:57Z: User data format: yaml_1.1
+2026/10/05 22:05:57Z: EC2LaunchTelemetry: IsTelemetryEnabled=true
+2026/10/05 22:05:57Z: EC2LaunchTelemetry: AgentOsArch=windows_amd64
+2026/10/05 22:05:57Z: EC2LaunchTelemetry: IsAgentScheduledPerBoot=true
+2026/10/05 22:05:57Z: EC2LaunchTelemetry: AgentCommandErrorCode=0
+2026/10/05 22:05:57Z: EC2LaunchTelemetry: AdminPasswordTypeCode=0
+2026/10/05 22:05:57Z: Message: Windows is Ready to use
+{"agentId":"WindowsLaunchAgentV2","metrics":[{"AgentCommandErrorCode":"0","LaunchAgentCommandErrorCodeMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentCommandErrorCode","agentVersion"]],"Metrics":[{"Name":"LaunchAgentCommandErrorCodeMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"}],"timestamp":1791237957724,"type":"EC2AgentTelemetry"}
+{"agentId":"WindowsLaunchAgentV2","metrics":[{"AdminPasswordTypeCode":"0","AdminPasswordTypeCodeMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["AdminPasswordTypeCode","agentVersion"]],"Metrics":[{"Name":"AdminPasswordTypeCodeMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"},{"AgentOsArch":"windows_amd64","AgentOsArchMetric":1,"InstanceType":"m5.large","OsVersion":"10.0.26100","_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentOsArch","InstanceType","OsVersion","agentVersion"]],"Metrics":[{"Name":"AgentOsArchMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"}],"timestamp":1791237957727,"type":"EC2AgentTelemetry"}
+{"agentId":"WindowsLaunchAgentV2","metrics":[{"OsVersion":"10.0.26100","OsVersionMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["OsVersion","agentVersion"]],"Metrics":[{"Name":"OsVersionMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"},{"InstanceType":"m5.large","InstanceTypeMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["InstanceType","agentVersion"]],"Metrics":[{"Name":"InstanceTypeMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"}],"timestamp":1791237957727,"type":"EC2AgentTelemetry"}
+{"agentId":"WindowsLaunchAgentV2","metrics":[{"AgentErrorLocation":"null","AgentErrorLocationMetric":1,"_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentErrorLocation","agentVersion"]],"Metrics":[{"Name":"AgentErrorLocationMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"},{"AgentErrorLocation":"null","AgentErrorLocationDetailsMetric":1,"InstanceType":"m5.large","OsVersion":"10.0.26100","_aws":{"CloudWatchMetrics":[{"Dimensions":[["AgentErrorLocation","InstanceType","OsVersion","agentVersion"]],"Metrics":[{"Name":"AgentErrorLocationDetailsMetric","Unit":"Count"}]}],"Timestamp":1791237957724},"agentVersion":"2.5.1"}],"timestamp":1791237957727,"type":"EC2AgentTelemetry"}
+2026/10/05 22:06:25Z: Amazon SSM Agent v3.3.4793.0 is running
+2026/10/05 22:06:25Z: OsProductName: Windows Server 2025 Datacenter
+2026/10/05 22:06:25Z: OsInstallOption: Full
+2026/10/05 22:06:25Z: OsVersion: 10.0
+2026/10/05 22:06:25Z: OsBuildLabEx: 26100.1.amd64fre.ge_release.240331-1435
