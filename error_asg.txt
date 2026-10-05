@@ -8,3 +8,22 @@ WsContactsAPC = Z:\CrediWeb\WS\WsCrmContacts
  
 Get-WebApplication -Site "WS_apcexperian" | Select-Object Path, PhysicalPath, applicationPool
 Get-WebApplication -Site "Apc Web Services" | Select-Object Path, PhysicalPath, applicationPool
+
+
+PS C:\Windows\system32> Get-WebApplication -Site "WS_apcexperian" | Select-Object Path, PhysicalPath, applicationPool
+ 
+path                 PhysicalPath                              applicationPool
+----                 ------------                              ---------------
+/SCOREPLUS           E:\APC\WS\SCOREPLUS\Produccion\SCOREAPCWS WS_apcexperian
+/WsContactsAPC       E:\APC\WS\WsCrmContacts                   WS_apcexperian
+/PCF                 E:\APC\WS\PcEssentialsService             NetCore
+/CustomModelsService E:\APC\WS\CustomModelsService             CustomModelsService
+/IntelicheckService  E:\APC\WS\IntelicheckService              IntelicheckService
+ 
+ 
+PS C:\Windows\system32> Get-WebApplication -Site "Apc Web Services" | Select-Object Path, PhysicalPath, applicationPool
+ 
+path           PhysicalPath                              applicationPool
+----           ------------                              ---------------
+/SCOREPLUS     E:\APC\WS\SCOREPLUS\Produccion\SCOREAPCWS Apc Web Services
+/WsContactsAPC E:\APC\WS\WsCrmContacts                   Apc Web Services
