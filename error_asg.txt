@@ -1,9 +1,114 @@
-Drive FSx Z: no montado todavia; State Manager reintentara.
-At C:\ProgramData\Amazon\SSM\InstanceData\i-036270be53d91da1b\document\orchestration\218b8ce0-3495-46d5-bfb8-f885a8ac47
-6c\configureIis\_script.ps1:10 char:34
-+ ... $DR`:\")) { throw "Drive FSx $DR`: no montado todavia; State Manager  ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : OperationStopped: (Drive FSx Z: no...er reintentara.:String) [], RuntimeException
-    + FullyQualifiedErrorId : Drive FSx Z: no montado todavia; State Manager reintentara.
- 
-failed to run commands: exit status 1
+AWS Systems Manager
+Run Command
+Command ID: 78e33f95-55cc-48f8-b812-1097d39f7be2
+AWS Systems Manager
+Run Command
+Command ID: 78e33f95-55cc-48f8-b812-1097d39f7be2
+
+
+AWS Systems Manager
+Review node insights
+Explore nodes
+Diagnose and remediate
+Just-in-time node access
+Hybrid and Multicloud nodes
+
+New
+Settings
+Node Tools
+Compliance
+Distributor
+Fleet Manager
+Hybrid Activations
+Inventory
+Patch Manager
+Run Command
+Session Manager
+State Manager
+Change Management Tools
+Automation
+Change Calendar
+Change Manager
+Documents
+Maintenance Windows
+Quick Setup
+Application Tools
+AppConfig
+Application Manager
+Parameter Store
+Operations Tools
+Explorer
+Incident Manager
+OpsCenter
+Command ID: 78e33f95-55cc-48f8-b812-1097d39f7be2
+
+Cancel command
+Rerun
+Copy to new
+Command status
+Overall status
+Failed
+Detailed status
+Failed
+# targets
+2
+# completed
+2
+# error
+1
+# delivery timed out
+0
+Targets and outputs
+View output
+
+1
+
+Command invocation selection	
+Instance ID
+Instance name
+Status
+Detailed Status
+Start time
+Finish time
+i-035df45b5907a70eb
+EC2AMAZ-9GQEFSE.WORKGROUP
+Failed
+Terminated
+i-08c4bb843f617f39f
+EC2AMAZ-DAAMP3H.WORKGROUP
+Failed
+Failed
+Mon, 05 Oct 2026 22:34:28 GMT
+Mon, 05 Oct 2026 22:34:30 GMT
+CloudWatch alarm
+Alarm
+-
+Continue command if alarm status is unavailable
+-
+Command description
+Command ID
+78e33f95-55cc-48f8-b812-1097d39f7be2
+Command steps
+1
+Command document
+eec-aws-us-eits-intelisrcpa-prd-iis-configure
+Comment
+c1e4a340-c649-45ac-9a2f-967391f6e37a:091718ce-b4ec-4c4d-921f-b23a176934c4
+Document version
+2
+Date requested
+Mon, 05 Oct 2026 22:34:28 GMT
+Command parameters
+Parameters
+CertSecretPrefix
+"eec-aws-us-eits-intelisrcpa-prd"
+FsxDrive
+"Z"
+IisSitesJson
+"[{"apps":[],"cert_secret_name":"api-apcexperian-com","host_header":"api.apcexperian.com","name":"api","path":"API_PA\\wwwroot","port":80},{"apps":[],"cert_secret_name":"apiprodpa-experian-local","host_header":"apiprodpa.experian.local","name":"apiprodpa","path":"API_PA\\wwwroot","port":80}]"
+Region
+"us-east-1"
+Delivery timeout (seconds)
+600
+Execution timeout (seconds)
+3600
