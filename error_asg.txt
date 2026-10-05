@@ -1,11 +1,9 @@
-At C:\ProgramData\Amazon\SSM\InstanceData\i-06daacf3922b65f72\document\orchestration\cfb8e221-3fca-4b1b-9f24-52b9261221
-16\configureIis\_script.ps1:63 char:44
-+   }catch{ W "Aviso BindHttps $($site.name)/$certKey: $($_.Exception.M ...
-+                                            ~~~~~~~~~
-Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to 
-delimit the name.
-    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
-    + FullyQualifiedErrorId : InvalidVariableReferenceWithDrive
- 
-failed to run commands: exit status 1
++ /home/jenkins/workspace/SP-LATAM/EITS/Infrastructure/eec-aws-us-eits-intelisrcpa/1186/.bin/bin/terraform validate
 
+Error: Invalid reference
+
+  on iis-config.tf line 135, in resource "aws_ssm_document" "iis_configure":
+ 135:             "  }catch{ W \"Aviso BindHttps $($site.name)/${certKey}: $($_.Exception.Message)\" }",
+
+A reference to a resource type must be followed by at least one attribute
+access, specifying the resource name.
