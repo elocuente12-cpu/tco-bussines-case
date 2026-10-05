@@ -1,38 +1,11 @@
-aspnet_client = Z:\CrediWeb\WS\wwwroot\aspnet_client
-customModelsService = Z:\CrediWeb\WS\CustomModelsService
-IntelicheckService = Z:\CrediWeb\WS\IntelicheckService
-Logs = Z:\CrediWeb\WS\wwwroot\Logs
-PCF = Z:\CrediWeb\WS\PcEssentialsService
-SCOREPLUS = Z:\CrediWeb\WS\SCOREPLUS\Produccion\SCOREAPCWS
-WsContactsAPC = Z:\CrediWeb\WS\WsCrmContacts
+At C:\ProgramData\Amazon\SSM\InstanceData\i-06daacf3922b65f72\document\orchestration\cfb8e221-3fca-4b1b-9f24-52b9261221
+16\configureIis\_script.ps1:63 char:44
++   }catch{ W "Aviso BindHttps $($site.name)/$certKey: $($_.Exception.M ...
++                                            ~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to 
+delimit the name.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : InvalidVariableReferenceWithDrive
  
-Get-WebApplication -Site "WS_apcexperian" | Select-Object Path, PhysicalPath, applicationPool
-Get-WebApplication -Site "Apc Web Services" | Select-Object Path, PhysicalPath, applicationPool
+failed to run commands: exit status 1
 
-
-PS C:\Windows\system32> Get-WebApplication -Site "WS_apcexperian" | Select-Object Path, PhysicalPath, applicationPool
- 
-path                 PhysicalPath                              applicationPool
-----                 ------------                              ---------------
-/SCOREPLUS           E:\APC\WS\SCOREPLUS\Produccion\SCOREAPCWS WS_apcexperian
-/WsContactsAPC       E:\APC\WS\WsCrmContacts                   WS_apcexperian
-/PCF                 E:\APC\WS\PcEssentialsService             NetCore
-/CustomModelsService E:\APC\WS\CustomModelsService             CustomModelsService
-/IntelicheckService  E:\APC\WS\IntelicheckService              IntelicheckService
- 
- 
-PS C:\Windows\system32> Get-WebApplication -Site "Apc Web Services" | Select-Object Path, PhysicalPath, applicationPool
- 
-path           PhysicalPath                              applicationPool
-----           ------------                              ---------------
-/SCOREPLUS     E:\APC\WS\SCOREPLUS\Produccion\SCOREAPCWS Apc Web Services
-/WsContactsAPC E:\APC\WS\WsCrmContacts                   Apc Web Services
-
-PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-Get-Content : Cannot find path 'C:\ProgramData\intelisrcpa-bootstrap.log' because it does not exist.
-At line:1 char:1
-+ Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (C:\ProgramData\intelisrcpa-bootstrap.log:String) [Get-Content], ItemNotFoundException
-    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetContentCommand
-PS C:\Windows\system32>
