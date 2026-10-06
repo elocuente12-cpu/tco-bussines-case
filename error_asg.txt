@@ -1,78 +1,23 @@
-Get-Content "C:\ProgramData\Amazon\EC2Launch\log\agent.log" | Select-String -Pattern "executeScript|exit|3010|reboot|error|Running task|userdata" -Context 0,1
-
-Get-ChildItem C:\ProgramData\*.log | Format-Table Name, Length, LastWriteTime
-Test-Path C:\ProgramData\intelisrcpa-bootstrap.log
-
-
-
-Sepulveda.ext, Javier
-Alberto hola buen día, me ayudas corriendo estos comandos en cualquiera de las instancias.     Get-Content "C:\ProgramData\Amazon\EC2Launch\log\agent.log" | Select-String -Pattern "executeScript|exit…
-
-> 2026-07-31 17:42:17.312Z Console: EC2LaunchTelemetry: IsUserDataScheduledPerBoot=false
-> 2026-07-31 17:42:17.313Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-07-31 17:42:17.313Z Console: EC2LaunchTelemetry: AdminPasswordTypeCode=0
-> 2026-07-31 17:42:17.325Z Info: Error file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch3599108618\err.tmp
-  2026-07-31 17:42:17.326Z Info: Output file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch3599108618\output.tmp
-> 2026-07-31 17:43:09.725Z Error: Script produced error output.
-> 2026-07-31 17:43:09.739Z Info: Stage: postReadyUserData completed.
-  2026-07-31 17:43:09.740Z Info: Run StartSsm task.
-> 2026-07-31 17:53:23.692Z Console: EC2LaunchTelemetry: IsUserDataScheduledPerBoot=false
-> 2026-07-31 17:53:23.693Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-07-31 17:53:23.694Z Console: Message: Windows is Ready to use
-> 2026-07-31 17:53:23.695Z Warning: Skipping task postReadyUserData-executeScript-0
-> 2026-07-31 17:53:23.700Z Info: Stage: postReadyUserData completed.
-  2026-07-31 17:53:23.701Z Info: Run StartSsm task.
-> 2026-07-31 17:59:42.863Z Console: EC2LaunchTelemetry: IsUserDataScheduledPerBoot=false
-> 2026-07-31 17:59:42.865Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-07-31 17:59:42.867Z Console: Message: Windows is Ready to use
-> 2026-07-31 17:59:42.869Z Warning: Skipping task postReadyUserData-executeScript-0
-> 2026-07-31 17:59:42.873Z Info: Stage: postReadyUserData completed.
-  2026-07-31 17:59:42.878Z Info: COM port closed successfully.
-> 2026-07-31 18:05:17.596Z Console: EC2LaunchTelemetry: IsUserDataScheduledPerBoot=false
-> 2026-07-31 18:05:17.596Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-07-31 18:05:17.596Z Console: Message: Windows is Ready to use
-> 2026-07-31 18:05:17.602Z Warning: Skipping task postReadyUserData-executeScript-0
-> 2026-07-31 18:05:17.604Z Info: Stage: postReadyUserData completed.
-  2026-07-31 18:05:17.605Z Info: Run StartSsm task.
-> 2026-07-31 18:25:51.222Z Console: EC2LaunchTelemetry: IsUserDataScheduledPerBoot=false
-> 2026-07-31 18:25:51.222Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-07-31 18:25:51.222Z Console: Message: Windows is Ready to use
-> 2026-07-31 18:25:51.224Z Warning: Skipping task postReadyUserData-executeScript-0
-> 2026-07-31 18:25:51.227Z Info: Stage: postReadyUserData completed.
-  2026-07-31 18:25:51.229Z Info: Run StartSsm task.
-> 2026-08-13 14:06:31.745Z Info: Detected EC2Launch coming back from reboot.
-  2026-08-13 14:06:32.020Z Info: Stage:'sysprepSpecialize' ran successfully.
-> 2026-08-13 14:07:34.155Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-08-13 14:07:34.155Z Console: EC2LaunchTelemetry: AdminPasswordTypeCode=0
-> 2026-08-13 14:07:34.156Z Info: Stage: postReadyUserData completed.
-  2026-08-13 14:07:34.162Z Info: Run StartSsm task.
-> 2026-10-06 10:16:47.055Z Info: Detected EC2Launch coming back from reboot.
-  2026-10-06 10:16:47.161Z Info: Stage:'sysprepSpecialize' ran successfully.
-> 2026-10-06 15:18:54.599Z Console: EC2LaunchTelemetry: AgentCommandErrorCode=0
-  2026-10-06 15:18:54.687Z Console: EC2LaunchTelemetry: AdminPasswordTypeCode=0
-> 2026-10-06 15:18:55.239Z Info: Error file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch730782446\err.tmp
-  2026-10-06 15:18:55.328Z Info: Output file is created at: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch730782446\output.tmp
-> 2026-10-06 15:20:23.401Z Error: Script was run successfully but returned a non-zero exit code: 1
-> 2026-10-06 15:20:23.469Z Info: Stage: postReadyUserData completed.
-  2026-10-06 15:20:23.477Z Info: Run StartSsm task.
- 
 PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-
-2026-10-06T15:18:59.9505733+00:00  === Inicio bootstrap ===
-
-2026-10-06T15:19:01.3496019+00:00  Instance ID: i-0cc1b1829407d13ff
-
-2026-10-06T15:19:02.9655949+00:00  Health-check deshabilitado mientras se valida bootstrap.
-
-2026-10-06T15:19:07.2526818+00:00  Fase 1: Domain join...
-
-2026-10-06T15:20:23.1827398+00:00  Hostname 2 reclamado (1).
-
-2026-10-06T15:20:23.1852083+00:00  Hostname asignado: 2026-10-06T15:20:23.1827398+00:00  Hostname 2 reclamado (1). USAEA1PWBWESPA2
-
-2026-10-06T15:20:23.1892317+00:00  Renombrando: EC2AMAZ-84I97S4 -> 2026-10-06T15:20:23.1827398+00:00  Hostname 2 reclamado (1). USAEA1PWBWESPA2
-
-2026-10-06T15:20:23.2742752+00:00  ERROR FATAL: Cannot convert 'System.Object[]' to the type 'System.String' required by parameter 'NewName'. Specified method is not supported.
-
+2026-10-06T17:50:23.4748451+00:00  === Inicio bootstrap ===
+2026-10-06T17:50:24.0312213+00:00  Instance ID: i-0b99273f76e7df8bc
+2026-10-06T17:50:25.4417344+00:00  Health-check deshabilitado mientras se valida bootstrap.
+2026-10-06T17:50:29.6645223+00:00  Fase 1: Domain join...
+2026-10-06T17:51:40.5233095+00:00  Hostname 2 reclamado (1).
+2026-10-06T17:51:40.6007522+00:00  Hostname asignado: USAEA1PWBWESPD2
+2026-10-06T17:51:40.6543812+00:00  Renombrando: EC2AMAZ-3B5OHBA -> USAEA1PWBWESPD2
+2026-10-06T17:51:43.4111527+00:00  Rename OK. Exit 3010.
+2026-10-06T17:52:46.0541932+00:00  === Inicio bootstrap ===
+2026-10-06T17:52:47.5702803+00:00  Instance ID: i-0b99273f76e7df8bc
+2026-10-06T17:52:48.0961356+00:00  Health-check deshabilitado mientras se valida bootstrap.
+2026-10-06T17:52:48.5584222+00:00  Fase 1: Domain join...
+2026-10-06T17:53:47.7517565+00:00  Hostname reutilizado: USAEA1PWBWESPD2
+2026-10-06T17:54:18.4977659+00:00  Domain join: USAEA1PWBWESPD2 -> gdc.local
+2026-10-06T17:54:42.8529147+00:00  Domain join OK. Exit 3010.
+2026-10-06T17:55:57.4915468+00:00  === Inicio bootstrap ===
+2026-10-06T17:55:58.0385074+00:00  Instance ID: i-0b99273f76e7df8bc
+2026-10-06T17:55:58.6286765+00:00  Health-check deshabilitado mientras se valida bootstrap.
+2026-10-06T17:55:59.3461646+00:00  ERROR FATAL: Gate AD fallo: canal seguro con gdc.local no valido.
 PS C:\Windows\system32>
  
+}
