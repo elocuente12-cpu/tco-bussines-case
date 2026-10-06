@@ -1,23 +1,10 @@
-PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-2026-10-06T17:50:23.4748451+00:00  === Inicio bootstrap ===
-2026-10-06T17:50:24.0312213+00:00  Instance ID: i-0b99273f76e7df8bc
-2026-10-06T17:50:25.4417344+00:00  Health-check deshabilitado mientras se valida bootstrap.
-2026-10-06T17:50:29.6645223+00:00  Fase 1: Domain join...
-2026-10-06T17:51:40.5233095+00:00  Hostname 2 reclamado (1).
-2026-10-06T17:51:40.6007522+00:00  Hostname asignado: USAEA1PWBWESPD2
-2026-10-06T17:51:40.6543812+00:00  Renombrando: EC2AMAZ-3B5OHBA -> USAEA1PWBWESPD2
-2026-10-06T17:51:43.4111527+00:00  Rename OK. Exit 3010.
-2026-10-06T17:52:46.0541932+00:00  === Inicio bootstrap ===
-2026-10-06T17:52:47.5702803+00:00  Instance ID: i-0b99273f76e7df8bc
-2026-10-06T17:52:48.0961356+00:00  Health-check deshabilitado mientras se valida bootstrap.
-2026-10-06T17:52:48.5584222+00:00  Fase 1: Domain join...
-2026-10-06T17:53:47.7517565+00:00  Hostname reutilizado: USAEA1PWBWESPD2
-2026-10-06T17:54:18.4977659+00:00  Domain join: USAEA1PWBWESPD2 -> gdc.local
-2026-10-06T17:54:42.8529147+00:00  Domain join OK. Exit 3010.
-2026-10-06T17:55:57.4915468+00:00  === Inicio bootstrap ===
-2026-10-06T17:55:58.0385074+00:00  Instance ID: i-0b99273f76e7df8bc
-2026-10-06T17:55:58.6286765+00:00  Health-check deshabilitado mientras se valida bootstrap.
-2026-10-06T17:55:59.3461646+00:00  ERROR FATAL: Gate AD fallo: canal seguro con gdc.local no valido.
-PS C:\Windows\system32>
+stop-webitem : Cannot find path 'IIS:\Sites\Default Web Site' because it does not exist.
+At C:\ProgramData\Amazon\SSM\InstanceData\i-03068edb797f0d48f\document\orchestration\05cd7804-ee92-4ac7-b492-db5514af7b
+49\configureIis\_script.ps1:71 char:1
++ Stop-Website 'Default Web Site' -EA SilentlyContinue
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (IIS:\Sites\Default Web Site:String) [Stop-WebItem], ItemNotFoundExcepti 
+   on
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.IIs.PowerShell.Provider.StopItemCommand
  
-}
+failed to run commands: exit status 1
