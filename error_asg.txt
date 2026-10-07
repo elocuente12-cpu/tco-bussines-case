@@ -1,134 +1,60 @@
-aws secretsmanager put-secret-value \
-  --secret-id eec-aws-us-eits-intelisrcpa-prd-datadog-apikey \
-  --secret-string '{"api_key":"<TU_API_KEY_DATADOG>"}' \
-  --region us-east-1
+	
+/intelisrcpa/app1/hostname-mapping/i-054e25194eebdaa29
+Standard
+String
+Wed, 07 Oct 2026 20:26:12 GMT
 
+/intelisrcpa/app1/hostname-mapping/i-0f59d1c75a6f42b92
+Standard
+String
+Wed, 07 Oct 2026 20:32:51 GMT
 
-aws secretsmanager put-secret-value \
-  --secret-id eec-aws-us-eits-intelisrcpa-prd-datadog-database \
-  --secret-string '{"host":"<ENDPOINT_RDS_MULTIAZ1>","port":"1433","username":"datadog_monitoring","password":"<PASSWORD>","database":"<DB>"}' \
-  --region us-east-1
+/intelisrcpa/app2/hostname-mapping/i-05bd63f4b79776525
+Standard
+String
+Mon, 28 Sep 2026 23:15:52 GMT
 
+/intelisrcpa/app2/hostname-mapping/i-093b3986bc3d31522
+Standard
+String
+Wed, 07 Oct 2026 20:35:40 GMT
 
-star
-eec-aws-us-eits-intelisrcpa-prd-datadog-configure
-Document type
-Command
-Owner
-274193347839
-Platform types
-Windows, Linux, MacOS
-Default version
-1
-star
-PMI-Uninstall-Datadog-Agent
-Document type
-Command
-Owner
-957780545500
-Platform types
-Windows, Linux
-Default version
-3
-star
-datadog_install
-Document type
-Command
-Owner
-530710445070
-Platform types
-Linux
-Default version
-1
-star
-datadog-agent-installation-windows-no-reboot
-Document type
-Command
-Owner
-339712931322
-Platform types
-Windows, Linux, MacOS
-Default version
-1
-star
-datadog-agent-installation-linux-retry
-Document type
-Command
-Owner
-339712931322
-Platform types
-Linux, MacOS
-Default version
-6
-star
-datadog-agent-installation-windows
-Document type
-Command
-Owner
-865078226113
-Platform types
-Windows, Linux, MacOS
-Default version
-3
-star
-datadog-agent-installation-linux
-Document type
-Command
-Owner
-865078226113
-Platform types
-Linux, MacOS
-Default version
-6
-star
-rackspace-datadog-agent-configure-mysql
-Document type
-Command
-Owner
-953410294458
-Platform types
-Windows, Linux
-Default version
-1
-star
-rackspace-datadog-agent-configure
-Document type
-Command
-Owner
-953410294458
-Platform types
-Windows, Linux
-Default version
-3
-star
-rackspace-datadog-agent-unconfigure-apache
-Document type
-Command
-Owner
-953410294458
-Platform types
-Windows, Linux
-Default version
-3
-star
-rackspace-datadog-agent-uninstall
-Document type
-Command
-Owner
-953410294458
-Platform types
-Windows, Linux
-Default version
-5
-star
-rackspace-datadog-agent-unconfigure-iis
-Document type
-Command
-Owner
-953410294458
-Platform types
-Windows
-Default version
-1
+/intelisrcpa/app3/hostname-mapping/i-023ffc6a6407b920f
+Standard
+String
+Wed, 07 Oct 2026 20:24:29 GMT
 
+/intelisrcpa/app4/hostname-mapping/i-0ff2707fdc92dd662
+Standard
+String
+Wed, 07 Oct 2026 20:25:48 GMT
 
+/intelisrcpa/app5/hostname-mapping/i-0318d47da9408c35a
+Standard
+String
+Wed, 07 Oct 2026 20:17:54 GMT
+
+/intelisrcpa/app5/hostname-mapping/i-0457211b0f1b5cba0
+Standard
+String
+Wed, 07 Oct 2026 20:34:49 GMT
+
+/intelisrcpa/app5/orphaned/USAEA1PWBWESPE2
+Standard
+String
+Wed, 07 Oct 2026 20:34:48 GMT
+
+/intelisrcpa/app7/hostname-mapping/i-01e844b4dadd7720c
+Standard
+String
+Wed, 07 Oct 2026 20:24:49 GMT
+
+/intelisrcpa/app7/hostname-mapping/i-0a551c979c0bf5b53
+Standard
+String
+Mon, 28 Sep 2026 23:16:10 GMT
+
+/intelisrcpa/app7/hostname-mapping/i-0d7f62deead54a3b3
+Standard
+String
+Wed, 07 Oct 2026 20:33:19 GMT
