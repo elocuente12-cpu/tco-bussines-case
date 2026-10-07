@@ -1,10 +1,9 @@
-stop-webitem : Cannot find path 'IIS:\Sites\Default Web Site' because it does not exist.
-At C:\ProgramData\Amazon\SSM\InstanceData\i-03068edb797f0d48f\document\orchestration\05cd7804-ee92-4ac7-b492-db5514af7b
-49\configureIis\_script.ps1:71 char:1
-+ Stop-Website 'Default Web Site' -EA SilentlyContinue
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (IIS:\Sites\Default Web Site:String) [Stop-WebItem], ItemNotFoundExcepti 
-   on
-    + FullyQualifiedErrorId : PathNotFound,Microsoft.IIs.PowerShell.Provider.StopItemCommand
+iisreset fallo con exit code 1062.
+At C:\ProgramData\Amazon\SSM\InstanceData\i-0e4cc9ab8f8f533ee\document\orchestration\c43e3898-8c37-4140-a3f8-3132eece26
+9b\configureIis\_script.ps1:302 char:32
++ ... ITCODE -ne 0) { throw "iisreset fallo con exit code $LASTEXITCODE." }
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (iisreset fallo con exit code 1062.:String) [], RuntimeException
+    + FullyQualifiedErrorId : iisreset fallo con exit code 1062.
  
 failed to run commands: exit status 1
