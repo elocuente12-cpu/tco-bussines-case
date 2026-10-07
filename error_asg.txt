@@ -1,3 +1,10 @@
-2026-10-07T11:32:22.9078788-04:00  === Inicio reconciliacion IIS SSM ===
-2026-10-07T11:32:49.2439096-04:00  IIS ya estaba convergido; no se reciclan pools.
-2026-10-07T11:32:49.2459227-04:00  === Reconciliacion IIS SSM completada ===
+aws secretsmanager put-secret-value \
+  --secret-id eec-aws-us-eits-intelisrcpa-prd-datadog-apikey \
+  --secret-string '{"api_key":"<TU_API_KEY_DATADOG>"}' \
+  --region us-east-1
+
+
+aws secretsmanager put-secret-value \
+  --secret-id eec-aws-us-eits-intelisrcpa-prd-datadog-database \
+  --secret-string '{"host":"<ENDPOINT_RDS_MULTIAZ1>","port":"1433","username":"datadog_monitoring","password":"<PASSWORD>","database":"<DB>"}' \
+  --region us-east-1
