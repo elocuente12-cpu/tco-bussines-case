@@ -1,3 +1,4 @@
 fields @timestamp, @message
-| filter @message like /i-05bd63f4b79776525/ or @message like /i-0a551c979c0bf5b53/
+| filter @message like /hostname-mapping/ or @message like /Lifecycle action completed/ or @message like /SSM Command sent/ or @message like /delete_parameter/ or @message like /eliminado/
 | sort @timestamp asc
+| limit 200
