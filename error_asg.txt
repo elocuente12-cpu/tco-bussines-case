@@ -1,4 +1,36 @@
-fields @timestamp, @message
-| filter @message like /hostname-mapping/ or @message like /Lifecycle action completed/ or @message like /SSM Command sent/ or @message like /delete_parameter/ or @message like /eliminado/
-| sort @timestamp asc
-| limit 200
+2026-10-07T20:09:56.148Z	[INFO] 2026-10-07T20:09:56.148Z 9df16d94-5c81-48c4-98fa-fc5b353bbc30 Derived asg_key='app2' -> mapping path '/intelisrcpa/app2/hostname-mapping'
+2026-10-07T20:09:56.466Z	[INFO] 2026-10-07T20:09:56.466Z 9df16d94-5c81-48c4-98fa-fc5b353bbc30 SSM Command sent: 39b88fbc-8694-4fbd-930a-05ff4eb39ea7
+2026-10-07T20:10:26.772Z	[INFO] 2026-10-07T20:10:26.772Z 9df16d94-5c81-48c4-98fa-fc5b353bbc30 SSM Parameter '/intelisrcpa/app2/hostname-mapping/i-0301e70c21eb2710a' no existe (ya borrado o nunca creado) - OK.
+2026-10-07T20:10:27.170Z	[INFO] 2026-10-07T20:10:27.170Z 9df16d94-5c81-48c4-98fa-fc5b353bbc30 Lifecycle action completed for i-0301e70c21eb2710a
+2026-10-07T20:11:33.127Z	[INFO] 2026-10-07T20:11:33.127Z fce76a1b-f945-4dca-b089-2edfeaf8df4b Derived asg_key='app5' -> mapping path '/intelisrcpa/app5/hostname-mapping'
+2026-10-07T20:11:33.388Z	[INFO] 2026-10-07T20:11:33.388Z fce76a1b-f945-4dca-b089-2edfeaf8df4b SSM Command sent: 8930b7f0-c16b-4cd3-adcf-c8751c323795
+2026-10-07T20:12:28.844Z	[INFO] 2026-10-07T20:12:28.844Z fce76a1b-f945-4dca-b089-2edfeaf8df4b SSM Command Success: 2026-10-07T16:11:36.1442111-04:00 === Leave-Domain iniciado === 2026-10-07T16:11:36.1666315-04:00 Computer: USAEA1PWBWESPE1 2026-10-07T16:12:22.4509252-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-10-07T16:12:23.5931145-04:00 Computer object 'USAEA1PWBWESPE1' ELIMINADO del AD. 2026-10-07T16:12:23.8875933-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-10-07T16:12:23.9155049-04:00 === Leave-Domain completado ===
+2026-10-07T20:12:28.948Z	[INFO] 2026-10-07T20:12:28.948Z fce76a1b-f945-4dca-b089-2edfeaf8df4b SSM Parameter '/intelisrcpa/app5/hostname-mapping/i-00cbcce2f3e19df03' eliminado por la Lambda.
+2026-10-07T20:12:29.325Z	[INFO] 2026-10-07T20:12:29.324Z fce76a1b-f945-4dca-b089-2edfeaf8df4b Lifecycle action completed for i-00cbcce2f3e19df03
+2026-10-07T20:20:26.904Z	[INFO] 2026-10-07T20:20:26.904Z b97695a3-d109-4205-89c2-e566961f8e5b Derived asg_key='app1' -> mapping path '/intelisrcpa/app1/hostname-mapping'
+2026-10-07T20:20:27.222Z	[INFO] 2026-10-07T20:20:27.221Z b97695a3-d109-4205-89c2-e566961f8e5b SSM Command sent: 649848d0-34b0-4909-8fb7-4cec1fb7c0b0
+2026-10-07T20:20:28.110Z	[INFO] 2026-10-07T20:20:28.110Z 84d73448-555d-4492-b4c3-3b41a17dd07c Derived asg_key='app3' -> mapping path '/intelisrcpa/app3/hostname-mapping'
+2026-10-07T20:20:28.386Z	[INFO] 2026-10-07T20:20:28.386Z 91c3dcdd-052d-4888-a845-fafcba227e5e Derived asg_key='app7' -> mapping path '/intelisrcpa/app7/hostname-mapping'
+2026-10-07T20:20:28.403Z	[INFO] 2026-10-07T20:20:28.403Z 84d73448-555d-4492-b4c3-3b41a17dd07c SSM Command sent: 1e724839-c167-42c2-80fb-aa2932c38dcf
+2026-10-07T20:20:28.714Z	[INFO] 2026-10-07T20:20:28.714Z 91c3dcdd-052d-4888-a845-fafcba227e5e SSM Command sent: f60fb86b-e98b-4927-8c52-a1e9e3e2cb2d
+2026-10-07T20:20:28.828Z	[INFO] 2026-10-07T20:20:28.828Z a13098c3-e874-4354-9a15-6874bdbcca94 Derived asg_key='app4' -> mapping path '/intelisrcpa/app4/hostname-mapping'
+2026-10-07T20:20:29.158Z	[INFO] 2026-10-07T20:20:29.158Z a13098c3-e874-4354-9a15-6874bdbcca94 SSM Command sent: 37f1a979-6504-42e4-ac6d-caa44412b0ef
+2026-10-07T20:20:48.472Z	[INFO] 2026-10-07T20:20:48.472Z 1942b7db-27e9-4d1f-9c5f-61055cc0e920 Derived asg_key='app4' -> mapping path '/intelisrcpa/app4/hostname-mapping'
+2026-10-07T20:20:48.782Z	[INFO] 2026-10-07T20:20:48.782Z 1942b7db-27e9-4d1f-9c5f-61055cc0e920 SSM Command sent: 03177172-0168-4c13-9026-48fe03c01eaa
+2026-10-07T20:20:52.442Z	[INFO] 2026-10-07T20:20:52.442Z b97695a3-d109-4205-89c2-e566961f8e5b SSM Command Success: 2026-10-07T16:20:28.0517089-04:00 === Leave-Domain iniciado === 2026-10-07T16:20:28.0650833-04:00 Computer: USAEA1PWBWESPA1 2026-10-07T16:20:49.5037253-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-10-07T16:20:49.6480975-04:00 Computer object 'USAEA1PWBWESPA1' no encontrado en AD. 2026-10-07T16:20:49.8056226-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-10-07T16:20:49.8076345-04:00 === Leave-Domain completado ===
+2026-10-07T20:20:52.554Z	[INFO] 2026-10-07T20:20:52.553Z b97695a3-d109-4205-89c2-e566961f8e5b SSM Parameter '/intelisrcpa/app1/hostname-mapping/i-093596e1d3df65bd9' eliminado por la Lambda.
+2026-10-07T20:20:52.792Z	[INFO] 2026-10-07T20:20:52.792Z b97695a3-d109-4205-89c2-e566961f8e5b Lifecycle action completed for i-093596e1d3df65bd9
+2026-10-07T20:20:58.769Z	[INFO] 2026-10-07T20:20:58.769Z 84d73448-555d-4492-b4c3-3b41a17dd07c SSM Parameter '/intelisrcpa/app3/hostname-mapping/i-0bb7ce6c2ecf603f2' eliminado por la Lambda.
+2026-10-07T20:20:58.970Z	[INFO] 2026-10-07T20:20:58.970Z 91c3dcdd-052d-4888-a845-fafcba227e5e SSM Command Success: 2026-10-07T16:20:29.7239358-04:00 === Leave-Domain iniciado === 2026-10-07T16:20:29.7491054-04:00 Computer: USAEA1PWBWESPG3 2026-10-07T16:20:54.5056779-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-10-07T16:20:55.1618151-04:00 Computer object 'USAEA1PWBWESPG3' ELIMINADO del AD. 2026-10-07T16:20:55.2843350-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-10-07T16:20:55.2873738-04:00 === Leave-Domain completado ===
+2026-10-07T20:20:58.970Z	[INFO] 2026-10-07T20:20:58.970Z c11afab4-f534-4b5a-9903-d0f17b998f2b Derived asg_key='app3' -> mapping path '/intelisrcpa/app3/hostname-mapping'
+2026-10-07T20:20:59.034Z	[INFO] 2026-10-07T20:20:59.034Z c11afab4-f534-4b5a-9903-d0f17b998f2b SSM Command sent: d8a80b61-8537-4f22-8fe8-b3d6a8fdfec9
+2026-10-07T20:20:59.037Z	[INFO] 2026-10-07T20:20:59.037Z 84d73448-555d-4492-b4c3-3b41a17dd07c Lifecycle action completed for i-0bb7ce6c2ecf603f2
+2026-10-07T20:20:59.066Z	[INFO] 2026-10-07T20:20:59.066Z 91c3dcdd-052d-4888-a845-fafcba227e5e SSM Parameter '/intelisrcpa/app7/hostname-mapping/i-0b50e975fa13ce5ac' eliminado por la Lambda.
+2026-10-07T20:20:59.384Z	[INFO] 2026-10-07T20:20:59.384Z 91c3dcdd-052d-4888-a845-fafcba227e5e Lifecycle action completed for i-0b50e975fa13ce5ac
+2026-10-07T20:20:59.398Z	[INFO] 2026-10-07T20:20:59.398Z a13098c3-e874-4354-9a15-6874bdbcca94 SSM Command Success: 2026-10-07T16:20:29.5430915-04:00 === Leave-Domain iniciado === 2026-10-07T16:20:29.5580974-04:00 Computer: USAEA1PWBWESPD2 2026-10-07T16:20:53.9696605-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-10-07T16:20:54.0950484-04:00 Computer object 'USAEA1PWBWESPD2' no encontrado en AD. 2026-10-07T16:20:54.2180069-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-10-07T16:20:54.2200166-04:00 === Leave-Domain completado ===
+2026-10-07T20:20:59.496Z	[INFO] 2026-10-07T20:20:59.496Z a13098c3-e874-4354-9a15-6874bdbcca94 SSM Parameter '/intelisrcpa/app4/hostname-mapping/i-034317bd762d55c35' eliminado por la Lambda.
+2026-10-07T20:20:59.758Z	[INFO] 2026-10-07T20:20:59.758Z a13098c3-e874-4354-9a15-6874bdbcca94 Lifecycle action completed for i-034317bd762d55c35
+2026-10-07T20:21:34.197Z	[INFO] 2026-10-07T20:21:34.197Z 1942b7db-27e9-4d1f-9c5f-61055cc0e920 SSM Command Success: 2026-10-07T16:20:50.1291375-04:00 === Leave-Domain iniciado === 2026-10-07T16:20:50.1865900-04:00 Computer: USAEA1PWBWESPD1 2026-10-07T16:21:28.9492624-04:00 Usando credenciales de: gdc.local\paawsas_svc 2026-10-07T16:21:29.8503331-04:00 Computer object 'USAEA1PWBWESPD1' ELIMINADO del AD. 2026-10-07T16:21:30.0399196-04:00 Remove-Computer: objeto AD ya eliminado, unjoin no es necesario (esperado). 2026-10-07T16:21:30.0459581-04:00 === Leave-Domain completado ===
+2026-10-07T20:21:34.293Z	[INFO] 2026-10-07T20:21:34.292Z 1942b7db-27e9-4d1f-9c5f-61055cc0e920 SSM Parameter '/intelisrcpa/app4/hostname-mapping/i-02b76e9c5e2bc2251' eliminado por la Lambda.
+2026-10-07T20:21:34.541Z	[INFO] 2026-10-07T20:21:34.540Z 1942b7db-27e9-4d1f-9c5f-61055cc0e920 Lifecycle action completed for i-02b76e9c5e2bc2251
+152 log(s)
