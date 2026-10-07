@@ -1,9 +1,17 @@
-iisreset fallo con exit code 1062.
-At C:\ProgramData\Amazon\SSM\InstanceData\i-0e4cc9ab8f8f533ee\document\orchestration\c43e3898-8c37-4140-a3f8-3132eece26
-9b\configureIis\_script.ps1:302 char:32
-+ ... ITCODE -ne 0) { throw "iisreset fallo con exit code $LASTEXITCODE." }
-+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : OperationStopped: (iisreset fallo con exit code 1062.:String) [], RuntimeException
-    + FullyQualifiedErrorId : iisreset fallo con exit code 1062.
+2026-10-07T11:18:49.9044702-04:00  === Inicio reconciliacion IIS SSM ===
+2026-10-07T11:19:11.9905589-04:00  ERROR HTTPS mobile/mobile-apc-com-pa: A parameter cannot be found that matches parameter name 'Thumbprint'.
+2026-10-07T11:19:12.2927595-04:00  ERROR HTTPS tuintelidat/www-tuintelidat-com: A parameter cannot be found that matches parameter name 'Thumbprint'.
+2026-10-07T11:19:12.4804222-04:00  ERROR HTTPS apcexperian/apcexperian-com: A parameter cannot be found that matches parameter name 'Thumbprint'.
+2026-10-07T11:19:12.4900385-04:00  IIS ya estaba convergido; no se reciclan pools.
+2026-10-07T11:19:12.4939635-04:00  ERROR FATAL IIS SSM: Configuracion IIS incompleta; revisar errores anteriores.
+
+
+Configuracion IIS incompleta; revisar errores anteriores.
+At C:\ProgramData\Amazon\SSM\InstanceData\i-0e4cc9ab8f8f533ee\document\orchestration\da817568-187c-4fd5-a989-470c32858a
+ac\configureIis\_script.ps1:327 char:25
++ ... t:failed) { throw 'Configuracion IIS incompleta; revisar errores ante ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Configuracion I...res anteriores.:String) [], RuntimeException
+    + FullyQualifiedErrorId : Configuracion IIS incompleta; revisar errores anteriores.
  
 failed to run commands: exit status 1
