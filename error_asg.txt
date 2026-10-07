@@ -10,8 +10,5 @@ aws secretsmanager put-secret-value \
   --region us-east-1
 
 
-Error: "description" doesn't comply with restrictions ("^[0-9A-Za-z_ .:/()#,@\\[\\]+=&;{}!$*-]*$"): "Datadog DBM EC2 -> RDS SQL Server (1433)"
+failed to download manifest - failed to retrieve package document description: InvalidDocument: Document with name Datadog-Agent does not exist.
 
-  with aws_security_group_rule.rds_from_datadog_dbm,
-  on datadog_dbm.tf line 135, in resource "aws_security_group_rule" "rds_from_datadog_dbm":
- 135:   description              = "Datadog DBM EC2 -> RDS SQL Server (1433)"
