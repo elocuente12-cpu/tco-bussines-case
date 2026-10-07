@@ -10,5 +10,125 @@ aws secretsmanager put-secret-value \
   --region us-east-1
 
 
-failed to download manifest - failed to retrieve package document description: InvalidDocument: Document with name Datadog-Agent does not exist.
+star
+eec-aws-us-eits-intelisrcpa-prd-datadog-configure
+Document type
+Command
+Owner
+274193347839
+Platform types
+Windows, Linux, MacOS
+Default version
+1
+star
+PMI-Uninstall-Datadog-Agent
+Document type
+Command
+Owner
+957780545500
+Platform types
+Windows, Linux
+Default version
+3
+star
+datadog_install
+Document type
+Command
+Owner
+530710445070
+Platform types
+Linux
+Default version
+1
+star
+datadog-agent-installation-windows-no-reboot
+Document type
+Command
+Owner
+339712931322
+Platform types
+Windows, Linux, MacOS
+Default version
+1
+star
+datadog-agent-installation-linux-retry
+Document type
+Command
+Owner
+339712931322
+Platform types
+Linux, MacOS
+Default version
+6
+star
+datadog-agent-installation-windows
+Document type
+Command
+Owner
+865078226113
+Platform types
+Windows, Linux, MacOS
+Default version
+3
+star
+datadog-agent-installation-linux
+Document type
+Command
+Owner
+865078226113
+Platform types
+Linux, MacOS
+Default version
+6
+star
+rackspace-datadog-agent-configure-mysql
+Document type
+Command
+Owner
+953410294458
+Platform types
+Windows, Linux
+Default version
+1
+star
+rackspace-datadog-agent-configure
+Document type
+Command
+Owner
+953410294458
+Platform types
+Windows, Linux
+Default version
+3
+star
+rackspace-datadog-agent-unconfigure-apache
+Document type
+Command
+Owner
+953410294458
+Platform types
+Windows, Linux
+Default version
+3
+star
+rackspace-datadog-agent-uninstall
+Document type
+Command
+Owner
+953410294458
+Platform types
+Windows, Linux
+Default version
+5
+star
+rackspace-datadog-agent-unconfigure-iis
+Document type
+Command
+Owner
+953410294458
+Platform types
+Windows
+Default version
+1
+
 
