@@ -1,0 +1,1485 @@
+Tests started at 2026-08-24 10:49:32 UTC
+Branch: UKICLOENA-3061-update-rules
+Pull Request ID: 31
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'standard': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "Security group for automated testing of eits-tf-aws-security-group repository"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_icmp_-1"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Ping"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = -1
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.0/26"
+      + description            = "CyberArk SIA SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.128/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.128/26"
+      + description            = "CyberArk SIA SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery for eu-west-2 region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_cpm_ssh_10.232.129.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.129.224/28"
+      + description            = "CyberArk CPM SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_cpm_ssh_10.232.129.96/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.129.96/28"
+      + description            = "CyberArk CPM SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.224/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.240/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.240/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.28.128/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.28.128/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.36.0/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.36.0/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.82.192/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.82.192/27"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.245.15.128/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.245.15.128/27"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.0/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.64/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.64/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.self["self_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "self" {
+      + arn                          = (known after apply)
+      + description                  = "Internal SSH"
+      + from_port                    = 22
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + region                       = "eu-west-2"
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                      = 22
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 18 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + egress_rules  = {}
+  + ingress_rules = {
+      + "10.0.0.0/8_icmp_-1"                     = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.0.0.0/8"
+          + cidr_ipv6                    = null
+          + description                  = "Ping"
+          + from_port                    = -1
+          + id                           = (known after apply)
+          + ip_protocol                  = "icmp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = -1
+        }
+      + eec_cmdb_22_a                            = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.229.161.0/25"
+          + cidr_ipv6                    = null
+          + description                  = "CMDB Asset discovery for eu-west-2 region"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + "eec_cyberark_cpm_ssh_10.232.129.224/28" = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.232.129.224/28"
+          + cidr_ipv6                    = null
+          + description                  = "CyberArk CPM SSH access for eu region"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + "eec_cyberark_cpm_ssh_10.232.129.96/28"  = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.232.129.96/28"
+          + cidr_ipv6                    = null
+          + description                  = "CyberArk CPM SSH access for eu region"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + "eec_tanium_17472_10.2.89.224/28"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.2.89.224/28"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.2.89.240/28"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.2.89.240/28"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.231.28.128/25"      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.231.28.128/25"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.231.36.0/25"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.231.36.0/25"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.231.82.192/27"      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.231.82.192/27"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.245.15.128/27"      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.245.15.128/27"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.64.31.0/26"         = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.64.31.0/26"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.64.31.64/26"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.64.31.64/26"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + self_tcp_22                              = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = null
+          + cidr_ipv6                    = null
+          + description                  = "Internal SSH"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = (known after apply)
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+    }
+
+
+Wiz.io IaC scan result for 'standard': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a8c22-010b-8921-a961-ebbe61378001%252A2c2026-08-24T10%2525%25252A3a50%2525%25252A3a52.723970843Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'validation_warnings': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.security_group.aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "Security group for automated testing of eits-tf-aws-security-group repository"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "uk-cloudenablement-sbx-eits-tf-aws-sg"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.security_group.aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cidr_ipv4["0.0.0.0/0_icmp_-1"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Ping"
+      + from_port              = -1
+      + id                     = (known after apply)
+      + ip_protocol            = "icmp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = -1
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.0/26"
+      + description            = "CyberArk SIA SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.128/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.128/26"
+      + description            = "CyberArk SIA SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery for eu-west-2 region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_cpm_ssh_10.232.129.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.129.224/28"
+      + description            = "CyberArk CPM SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_cpm_ssh_10.232.129.96/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.129.96/28"
+      + description            = "CyberArk CPM SSH access for eu region"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.224/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.240/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.240/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.28.128/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.28.128/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.36.0/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.36.0/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.82.192/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.82.192/27"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.245.15.128/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.245.15.128/27"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.0/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.64/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.64/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.self["self_tcp_22"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "self" {
+      + arn                          = (known after apply)
+      + description                  = "Internal SSH"
+      + from_port                    = 22
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + region                       = "eu-west-2"
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                      = 22
+    }
+
+  # module.security_group.aws_vpc_security_group_ingress_rule.self["self_tcp_23"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "self" {
+      + arn                          = (known after apply)
+      + description                  = "Wide Range"
+      + from_port                    = 23
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + region                       = "eu-west-2"
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                      = 65535
+    }
+
+  # module.security_group.time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 19 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + egress_rules  = {}
+  + ingress_rules = {
+      + "0.0.0.0/0_icmp_-1"                      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "0.0.0.0/0"
+          + cidr_ipv6                    = null
+          + description                  = "Ping"
+          + from_port                    = -1
+          + id                           = (known after apply)
+          + ip_protocol                  = "icmp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = -1
+        }
+      + eec_cmdb_22_a                            = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.229.161.0/25"
+          + cidr_ipv6                    = null
+          + description                  = "CMDB Asset discovery for eu-west-2 region"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + "eec_cyberark_cpm_ssh_10.232.129.224/28" = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.232.129.224/28"
+          + cidr_ipv6                    = null
+          + description                  = "CyberArk CPM SSH access for eu region"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + "eec_cyberark_cpm_ssh_10.232.129.96/28"  = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.232.129.96/28"
+          + cidr_ipv6                    = null
+          + description                  = "CyberArk CPM SSH access for eu region"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + "eec_tanium_17472_10.2.89.224/28"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.2.89.224/28"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.2.89.240/28"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.2.89.240/28"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.231.28.128/25"      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.231.28.128/25"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.231.36.0/25"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.231.36.0/25"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.231.82.192/27"      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.231.82.192/27"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.245.15.128/27"      = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.245.15.128/27"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium P2P client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.64.31.0/26"         = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.64.31.0/26"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + "eec_tanium_17472_10.64.31.64/26"        = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = "10.64.31.64/26"
+          + cidr_ipv6                    = null
+          + description                  = "Tanium client"
+          + from_port                    = 17472
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = null
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 17472
+        }
+      + self_tcp_22                              = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = null
+          + cidr_ipv6                    = null
+          + description                  = "Internal SSH"
+          + from_port                    = 22
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = (known after apply)
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 22
+        }
+      + self_tcp_23                              = {
+          + arn                          = (known after apply)
+          + cidr_ipv4                    = null
+          + cidr_ipv6                    = null
+          + description                  = "Wide Range"
+          + from_port                    = 23
+          + id                           = (known after apply)
+          + ip_protocol                  = "tcp"
+          + prefix_list_id               = null
+          + referenced_security_group_id = (known after apply)
+          + region                       = "eu-west-2"
+          + security_group_id            = (known after apply)
+          + security_group_rule_id       = (known after apply)
+          + tags                         = null
+          + tags_all                     = {
+              + DeployedByAURA = "true"
+            }
+          + to_port                      = 65535
+        }
+    }
+
+
+Wiz.io IaC scan result for 'validation_warnings': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a8c22-3f0b-8d46-9eb1-935e2b6d8001%252A2c2026-08-24T10%2525%25252A3a51%2525%25252A3a54.804980158Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}

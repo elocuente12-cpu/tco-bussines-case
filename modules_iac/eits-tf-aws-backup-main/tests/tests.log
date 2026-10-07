@@ -1,0 +1,3480 @@
+Tests started at 2026-07-16 09:01:58 UTC
+Branch: UKICLOENA-2937
+Pull Request ID: 29
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'integration': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.aws_backup_hourly.aws_backup_plan.bkp_plan[0] will be created
+  + resource "aws_backup_plan" "bkp_plan" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + name     = "eits-tf-aws-backup-plan-hourly"
+      + region   = "eu-west-2"
+      + tags     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + version  = (known after apply)
+
+      + advanced_backup_setting {
+          + backup_options = {
+              + "WindowsVSS" = "enabled"
+            }
+          + resource_type  = "EC2"
+        }
+
+      + rule {
+          + completion_window                            = 720
+          + enable_continuous_backup                     = false
+          + recovery_point_tags                          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-backup"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+          + rule_name                                    = "eits-tf-aws-backup-rule-hourly"
+          + schedule                                     = "cron(40 1/1 ? * * *)"
+          + schedule_expression_timezone                 = "Etc/UTC"
+          + start_window                                 = 60
+          + target_vault_name                            = (known after apply)
+            # (1 unchanged attribute hidden)
+
+          + lifecycle {
+              + cold_storage_after                        = 0
+              + delete_after                              = 7
+              + opt_in_to_archive_for_supported_resources = (known after apply)
+            }
+        }
+    }
+
+  # module.aws_backup_hourly.aws_backup_selection.bkp_selection[0] will be created
+  + resource "aws_backup_selection" "bkp_selection" {
+      + iam_role_arn  = (known after apply)
+      + id            = (known after apply)
+      + name          = "eits-tf-aws-backup-ruleselection-hourly"
+      + not_resources = (known after apply)
+      + plan_id       = (known after apply)
+      + region        = "eu-west-2"
+      + resources     = [
+          + "*",
+        ]
+
+      + condition {
+          + string_equals {
+              + key   = "aws:ResourceTag/test_backup"
+              + value = "yes"
+            }
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_region_settings.this[0] will be created
+  + resource "aws_backup_region_settings" "this" {
+      + id                                  = (known after apply)
+      + region                              = "eu-west-2"
+      + resource_type_management_preference = (known after apply)
+      + resource_type_opt_in_preference     = {
+          + "Aurora"   = true
+          + "DynamoDB" = true
+          + "EBS"      = true
+          + "EC2"      = true
+          + "EFS"      = true
+          + "FSx"      = true
+          + "RDS"      = true
+          + "S3"       = true
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_report_plan.bkp_backup_jobs_report[0] will be created
+  + resource "aws_backup_report_plan" "bkp_backup_jobs_report" {
+      + arn               = (known after apply)
+      + creation_time     = (known after apply)
+      + deployment_status = (known after apply)
+      + description       = "Backup jobs report by Experian"
+      + id                = (known after apply)
+      + name              = "eits_tf_aws_backup_report"
+      + region            = "eu-west-2"
+      + tags              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all          = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+
+      + report_delivery_channel {
+          + formats        = [
+              + "CSV",
+            ]
+          + s3_bucket_name = (known after apply)
+        }
+
+      + report_setting {
+          + report_template = "BACKUP_JOB_REPORT"
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_vault.bkp_vault[0] will be created
+  + resource "aws_backup_vault" "bkp_vault" {
+      + arn             = (known after apply)
+      + force_destroy   = true
+      + id              = (known after apply)
+      + kms_key_arn     = (known after apply)
+      + name            = "eits-tf-aws-backup-vault"
+      + recovery_points = (known after apply)
+      + region          = "eu-west-2"
+      + tags            = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all        = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_vault_lock_configuration.this[0] will be created
+  + resource "aws_backup_vault_lock_configuration" "this" {
+      + backup_vault_arn   = (known after apply)
+      + backup_vault_name  = (known after apply)
+      + id                 = (known after apply)
+      + max_retention_days = 7
+      + min_retention_days = 1
+      + region             = "eu-west-2"
+    }
+
+  # module.aws_backup_vault.aws_backup_vault_notifications.backup_events[0] will be created
+  + resource "aws_backup_vault_notifications" "backup_events" {
+      + backup_vault_arn    = (known after apply)
+      + backup_vault_events = [
+          + "BACKUP_JOB_COMPLETED",
+          + "BACKUP_JOB_STARTED",
+          + "RESTORE_JOB_COMPLETED",
+        ]
+      + backup_vault_name   = "eits-tf-aws-backup-vault"
+      + id                  = (known after apply)
+      + region              = "eu-west-2"
+      + sns_topic_arn       = (known after apply)
+    }
+
+  # module.aws_backup_vault.aws_backup_vault_policy.deny_delete[0] will be created
+  + resource "aws_backup_vault_policy" "deny_delete" {
+      + backup_vault_arn  = (known after apply)
+      + backup_vault_name = "eits-tf-aws-backup-vault"
+      + id                = (known after apply)
+      + policy            = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "backup:DeleteRecoveryPoint"
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "DenyDelete"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region            = "eu-west-2"
+    }
+
+  # module.kms["s3"].aws_kms_alias.this["logging-s3"] will be created
+  + resource "aws_kms_alias" "this" {
+      + arn            = (known after apply)
+      + id             = (known after apply)
+      + name           = "alias/eits-tf-aws-backup-s3-logging-s3-kms"
+      + name_prefix    = (known after apply)
+      + region         = "eu-west-2"
+      + target_key_arn = (known after apply)
+      + target_key_id  = (known after apply)
+    }
+
+  # module.kms["s3"].aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key for AWS Backup S3 buckets"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "logging.s3.amazonaws.com"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageServices"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.kms["sns"].aws_kms_alias.this["sns"] will be created
+  + resource "aws_kms_alias" "this" {
+      + arn            = (known after apply)
+      + id             = (known after apply)
+      + name           = "alias/eits-tf-aws-backup-sns-sns-kms"
+      + name_prefix    = (known after apply)
+      + region         = "eu-west-2"
+      + target_key_arn = (known after apply)
+      + target_key_id  = (known after apply)
+    }
+
+  # module.kms["sns"].aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key for AWS Backup SNS topic"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "sns.amazonaws.com"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageServices"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.kms["vault"].aws_kms_alias.this["backup"] will be created
+  + resource "aws_kms_alias" "this" {
+      + arn            = (known after apply)
+      + id             = (known after apply)
+      + name           = "alias/eits-tf-aws-backup-vault-backup-kms"
+      + name_prefix    = (known after apply)
+      + region         = "eu-west-2"
+      + target_key_arn = (known after apply)
+      + target_key_id  = (known after apply)
+    }
+
+  # module.kms["vault"].aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key for AWS Backup vault"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-infrastructure-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "backup.amazonaws.com"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageServices"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.s3_backup_report_bucket.data.aws_iam_policy_document.block_nonsecure_access will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "block_nonsecure_access" {
+      + id            = (known after apply)
+      + json          = (known after apply)
+      + minified_json = (known after apply)
+
+      + statement {
+          + actions   = [
+              + "s3:*",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "EITSEnforceSSLOnlyAccess"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:SecureTransport"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "AWS"
+            }
+        }
+      + statement {
+          + actions   = [
+              + "s3:*",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "EITSEnforceTLSv12orHigher"
+
+          + condition {
+              + test     = "NumericLessThan"
+              + values   = [
+                  + "1.2",
+                ]
+              + variable = "s3:TlsVersion"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "AWS"
+            }
+        }
+    }
+
+  # module.s3_backup_report_bucket.data.aws_iam_policy_document.restrict_source_ips[0] will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "restrict_source_ips" {
+      + id            = (known after apply)
+      + json          = (known after apply)
+      + minified_json = (known after apply)
+
+      + statement {
+          + actions   = [
+              + "s3:*",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+              + (known after apply),
+            ]
+          + sid       = "EITSRestrictSourceIPs"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:PrincipalIsAWSService"
+            }
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:ViaAWSService"
+            }
+          + condition {
+              + test     = "ForAnyValue:StringNotEquals"
+              + values   = [
+                  + "aoss.amazonaws.com",
+                  + "athena.amazonaws.com",
+                  + "backup.amazonaws.com",
+                  + "cloud9.amazonaws.com",
+                  + "cloudformation.amazonaws.com",
+                  + "databrew.amazonaws.com",
+                  + "dataexchange.amazonaws.com",
+                  + "dynamodb.amazonaws.com",
+                  + "imagebuilder.amazonaws.com",
+                  + "kms.amazonaws.com",
+                  + "mgn.amazonaws.com",
+                  + "nimble.amazonaws.com",
+                  + "omics.amazonaws.com",
+                  + "ram.amazonaws.com",
+                  + "robomaker.amazonaws.com",
+                  + "servicecatalog-appregistry.amazonaws.com",
+                  + "sqlworkbench.amazonaws.com",
+                  + "ssm-guiconnect.amazonaws.com",
+                ]
+              + variable = "aws:CalledVia"
+            }
+          + condition {
+              + test     = "NotIpAddress"
+              + values   = [
+                  + "167.107.0.0/16",
+                  + "205.174.32.0/20",
+                  + "200.245.207.0/24",
+                  + "200.234.240.0/20",
+                  + "84.246.168.0/24",
+                  + "18.231.70.159/32",
+                  + "34.200.128.151/32",
+                  + "13.212.56.186/32",
+                  + "3.25.208.9/32",
+                  + "13.235.74.213/32",
+                  + "199.96.232.0/22",
+                  + "54.207.188.124/32",
+                  + "54.94.89.48/32",
+                  + "54.207.206.229/32",
+                  + "200.192.106.16/32",
+                  + "204.199.78.170/29",
+                  + "194.60.163.222/32",
+                  + "200.46.229.2/32",
+                  + "77.95.152.0/24",
+                  + "161.69.16.0/21",
+                  + "161.69.32.0/22",
+                  + "161.69.36.0/23",
+                  + "161.69.40.0/21",
+                  + "161.69.48.0/20",
+                  + "161.69.64.0/18",
+                  + "52.52.221.153/32",
+                  + "15.236.59.65/32",
+                  + "35.172.57.133/32",
+                  + "52.9.179.186/32",
+                  + "185.221.68.0/22",
+                  + "185.212.104.0/22",
+                  + "120.138.17.53/32",
+                  + "120.138.17.54/32",
+                  + "184.75.215.242/32",
+                  + "184.75.215.98/32",
+                  + "185.125.224.0/22",
+                  + "52.201.126.139/32",
+                  + "52.38.193.184/32",
+                  + "208.81.67.37/32",
+                  + "185.221.69.37/32",
+                  + "208.65.145.37/32",
+                  + "208.81.70.37/32",
+                  + "185.221.71.37/32",
+                ]
+              + variable = "aws:SourceIp"
+            }
+          + condition {
+              + test     = "Null"
+              + values   = [
+                  + "true",
+                ]
+              + variable = "aws:PrincipalTag/eec:SourceIPException"
+            }
+          + condition {
+              + test     = "StringNotEquals"
+              + values   = [
+                  + "vpce-0133002bb1e6c3aad",
+                ]
+              + variable = "aws:SourceVpce"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "*"
+            }
+        }
+    }
+
+  # module.s3_backup_report_bucket.data.aws_iam_policy_document.source_documents will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "source_documents" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + source_policy_documents = [
+          + jsonencode(
+                {
+                  + Statement = [
+                      + {
+                          + Action    = "s3:PutObject"
+                          + Condition = {
+                              + StringEquals = {
+                                  + "s3:x-amz-acl" = "bucket-owner-full-control"
+                                }
+                            }
+                          + Effect    = "Allow"
+                          + Principal = {
+                              + AWS = "arn:aws:iam::077820194866:role/aws-service-role/reports.backup.amazonaws.com/AWSServiceRoleForBackupReports"
+                            }
+                          + Resource  = "arn:aws:s3:::eits-tf-aws-backup-reports/*"
+                          + Sid       = "AWSBackupReports"
+                        },
+                    ]
+                  + Version   = "2012-10-17"
+                }
+            ),
+          + (known after apply),
+          + (known after apply),
+        ]
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket.this will be created
+  + resource "aws_s3_bucket" "this" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "eits-tf-aws-backup-reports"
+      + bucket_domain_name          = (known after apply)
+      + bucket_namespace            = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "eu-west-2"
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-s3"
+          + "eitsce:moduleversion" = "2.19.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                    = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-s3"
+          + "eitsce:moduleversion" = "2.19.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket_lifecycle_configuration.this[0] will be created
+  + resource "aws_s3_bucket_lifecycle_configuration" "this" {
+      + bucket                                 = (known after apply)
+      + expected_bucket_owner                  = (known after apply)
+      + id                                     = (known after apply)
+      + region                                 = "eu-west-2"
+      + transition_default_minimum_object_size = "all_storage_classes_128K"
+
+      + rule {
+          + id     = "default-abort-incomplete-uploads"
+          + status = "Enabled"
+            # (1 unchanged attribute hidden)
+
+          + abort_incomplete_multipart_upload {
+              + days_after_initiation = 7
+            }
+
+          + filter {
+                # (1 unchanged attribute hidden)
+            }
+        }
+      + rule {
+          + id     = "delete_old_backup_report"
+          + status = "Enabled"
+            # (1 unchanged attribute hidden)
+
+          + abort_incomplete_multipart_upload {
+              + days_after_initiation = 7
+            }
+
+          + expiration {
+              + days                         = 30
+              + expired_object_delete_marker = false
+            }
+
+          + filter {
+                # (1 unchanged attribute hidden)
+            }
+
+          + noncurrent_version_expiration {
+              + noncurrent_days = 90
+            }
+
+          + noncurrent_version_transition {
+              + noncurrent_days = 30
+              + storage_class   = "ONEZONE_IA"
+            }
+        }
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket_logging.this[0] will be created
+  + resource "aws_s3_bucket_logging" "this" {
+      + bucket        = (known after apply)
+      + id            = (known after apply)
+      + region        = "eu-west-2"
+      + target_bucket = "eec-aws-uk-eits-cloudenablement-sandbox-s3-access-logs"
+      + target_prefix = "eits-tf-aws-backup-reports/"
+
+      + target_object_key_format {
+          + simple_prefix {}
+        }
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket_ownership_controls.this will be created
+  + resource "aws_s3_bucket_ownership_controls" "this" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "eu-west-2"
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket_policy.this will be created
+  + resource "aws_s3_bucket_policy" "this" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket_public_access_block.this will be created
+  + resource "aws_s3_bucket_public_access_block" "this" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + region                  = "eu-west-2"
+      + restrict_public_buckets = true
+    }
+
+  # module.s3_backup_report_bucket.aws_s3_bucket_server_side_encryption_configuration.this will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "eu-west-2"
+
+      + rule {
+          + blocked_encryption_types = (known after apply)
+          + bucket_key_enabled       = true
+
+          + apply_server_side_encryption_by_default {
+              + kms_master_key_id = (known after apply)
+              + sse_algorithm     = "aws:kms"
+            }
+        }
+    }
+
+  # module.s3_backup_report_bucket.time_sleep.wait_for_s3_bucket will be created
+  + resource "time_sleep" "wait_for_s3_bucket" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+  # module.aws_backup_vault.module.alarm["NumberOfBackupJobsAborted"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "The number of user cancelled backup jobs."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "NumberOfBackupJobsAborted"
+      + namespace                             = "AWS/Backup"
+      + period                                = 3600
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-backup"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-backup"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.aws_backup_vault.module.backup_events_sns[0].data.aws_iam_policy_document.this will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "this" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + policy_id               = "SNSTopicsPublish"
+      + source_policy_documents = []
+
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowedPrincipals"
+
+          + principals {
+              + identifiers = [
+                  + "backup.amazonaws.com",
+                ]
+              + type        = "Service"
+            }
+        }
+      + statement {
+          + actions   = [
+              + "sns:Publish",
+            ]
+          + effect    = "Deny"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "SecureTransport"
+
+          + condition {
+              + test     = "Bool"
+              + values   = [
+                  + "false",
+                ]
+              + variable = "aws:SecureTransport"
+            }
+
+          + principals {
+              + identifiers = [
+                  + "*",
+                ]
+              + type        = "*"
+            }
+        }
+    }
+
+  # module.aws_backup_vault.module.backup_events_sns[0].aws_sns_topic.this will be created
+  + resource "aws_sns_topic" "this" {
+      + application_success_feedback_sample_rate = 10
+      + arn                                      = (known after apply)
+      + beginning_archive_time                   = (known after apply)
+      + content_based_deduplication              = false
+      + fifo_throughput_scope                    = (known after apply)
+      + fifo_topic                               = false
+      + firehose_success_feedback_sample_rate    = 10
+      + http_success_feedback_sample_rate        = 10
+      + id                                       = (known after apply)
+      + kms_master_key_id                        = (known after apply)
+      + lambda_success_feedback_sample_rate      = 10
+      + name                                     = "uk-cloudenablement-sbx-eits-tf-aws-backup-topic-sns-sns-topic"
+      + name_prefix                              = (known after apply)
+      + owner                                    = (known after apply)
+      + policy                                   = (known after apply)
+      + region                                   = "eu-west-2"
+      + signature_version                        = (known after apply)
+      + sqs_success_feedback_sample_rate         = 10
+      + tags                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "1.8.0"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-sns"
+          + "eitsce:moduleversion" = "1.8.0"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tracing_config                           = (known after apply)
+    }
+
+  # module.aws_backup_vault.module.backup_events_sns[0].aws_sns_topic_policy.this[0] will be created
+  + resource "aws_sns_topic_policy" "this" {
+      + arn    = (known after apply)
+      + id     = (known after apply)
+      + owner  = (known after apply)
+      + policy = (known after apply)
+      + region = "eu-west-2"
+    }
+
+  # module.aws_backup_vault.module.backup_events_sns[0].aws_sns_topic_subscription.this["tom"] will be created
+  + resource "aws_sns_topic_subscription" "this" {
+      + arn                             = (known after apply)
+      + confirmation_timeout_in_minutes = 1
+      + confirmation_was_authenticated  = (known after apply)
+      + endpoint                        = "tom.meer@experian.com"
+      + endpoint_auto_confirms          = false
+      + filter_policy_scope             = (known after apply)
+      + id                              = (known after apply)
+      + owner_id                        = (known after apply)
+      + pending_confirmation            = (known after apply)
+      + protocol                        = "email"
+      + raw_message_delivery            = false
+      + region                          = "eu-west-2"
+      + topic_arn                       = (known after apply)
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_policy.default[0] will be created
+  + resource "aws_iam_policy" "default" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "IAM policy for AWS Backup"
+      + id               = (known after apply)
+      + name             = "BUPolicyForAWSBackupTest"
+      + name_prefix      = (known after apply)
+      + path             = "/"
+      + policy           = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "tag:GetResources",
+                          + "backup:UntagResource",
+                          + "backup:TagResource",
+                          + "backup:ListTags",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "AllowTaggingBackup"
+                    },
+                  + {
+                      + Action   = [
+                          + "ec2:ModifyInstanceMetadataOptions",
+                          + "backup:StartBackupJob",
+                          + "backup:ListBackupVaults",
+                          + "backup:GetRecoveryPointRestoreMetadata",
+                          + "backup:DescribeBackupJob",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "BackupActions"
+                    },
+                  + {
+                      + Action    = [
+                          + "iam:PassRole",
+                          + "iam:GetRole",
+                        ]
+                      + Condition = {
+                          + StringEquals = {
+                              + "iam:PassedToService" = "ec2.amazonaws.com"
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:iam::077820194866:role/eec-aws-ami-factory-instance-role"
+                      + Sid       = "AllowEC2RolePassToService"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + policy_id        = (known after apply)
+      + tags             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role.default[0] will be created
+  + resource "aws_iam_role" "default" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "backup.amazonaws.com"
+                        }
+                      + Sid       = "AssumeRoleBackup"
+                    },
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Condition = {
+                          + Bool            = {
+                              + "aws:PrincipalIsAWSService" = "false"
+                            }
+                          + StringNotEquals = {
+                              + "aws:PrincipalOrgID" = [
+                                  + "o-33fd8d019b",
+                                  + "o-m6fjxrdr7x",
+                                  + "o-c7zjgfu8y0",
+                                  + "o-yfj05rswby",
+                                  + "o-m5tvfoa2j3",
+                                  + "o-v4zenr53b5",
+                                  + "o-r4orxccey7",
+                                  + "o-72fonqzrib",
+                                  + "o-rhlgy4h75h",
+                                  + "o-sg7wkai3ne",
+                                  + "o-mw9tjv7zmd",
+                                  + "o-8jhc22ry8c",
+                                  + "o-khqbuhx1kx",
+                                  + "o-mtyumpp7ml",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Sid       = "DenyNonExperianAccountAccess"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + description           = "IAM role for AWS Backup"
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "BURoleForAWSBackupTest"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.default[0] will be created
+  + resource "aws_iam_role_policy_attachment" "default" {
+      + id         = (known after apply)
+      + policy_arn = (known after apply)
+      + role       = "BURoleForAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Backup"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Backup"
+      + role       = "BURoleForAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Restore"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Restore"
+      + role       = "BURoleForAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+      + role       = "BURoleForAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
+      + role       = "BURoleForAWSBackupTest"
+    }
+
+Plan: 33 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'integration': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a589e-890b-846f-9ea4-9bfdec8f8001%252A2c2026-07-16T09%2525%25252A3a04%2525%25252A3a34.074385613Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'lag_vault': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.aws_backup_int_vault.aws_backup_vault.bkp_vault[0] will be created
+  + resource "aws_backup_vault" "bkp_vault" {
+      + arn             = (known after apply)
+      + force_destroy   = false
+      + id              = (known after apply)
+      + kms_key_arn     = (known after apply)
+      + name            = "tf-vault-test-int"
+      + recovery_points = (known after apply)
+      + region          = "eu-west-2"
+      + tags            = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all        = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.data.aws_iam_policy_document.aws_backup_lag_lambda_role[0] will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "aws_backup_lag_lambda_role" {
+      + id            = (known after apply)
+      + json          = (known after apply)
+      + minified_json = (known after apply)
+
+      + statement {
+          + actions   = [
+              + "backup:DeleteRecoveryPoint",
+              + "backup:DescribeRecoveryPoint",
+              + "backup:ListRecoveryPointsByBackupVault",
+              + "backup:StartCopyJob",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + "*",
+            ]
+          + sid       = "AllowBackupCopyJob"
+        }
+      + statement {
+          + actions   = [
+              + "ec2:DeleteSnapshot",
+              + "ec2:DeregisterImage",
+              + "ec2:DescribeImages",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + "*",
+            ]
+          + sid       = "AllowEC2Actions"
+        }
+      + statement {
+          + actions   = [
+              + "logs:CreateLogGroup",
+              + "logs:CreateLogStream",
+              + "logs:PutLogEvents",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + "arn:aws:logs:*:077820194866:*",
+            ]
+          + sid       = "AllowLogs"
+        }
+      + statement {
+          + actions   = [
+              + "iam:PassRole",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowPassRole"
+        }
+    }
+
+  # module.aws_backup_lag_vault.aws_backup_logically_air_gapped_vault.this[0] will be created
+  + resource "aws_backup_logically_air_gapped_vault" "this" {
+      + arn                = (known after apply)
+      + encryption_key_arn = (known after apply)
+      + id                 = (known after apply)
+      + max_retention_days = 30
+      + min_retention_days = 7
+      + name               = "tf-vault-test-lag"
+      + region             = "eu-west-2"
+      + tags               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.aws_backup_vault_policy.lag_vault[0] will be created
+  + resource "aws_backup_vault_policy" "lag_vault" {
+      + backup_vault_arn  = (known after apply)
+      + backup_vault_name = "tf-vault-test-lag"
+      + id                = (known after apply)
+      + policy            = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "backup:CopyIntoBackupVault"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:root"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "AllowCopyToLAG"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region            = "eu-west-2"
+    }
+
+  # module.aws_backup_lag_vault.aws_lambda_permission.allow_eventbridge_cleanup_temp_vault[0] will be created
+  + resource "aws_lambda_permission" "allow_eventbridge_cleanup_temp_vault" {
+      + action              = "lambda:InvokeFunction"
+      + function_name       = "uk-cloudenablement-sbx-aws_backup_lag_vault_cleanup-lambda"
+      + id                  = (known after apply)
+      + principal           = "events.amazonaws.com"
+      + region              = "eu-west-2"
+      + source_arn          = (known after apply)
+      + statement_id        = "AllowExecutionFromEventBridge"
+      + statement_id_prefix = (known after apply)
+    }
+
+  # module.aws_backup_lag_vault.aws_lambda_permission.allow_eventbridge_copy_to_lag[0] will be created
+  + resource "aws_lambda_permission" "allow_eventbridge_copy_to_lag" {
+      + action              = "lambda:InvokeFunction"
+      + function_name       = "uk-cloudenablement-sbx-aws_backup_lag_vault_copy-lambda"
+      + id                  = (known after apply)
+      + principal           = "events.amazonaws.com"
+      + region              = "eu-west-2"
+      + source_arn          = (known after apply)
+      + statement_id        = "AllowExecutionFromEventBridge"
+      + statement_id_prefix = (known after apply)
+    }
+
+  # module.aws_backup_lag_vault.aws_ram_principal_association.this["077820194866"] will be created
+  + resource "aws_ram_principal_association" "this" {
+      + id                 = (known after apply)
+      + principal          = "077820194866"
+      + region             = "eu-west-2"
+      + resource_share_arn = (known after apply)
+    }
+
+  # module.aws_backup_lag_vault.aws_ram_resource_association.this[0] will be created
+  + resource "aws_ram_resource_association" "this" {
+      + id                 = (known after apply)
+      + region             = "eu-west-2"
+      + resource_arn       = (known after apply)
+      + resource_share_arn = (known after apply)
+    }
+
+  # module.aws_backup_lag_vault.aws_ram_resource_share.lag_vault[0] will be created
+  + resource "aws_ram_resource_share" "lag_vault" {
+      + allow_external_principals = false
+      + arn                       = (known after apply)
+      + id                        = (known after apply)
+      + name                      = "tf-vault-test-lag-share"
+      + permission_arns           = (known after apply)
+      + region                    = "eu-west-2"
+      + tags                      = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+
+      + resource_share_configuration (known after apply)
+    }
+
+  # module.aws_backup_plan.aws_backup_plan.bkp_plan[0] will be created
+  + resource "aws_backup_plan" "bkp_plan" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + name     = "tf-plan-1"
+      + region   = "eu-west-2"
+      + tags     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + version  = (known after apply)
+
+      + advanced_backup_setting {
+          + backup_options = {
+              + "WindowsVSS" = "enabled"
+            }
+          + resource_type  = "EC2"
+        }
+
+      + rule {
+          + completion_window                            = 720
+          + enable_continuous_backup                     = false
+          + recovery_point_tags                          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-backup"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+          + rule_name                                    = "tf-backup-rule-1"
+          + schedule                                     = "cron(0 1 ? * * *)"
+          + schedule_expression_timezone                 = "Etc/UTC"
+          + start_window                                 = 60
+          + target_vault_name                            = (known after apply)
+            # (1 unchanged attribute hidden)
+
+          + copy_action {
+              + destination_vault_arn = (known after apply)
+
+              + lifecycle {
+                  + cold_storage_after                        = 0
+                  + delete_after                              = 3
+                  + opt_in_to_archive_for_supported_resources = (known after apply)
+                }
+            }
+
+          + lifecycle {
+              + cold_storage_after                        = 0
+              + delete_after                              = 1
+              + opt_in_to_archive_for_supported_resources = (known after apply)
+            }
+        }
+    }
+
+  # module.aws_backup_plan.aws_backup_selection.bkp_selection[0] will be created
+  + resource "aws_backup_selection" "bkp_selection" {
+      + iam_role_arn  = (known after apply)
+      + id            = (known after apply)
+      + name          = "tf-ruleselection-1"
+      + not_resources = (known after apply)
+      + plan_id       = (known after apply)
+      + region        = "eu-west-2"
+      + resources     = [
+          + "*",
+        ]
+
+      + condition {
+          + string_equals {
+              + key   = "aws:ResourceTag/backup_to_lag"
+              + value = "yes"
+            }
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_region_settings.this[0] will be created
+  + resource "aws_backup_region_settings" "this" {
+      + id                                  = (known after apply)
+      + region                              = "eu-west-2"
+      + resource_type_management_preference = (known after apply)
+      + resource_type_opt_in_preference     = {
+          + "Aurora"          = true
+          + "CloudFormation"  = false
+          + "DocumentDB"      = false
+          + "DynamoDB"        = true
+          + "EBS"             = true
+          + "EC2"             = true
+          + "EFS"             = true
+          + "FSx"             = true
+          + "Neptune"         = false
+          + "RDS"             = true
+          + "Redshift"        = false
+          + "S3"              = true
+          + "Storage Gateway" = false
+          + "VirtualMachine"  = false
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_vault.bkp_vault[0] will be created
+  + resource "aws_backup_vault" "bkp_vault" {
+      + arn             = (known after apply)
+      + force_destroy   = true
+      + id              = (known after apply)
+      + kms_key_arn     = (known after apply)
+      + name            = "tf-vault-test-primary"
+      + recovery_points = (known after apply)
+      + region          = "eu-west-2"
+      + tags            = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all        = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_vault.aws_backup_vault_policy.deny_delete[0] will be created
+  + resource "aws_backup_vault_policy" "deny_delete" {
+      + backup_vault_arn  = (known after apply)
+      + backup_vault_name = "tf-vault-test-primary"
+      + id                = (known after apply)
+      + policy            = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "backup:DeleteRecoveryPoint"
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "DenyDelete"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region            = "eu-west-2"
+    }
+
+  # module.kms.aws_kms_alias.this["backup"] will be created
+  + resource "aws_kms_alias" "this" {
+      + arn            = (known after apply)
+      + id             = (known after apply)
+      + name           = "alias/test-backup-lag-backup-kms"
+      + name_prefix    = (known after apply)
+      + region         = "eu-west-2"
+      + target_key_arn = (known after apply)
+      + target_key_id  = (known after apply)
+    }
+
+  # module.kms.aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "Test KMS key for AWS Backup LAG vault testing"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:root",
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:role/BUAdministratorAccessRole"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "backup.amazonaws.com"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageServices"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.module.eventbridge_backup_cleanup_temp_vault[0].aws_cloudwatch_event_rule.this[0] will be created
+  + resource "aws_cloudwatch_event_rule" "this" {
+      + arn            = (known after apply)
+      + description    = "Triggers cleanup Lambda when copy job completes to LAG vault"
+      + event_bus_name = "default"
+      + event_pattern  = jsonencode(
+            {
+              + detail      = {
+                  + destinationBackupVaultArn = [
+                      + "arn:aws:backup:eu-west-2:077820194866:backup-vault:tf-vault-test-lag",
+                    ]
+                  + state                     = [
+                      + "COMPLETED",
+                    ]
+                }
+              + detail-type = [
+                  + "Copy Job State Change",
+                ]
+              + source      = [
+                  + "aws.backup",
+                ]
+            }
+        )
+      + force_destroy  = false
+      + id             = (known after apply)
+      + name           = "uk-cloudenablement-sbx-aws-backup-lag-cleanup-temp-vault-event"
+      + name_prefix    = (known after apply)
+      + region         = "eu-west-2"
+      + state          = "ENABLED"
+      + tags           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-eventbridge"
+          + "eitsce:moduleversion" = "2.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all       = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-eventbridge"
+          + "eitsce:moduleversion" = "2.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.module.eventbridge_backup_cleanup_temp_vault[0].aws_cloudwatch_event_target.this["lambda_backup_lag_cleanup"] will be created
+  + resource "aws_cloudwatch_event_target" "this" {
+      + arn            = (known after apply)
+      + event_bus_name = "default"
+      + force_destroy  = false
+      + id             = (known after apply)
+      + region         = "eu-west-2"
+      + rule           = "uk-cloudenablement-sbx-aws-backup-lag-cleanup-temp-vault-event"
+      + target_id      = "lambda_backup_lag_cleanup"
+    }
+
+  # module.aws_backup_lag_vault.module.eventbridge_backup_lag_copy[0].aws_cloudwatch_event_rule.this[0] will be created
+  + resource "aws_cloudwatch_event_rule" "this" {
+      + arn            = (known after apply)
+      + description    = "Triggers LAG vault copy Lambda when a copy job completes to tf-vault-test-lag-intermediate vault"
+      + event_bus_name = "default"
+      + event_pattern  = (known after apply)
+      + force_destroy  = false
+      + id             = (known after apply)
+      + name           = "uk-cloudenablement-sbx-aws-backup-lag-copy-event"
+      + name_prefix    = (known after apply)
+      + region         = "eu-west-2"
+      + state          = "ENABLED"
+      + tags           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-eventbridge"
+          + "eitsce:moduleversion" = "2.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all       = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-eventbridge"
+          + "eitsce:moduleversion" = "2.5.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.module.eventbridge_backup_lag_copy[0].aws_cloudwatch_event_target.this["lambda_backup_lag_copy"] will be created
+  + resource "aws_cloudwatch_event_target" "this" {
+      + arn            = (known after apply)
+      + event_bus_name = "default"
+      + force_destroy  = false
+      + id             = (known after apply)
+      + region         = "eu-west-2"
+      + rule           = "uk-cloudenablement-sbx-aws-backup-lag-copy-event"
+      + target_id      = "lambda_backup_lag_copy"
+    }
+
+  # module.aws_backup_lag_vault.module.iam_role_lag_lambda[0].data.aws_iam_policy_document.default[0] will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "default" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + source_policy_documents = [
+          + (known after apply),
+        ]
+    }
+
+  # module.aws_backup_lag_vault.module.iam_role_lag_lambda[0].aws_iam_policy.default[0] will be created
+  + resource "aws_iam_policy" "default" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "IAM policy for AWS Backup LAG vault copy Lambda function"
+      + id               = (known after apply)
+      + name             = "BUPolicyForLAGVaultCopyLambda"
+      + name_prefix      = (known after apply)
+      + path             = "/"
+      + policy           = (known after apply)
+      + policy_id        = (known after apply)
+      + tags             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.module.iam_role_lag_lambda[0].aws_iam_role.default[0] will be created
+  + resource "aws_iam_role" "default" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                      + Sid       = "AssumeRoleBackupLAGLambda"
+                    },
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Condition = {
+                          + Bool            = {
+                              + "aws:PrincipalIsAWSService" = "false"
+                            }
+                          + StringNotEquals = {
+                              + "aws:PrincipalOrgID" = [
+                                  + "o-33fd8d019b",
+                                  + "o-m6fjxrdr7x",
+                                  + "o-c7zjgfu8y0",
+                                  + "o-yfj05rswby",
+                                  + "o-m5tvfoa2j3",
+                                  + "o-v4zenr53b5",
+                                  + "o-r4orxccey7",
+                                  + "o-72fonqzrib",
+                                  + "o-rhlgy4h75h",
+                                  + "o-sg7wkai3ne",
+                                  + "o-mw9tjv7zmd",
+                                  + "o-8jhc22ry8c",
+                                  + "o-khqbuhx1kx",
+                                  + "o-mtyumpp7ml",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Sid       = "DenyNonExperianAccountAccess"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + description           = "IAM role for AWS Backup LAG vault copy Lambda function"
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "BURoleForLAGVaultCopyLambda"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.aws_backup_lag_vault.module.iam_role_lag_lambda[0].aws_iam_role_policy_attachment.default[0] will be created
+  + resource "aws_iam_role_policy_attachment" "default" {
+      + id         = (known after apply)
+      + policy_arn = (known after apply)
+      + role       = "BURoleForLAGVaultCopyLambda"
+    }
+
+  # module.aws_backup_lag_vault.module.lambda_cleanup_temp_vault[0].aws_lambda_function.this will be created
+  + resource "aws_lambda_function" "this" {
+      + architectures                  = [
+          + "x86_64",
+        ]
+      + arn                            = (known after apply)
+      + code_sha256                    = (known after apply)
+      + description                    = "Deletes recovery points from intermediate vault after successful copy to LAG vault"
+      + filename                       = "../../src/lambda_cleanup_temp_vault.zip"
+      + function_name                  = "uk-cloudenablement-sbx-aws_backup_lag_vault_cleanup-lambda"
+      + handler                        = "lambda_cleanup_temp_vault.lambda_handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + last_modified                  = (known after apply)
+      + layers                         = []
+      + memory_size                    = 256
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + region                         = "eu-west-2"
+      + reserved_concurrent_executions = 5
+      + response_streaming_invoke_arn  = (known after apply)
+      + role                           = (known after apply)
+      + runtime                        = "python3.14"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = "I4hLEgY8xit4P/Ah4fgPCX8evzuaJsQc5YFEdQOaJE0="
+      + source_code_size               = (known after apply)
+      + tags                           = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-lambda"
+          + "eitsce:moduleversion" = "1.11.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                       = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-lambda"
+          + "eitsce:moduleversion" = "1.11.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + timeout                        = 60
+      + version                        = (known after apply)
+
+      + environment {
+          + variables = (known after apply)
+        }
+
+      + ephemeral_storage (known after apply)
+
+      + logging_config {
+          + log_format = "Text"
+          + log_group  = "/aws/lambda/uk-cloudenablement-sbx-aws_backup_lag_vault_cleanup-lambda"
+        }
+
+      + tracing_config (known after apply)
+    }
+
+  # module.aws_backup_lag_vault.module.lambda_copy_to_lag[0].aws_lambda_function.this will be created
+  + resource "aws_lambda_function" "this" {
+      + architectures                  = [
+          + "x86_64",
+        ]
+      + arn                            = (known after apply)
+      + code_sha256                    = (known after apply)
+      + description                    = "Copies AWS Backup recovery points from source vault to destination LAG vault"
+      + filename                       = "../../src/lambda_copy_to_lag.zip"
+      + function_name                  = "uk-cloudenablement-sbx-aws_backup_lag_vault_copy-lambda"
+      + handler                        = "lambda_copy_to_lag.lambda_handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + last_modified                  = (known after apply)
+      + layers                         = []
+      + memory_size                    = 256
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + region                         = "eu-west-2"
+      + reserved_concurrent_executions = 5
+      + response_streaming_invoke_arn  = (known after apply)
+      + role                           = (known after apply)
+      + runtime                        = "python3.14"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = "uxy+OPRoNyTqtXLrkLkD8WNKzk133WRVY/ur9QRuGVQ="
+      + source_code_size               = (known after apply)
+      + tags                           = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-lambda"
+          + "eitsce:moduleversion" = "1.11.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                       = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-lambda"
+          + "eitsce:moduleversion" = "1.11.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + timeout                        = 60
+      + version                        = (known after apply)
+
+      + environment {
+          + variables = (known after apply)
+        }
+
+      + ephemeral_storage (known after apply)
+
+      + logging_config {
+          + log_format = "Text"
+          + log_group  = "/aws/lambda/uk-cloudenablement-sbx-aws_backup_lag_vault_copy-lambda"
+        }
+
+      + tracing_config (known after apply)
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_policy.default[0] will be created
+  + resource "aws_iam_policy" "default" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "IAM policy for AWS Backup"
+      + id               = (known after apply)
+      + name             = "BUPolicyForTFAWSBackupTest"
+      + name_prefix      = (known after apply)
+      + path             = "/"
+      + policy           = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "tag:GetResources",
+                          + "backup:UntagResource",
+                          + "backup:TagResource",
+                          + "backup:ListTags",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "AllowTaggingBackup"
+                    },
+                  + {
+                      + Action   = [
+                          + "ec2:ModifyInstanceMetadataOptions",
+                          + "backup:StartBackupJob",
+                          + "backup:ListBackupVaults",
+                          + "backup:GetRecoveryPointRestoreMetadata",
+                          + "backup:DescribeBackupJob",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "BackupActions"
+                    },
+                  + {
+                      + Action    = [
+                          + "iam:PassRole",
+                          + "iam:GetRole",
+                        ]
+                      + Condition = {
+                          + StringEquals = {
+                              + "iam:PassedToService" = "ec2.amazonaws.com"
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:iam::077820194866:role/eec-aws-ami-factory-instance-role"
+                      + Sid       = "AllowEC2RolePassToService"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + policy_id        = (known after apply)
+      + tags             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role.default[0] will be created
+  + resource "aws_iam_role" "default" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "backup.amazonaws.com"
+                        }
+                      + Sid       = "AssumeRoleBackup"
+                    },
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Condition = {
+                          + Bool            = {
+                              + "aws:PrincipalIsAWSService" = "false"
+                            }
+                          + StringNotEquals = {
+                              + "aws:PrincipalOrgID" = [
+                                  + "o-33fd8d019b",
+                                  + "o-m6fjxrdr7x",
+                                  + "o-c7zjgfu8y0",
+                                  + "o-yfj05rswby",
+                                  + "o-m5tvfoa2j3",
+                                  + "o-v4zenr53b5",
+                                  + "o-r4orxccey7",
+                                  + "o-72fonqzrib",
+                                  + "o-rhlgy4h75h",
+                                  + "o-sg7wkai3ne",
+                                  + "o-mw9tjv7zmd",
+                                  + "o-8jhc22ry8c",
+                                  + "o-khqbuhx1kx",
+                                  + "o-mtyumpp7ml",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = {
+                          + AWS = "*"
+                        }
+                      + Sid       = "DenyNonExperianAccountAccess"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + description           = "IAM role for AWS Backup"
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "BURoleForTFAWSBackupTest"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.default[0] will be created
+  + resource "aws_iam_role_policy_attachment" "default" {
+      + id         = (known after apply)
+      + policy_arn = (known after apply)
+      + role       = "BURoleForTFAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Backup"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Backup"
+      + role       = "BURoleForTFAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Restore"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Restore"
+      + role       = "BURoleForTFAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+      + role       = "BURoleForTFAWSBackupTest"
+    }
+
+  # module.aws_backup_vault.module.bkp_iam_role[0].aws_iam_role_policy_attachment.managed["arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"] will be created
+  + resource "aws_iam_role_policy_attachment" "managed" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForRestores"
+      + role       = "BURoleForTFAWSBackupTest"
+    }
+
+  # module.aws_backup_lag_vault.module.lambda_cleanup_temp_vault[0].module.alarm["concurrent_executions"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to monitor if the concurrency of the function is approaching the Region-level concurrency limit of your account."
+      + alarm_name                            = "AWS/Lambda ConcurrentExecutions FunctionName=uk-cloudenablement-sbx-aws_backup_lag_vault_cleanup-lambda"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "FunctionName" = "uk-cloudenablement-sbx-aws_backup_lag_vault_cleanup-lambda"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "ConcurrentExecutions"
+      + namespace                             = "AWS/Lambda"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 900
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.aws_backup_lag_vault.module.lambda_cleanup_temp_vault[0].module.cloudwatch_log_group.aws_cloudwatch_log_group.this will be created
+  + resource "aws_cloudwatch_log_group" "this" {
+      + arn                         = (known after apply)
+      + deletion_protection_enabled = (known after apply)
+      + id                          = (known after apply)
+      + log_group_class             = "STANDARD"
+      + name                        = "/aws/lambda/uk-cloudenablement-sbx-aws_backup_lag_vault_cleanup-lambda"
+      + name_prefix                 = (known after apply)
+      + region                      = "eu-west-2"
+      + retention_in_days           = 30
+      + skip_destroy                = false
+      + tags                        = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-logs"
+          + "eitsce:moduleversion" = "2.6.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                    = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-logs"
+          + "eitsce:moduleversion" = "2.6.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_lag_vault.module.lambda_copy_to_lag[0].module.alarm["concurrent_executions"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps to monitor if the concurrency of the function is approaching the Region-level concurrency limit of your account."
+      + alarm_name                            = "AWS/Lambda ConcurrentExecutions FunctionName=uk-cloudenablement-sbx-aws_backup_lag_vault_copy-lambda"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + datapoints_to_alarm                   = 10
+      + dimensions                            = {
+          + "FunctionName" = "uk-cloudenablement-sbx-aws_backup_lag_vault_copy-lambda"
+        }
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 10
+      + id                                    = (known after apply)
+      + metric_name                           = "ConcurrentExecutions"
+      + namespace                             = "AWS/Lambda"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 900
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.aws_backup_lag_vault.module.lambda_copy_to_lag[0].module.cloudwatch_log_group.aws_cloudwatch_log_group.this will be created
+  + resource "aws_cloudwatch_log_group" "this" {
+      + arn                         = (known after apply)
+      + deletion_protection_enabled = (known after apply)
+      + id                          = (known after apply)
+      + log_group_class             = "STANDARD"
+      + name                        = "/aws/lambda/uk-cloudenablement-sbx-aws_backup_lag_vault_copy-lambda"
+      + name_prefix                 = (known after apply)
+      + region                      = "eu-west-2"
+      + retention_in_days           = 30
+      + skip_destroy                = false
+      + tags                        = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-logs"
+          + "eitsce:moduleversion" = "2.6.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                    = {
+          + "DeployedByAURA"       = "true"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-logs"
+          + "eitsce:moduleversion" = "2.6.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-lambda"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+Plan: 35 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + backup_lag_vault_arn = (known after apply)
+  + backup_lag_vault_id  = (known after apply)
+
+
+Wiz.io IaC scan result for 'lag_vault': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a589e-f10b-89ac-bc5f-ff1d43968001%252A2c2026-07-16T09%2525%25252A3a06%2525%25252A3a24.079472842Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'malware_scan': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+  # module.aws_backup_malware_scan.data.aws_iam_policy_document.aws_backup_role will be read during apply
+  # (config refers to values not yet known)
+ <= data "aws_iam_policy_document" "aws_backup_role" {
+      + id                      = (known after apply)
+      + json                    = (known after apply)
+      + minified_json           = (known after apply)
+      + source_policy_documents = [
+          + null,
+        ]
+
+      + statement {
+          + actions   = [
+              + "backup:ListTags",
+              + "backup:TagResource",
+              + "backup:UntagResource",
+              + "tag:GetResources",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + "*",
+            ]
+          + sid       = "AllowTaggingBackup"
+        }
+      + statement {
+          + actions   = [
+              + "backup:DescribeBackupJob",
+              + "backup:GetRecoveryPointRestoreMetadata",
+              + "backup:ListBackupVaults",
+              + "backup:StartBackupJob",
+              + "ec2:ModifyInstanceMetadataOptions",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + "*",
+            ]
+          + sid       = "BackupActions"
+        }
+      + statement {
+          + actions   = [
+              + "iam:GetRole",
+              + "iam:PassRole",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + "arn:aws:iam::077820194866:role/eec-aws-ami-factory-instance-role",
+            ]
+          + sid       = "AllowEC2RolePassToService"
+
+          + condition {
+              + test     = "StringEquals"
+              + values   = [
+                  + "ec2.amazonaws.com",
+                ]
+              + variable = "iam:PassedToService"
+            }
+        }
+      + statement {
+          + actions   = [
+              + "iam:GetRole",
+              + "iam:PassRole",
+            ]
+          + effect    = "Allow"
+          + resources = [
+              + (known after apply),
+            ]
+          + sid       = "AllowScannerRolePassToBackup"
+
+          + condition {
+              + test     = "StringEquals"
+              + values   = [
+                  + "backup.amazonaws.com",
+                ]
+              + variable = "iam:PassedToService"
+            }
+        }
+    }
+
+  # module.aws_backup_malware_scan.aws_backup_plan.bkp_plan[0] will be created
+  + resource "aws_backup_plan" "bkp_plan" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + name     = "eits-tf-aws-backup-malware-scan-test"
+      + region   = "eu-west-2"
+      + tags     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-backup"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + version  = (known after apply)
+
+      + rule {
+          + completion_window                            = 180
+          + enable_continuous_backup                     = false
+          + recovery_point_tags                          = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-backup"
+              + "eitsce:moduleversion" = "local"
+              + "eitsce:tagschecked"   = "true"
+            }
+          + rule_name                                    = "eits-tf-aws-backup-malware-scan-rule"
+          + schedule                                     = "cron(0 2 ? * * *)"
+          + schedule_expression_timezone                 = "Etc/UTC"
+          + start_window                                 = 60
+          + target_vault_name                            = "Default"
+            # (1 unchanged attribute hidden)
+
+          + lifecycle {
+              + cold_storage_after                        = 0
+              + delete_after                              = 90
+              + opt_in_to_archive_for_supported_resources = (known after apply)
+            }
+
+          + scan_action {
+              + malware_scanner = "GUARDDUTY"
+              + scan_mode       = "INCREMENTAL_SCAN"
+            }
+        }
+
+      + scan_setting {
+          + malware_scanner  = "GUARDDUTY"
+          + resource_types   = [
+              + "ALL",
+            ]
+          + scanner_role_arn = (known after apply)
+        }
+    }
+
+  # module.aws_backup_malware_scan.module.bkp_scanner_iam_role[0].aws_iam_policy.default[0] will be created
+  + resource "aws_iam_policy" "default" {
+      + arn              = (known after apply)
+      + attachment_count = (known after apply)
+      + description      = "IAM policy for AWS Backup Malware Scanning"
+      + id               = (known after apply)
+      + name             = "BUPolicyForAWSBackup-scanner"
+      + name_prefix      = (known after apply)
+      + path             = "/"
+      + policy           = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "ebs:ListSnapshotBlocks",
+                          + "ebs:ListChangedBlocks",
+                          + "ebs:GetSnapshotBlock",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:ec2:*::snapshot/*"
+                    },
+                  + {
+                      + Action    = "kms:CreateGrant"
+                      + Condition = {
+                          + Bool                        = {
+                              + "kms:GrantIsForAWSResource" = "true"
+                            }
+                          + "ForAllValues:StringEquals" = {
+                              + "kms:GrantOperations" = [
+                                  + "Decrypt",
+                                  + "CreateGrant",
+                                  + "GenerateDataKeyWithoutPlaintext",
+                                  + "ReEncryptFrom",
+                                  + "ReEncryptTo",
+                                  + "RetireGrant",
+                                  + "DescribeKey",
+                                ]
+                            }
+                          + "ForAnyValue:StringLike"    = {
+                              + "kms:EncryptionContext:aws:guardduty:id" = "snap-*"
+                              + "kms:ViaService"                         = [
+                                  + "guardduty.*.amazonaws.com",
+                                  + "backup.*.amazonaws.com",
+                                ]
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:kms:*:*:key/*"
+                      + Sid       = "CreateGrantPermissions"
+                    },
+                  + {
+                      + Action    = "kms:CreateGrant"
+                      + Condition = {
+                          + Bool                        = {
+                              + "kms:GrantIsForAWSResource" = "true"
+                            }
+                          + "ForAllValues:StringEquals" = {
+                              + "kms:GrantOperations" = [
+                                  + "Decrypt",
+                                  + "ReEncryptTo",
+                                  + "ReEncryptFrom",
+                                  + "RetireGrant",
+                                  + "DescribeKey",
+                                ]
+                            }
+                          + "ForAnyValue:StringLike"    = {
+                              + "kms:EncryptionContext:aws:ebs:id" = "snap-*"
+                              + "kms:ViaService"                   = [
+                                  + "guardduty.*.amazonaws.com",
+                                  + "backup.*.amazonaws.com",
+                                ]
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:kms:*:*:key/*"
+                      + Sid       = "CreateGrantPermissionsForReEncryptAndDirectAPIs"
+                    },
+                  + {
+                      + Action   = [
+                          + "ec2:DescribeSnapshots",
+                          + "ec2:DescribeImages",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                  + {
+                      + Action   = "ec2:ModifySnapshotAttribute"
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:ec2:*:*:snapshot/*"
+                      + Sid      = "ShareSnapshotPermission"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncryptTo",
+                          + "kms:ReEncryptFrom",
+                        ]
+                      + Condition = {
+                          + StringLike = {
+                              + "kms:ViaService" = "ec2.*.amazonaws.com"
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:kms:*:*:key/*"
+                      + Sid       = "ShareSnapshotKMSPermission"
+                    },
+                  + {
+                      + Action   = "kms:DescribeKey"
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:kms:*:*:key/*"
+                      + Sid      = "DescribeKeyPermission"
+                    },
+                  + {
+                      + Action   = "backup:DescribeRecoveryPoint"
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "DescribeRecoveryPointPermission"
+                    },
+                  + {
+                      + Action   = "backup:CreateBackupAccessPoint"
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:backup:*:*:recovery-point:*"
+                      + Sid      = "CreateBackupAccessPointPermissions"
+                    },
+                  + {
+                      + Action   = [
+                          + "backup:DescribeBackupAccessPoint",
+                          + "backup:DeleteBackupAccessPoint",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "ReadAndDeleteBackupAccessPointPermissions"
+                    },
+                  + {
+                      + Action    = "kms:Decrypt"
+                      + Condition = {
+                          + StringLike = {
+                              + "kms:ViaService" = "backup.*.amazonaws.com"
+                            }
+                        }
+                      + Effect    = "Allow"
+                      + Resource  = "arn:aws:kms:*:*:key/*"
+                      + Sid       = "KMSKeyPermissionsForInstantAccess"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + policy_id        = (known after apply)
+      + tags             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.aws_backup_malware_scan.module.bkp_scanner_iam_role[0].aws_iam_role.default[0] will be created
+  + resource "aws_iam_role" "default" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "malware-protection.guardduty.amazonaws.com"
+                        }
+                      + Sid       = "AssumeRoleBackupScanner"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + description           = "IAM role for AWS Backup Malware Scanning"
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "BURoleForAWSBackup-scanner"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-iam"
+          + "eitsce:moduleversion" = "1.9.7"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.aws_backup_malware_scan.module.bkp_scanner_iam_role[0].aws_iam_role_policy_attachment.default[0] will be created
+  + resource "aws_iam_role_policy_attachment" "default" {
+      + id         = (known after apply)
+      + policy_arn = (known after apply)
+      + role       = "BURoleForAWSBackup-scanner"
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + backup_plan_arn = (known after apply)
+  + backup_plan_id  = (known after apply)
+
+
+Wiz.io IaC scan result for 'malware_scan': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a589f-480b-8a3f-9915-8611c49f8001%252A2c2026-07-16T09%2525%25252A3a07%2525%25252A3a34.478485969Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}

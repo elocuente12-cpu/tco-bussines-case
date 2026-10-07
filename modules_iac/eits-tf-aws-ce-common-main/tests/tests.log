@@ -1,0 +1,178 @@
+Tests started at 2026-02-04 10:31:52 UTC
+Branch: output-version
+Pull Request ID: 6
+
+Static scan terraform_validate result: Failure
+{
+  "format_version": "1.0",
+  "valid": false,
+  "error_count": 1,
+  "warning_count": 0,
+  "diagnostics": [
+    {
+      "severity": "error",
+      "summary": "Invalid function argument",
+      "detail": "Invalid value for \"path\" parameter: no file exists at \"./.terraform/modules/modules.json\"; this function works only with files that are distributed as part of the configuration source code, so if this file will be created by a resource in this configuration you must instead obtain this result from an attribute of that resource.",
+      "range": {
+        "filename": "main.tf",
+        "start": {
+          "line": 11,
+          "column": 38,
+          "byte": 731
+        },
+        "end": {
+          "line": 11,
+          "column": 47,
+          "byte": 740
+        }
+      },
+      "snippet": {
+        "context": "locals",
+        "code": "    for module in jsondecode(file(\"${path.root}/.terraform/modules/modules.json\")).Modules : module.Source",
+        "start_line": 11,
+        "highlight_start_offset": 37,
+        "highlight_end_offset": 46,
+        "values": [
+          {
+            "traversal": "path.root",
+            "statement": "is \".\""
+          }
+        ],
+        "function_call": {
+          "called_as": "file",
+          "signature": {
+            "name": "file",
+            "params": [
+              {
+                "name": "path",
+                "type": "string"
+              }
+            ],
+            "return_type": "string"
+          }
+        }
+      }
+    }
+  ]
+}
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'base_project': Success
+
+Changes to Outputs:
+  + prefix = "uk-cloudenablement-sbx"
+  + tags   = {
+      + "eitsce:tagschecked" = "true"
+    }
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+
+Wiz.io IaC scan result for 'base_project': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698320-6f0b-831e-bf77-31fe1b718001%252A2c2026-02-04T10%2525%25252A3a33%2525%25252A3a19.414189338Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 2,
+    "filesParsed": 2,
+    "queriesLoaded": 53,
+    "queriesExecuted": 0,
+    "queriesExecutionFailed": 48
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'basic': Success
+
+Changes to Outputs:
+  + prefix = "uk-cloudenablement-sbx"
+  + tags   = {
+      + "eitsce:modulename"    = "eits-tf-aws-ce-common-test"
+      + "eitsce:moduleversion" = "local"
+      + "eitsce:tagschecked"   = "true"
+    }
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+
+Wiz.io IaC scan result for 'basic': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698320-a70b-894f-9e04-20fd94c18001%252A2c2026-02-04T10%2525%25252A3a34%2525%25252A3a15.898006556Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 2,
+    "filesParsed": 2,
+    "queriesLoaded": 53,
+    "queriesExecuted": 0,
+    "queriesExecutionFailed": 48
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'basic_no_checks': Success
+
+Changes to Outputs:
+  + ce_common_tags = {
+      + "eitsce:modulename"    = "eits-tf-aws-ce-common-test"
+      + "eitsce:moduleversion" = "local"
+      + "eitsce:tagschecked"   = "true"
+    }
+  + prefix         = "uk-cloudenablement-sbx"
+  + recheck_tags   = {
+      + "eitsce:modulename"    = "eits-tf-aws-ce-common-recheck"
+      + "eitsce:moduleversion" = "local"
+      + "eitsce:tagschecked"   = "true"
+    }
+
+You can apply this plan to save these new output values to the Terraform
+state, without changing any real infrastructure.
+
+
+Wiz.io IaC scan result for 'basic_no_checks': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%252700698320-e00b-8e23-b254-2a1eadd38001%252A2c2026-02-04T10%2525%25252A3a35%2525%25252A3a12.203950959Z%2527%2529
+{
+  "__typename": "CICDIACScanResult",
+  "failedPolicyMatches": [],
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 2,
+    "filesParsed": 2,
+    "queriesLoaded": 53,
+    "queriesExecuted": 0,
+    "queriesExecutionFailed": 48
+  },
+  "secrets": null,
+  "fileTypes": null,
+  "discoveredResources": null
+}

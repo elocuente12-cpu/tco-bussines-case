@@ -1,0 +1,269 @@
+{
+  "name": "iam",
+  "tags": [
+    "iam",
+    "role",
+    "policy"
+  ],
+  "summary": "Terraform module for AWS IAM roles and policies",
+  "description": "Terraform module to create IAM roles and policies. With this module is possible to:\n-Create an IAM role with a custom IAM policy and/or managed IAM policies attached to it\n-Create an instance profile role",
+  "minimum_example": {
+    "account_id": "123456789",
+    "external_id": "YOUR_IAM_ROLE_EXTERNAL_ID",
+    "region": "eu-west-2",
+    "resources": [
+      {
+        "template": "iam",
+        "inputs": {
+          "role_name": "example-role-name",
+          "assume_role_policy": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::123456789:role/UserRole"
+                },
+                "Action": "sts:AssumeRole"
+              }
+            ]
+          },
+          "policy_name": "example-policy-name",
+          "policy_documents": [
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Sid": "ExampleListBucket",
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket"
+                  ],
+                  "Resource": [
+                    "arn:aws:s3:::123456789-example-bucket"
+                  ]
+                }
+              ]
+            }
+          ],
+          "tags": {
+            "CostString": "2000.GB.123.456789",
+            "AppID": 12345,
+            "Environment": "sbx"
+          }
+        }
+      }
+    ]
+  },
+  "skeleton": {
+    "account_id": "",
+    "external_id": "",
+    "region": "",
+    "change_id": "",
+    "plan": false,
+    "wiz_scan": true,
+    "resources": [
+      {
+        "name": "",
+        "template": "iam",
+        "version": "latest",
+        "inputs": {
+          "assume_role_policy": "",
+          "create_role": true,
+          "disable_org_check": false,
+          "instance_profile_enabled": false,
+          "managed_policy_arns": [],
+          "max_session_duration": 3600,
+          "override_policy_name": false,
+          "override_role_name": false,
+          "path": "/",
+          "permissions_boundary": "",
+          "policy_description": "",
+          "policy_documents": [],
+          "policy_name": "",
+          "role_description": "",
+          "role_name": "",
+          "tags": {},
+          "trusted_service": ""
+        }
+      }
+    ],
+    "tags": {}
+  },
+  "filters": {
+    "tojsonstring": [
+      "assume_role_policy",
+      "policy_documents"
+    ]
+  },
+  "docs": {
+    "inputs": [
+      {
+        "name": "assume_role_policy",
+        "type": "string",
+        "description": "JSON IAM policy for assume role (either this or `trusted_service` is mandatory. Both can be specified)",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "create_role",
+        "type": "string",
+        "description": "Set to True to create IAM role (Default: true)",
+        "default": true,
+        "required": false
+      },
+      {
+        "name": "disable_org_check",
+        "type": "bool",
+        "description": "Set this to true to disable the Deny permission in the trust policy which stops services from outside the Experian Organization from assuming the role",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "instance_profile_enabled",
+        "type": "bool",
+        "description": "Create EC2 Instance Profile for the role (Default: false)",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "managed_policy_arns",
+        "type": "set(string)",
+        "description": "List of managed policies to attach to created role",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "max_session_duration",
+        "type": "number",
+        "description": "The maximum session duration (in seconds) for the role. Can have a value from 1 hour (3600 seconds) to 12 hours (43200 seconds)",
+        "default": 3600,
+        "required": false
+      },
+      {
+        "name": "override_policy_name",
+        "type": "bool",
+        "description": "Set to TRUE to override the policy name. By default, 'BUPolicyFor' is added as a prefix as per https://experian.atlassian.net/wiki/x/XwH3E",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "override_role_name",
+        "type": "bool",
+        "description": "Set to TRUE to override the role name. By default, 'BURoleFor' is added as a prefix as per https://experian.atlassian.net/wiki/x/XwH3E",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "path",
+        "type": "string",
+        "description": "Path to the role and policy. See [IAM Identifiers](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html) for more information.  (Default: '/')",
+        "default": "/",
+        "required": false
+      },
+      {
+        "name": "permissions_boundary",
+        "type": "string",
+        "description": "ARN of the policy that is used to set the permissions boundary for the role",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "policy_description",
+        "type": "string",
+        "description": "The description of the IAM policy that is visible in the IAM policy manager (required if `policy_documents` is not empty)",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "policy_documents",
+        "type": "list(string)",
+        "description": "List of JSON IAM policy documents",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "policy_name",
+        "type": "string",
+        "description": "The name of the IAM policy that is visible in the IAM policy manager (required if `policy_documents` is not empty)",
+        "default": "",
+        "required": false
+      },
+      {
+        "name": "role_description",
+        "type": "string",
+        "description": "The description of the IAM role that is visible in the IAM role manager",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "role_name",
+        "type": "string",
+        "description": "Name of the IAM role (mandatory)",
+        "default": null,
+        "required": true
+      },
+      {
+        "name": "tags",
+        "type": "map(string)",
+        "description": "Tags for AWS Resources. See https://experian.atlassian.net/wiki/x/swH3E for all available tags. 'CostString', 'AppID' and 'Environment' are required",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "trusted_service",
+        "type": "string",
+        "description": "Name of the AWS service (e.g., `ec2`) that can assume the role (either this or `assume_role_policy` is mandatory. Both can be specified)",
+        "default": null,
+        "required": false
+      }
+    ],
+    "modules": [
+      {
+        "name": "eits_ce_common",
+        "source": "git::https://code.experian.local/scm/EUCES/eits-tf-aws-ce-common.git",
+        "version": "v1",
+        "description": null
+      }
+    ],
+    "outputs": [
+      {
+        "name": "instance_profile",
+        "description": "Name of the ec2 profile (if enabled)"
+      },
+      {
+        "name": "role_arn",
+        "description": "The Amazon Resource Name (ARN) specifying the role"
+      },
+      {
+        "name": "role_id",
+        "description": "The stable and unique string identifying the role"
+      },
+      {
+        "name": "role_name",
+        "description": "The name of the IAM role created"
+      },
+      {
+        "name": "role_policy",
+        "description": "Role policy document in json format. Outputs always, independent of `enabled` variable"
+      }
+    ],
+    "providers": [
+      {
+        "name": "aws",
+        "alias": null,
+        "version": "6.42.0"
+      }
+    ],
+    "requirements": [
+      {
+        "name": "terraform",
+        "version": ">= 1.9"
+      },
+      {
+        "name": "aws",
+        "version": ">= 6.34.0"
+      }
+    ]
+  }
+}

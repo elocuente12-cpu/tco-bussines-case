@@ -1,0 +1,723 @@
+Tests started at 2026-08-14 15:19:44 UTC
+Branch: UKICLOENA-3003
+Pull Request ID: 9
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'advanced_test': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.kms_key.aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key for testing Secret Manager module"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:role/BUAdministratorAccessRole"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.secret.aws_secretsmanager_secret.this will be created
+  + resource "aws_secretsmanager_secret" "this" {
+      + arn                            = (known after apply)
+      + description                    = "Test for Secret Manager module"
+      + force_overwrite_replica_secret = false
+      + id                             = (known after apply)
+      + kms_key_id                     = (known after apply)
+      + name                           = "eits-tf-aws-secrets-manager"
+      + name_prefix                    = (known after apply)
+      + policy                         = (known after apply)
+      + recovery_window_in_days        = 30
+      + region                         = "eu-west-2"
+      + tags                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-secrets-manager"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                       = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-secrets-manager"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+
+      + replica (known after apply)
+    }
+
+  # module.secret.aws_secretsmanager_secret_policy.this[0] will be created
+  + resource "aws_secretsmanager_secret_policy" "this" {
+      + id         = (known after apply)
+      + policy     = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = [
+                          + "secretsmanager:ValidateResourcePolicy",
+                          + "secretsmanager:UpdateSecretVersionStage",
+                          + "secretsmanager:UpdateSecret",
+                          + "secretsmanager:UntagResource",
+                          + "secretsmanager:TagResource",
+                          + "secretsmanager:StopReplicationToReplica",
+                          + "secretsmanager:RotateSecret",
+                          + "secretsmanager:RestoreSecret",
+                          + "secretsmanager:ReplicateSecretToRegions",
+                          + "secretsmanager:RemoveRegionsFromReplication",
+                          + "secretsmanager:PutSecretValue",
+                          + "secretsmanager:PutResourcePolicy",
+                          + "secretsmanager:ListSecrets",
+                          + "secretsmanager:ListSecretVersionIds",
+                          + "secretsmanager:GetResourcePolicy",
+                          + "secretsmanager:DescribeSecret",
+                          + "secretsmanager:DeleteSecret",
+                          + "secretsmanager:DeleteResourcePolicy",
+                          + "secretsmanager:CreateSecret",
+                          + "secretsmanager:CancelRotateSecret",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "PolicyForSecretOwners"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region     = "eu-west-2"
+      + secret_arn = (known after apply)
+    }
+
+  # module.secret.aws_secretsmanager_secret_version.this will be created
+  + resource "aws_secretsmanager_secret_version" "this" {
+      + arn                      = (known after apply)
+      + has_secret_string_wo     = (known after apply)
+      + id                       = (known after apply)
+      + region                   = "eu-west-2"
+      + secret_arn               = (known after apply)
+      + secret_id                = (known after apply)
+      + secret_string_wo         = (write-only attribute)
+      + secret_string_wo_version = (sensitive value)
+      + version_id               = (known after apply)
+      + version_stages           = (known after apply)
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'advanced_test': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a7f32-500b-8841-a651-a5114c4f8001%252A2c2026-08-14T15%2525%25252A3a21%2525%25252A3a06.799411681Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'basic_test': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.kms_key.aws_kms_key.this[0] will be created
+  + resource "aws_kms_key" "this" {
+      + arn                                = (known after apply)
+      + bypass_policy_lockout_safety_check = false
+      + customer_master_key_spec           = "SYMMETRIC_DEFAULT"
+      + deletion_window_in_days            = 30
+      + description                        = "KMS key for testing Secret Manager module"
+      + enable_key_rotation                = true
+      + id                                 = (known after apply)
+      + is_enabled                         = true
+      + key_id                             = (known after apply)
+      + key_usage                          = "ENCRYPT_DECRYPT"
+      + multi_region                       = false
+      + policy                             = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "kms:*"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:role/BUAdministratorAccessRole"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyOwner"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:Update*",
+                          + "kms:UntagResource",
+                          + "kms:TagResource",
+                          + "kms:ScheduleKeyDeletion",
+                          + "kms:Revoke*",
+                          + "kms:Put*",
+                          + "kms:List*",
+                          + "kms:ImportKeyMaterial",
+                          + "kms:Get*",
+                          + "kms:Enable*",
+                          + "kms:Disable*",
+                          + "kms:Describe*",
+                          + "kms:Delete*",
+                          + "kms:Create*",
+                          + "kms:CancelKeyDeletion",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = [
+                              + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                              + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                            ]
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyAdministration"
+                    },
+                  + {
+                      + Action    = [
+                          + "kms:ReEncrypt*",
+                          + "kms:GenerateDataKey*",
+                          + "kms:Encrypt",
+                          + "kms:DescribeKey",
+                          + "kms:Decrypt",
+                        ]
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + AWS = "arn:aws:iam::077820194866:role/BUAdministratorAccessRole"
+                        }
+                      + Resource  = "*"
+                      + Sid       = "KeyUsageUsers"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region                             = "eu-west-2"
+      + rotation_period_in_days            = 365
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-kms"
+          + "eitsce:moduleversion" = "1.10.2"
+          + "eitsce:tagschecked"   = "true"
+        }
+    }
+
+  # module.secrets.aws_secretsmanager_secret.this will be created
+  + resource "aws_secretsmanager_secret" "this" {
+      + arn                            = (known after apply)
+      + description                    = "Test for Secret Manager module"
+      + force_overwrite_replica_secret = true
+      + id                             = (known after apply)
+      + kms_key_id                     = (known after apply)
+      + name                           = "eits-tf-aws-secrets-manager"
+      + name_prefix                    = (known after apply)
+      + policy                         = (known after apply)
+      + recovery_window_in_days        = 7
+      + region                         = "eu-west-2"
+      + tags                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-secrets-manager"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                       = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-secrets-manager"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+
+      + replica (known after apply)
+    }
+
+  # module.secrets.aws_secretsmanager_secret_policy.this[0] will be created
+  + resource "aws_secretsmanager_secret_policy" "this" {
+      + id         = (known after apply)
+      + policy     = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = [
+                          + "secretsmanager:ValidateResourcePolicy",
+                          + "secretsmanager:UpdateSecretVersionStage",
+                          + "secretsmanager:UpdateSecret",
+                          + "secretsmanager:UntagResource",
+                          + "secretsmanager:TagResource",
+                          + "secretsmanager:StopReplicationToReplica",
+                          + "secretsmanager:RotateSecret",
+                          + "secretsmanager:RestoreSecret",
+                          + "secretsmanager:ReplicateSecretToRegions",
+                          + "secretsmanager:RemoveRegionsFromReplication",
+                          + "secretsmanager:PutResourcePolicy",
+                          + "secretsmanager:ListSecrets",
+                          + "secretsmanager:GetResourcePolicy",
+                          + "secretsmanager:DeleteSecret",
+                          + "secretsmanager:DeleteResourcePolicy",
+                          + "secretsmanager:CreateSecret",
+                          + "secretsmanager:CancelRotateSecret",
+                        ]
+                      + Condition = {
+                          + StringNotEquals = {
+                              + "aws:PrincipalArn" = [
+                                  + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                                  + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = "*"
+                      + Resource  = "*"
+                      + Sid       = "PolicyForSecretOwners"
+                    },
+                  + {
+                      + Action    = "secretsmanager:GetSecretValue"
+                      + Condition = {
+                          + StringNotEquals = {
+                              + "aws:PrincipalArn" = "arn:aws:iam::077820194866:role/BUAdministratorAccessRole"
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = "*"
+                      + Resource  = "*"
+                      + Sid       = "PolicyForSecretUsers"
+                    },
+                  + {
+                      + Action    = [
+                          + "secretsmanager:ListSecretVersionIds",
+                          + "secretsmanager:DescribeSecret",
+                        ]
+                      + Condition = {
+                          + StringNotEquals = {
+                              + "aws:PrincipalArn" = [
+                                  + "arn:aws:iam::077820194866:role/BUAdministratorAccessRole",
+                                  + "arn:aws:iam::077820194866:role/eec-aws-aura-iac-deployment-role",
+                                ]
+                            }
+                        }
+                      + Effect    = "Deny"
+                      + Principal = "*"
+                      + Resource  = "*"
+                      + Sid       = "PolicyForDescribeSecret"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + region     = "eu-west-2"
+      + secret_arn = (known after apply)
+    }
+
+  # module.secrets.aws_secretsmanager_secret_version.this will be created
+  + resource "aws_secretsmanager_secret_version" "this" {
+      + arn                      = (known after apply)
+      + has_secret_string_wo     = (known after apply)
+      + id                       = (known after apply)
+      + region                   = "eu-west-2"
+      + secret_arn               = (known after apply)
+      + secret_id                = (known after apply)
+      + secret_string_wo         = (write-only attribute)
+      + secret_string_wo_version = (sensitive value)
+      + version_id               = (known after apply)
+      + version_stages           = (known after apply)
+    }
+
+Plan: 4 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'basic_test': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006a7f32-8f0b-826d-8b15-53c8b18d8001%252A2c2026-08-14T15%2525%25252A3a22%2525%25252A3a01.950004688Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}

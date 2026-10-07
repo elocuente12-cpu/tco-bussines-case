@@ -1,0 +1,315 @@
+{
+  "name": "kms",
+  "tags": [
+    "kms",
+    "encryption",
+    "key"
+  ],
+  "summary": "Terraform Module for AWS KMS",
+  "description": "Terraform module for AWS KMS CMKs. This module will:\n- Create a single-region KMS key from AWS generated key material that automatically rotates every 365 days.\n- Optionally create an external key instead with imported key material.\n- Create a key policy with multiple permission sets including Key Owner, Key Admin, Key Users.\n- Specify the alias name (while adhering with naming convention).\nNOTE: The BUAdministratorAccessRole and the role executing the Terraform code will automatically be added as Key Admins.",
+  "minimum_example": {
+    "account_id": "123456789",
+    "external_id": "YOUR_IAM_ROLE_EXTERNAL_ID",
+    "region": "eu-west-2",
+    "resources": [
+      {
+        "template": "kms",
+        "inputs": {
+          "aliases": [
+            "cda-example-key"
+          ],
+          "description": "Example KMS key",
+          "key_services": [
+            "s3"
+          ],
+          "key_administrators": [
+            "arn:aws:iam::123456789:role/MyAdminRole"
+          ],
+          "tags": {
+            "CostString": "2000.GB.123.456789",
+            "AppID": 12345,
+            "Environment": "sbx",
+            "ResourceOwner": "eitsukicloud@experian.com"
+          }
+        }
+      }
+    ]
+  },
+  "skeleton": {
+    "account_id": "",
+    "external_id": "",
+    "region": "eu-west-2",
+    "change_id": "",
+    "plan": false,
+    "wiz_scan": true,
+    "resources": [
+      {
+        "name": "",
+        "template": "kms",
+        "version": "latest",
+        "inputs": {
+          "aliases": [],
+          "custom_key_store_id": "",
+          "customer_master_key_spec": "SYMMETRIC_DEFAULT",
+          "deletion_window_in_days": 30,
+          "description": "",
+          "external_key": false,
+          "grants": {},
+          "is_enabled": true,
+          "key_administrators": [],
+          "key_asymmetric_public_encryption_users": [],
+          "key_asymmetric_sign_verify_users": [],
+          "key_hmac_users": [],
+          "key_material_base64": "",
+          "key_owners": [],
+          "key_service_users": [],
+          "key_services": [],
+          "key_statements": {},
+          "key_symmetric_encryption_users": [],
+          "key_usage": "ENCRYPT_DECRYPT",
+          "key_users": [],
+          "multi_region": false,
+          "policy": "",
+          "prefix": "",
+          "rotation_period_in_days": 365,
+          "tags": {},
+          "xks_key_id": ""
+        }
+      }
+    ],
+    "tags": {}
+  },
+  "docs": {
+    "inputs": [
+      {
+        "name": "aliases",
+        "type": "list(string)",
+        "description": "  A list of aliases.\n  If configured, an alias for each element of the list will be built in this format: alias/{local.prefix}-{alias}-kms\n  If not configured, one single alias will be built in this format: alias/{local.prefix}-{dash-separated-services-from-key_services}-kms\n",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "custom_key_store_id",
+        "type": "string",
+        "description": "ID of the KMS Custom Key Store where the key will be stored instead of KMS. This variable is ignored if `external_key` is true.",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "customer_master_key_spec",
+        "type": "string",
+        "description": "Specifies the type of KMS key to create. Defaults to `SYMMETRIC_DEFAULT`. For a list of valid values and help with choosing a key spec, see the [AWS KMS Developer Guide](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-choose.html). This variable is ignored if `external_key` is true.",
+        "default": "SYMMETRIC_DEFAULT",
+        "required": false
+      },
+      {
+        "name": "deletion_window_in_days",
+        "type": "number",
+        "description": "The window you have to restore a disabled KMS key before it is gone forever",
+        "default": 30,
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "The description of the key as viewed in AWS console",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "external_key",
+        "type": "bool",
+        "description": "Whether the created key is external",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "grants",
+        "type": "map(object({\n    name              = optional(string)\n    grantee_principal = string\n    operations        = list(string)\n    constraints = optional(map(object({\n      encryption_context_equals = optional(map(string))\n      encryption_context_subset = optional(map(string))\n    })), {})\n    retiring_principal    = optional(string)\n    grant_creation_tokens = optional(list(string))\n    retire_on_delete      = optional(bool)\n  }))",
+        "description": "A map of grant definitions to create, see type definition and [Terraform docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_grant) for details. Note that grants will not be created if `external_key` is true and `key_material_base64` is not provided, as the key must have key material to be able to create grants",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "is_enabled",
+        "type": "bool",
+        "description": "Specifies whether the key is enabled. Defaults to `true`.",
+        "default": true,
+        "required": false
+      },
+      {
+        "name": "key_administrators",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key administrators](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-default-allow-administrators)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_asymmetric_public_encryption_users",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key asymmetric public encryption users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-users-crypto)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_asymmetric_sign_verify_users",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key asymmetric sign and verify users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-users-crypto)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_hmac_users",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key HMAC users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-users-crypto)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_material_base64",
+        "type": "string",
+        "description": "Provide the base64 key material for key imports. This will create an external key if provided, and a regular KMS key if not. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_external_key for more details",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "key_owners",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for those who will have full key permissions (`kms:*`)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_service_users",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key service users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-service-integration)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_services",
+        "type": "list(string)",
+        "description": "A list of AWS services for [key users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-default-allow-users)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_statements",
+        "type": "any",
+        "description": "A map of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) for custom permission usage",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "key_symmetric_encryption_users",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key symmetric encryption users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-users-crypto)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "key_usage",
+        "type": "string",
+        "description": "Specifies the intended use of the key. Valid values: `ENCRYPT_DECRYPT`,`SIGN_VERIFY`, or `GENERATE_VERIFY_MAC`. Defaults to `ENCRYPT_DECRYPT`",
+        "default": "ENCRYPT_DECRYPT",
+        "required": false
+      },
+      {
+        "name": "key_users",
+        "type": "list(string)",
+        "description": "A list of IAM ARNs for [key users](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-default-allow-users)",
+        "default": [],
+        "required": false
+      },
+      {
+        "name": "multi_region",
+        "type": "bool",
+        "description": "Indicates whether the KMS key is a multi-Region (true) or regional (false) key. Defaults to `false`.",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "policy",
+        "type": "string",
+        "description": "A valid policy JSON document, will be merged with any configuration supplied to the key_* variables, Although this is a key policy, not an IAM policy, an `aws_iam_policy_document`, in the form that designates a principal, can be used",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "prefix",
+        "type": "string",
+        "description": "Used for naming your cloud resources. The KMS alias will be 'alias/{local.prefix}-{alias}-kms'",
+        "default": "",
+        "required": false
+      },
+      {
+        "name": "rotation_period_in_days",
+        "type": "number",
+        "description": "Custom period of time between each rotation date. Must be a number between 90 and 2560. This variable is ignored if `external_key` is true.",
+        "default": 365,
+        "required": false
+      },
+      {
+        "name": "tags",
+        "type": "map(string)",
+        "description": "KMS key tags. See https://experian.atlassian.net/wiki/x/swH3E for all available tags",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "xks_key_id",
+        "type": "string",
+        "description": "Identifies the external key that serves as key material for the KMS key in an external key store.  This variable is ignored if `external_key` is true.",
+        "default": null,
+        "required": false
+      }
+    ],
+    "modules": [
+      {
+        "name": "eits_ce_common",
+        "source": "git::https://code.experian.local/scm/EUCES/eits-tf-aws-ce-common.git",
+        "version": "v1",
+        "description": null
+      }
+    ],
+    "outputs": [
+      {
+        "name": "aliases",
+        "description": "A map of aliases created and their attributes"
+      },
+      {
+        "name": "grants",
+        "description": "A map of grants created and their attributes"
+      },
+      {
+        "name": "key_arn",
+        "description": "The Amazon Resource Name (ARN) of the key"
+      },
+      {
+        "name": "key_id",
+        "description": "The globally unique identifier for the key"
+      },
+      {
+        "name": "key_policy",
+        "description": "The IAM resource policy set on the key"
+      }
+    ],
+    "providers": [
+      {
+        "name": "aws",
+        "alias": null,
+        "version": "6.45.0"
+      }
+    ],
+    "requirements": [
+      {
+        "name": "terraform",
+        "version": ">= 1.9.0"
+      },
+      {
+        "name": "aws",
+        "version": ">= 6.34.0"
+      }
+    ]
+  }
+}

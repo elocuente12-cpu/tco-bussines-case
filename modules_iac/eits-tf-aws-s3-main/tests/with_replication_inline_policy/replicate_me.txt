@@ -1,0 +1,1 @@
+this is an S3 object to test replication
