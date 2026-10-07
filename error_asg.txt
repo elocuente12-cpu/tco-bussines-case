@@ -8,3 +8,11 @@ aws secretsmanager put-secret-value \
   --secret-id eec-aws-us-eits-intelisrcpa-prd-datadog-database \
   --secret-string '{"host":"<ENDPOINT_RDS_MULTIAZ1>","port":"1433","username":"datadog_monitoring","password":"<PASSWORD>","database":"<DB>"}' \
   --region us-east-1
+
+
+Error: Unsupported argument
+
+  on datadog_dbm.tf line 192, in module "ec2_datadog_dbm":
+ 192:   metadata_options = {
+
+An argument named "metadata_options" is not expected here.
