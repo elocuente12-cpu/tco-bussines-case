@@ -1,0 +1,72 @@
+===========================================================================
+MODULOS FALTANTES PARA REPLICAR EL STACK intelisrcpa/pro
+Generado para la prueba de idempotencia.
+Directorio actual: /Users/javier.sepulveda/projects/experian/tco-bussines-case/modules_iac
+===========================================================================
+
+El stack usa 15 modulos (13 repos remotos + 2 locales). En este directorio
+ya tienes 6. Faltan 9.
+
+---------------------------------------------------------------------------
+YA DESCARGADOS (6)  -- OK, no hacer nada
+---------------------------------------------------------------------------
+  eits-tf-aws-acm-main            (ref usado por el stack: 2.3.4)
+  eits-tf-aws-alb-main            (ref usado por el stack: 3.11.0)
+  eits-tf-aws-autoscaling-main    (ref usado por el stack: 1.11.2)
+  eits-tf-aws-fsx-windows-main    (ref usado por el stack: 1.5.0)
+  eits-tf-aws-lambda-main         (ref usado por el stack: 1.11.1)
+  eits-tf-aws-sns-main            (ref usado por el stack: 1.8.1)
+
+  NOTA: los tienes como "-main" (rama por defecto), no en el tag exacto que
+  usa el stack. Para una prueba de idempotencia fiel conviene usar el MISMO
+  tag (?ref=) que produccion. Verifica que la version de -main coincida con
+  la ref indicada arriba; si no, re-clona por tag (ver comandos abajo).
+
+---------------------------------------------------------------------------
+FALTAN - REMOTOS (git::)  (7)
+---------------------------------------------------------------------------
+Base URL: https://code.experian.local/scm/EUCES/<repo>.git
+
+  eits-tf-aws-iam                 ref 1.9.6
+  eits-tf-aws-security-group      ref 3.5.1
+  eits-tf-aws-ec2-innersource     ref 4.1.0
+  eits-tf-aws-kms                 ref 1.10.0
+  eits-tf-aws-secrets-manager     ref 1.2.1
+  eits-tf-aws-s3                  ref 2.18.0
+  eits-tf-aws-backup              ref 3.7.1
+
+---------------------------------------------------------------------------
+FALTAN - LOCALES (ya existen en iac/repo/modules, solo copiar)  (2)
+---------------------------------------------------------------------------
+  eits-tf-aws-rds-main
+  eits-tf-aws-dms-main
+
+  Origen: /Users/javier.sepulveda/projects/experian/iac/repo/modules/
+  Copia esas dos carpetas a este directorio (o deja el source como
+  ../../modules si el stack de pruebas respeta esa ruta relativa).
+
+===========================================================================
+COMANDOS PARA CLONAR LOS 7 REMOTOS FALTANTES (por tag)
+Ejecutar dentro de: /Users/javier.sepulveda/projects/experian/tco-bussines-case/modules_iac
+===========================================================================
+
+BASE="https://code.experian.local/scm/EUCES"
+
+git clone --branch 1.9.6  --depth 1 "$BASE/eits-tf-aws-iam.git"             eits-tf-aws-iam
+git clone --branch 3.5.1  --depth 1 "$BASE/eits-tf-aws-security-group.git"  eits-tf-aws-security-group
+git clone --branch 4.1.0  --depth 1 "$BASE/eits-tf-aws-ec2-innersource.git" eits-tf-aws-ec2-innersource
+git clone --branch 1.10.0 --depth 1 "$BASE/eits-tf-aws-kms.git"             eits-tf-aws-kms
+git clone --branch 1.2.1  --depth 1 "$BASE/eits-tf-aws-secrets-manager.git" eits-tf-aws-secrets-manager
+git clone --branch 2.18.0 --depth 1 "$BASE/eits-tf-aws-s3.git"              eits-tf-aws-s3
+git clone --branch 3.7.1  --depth 1 "$BASE/eits-tf-aws-backup.git"          eits-tf-aws-backup
+
+# Copiar los 2 modulos locales:
+cp -r /Users/javier.sepulveda/projects/experian/iac/repo/modules/eits-tf-aws-rds-main .
+cp -r /Users/javier.sepulveda/projects/experian/iac/repo/modules/eits-tf-aws-dms-main .
+
+===========================================================================
+RESUMEN
+  Ya tienes:  6
+  Faltan:     9  (7 remotos + 2 locales)
+  Total:     15
+===========================================================================
