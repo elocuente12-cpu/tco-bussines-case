@@ -1,6 +1,265 @@
-Error: Missing required argument
+#!/bin/bash
+# Generado por Terraform: parametros + scripts/install_datadog_dbm.sh
+export DD_ENABLE_DBM='true'
+export DD_ENV='prd'
+export DD_SECRET_API_KEY='eec-aws-us-eits-intelisrcpa-prd-datadog-apikey'
+export DD_SECRET_SQLSERVER='eec-aws-us-eits-intelisrcpa-prd-datadog-database'
+export DD_SERVICE='sqlserver-intelisrcpa'
+export DD_SITE='datadoghq.com'
+#!/bin/bash
+# =============================================================================
+# install_datadog_dbm.sh
+# Instala el Datadog Agent 7 solo para Database Monitoring (DBM) de RDS SQL
+# Server. El mismo archivo sirve de tres formas (siempre como root):
+#
+#   1. user_data manual (consola/CLI): pegar el script; usa los valores por
+#      defecto de CONFIGURACIÓN o editarlos ahí.
+#   2. SSM / shell:
+#        sudo DD_SITE=datadoghq.com DD_ENV=dev bash install_datadog_dbm.sh
+#      o con AWS-RunShellScript enviando esas mismas líneas.
+#   3. Terraform: locals.tf antepone los "export DD_*" desde terraform.tfvars
+#      y concatena este archivo con file() (sin templatefile).
+#
+# Variables de entorno (opcionales; sin definir = valor por defecto):
+#   DD_SITE, DD_ENV, DD_SERVICE, DD_VERSION, DD_ENABLE_DBM (true|false),
+#   DD_SECRET_API_KEY, DD_SECRET_SQLSERVER,
+#   DD_PROXY_HTTP   proxy del Agent para tráfico http hacia Datadog.
+#   DD_PROXY_HTTPS  proxy del Agent para tráfico https hacia Datadog.
+#                   Definidas vacías (DD_PROXY_HTTP= DD_PROXY_HTTPS=) = sin
+#                   proxy (salida directa).
+#   DD_NO_PROXY   lista separada por comas (169.254.169.254 siempre incluido).
+#
+# Proxy: solo lo usa el Agent para enviar telemetría a Datadog (bloque proxy
+# de datadog.yaml). No se modifica el proxy del sistema: la instalación
+# (install/yum/keys.datadoghq.com) y Secrets Manager usan la salida normal
+# de la instancia.
+#
+# Secretos (arquetipo):
+#   api_key           -> secreto compartido por todas las instancias con Agent.
+#   usuario de la RDS -> host/port/username/password/database del login de
+#                        Datadog. Solo lo lee el check sqlserver.
+#   El secreto del usuario maestro de RDS no se usa aquí (mínimo privilegio).
+#   host y port se leen del secreto al arrancar; username/password/database
+#   se resuelven en memoria. Si cambia el endpoint o el puerto en el secreto,
+#   hay que volver a provisionar la instancia (o re-ejecutar este script).
+#
+# Seguridad: el Agent resuelve ENC[secreto;clave] en memoria con el rol de la
+# EC2 (backend aws.secrets). Ningún valor sensible queda en disco, en el
+# user_data ni en el log.
+#
+# Dependencias: solo lo que trae Amazon Linux 2023 (curl, aws cli, python3).
+# El ODBC Driver 18 viene embebido en el Agent Linux (7.51+).
+# Log: /var/log/datadog-dbm-install.log
+# =============================================================================
+set -Eeuo pipefail
+umask 027
 
-  on datadog_dbm.tf line 87, in module "ec2_datadog_dbm":
-  87: module "ec2_datadog_dbm" {
+# --- CONFIGURACIÓN (entorno > valor por defecto) ------------------------------
+readonly dd_site="${DD_SITE:-datadoghq.com}"
+readonly dd_env="${DD_ENV:-uat}"
+readonly dd_service="${DD_SERVICE:-intelisrcpa}"
+readonly dd_version="${DD_VERSION:-1.0}"
+readonly enable_dbm="${DD_ENABLE_DBM:-true}"
+readonly secret_api_key="${DD_SECRET_API_KEY:-prod/infra/datadog}"
+readonly secret_sqlserver="${DD_SECRET_SQLSERVER:-prod/database/sqlserver}"
+# Sin ":" a propósito: sin definir = proxy por defecto; definida vacía = sin proxy.
+readonly proxy_http="${DD_PROXY_HTTP-http://proxy-useast.us.experian.eeca:9595}"
+readonly proxy_https="${DD_PROXY_HTTPS-http://proxy-useast.us.experian.eeca:9595}"
+readonly no_proxy_list="${DD_NO_PROXY:-169.254.169.254,100.100.100.200}"
 
-The argument "source" is required, but no definition was found.
+# --- CONSTANTES ---------------------------------------------------------------
+readonly dd_etc="/etc/datadog-agent"
+readonly dd_installer_url="https://install.datadoghq.com/scripts/install_script_agent7.sh"
+readonly log_file="/var/log/datadog-dbm-install.log"
+readonly imds_url="http://169.254.169.254/latest"
+readonly retry_max=10
+readonly retry_sleep=10
+
+# --- UTILIDADES ---------------------------------------------------------------
+log()  { printf '%s [%s] %s\n' "$(date -Is)" "$1" "$2"; }
+info() { log INFO "$*"; }
+fail() { log ERROR "$*" >&2; exit 1; }
+trap 'log ERROR "falló la línea $LINENO (exit $?)" >&2' ERR
+
+# Reintenta un comando: en el arranque la red/NAT o el rol pueden tardar.
+retry() {
+  local attempt=1
+  until "$@"; do
+    [ "$attempt" -ge "$retry_max" ] && return 1
+    attempt=$((attempt + 1))
+    sleep "$retry_sleep"
+  done
+}
+
+imds_get() {
+  local token
+  token=$(curl -sfX PUT "$imds_url/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60") || return 1
+  curl -sf -H "X-aws-ec2-metadata-token: $token" "$imds_url/meta-data/$1"
+}
+
+get_secret() {
+  aws secretsmanager get-secret-value --region "$region" --secret-id "$1" \
+    --query SecretString --output text
+}
+
+# --- PASOS --------------------------------------------------------------------
+validate_secrets() {
+  # Valida estructura sin imprimir valores.
+  retry get_secret "$secret_api_key" \
+    | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin).get("api_key") else 1)' \
+    || fail "$secret_api_key sin api_key o sin acceso"
+
+  if [ "$enable_dbm" = "true" ]; then
+    # Valida los campos y devuelve SOLO host y port (no son sensibles).
+    # El check sqlserver recibe host y puerto juntos ("host,port") y ENC[]
+    # solo reemplaza valores completos, por eso estos dos se resuelven aquí;
+    # username/password/database siguen como ENC[] (resueltos en memoria).
+    local endpoint
+    endpoint=$(retry get_secret "$secret_sqlserver" | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+missing = [k for k in ("host", "port", "username", "password", "database") if not str(d.get(k, ""))]
+if missing:
+    sys.exit("faltan campos: " + ",".join(missing))
+port = str(d["port"])
+if not port.isdigit() or not 1 <= int(port) <= 65535:
+    sys.exit("port inválido")
+print(d["host"], port)') || fail "$secret_sqlserver inválido o sin acceso"
+    read -r db_host db_port <<< "$endpoint"
+    readonly db_host db_port
+    info "endpoint de la base: $db_host:$db_port"
+  fi
+  info "secretos validados en $region"
+}
+
+write_agent_config() {
+  install -d -m 755 "$dd_etc/conf.d/sqlserver.d"
+
+  cat > "$dd_etc/datadog.yaml" <<EOF
+## Datadog Agent: solo Database Monitoring
+api_key: ENC[$secret_api_key;api_key]
+site: $dd_site
+
+secret_backend_type: aws.secrets
+secret_backend_config:
+  aws_session:
+    aws_region: $region
+
+tags:
+  - env:$dd_env
+  - service:$dd_service
+  - version:$dd_version
+
+$proxy_yaml
+
+## Todo lo que no es DBM queda apagado
+logs_enabled: false
+apm_config:
+  enabled: false
+process_config:
+  process_collection:
+    enabled: false
+  container_collection:
+    enabled: false
+EOF
+
+  if [ "$enable_dbm" != "true" ]; then
+    rm -f "$dd_etc/conf.d/sqlserver.d/conf.yaml"   # re-ejecución sin DBM
+  else
+    cat > "$dd_etc/conf.d/sqlserver.d/conf.yaml" <<EOF
+init_config:
+
+instances:
+  - dbm: true
+    host: "$db_host,$db_port"          # desde $secret_sqlserver (host/port)
+    username: ENC[$secret_sqlserver;username]
+    password: ENC[$secret_sqlserver;password]
+    database: ENC[$secret_sqlserver;database]
+    connector: odbc
+    driver: ODBC Driver 18 for SQL Server   # embebido en el Agent
+    # La RDS exige TLS (rds.force_ssl=1). PoC: no valida la CA de RDS.
+    connection_string: "TrustServerCertificate=yes;"
+    aws:
+      instance_endpoint: "$db_host"
+    tags:
+      - env:$dd_env
+      - service:$dd_service
+      - version:$dd_version
+EOF
+  fi
+  info "configuración escrita en $dd_etc"
+}
+
+install_agent() {
+  if rpm -q datadog-agent >/dev/null 2>&1; then
+    info "datadog-agent ya instalado, se omite la instalación"
+    return 0
+  fi
+  local installer
+  installer=$(mktemp)
+  retry curl -fsSL -o "$installer" "$dd_installer_url" || fail "no se pudo descargar el instalador"
+  # Sin DD_API_KEY: el instalador conserva el datadog.yaml escrito antes.
+  DD_SITE="$dd_site" DD_AGENT_MAJOR_VERSION=7 DD_INSTALL_ONLY=true bash "$installer"
+  rm -f "$installer"
+  info "datadog-agent instalado: $(rpm -q datadog-agent)"
+}
+
+start_and_verify() {
+  chown -R dd-agent:dd-agent "$dd_etc"
+  find "$dd_etc" -name '*.yaml' -exec chmod 640 {} \;
+  # restart (no solo start): en una re-ejecución por SSM aplica la config nueva
+  systemctl enable datadog-agent
+  systemctl restart datadog-agent
+
+  local attempt
+  for attempt in $(seq 1 12); do
+    sleep 10
+    datadog-agent status 2>/dev/null | grep -q 'API Key valid' && break
+  done
+  datadog-agent status 2>/dev/null | grep -A2 'API Keys status' || true
+  if [ "$enable_dbm" = "true" ]; then
+    datadog-agent status 2>/dev/null | sed -n '/sqlserver (/,/Average Execution/p' || true
+  fi
+}
+
+configure_proxy() {
+  # Bloque proxy de datadog.yaml (vacío si no hay proxy).
+  # Solo el Agent usa el proxy, y solo hacia Datadog. No se tocan variables
+  # de entorno, dnf ni systemd de la instancia.
+  proxy_yaml=""
+  if [ -z "$proxy_http" ] && [ -z "$proxy_https" ]; then
+    info "Agent sin proxy: salida directa a Datadog"
+    return 0
+  fi
+
+  local entry entries="$no_proxy_list"
+  [[ ",$entries," == *",169.254.169.254,"* ]] || entries="169.254.169.254,$entries"   # IMDS
+  proxy_yaml="proxy:"
+  if [ -n "$proxy_http" ];  then proxy_yaml+=$'\n'"  http: $proxy_http"; fi
+  if [ -n "$proxy_https" ]; then proxy_yaml+=$'\n'"  https: $proxy_https"; fi
+  proxy_yaml+=$'\n'"  no_proxy:"
+  for entry in ${entries//,/ }; do
+    proxy_yaml+=$'\n'"    - $entry"
+  done
+  proxy_yaml+=$'\n'"no_proxy_nonexact_match: true"
+  info "Agent con proxy hacia Datadog: http=$proxy_http https=$proxy_https (no_proxy: $entries)"
+}
+
+main() {
+  exec > >(tee -a "$log_file") 2>&1
+  info "inicio instalación Datadog DBM"
+  [ "$(id -u)" -eq 0 ] || fail "ejecutar como root"
+
+  configure_proxy
+
+  region=$(retry imds_get placement/region) || fail "no se pudo leer la región desde IMDS"
+  readonly region
+
+  validate_secrets
+  write_agent_config
+  install_agent
+  start_and_verify
+  info "fin instalación Datadog DBM"
+}
+
+main "$@"
