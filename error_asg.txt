@@ -118,3 +118,117 @@ PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
 2026-10-08T11:12:47.1602725+00:00  Domain join: USAEA1PWBWESPG2 -> gdc.local
 2026-10-08T11:12:56.0876227+00:00  ERROR FATAL: Computer 'USAEA1PWBWESPG2' failed to join domain 'gdc.local' from its current workgroup 'WORKGROUP' with following error message: The system cannot find the file specified.
 PS C:\Windows\system32>
+
+grupo 1: PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-10-08T19:13:03.2697813+00:00  === Inicio bootstrap ===
+2026-10-08T19:13:05.2214933+00:00  Instance ID: i-076a9047edc6aefeb
+2026-10-08T19:13:07.3679355+00:00  Health-check off durante bootstrap.
+2026-10-08T19:13:11.0250101+00:00  Fase 1: Domain join...
+2026-10-08T19:14:33.2986053+00:00  Hostname 1 reclamado (1).
+2026-10-08T19:14:33.3032926+00:00  Hostname asignado: USAEA1PWBWESPA1
+2026-10-08T19:14:33.3041350+00:00  Renombrando: EC2AMAZ-00UJK97 -> USAEA1PWBWESPA1
+2026-10-08T19:14:33.9549728+00:00  Rename OK. Exit 3010.
+2026-10-08T19:15:51.3342720+00:00  === Inicio bootstrap ===
+2026-10-08T19:15:52.1412035+00:00  Instance ID: i-076a9047edc6aefeb
+2026-10-08T19:15:52.7174382+00:00  Health-check off durante bootstrap.
+2026-10-08T19:15:53.5230926+00:00  Fase 1: Domain join...
+2026-10-08T19:16:52.3830186+00:00  Hostname reutilizado: USAEA1PWBWESPA1
+2026-10-08T19:17:21.5426905+00:00  Domain join: USAEA1PWBWESPA1 -> gdc.local
+2026-10-08T19:17:42.0182956+00:00  Domain join OK. Exit 3010.
+2026-10-08T19:18:57.4838504+00:00  === Inicio bootstrap ===
+2026-10-08T19:18:58.9220530+00:00  Instance ID: i-076a9047edc6aefeb
+2026-10-08T19:18:59.7661186+00:00  Health-check off durante bootstrap.
+2026-10-08T19:19:00.3658263+00:00  Gate AD OK: dominio=gdc.local, hostname=USAEA1PWBWESPA1.
+2026-10-08T19:20:20.5732615+00:00  Fase 2: Montaje FSx...
+2026-10-08T19:20:24.0764281+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-10-08T19:20:24.2222106+00:00  Gate FSx OK: Z:\ accesible.
+2026-10-08T19:20:27.3189352+00:00  Fase 4: SQL Client Alias...
+2026-10-08T19:20:27.5619214+00:00  SQL Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433
+2026-10-08T19:20:28.6419720+00:00  Fase 5: Postbuild_tasks off.
+2026-10-08T19:20:33.0684521+00:00  Fase 5: Time sync NT5DS.
+2026-10-08T14:20:33.0843791-05:00  Fase 5: TZ UTC-5
+2026-10-08T14:20:33.2685100-05:00  Fase 6: Proxy WinINET OK
+2026-10-08T14:20:33.2705226-05:00  Fase 7: Esperando sitios IIS/DNN...
+2026-10-08T14:20:45.7583030-05:00  Esperando IIS (1): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:21:15.9132317-05:00  Esperando IIS (2): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:21:46.0252688-05:00  Esperando IIS (3): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:22:16.1417263-05:00  Esperando IIS (4): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:22:46.2450329-05:00  Esperando IIS (5): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:23:16.4155254-05:00  Esperando IIS (6): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:23:46.7375711-05:00  Esperando IIS (7): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:24:16.9759866-05:00  Esperando IIS (8): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:24:47.1852233-05:00  Esperando IIS (9): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:25:17.3814060-05:00  Esperando IIS (10): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:25:47.6077331-05:00  Esperando IIS (11): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:26:17.7576581-05:00  Esperando IIS (12): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:26:47.9191587-05:00  Esperando IIS (13): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:27:18.0478785-05:00  Esperando IIS (14): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:27:48.1964625-05:00  Esperando IIS (15): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:28:18.3374246-05:00  Esperando IIS (16): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:28:48.5352400-05:00  Esperando IIS (17): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:29:18.6451931-05:00  Esperando IIS (18): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:29:48.8242132-05:00  Esperando IIS (19): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:30:18.9697262-05:00  Esperando IIS (20): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:30:49.1469436-05:00  Esperando IIS (21): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:31:19.2710123-05:00  Esperando IIS (22): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:31:49.4073312-05:00  Esperando IIS (23): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:32:19.6670294-05:00  Esperando IIS (24): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:32:49.7784832-05:00  Esperando IIS (25): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:33:19.9473563-05:00  Esperando IIS (26): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:33:50.0585121-05:00  Esperando IIS (27): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:34:20.2698429-05:00  Esperando IIS (28): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:34:50.4707563-05:00  Esperando IIS (29): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:35:20.7093498-05:00  Esperando IIS (30): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:35:50.8917071-05:00  Esperando IIS (31): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:36:20.9976071-05:00  Esperando IIS (32): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:36:51.1697893-05:00  Esperando IIS (33): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:37:21.2973253-05:00  Esperando IIS (34): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:37:51.4586569-05:00  Esperando IIS (35): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:38:21.5751603-05:00  Esperando IIS (36): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:38:51.7107612-05:00  Esperando IIS (37): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:39:21.8820441-05:00  Esperando IIS (38): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:39:52.0112360-05:00  Esperando IIS (39): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:40:22.1406861-05:00  Esperando IIS (40): faltan mobile, tuintelidat, apcexperian.
+2026-10-08T14:40:52.1559432-05:00  WaitForIisSites timeout; se continua.
+2026-10-08T14:40:52.1579519-05:00  Fase 8: Pre-warm DNN...
+2026-10-08T14:40:56.7984172-05:00  Pre-warm mobile.apc.com.pa (1) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:41:15.3645808-05:00  Pre-warm mobile.apc.com.pa (2) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:41:34.2902966-05:00  Pre-warm mobile.apc.com.pa (3) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:41:52.2154655-05:00  Pre-warm mobile.apc.com.pa (4) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:42:11.2186530-05:00  Pre-warm mobile.apc.com.pa (5) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:42:30.9242420-05:00  Pre-warm mobile.apc.com.pa (6) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:42:50.7110937-05:00  Pre-warm mobile.apc.com.pa (7) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:43:10.4323058-05:00  Pre-warm mobile.apc.com.pa (8) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:43:30.1481503-05:00  Pre-warm mobile.apc.com.pa (9) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:43:49.3915338-05:00  Pre-warm mobile.apc.com.pa (10) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:44:04.4016171-05:00  Pre-warm mobile.apc.com.pa sin respuesta tras reintentos.
+2026-10-08T14:44:07.6225646-05:00  Pre-warm www.tuintelidat.com (1) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:44:27.1208918-05:00  Pre-warm www.tuintelidat.com (2) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:44:45.2466678-05:00  Pre-warm www.tuintelidat.com (3) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:03.7213120-05:00  Pre-warm www.tuintelidat.com (4) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:21.0521893-05:00  Pre-warm www.tuintelidat.com (5) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:40.1298567-05:00  Pre-warm www.tuintelidat.com (6) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:58.0328948-05:00  Pre-warm www.tuintelidat.com (7) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:16.3556842-05:00  Pre-warm www.tuintelidat.com (8) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:34.4698878-05:00  Pre-warm www.tuintelidat.com (9) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:53.0081598-05:00  Pre-warm www.tuintelidat.com (10) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:47:08.0184344-05:00  Pre-warm www.tuintelidat.com sin respuesta tras reintentos.
+2026-10-08T14:47:11.6917637-05:00  Pre-warm apcexperian.com (1) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:47:30.2844997-05:00  Pre-warm apcexperian.com (2) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:47:47.6323858-05:00  Pre-warm apcexperian.com (3) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:48:07.1862848-05:00  Pre-warm apcexperian.com (4) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:48:25.1444363-05:00  Pre-warm apcexperian.com (5) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:48:43.4988157-05:00  Pre-warm apcexperian.com (6) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:49:00.9798776-05:00  Pre-warm apcexperian.com (7) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:49:20.2428919-05:00  Pre-warm apcexperian.com (8) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:49:39.8073742-05:00  Pre-warm apcexperian.com (9) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:49:59.4053032-05:00  Pre-warm apcexperian.com (10) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:50:14.4078285-05:00  Pre-warm apcexperian.com sin respuesta tras reintentos.
+2026-10-08T14:50:14.4098400-05:00  Pre-warm DNN completado.
+2026-10-08T14:50:14.4117689-05:00  Fase final: Health-check HTTP:80...
+2026-10-08T14:50:14.6901340-05:00  Default Web Site removido.
+2026-10-08T14:50:15.0483400-05:00  Health-check creado.
+2026-10-08T14:50:15.0573978-05:00  Health-check habilitado: AD, FSx, IIS y pre-warm validados.
+2026-10-08T14:50:17.1370222-05:00  Aviso hook (CONTINUE): An error occurred while sending the request.
+2026-10-08T14:50:17.1399415-05:00  === Bootstrap completado ===
+PS C:\Windows\system32>
