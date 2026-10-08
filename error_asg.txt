@@ -1,6 +1,6 @@
-Error: Invalid for_each argument
+Error: Missing required argument
 
-  on .terraform/modules/sg_rds_sqlserver/main.tf line 99, in resource "aws_vpc_security_group_ingress_rule" "security_groups":
-  99:   for_each = local.sg_ingress_rule_sg
-    ├────────────────
-    │ local.sg_ingress_rule_sg will be known only after apply
+  on datadog_dbm.tf line 87, in module "ec2_datadog_dbm":
+  87: module "ec2_datadog_dbm" {
+
+The argument "source" is required, but no definition was found.
