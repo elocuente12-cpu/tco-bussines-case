@@ -1,23 +1,12 @@
-Error: Unsupported Terraform Core version
+Error: uploading S3 Object (iis-configure.ps1) to Bucket (eec-aws-us-eits-intelisrcpa-prd-bootstrap-scripts-bucket): operation error S3: PutObject, https response error StatusCode: 400, RequestID: SRFN2TE5J9XATJV4, HostID: PmCisMD4Nq+jBm8hsj+fsBVH5ptZ9vW7+HTQNsEXovGjMObb6n4aI8CxdM2z92jHCTwjkgUWT2gMiNHWrlas2yAYAHGEIMU9, api error BadRequest: Object tags cannot be greater than 10
 
-  on .terraform/modules/ssm_param_apm_pools/versions.tf line 2, in terraform:
-   2:   required_version = ">= 1.11.0"
+  with aws_s3_object.iis_configure,
+  on bootstrap-scripts.tf line 46, in resource "aws_s3_object" "iis_configure":
+  46: resource "aws_s3_object" "iis_configure" {
 
-Module module.ssm_param_apm_pools (from
-git::https://code.experian.local/scm/EUCES/eits-tf-aws-ssm-parameter.git?ref=1.5.2)
-does not support Terraform version 1.9.8. To proceed, either choose another
-supported Terraform version or update this version constraint. Version
-constraints are normally set for good reason, so updating the constraint may
-lead to other errors or unexpected behavior.
 
-Error: Unsupported Terraform Core version
+Error: uploading S3 Object (enable_apm_dotnet_iis.ps1) to Bucket (eec-aws-us-eits-intelisrcpa-prd-bootstrap-scripts-bucket): operation error S3: PutObject, https response error StatusCode: 400, RequestID: SRFT54C62N9XVT1K, HostID: 4m9yxn/6r4yOSTgg7TEioGarjcxLOVeAwjAKoOvQ3haCCAxdOJ0VZe4iltMwutPdFsEK/lu1f+lpZM3/0lo/jBB0cH1tMRxH, api error BadRequest: Object tags cannot be greater than 10
 
-  on .terraform/modules/ssm_param_iis_sites/versions.tf line 2, in terraform:
-   2:   required_version = ">= 1.11.0"
-
-Module module.ssm_param_iis_sites (from
-git::https://code.experian.local/scm/EUCES/eits-tf-aws-ssm-parameter.git?ref=1.5.2)
-does not support Terraform version 1.9.8. To proceed, either choose another
-supported Terraform version or update this version constraint. Version
-constraints are normally set for good reason, so updating the constraint may
-lead to other errors or unexpected behavior.
+  with aws_s3_object.enable_apm,
+  on bootstrap-scripts.tf line 58, in resource "aws_s3_object" "enable_apm":
+  58: resource "aws_s3_object" "enable_apm" 
