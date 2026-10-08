@@ -1,0 +1,71 @@
+###############################################################################
+# CONTENCION CRASH LOOP ASG - intelisrcpa prd
+# Objetivo: detener el bucle de reemplazo por "ELB system health check failure"
+#           suspendiendo HealthCheck y ReplaceUnhealthy en los 7 ASG, dejando
+#           las instancias vivas para diagnosticar.
+# Region:   us-east-1  (ajustar si aplica)
+# Ejecutar en: AWS CloudShell / consola web (NO toca el ALB; es reversible)
+###############################################################################
+
+
+###############################################################################
+# PASO 1 - Confirmar los nombres exactos de los ASG (ejecutar y revisar la lista)
+###############################################################################
+aws autoscaling describe-auto-scaling-groups \
+  --query "AutoScalingGroups[?contains(AutoScalingGroupName, 'intelisrcpa') && contains(AutoScalingGroupName, 'web')].AutoScalingGroupName" \
+  --output text --region us-east-1
+
+
+###############################################################################
+# PASO 2 - Suspender HealthCheck y ReplaceUnhealthy en TODOS los ASG
+#          (detiene el bucle de reemplazo)
+###############################################################################
+for asg in $(aws autoscaling describe-auto-scaling-groups \
+  --query "AutoScalingGroups[?contains(AutoScalingGroupName, 'intelisrcpa') && contains(AutoScalingGroupName, 'web')].AutoScalingGroupName" \
+  --output text --region us-east-1); do
+  echo "Suspendiendo en $asg ..."
+  aws autoscaling suspend-processes \
+    --auto-scaling-group-name "$asg" \
+    --scaling-processes HealthCheck ReplaceUnhealthy \
+    --region us-east-1
+done
+
+
+###############################################################################
+# PASO 3 - Verificar que quedaron suspendidos
+###############################################################################
+aws autoscaling describe-auto-scaling-groups \
+  --query "AutoScalingGroups[?contains(AutoScalingGroupName, 'intelisrcpa') && contains(AutoScalingGroupName, 'web')].{Name:AutoScalingGroupName,Suspended:SuspendedProcesses[].ProcessName}" \
+  --output table --region us-east-1
+
+
+###############################################################################
+# PASO 4 - DIAGNOSTICO EN LA INSTANCIA (via Session Manager / RDP)
+#          Ejecutar en una instancia que estaba en el ciclo, ahora estable.
+###############################################################################
+# 4.1 El sitio health-check esta Started y responde en :80?
+#   Get-Website -Name "health-check" | Format-List Name, State, Bindings
+#   Invoke-WebRequest http://localhost/ -UseBasicParsing | Select-Object StatusCode
+#
+# 4.2 Que esta consumiendo CPU en este momento?
+#   Get-Process | Sort-Object CPU -Descending | Select-Object -First 8 Name, CPU, Id
+#
+# 4.3 El bootstrap llego al final?
+#   Get-Content C:\ProgramData\intelisrcpa-bootstrap.log -Tail 30
+#
+# 4.4 Que esta haciendo el documento SSM de IIS?
+#   Get-Content C:\ProgramData\intelisrcpa-iis-ssm.log -Tail 40
+
+
+###############################################################################
+# REVERTIR - Reactivar HealthCheck y ReplaceUnhealthy cuando se resuelva la causa
+###############################################################################
+# for asg in $(aws autoscaling describe-auto-scaling-groups \
+#   --query "AutoScalingGroups[?contains(AutoScalingGroupName, 'intelisrcpa') && contains(AutoScalingGroupName, 'web')].AutoScalingGroupName" \
+#   --output text --region us-east-1); do
+#   echo "Reactivando en $asg ..."
+#   aws autoscaling resume-processes \
+#     --auto-scaling-group-name "$asg" \
+#     --scaling-processes HealthCheck ReplaceUnhealthy \
+#     --region us-east-1
+# done
