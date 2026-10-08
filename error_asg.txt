@@ -1,265 +1,102 @@
-#!/bin/bash
-# Generado por Terraform: parametros + scripts/install_datadog_dbm.sh
-export DD_ENABLE_DBM='true'
-export DD_ENV='prd'
-export DD_SECRET_API_KEY='eec-aws-us-eits-intelisrcpa-prd-datadog-apikey'
-export DD_SECRET_SQLSERVER='eec-aws-us-eits-intelisrcpa-prd-datadog-database'
-export DD_SERVICE='sqlserver-intelisrcpa'
-export DD_SITE='datadoghq.com'
-#!/bin/bash
-# =============================================================================
-# install_datadog_dbm.sh
-# Instala el Datadog Agent 7 solo para Database Monitoring (DBM) de RDS SQL
-# Server. El mismo archivo sirve de tres formas (siempre como root):
-#
-#   1. user_data manual (consola/CLI): pegar el script; usa los valores por
-#      defecto de CONFIGURACIÓN o editarlos ahí.
-#   2. SSM / shell:
-#        sudo DD_SITE=datadoghq.com DD_ENV=dev bash install_datadog_dbm.sh
-#      o con AWS-RunShellScript enviando esas mismas líneas.
-#   3. Terraform: locals.tf antepone los "export DD_*" desde terraform.tfvars
-#      y concatena este archivo con file() (sin templatefile).
-#
-# Variables de entorno (opcionales; sin definir = valor por defecto):
-#   DD_SITE, DD_ENV, DD_SERVICE, DD_VERSION, DD_ENABLE_DBM (true|false),
-#   DD_SECRET_API_KEY, DD_SECRET_SQLSERVER,
-#   DD_PROXY_HTTP   proxy del Agent para tráfico http hacia Datadog.
-#   DD_PROXY_HTTPS  proxy del Agent para tráfico https hacia Datadog.
-#                   Definidas vacías (DD_PROXY_HTTP= DD_PROXY_HTTPS=) = sin
-#                   proxy (salida directa).
-#   DD_NO_PROXY   lista separada por comas (169.254.169.254 siempre incluido).
-#
-# Proxy: solo lo usa el Agent para enviar telemetría a Datadog (bloque proxy
-# de datadog.yaml). No se modifica el proxy del sistema: la instalación
-# (install/yum/keys.datadoghq.com) y Secrets Manager usan la salida normal
-# de la instancia.
-#
-# Secretos (arquetipo):
-#   api_key           -> secreto compartido por todas las instancias con Agent.
-#   usuario de la RDS -> host/port/username/password/database del login de
-#                        Datadog. Solo lo lee el check sqlserver.
-#   El secreto del usuario maestro de RDS no se usa aquí (mínimo privilegio).
-#   host y port se leen del secreto al arrancar; username/password/database
-#   se resuelven en memoria. Si cambia el endpoint o el puerto en el secreto,
-#   hay que volver a provisionar la instancia (o re-ejecutar este script).
-#
-# Seguridad: el Agent resuelve ENC[secreto;clave] en memoria con el rol de la
-# EC2 (backend aws.secrets). Ningún valor sensible queda en disco, en el
-# user_data ni en el log.
-#
-# Dependencias: solo lo que trae Amazon Linux 2023 (curl, aws cli, python3).
-# El ODBC Driver 18 viene embebido en el Agent Linux (7.51+).
-# Log: /var/log/datadog-dbm-install.log
-# =============================================================================
-set -Eeuo pipefail
-umask 027
-
-# --- CONFIGURACIÓN (entorno > valor por defecto) ------------------------------
-readonly dd_site="${DD_SITE:-datadoghq.com}"
-readonly dd_env="${DD_ENV:-uat}"
-readonly dd_service="${DD_SERVICE:-intelisrcpa}"
-readonly dd_version="${DD_VERSION:-1.0}"
-readonly enable_dbm="${DD_ENABLE_DBM:-true}"
-readonly secret_api_key="${DD_SECRET_API_KEY:-prod/infra/datadog}"
-readonly secret_sqlserver="${DD_SECRET_SQLSERVER:-prod/database/sqlserver}"
-# Sin ":" a propósito: sin definir = proxy por defecto; definida vacía = sin proxy.
-readonly proxy_http="${DD_PROXY_HTTP-http://proxy-useast.us.experian.eeca:9595}"
-readonly proxy_https="${DD_PROXY_HTTPS-http://proxy-useast.us.experian.eeca:9595}"
-readonly no_proxy_list="${DD_NO_PROXY:-169.254.169.254,100.100.100.200}"
-
-# --- CONSTANTES ---------------------------------------------------------------
-readonly dd_etc="/etc/datadog-agent"
-readonly dd_installer_url="https://install.datadoghq.com/scripts/install_script_agent7.sh"
-readonly log_file="/var/log/datadog-dbm-install.log"
-readonly imds_url="http://169.254.169.254/latest"
-readonly retry_max=10
-readonly retry_sleep=10
-
-# --- UTILIDADES ---------------------------------------------------------------
-log()  { printf '%s [%s] %s\n' "$(date -Is)" "$1" "$2"; }
-info() { log INFO "$*"; }
-fail() { log ERROR "$*" >&2; exit 1; }
-trap 'log ERROR "falló la línea $LINENO (exit $?)" >&2' ERR
-
-# Reintenta un comando: en el arranque la red/NAT o el rol pueden tardar.
-retry() {
-  local attempt=1
-  until "$@"; do
-    [ "$attempt" -ge "$retry_max" ] && return 1
-    attempt=$((attempt + 1))
-    sleep "$retry_sleep"
-  done
-}
-
-imds_get() {
-  local token
-  token=$(curl -sfX PUT "$imds_url/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 60") || return 1
-  curl -sf -H "X-aws-ec2-metadata-token: $token" "$imds_url/meta-data/$1"
-}
-
-get_secret() {
-  aws secretsmanager get-secret-value --region "$region" --secret-id "$1" \
-    --query SecretString --output text
-}
-
-# --- PASOS --------------------------------------------------------------------
-validate_secrets() {
-  # Valida estructura sin imprimir valores.
-  retry get_secret "$secret_api_key" \
-    | python3 -c 'import json,sys; sys.exit(0 if json.load(sys.stdin).get("api_key") else 1)' \
-    || fail "$secret_api_key sin api_key o sin acceso"
-
-  if [ "$enable_dbm" = "true" ]; then
-    # Valida los campos y devuelve SOLO host y port (no son sensibles).
-    # El check sqlserver recibe host y puerto juntos ("host,port") y ENC[]
-    # solo reemplaza valores completos, por eso estos dos se resuelven aquí;
-    # username/password/database siguen como ENC[] (resueltos en memoria).
-    local endpoint
-    endpoint=$(retry get_secret "$secret_sqlserver" | python3 -c '
-import json, sys
-d = json.load(sys.stdin)
-missing = [k for k in ("host", "port", "username", "password", "database") if not str(d.get(k, ""))]
-if missing:
-    sys.exit("faltan campos: " + ",".join(missing))
-port = str(d["port"])
-if not port.isdigit() or not 1 <= int(port) <= 65535:
-    sys.exit("port inválido")
-print(d["host"], port)') || fail "$secret_sqlserver inválido o sin acceso"
-    read -r db_host db_port <<< "$endpoint"
-    readonly db_host db_port
-    info "endpoint de la base: $db_host:$db_port"
-  fi
-  info "secretos validados en $region"
-}
-
-write_agent_config() {
-  install -d -m 755 "$dd_etc/conf.d/sqlserver.d"
-
-  cat > "$dd_etc/datadog.yaml" <<EOF
-## Datadog Agent: solo Database Monitoring
-api_key: ENC[$secret_api_key;api_key]
-site: $dd_site
-
-secret_backend_type: aws.secrets
-secret_backend_config:
-  aws_session:
-    aws_region: $region
-
-tags:
-  - env:$dd_env
-  - service:$dd_service
-  - version:$dd_version
-
-$proxy_yaml
-
-## Todo lo que no es DBM queda apagado
-logs_enabled: false
-apm_config:
-  enabled: false
-process_config:
-  process_collection:
-    enabled: false
-  container_collection:
-    enabled: false
-EOF
-
-  if [ "$enable_dbm" != "true" ]; then
-    rm -f "$dd_etc/conf.d/sqlserver.d/conf.yaml"   # re-ejecución sin DBM
-  else
-    cat > "$dd_etc/conf.d/sqlserver.d/conf.yaml" <<EOF
-init_config:
-
-instances:
-  - dbm: true
-    host: "$db_host,$db_port"          # desde $secret_sqlserver (host/port)
-    username: ENC[$secret_sqlserver;username]
-    password: ENC[$secret_sqlserver;password]
-    database: ENC[$secret_sqlserver;database]
-    connector: odbc
-    driver: ODBC Driver 18 for SQL Server   # embebido en el Agent
-    # La RDS exige TLS (rds.force_ssl=1). PoC: no valida la CA de RDS.
-    connection_string: "TrustServerCertificate=yes;"
-    aws:
-      instance_endpoint: "$db_host"
-    tags:
-      - env:$dd_env
-      - service:$dd_service
-      - version:$dd_version
-EOF
-  fi
-  info "configuración escrita en $dd_etc"
-}
-
-install_agent() {
-  if rpm -q datadog-agent >/dev/null 2>&1; then
-    info "datadog-agent ya instalado, se omite la instalación"
-    return 0
-  fi
-  local installer
-  installer=$(mktemp)
-  retry curl -fsSL -o "$installer" "$dd_installer_url" || fail "no se pudo descargar el instalador"
-  # Sin DD_API_KEY: el instalador conserva el datadog.yaml escrito antes.
-  DD_SITE="$dd_site" DD_AGENT_MAJOR_VERSION=7 DD_INSTALL_ONLY=true bash "$installer"
-  rm -f "$installer"
-  info "datadog-agent instalado: $(rpm -q datadog-agent)"
-}
-
-start_and_verify() {
-  chown -R dd-agent:dd-agent "$dd_etc"
-  find "$dd_etc" -name '*.yaml' -exec chmod 640 {} \;
-  # restart (no solo start): en una re-ejecución por SSM aplica la config nueva
-  systemctl enable datadog-agent
-  systemctl restart datadog-agent
-
-  local attempt
-  for attempt in $(seq 1 12); do
-    sleep 10
-    datadog-agent status 2>/dev/null | grep -q 'API Key valid' && break
-  done
-  datadog-agent status 2>/dev/null | grep -A2 'API Keys status' || true
-  if [ "$enable_dbm" = "true" ]; then
-    datadog-agent status 2>/dev/null | sed -n '/sqlserver (/,/Average Execution/p' || true
-  fi
-}
-
-configure_proxy() {
-  # Bloque proxy de datadog.yaml (vacío si no hay proxy).
-  # Solo el Agent usa el proxy, y solo hacia Datadog. No se tocan variables
-  # de entorno, dnf ni systemd de la instancia.
-  proxy_yaml=""
-  if [ -z "$proxy_http" ] && [ -z "$proxy_https" ]; then
-    info "Agent sin proxy: salida directa a Datadog"
-    return 0
-  fi
-
-  local entry entries="$no_proxy_list"
-  [[ ",$entries," == *",169.254.169.254,"* ]] || entries="169.254.169.254,$entries"   # IMDS
-  proxy_yaml="proxy:"
-  if [ -n "$proxy_http" ];  then proxy_yaml+=$'\n'"  http: $proxy_http"; fi
-  if [ -n "$proxy_https" ]; then proxy_yaml+=$'\n'"  https: $proxy_https"; fi
-  proxy_yaml+=$'\n'"  no_proxy:"
-  for entry in ${entries//,/ }; do
-    proxy_yaml+=$'\n'"    - $entry"
-  done
-  proxy_yaml+=$'\n'"no_proxy_nonexact_match: true"
-  info "Agent con proxy hacia Datadog: http=$proxy_http https=$proxy_https (no_proxy: $entries)"
-}
-
-main() {
-  exec > >(tee -a "$log_file") 2>&1
-  info "inicio instalación Datadog DBM"
-  [ "$(id -u)" -eq 0 ] || fail "ejecutar como root"
-
-  configure_proxy
-
-  region=$(retry imds_get placement/region) || fail "no se pudo leer la región desde IMDS"
-  readonly region
-
-  validate_secrets
-  write_agent_config
-  install_agent
-  start_and_verify
-  info "fin instalación Datadog DBM"
-}
-
-main "$@"
+grupo 5: PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-10-08T19:12:49.7426134+00:00  === Inicio bootstrap ===
+2026-10-08T19:12:51.8376935+00:00  Instance ID: i-03c098fef25d809af
+2026-10-08T19:12:54.3046551+00:00  Health-check off durante bootstrap.
+2026-10-08T19:12:58.8929961+00:00  Fase 1: Domain join...
+2026-10-08T19:14:55.9028171+00:00  Hostname 1 reclamado (1).
+2026-10-08T19:14:55.9071569+00:00  Hostname asignado: USAEA1PWBWESPE1
+2026-10-08T19:14:55.9105392+00:00  Renombrando: EC2AMAZ-M5GCK0Q -> USAEA1PWBWESPE1
+2026-10-08T19:14:56.2379569+00:00  Rename OK. Exit 3010.
+2026-10-08T19:16:27.9056564+00:00  === Inicio bootstrap ===
+2026-10-08T19:16:29.5263047+00:00  Instance ID: i-03c098fef25d809af
+2026-10-08T19:16:30.3481280+00:00  Health-check off durante bootstrap.
+2026-10-08T19:16:30.8031935+00:00  Fase 1: Domain join...
+2026-10-08T19:17:14.5202101+00:00  Hostname reutilizado: USAEA1PWBWESPE1
+2026-10-08T19:17:54.3994792+00:00  Domain join: USAEA1PWBWESPE1 -> gdc.local
+2026-10-08T19:18:17.2993891+00:00  Domain join OK. Exit 3010.
+2026-10-08T19:19:50.8369244+00:00  === Inicio bootstrap ===
+2026-10-08T19:19:51.8273054+00:00  Instance ID: i-03c098fef25d809af
+2026-10-08T19:19:52.5826873+00:00  Health-check off durante bootstrap.
+2026-10-08T19:19:53.8998416+00:00  Gate AD OK: dominio=gdc.local, hostname=USAEA1PWBWESPE1.
+2026-10-08T19:21:29.0104568+00:00  Fase 2: Montaje FSx...
+2026-10-08T19:21:35.5194119+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-10-08T19:21:35.8200839+00:00  Gate FSx OK: Z:\ accesible.
+2026-10-08T19:21:39.9785634+00:00  Fase 4: SQL Client Alias...
+2026-10-08T19:21:40.4425349+00:00  SQL Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433
+2026-10-08T19:21:43.2592357+00:00  Fase 5: Postbuild_tasks off.
+2026-10-08T19:21:48.3929682+00:00  Fase 5: Time sync NT5DS.
+2026-10-08T14:21:48.4654062-05:00  Fase 5: TZ UTC-5
+2026-10-08T14:21:49.4910763-05:00  Fase 6: Proxy WinINET OK
+2026-10-08T14:21:49.4988003-05:00  Fase 7: Esperando sitios IIS/DNN...
+2026-10-08T14:22:09.6138040-05:00  Esperando IIS (1): faltan api, apiprodpa.
+2026-10-08T14:22:39.8579044-05:00  Esperando IIS (2): faltan api, apiprodpa.
+2026-10-08T14:23:10.0994982-05:00  Esperando IIS (3): faltan api, apiprodpa.
+2026-10-08T14:23:40.3155497-05:00  Esperando IIS (4): faltan api, apiprodpa.
+2026-10-08T14:24:10.5160692-05:00  Esperando IIS (5): faltan api, apiprodpa.
+2026-10-08T14:24:40.7429434-05:00  Esperando IIS (6): faltan api, apiprodpa.
+2026-10-08T14:25:10.9990665-05:00  Esperando IIS (7): faltan api, apiprodpa.
+2026-10-08T14:25:41.1374517-05:00  Esperando IIS (8): faltan api, apiprodpa.
+2026-10-08T14:26:11.3178811-05:00  Esperando IIS (9): faltan api, apiprodpa.
+2026-10-08T14:26:41.4120089-05:00  Esperando IIS (10): faltan api, apiprodpa.
+2026-10-08T14:27:11.5083146-05:00  Esperando IIS (11): faltan api, apiprodpa.
+2026-10-08T14:27:41.6894256-05:00  Esperando IIS (12): faltan api, apiprodpa.
+2026-10-08T14:28:11.8330376-05:00  Esperando IIS (13): faltan api, apiprodpa.
+2026-10-08T14:28:41.9393325-05:00  Esperando IIS (14): faltan api, apiprodpa.
+2026-10-08T14:29:12.1248091-05:00  Esperando IIS (15): faltan api, apiprodpa.
+2026-10-08T14:29:42.2451501-05:00  Esperando IIS (16): faltan api, apiprodpa.
+2026-10-08T14:30:12.3835629-05:00  Esperando IIS (17): faltan api, apiprodpa.
+2026-10-08T14:30:42.6573526-05:00  Esperando IIS (18): faltan api, apiprodpa.
+2026-10-08T14:31:12.8497937-05:00  Esperando IIS (19): faltan api, apiprodpa.
+2026-10-08T14:31:42.9824446-05:00  Esperando IIS (20): faltan api, apiprodpa.
+2026-10-08T14:32:13.2259747-05:00  Esperando IIS (21): faltan api, apiprodpa.
+2026-10-08T14:32:43.4348445-05:00  Esperando IIS (22): faltan api, apiprodpa.
+2026-10-08T14:33:13.5540851-05:00  Esperando IIS (23): faltan api, apiprodpa.
+2026-10-08T14:33:43.6668743-05:00  Esperando IIS (24): faltan api, apiprodpa.
+2026-10-08T14:34:13.8377603-05:00  Esperando IIS (25): faltan api, apiprodpa.
+2026-10-08T14:34:43.9859364-05:00  Esperando IIS (26): faltan api, apiprodpa.
+2026-10-08T14:35:14.1066319-05:00  Esperando IIS (27): faltan api, apiprodpa.
+2026-10-08T14:35:44.2692724-05:00  Esperando IIS (28): faltan api, apiprodpa.
+2026-10-08T14:36:14.4113651-05:00  Esperando IIS (29): faltan api, apiprodpa.
+2026-10-08T14:36:44.5340675-05:00  Esperando IIS (30): faltan api, apiprodpa.
+2026-10-08T14:37:14.6640393-05:00  Esperando IIS (31): faltan api, apiprodpa.
+2026-10-08T14:37:44.8061207-05:00  Esperando IIS (32): faltan api, apiprodpa.
+2026-10-08T14:38:14.9868632-05:00  Esperando IIS (33): faltan api, apiprodpa.
+2026-10-08T14:38:45.0910131-05:00  Esperando IIS (34): faltan api, apiprodpa.
+2026-10-08T14:39:15.3235760-05:00  Esperando IIS (35): faltan api, apiprodpa.
+2026-10-08T14:39:45.5083445-05:00  Esperando IIS (36): faltan api, apiprodpa.
+2026-10-08T14:40:15.7028658-05:00  Esperando IIS (37): faltan api, apiprodpa.
+2026-10-08T14:40:45.8274188-05:00  Esperando IIS (38): faltan api, apiprodpa.
+2026-10-08T14:41:15.9388685-05:00  Esperando IIS (39): faltan api, apiprodpa.
+2026-10-08T14:41:46.0510688-05:00  Esperando IIS (40): faltan api, apiprodpa.
+2026-10-08T14:42:16.0733766-05:00  WaitForIisSites timeout; se continua.
+2026-10-08T14:42:16.0781204-05:00  Fase 8: Pre-warm DNN...
+2026-10-08T14:42:21.3124486-05:00  Pre-warm api.apcexperian.com (1) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:42:39.8547479-05:00  Pre-warm api.apcexperian.com (2) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:42:57.3905459-05:00  Pre-warm api.apcexperian.com (3) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:43:16.1903835-05:00  Pre-warm api.apcexperian.com (4) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:43:34.4377352-05:00  Pre-warm api.apcexperian.com (5) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:43:53.8225043-05:00  Pre-warm api.apcexperian.com (6) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:44:12.2612282-05:00  Pre-warm api.apcexperian.com (7) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:44:31.1368527-05:00  Pre-warm api.apcexperian.com (8) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:44:50.0798254-05:00  Pre-warm api.apcexperian.com (9) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:08.0006561-05:00  Pre-warm api.apcexperian.com (10) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:23.0194406-05:00  Pre-warm api.apcexperian.com sin respuesta tras reintentos.
+2026-10-08T14:45:26.2545214-05:00  Pre-warm apiprodpa.experian.local (1) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:45:44.4301179-05:00  Pre-warm apiprodpa.experian.local (2) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:03.5858869-05:00  Pre-warm apiprodpa.experian.local (3) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:21.3376416-05:00  Pre-warm apiprodpa.experian.local (4) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:39.5496382-05:00  Pre-warm apiprodpa.experian.local (5) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:46:57.7198522-05:00  Pre-warm apiprodpa.experian.local (6) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:47:16.3102688-05:00  Pre-warm apiprodpa.experian.local (7) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:47:34.0875117-05:00  Pre-warm apiprodpa.experian.local (8) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:47:53.4279777-05:00  Pre-warm apiprodpa.experian.local (9) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:48:12.2243671-05:00  Pre-warm apiprodpa.experian.local (10) sin respuesta: Exception calling "GetResponse" with "0" argument(s): "Unable to connect to the remote server"
+2026-10-08T14:48:27.2349857-05:00  Pre-warm apiprodpa.experian.local sin respuesta tras reintentos.
+2026-10-08T14:48:27.2373558-05:00  Pre-warm DNN completado.
+2026-10-08T14:48:27.2419368-05:00  Fase final: Health-check HTTP:80...
+2026-10-08T14:48:27.6296815-05:00  Default Web Site removido.
+2026-10-08T14:48:28.1778969-05:00  Health-check creado.
+2026-10-08T14:48:28.2259705-05:00  Health-check habilitado: AD, FSx, IIS y pre-warm validados.
+2026-10-08T14:48:31.0228201-05:00  Aviso hook (CONTINUE): An error occurred while sending the request.
+2026-10-08T14:48:31.0251682-05:00  === Bootstrap completado ===
+PS C:\Windows\system32>
