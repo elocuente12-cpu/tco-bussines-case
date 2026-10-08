@@ -1,0 +1,211 @@
+{
+  "name": "ssm-parameter",
+  "tags": [
+    "ssm",
+    "parameter",
+    "parameter-store",
+    "secrets"
+  ],
+  "summary": "Terraform Module for SSM Parameter Store",
+  "description": "Terraform module which creates SSM Parameters. This module will:\n- Create parameters in SSM parameter store\n- Is able to assert parameter type without explicitly specifying.\nAs of v1.3.0 A check for potential secrets being stored in plaintext has been added, this will result in a warning if detected. Sensitive data can still be stored in Parameter Store as long as it's done as a SecureString to ensure it is encrypted at rest and in transit.",
+  "minimum_example": {
+    "account_id": "123456789",
+    "external_id": "YOUR_IAM_ROLE_EXTERNAL_ID",
+    "region": "eu-west-2",
+    "resources": [
+      {
+        "template": "ssm-parameter",
+        "inputs": {
+          "name": "my-parameter",
+          "value": "some-value",
+          "description": "Example SSM parameter",
+          "tags": {
+            "CostString": "2000.GB.123.456789",
+            "AppID": 12345,
+            "Environment": "sbx",
+            "ResourceOwner": "email@experian.com"
+          }
+        }
+      }
+    ]
+  },
+  "skeleton": {
+    "account_id": "",
+    "external_id": "",
+    "region": "eu-west-2",
+    "change_id": "",
+    "plan": false,
+    "wiz_scan": true,
+    "resources": [
+      {
+        "name": "",
+        "template": "ssm-parameter",
+        "version": "latest",
+        "inputs": {
+          "name": "",
+          "value": "",
+          "values": [],
+          "description": "",
+          "type": "",
+          "secure_type": false,
+          "tier": "",
+          "key_id": "alias/aws/ssm",
+          "allowed_pattern": "",
+          "data_type": "",
+          "tags": {}
+        }
+      }
+    ],
+    "tags": {}
+  },
+  "docs": {
+    "inputs": [
+      {
+        "name": "allowed_pattern",
+        "type": "string",
+        "description": "Regular expression used to validate the parameter value.",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "data_type",
+        "type": "string",
+        "description": "Data type of the parameter. Valid values: `text`, `aws:ssm:integration` and `aws:ec2:image` for AMI format.",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "Description of the parameter",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "key_id",
+        "type": "string",
+        "description": "KMS key ID or ARN for encrypting a parameter (when type is `SecureString`). By default `SecureString` will use the default AWS KMS key `alias/aws/ssm`, but it is recommended to use a customer managed key if possible.",
+        "default": "alias/aws/ssm",
+        "required": false
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "description": "Name of SSM parameter",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "secure_type",
+        "type": "bool",
+        "description": "Whether the type of the value should be considered as secure or not",
+        "default": false,
+        "required": false
+      },
+      {
+        "name": "tags",
+        "type": "map(string)",
+        "description": "Tags for AWS resources. See the [Experian Cloud Tagging Strategy & Standards](https://experian.atlassian.net/wiki/x/swH3E)",
+        "default": {},
+        "required": false
+      },
+      {
+        "name": "tier",
+        "type": "string",
+        "description": "Parameter tier to assign to the parameter. If not specified, will use the default parameter tier for the region. Valid tiers are `Standard`, `Advanced`, and `Intelligent-Tiering`. Downgrading an `Advanced` tier parameter to `Standard` will recreate the resource. For more information on parameter tiers, see the [AWS SSM Parameter tier comparison and guide](https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html).",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "type",
+        "type": "string",
+        "description": "Type of the parameter. Valid types are `String`, `StringList` and `SecureString`.",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "description": "Value of the parameter",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "value_wo",
+        "type": "string",
+        "description": "Write-only alternative to `value`. Sets the parameter value without storing it in Terraform state or plan files. Requires Terraform v1.11.0 or later. Primarily intended for sensitive data, especially `SecureString` parameters. Mutually exclusive with `value` and `values`.",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "value_wo_version",
+        "type": "number",
+        "description": "Version number used to trigger updates to `value_wo`. Increment this value to force a re-write of the parameter when `value_wo` is used.",
+        "default": null,
+        "required": false
+      },
+      {
+        "name": "values",
+        "type": "list(string)",
+        "description": "List of values of the parameter (will be jsonencoded to store as string natively in SSM)",
+        "default": [],
+        "required": false
+      }
+    ],
+    "modules": [
+      {
+        "name": "eits_ce_common",
+        "source": "git::https://code.experian.local/scm/EUCES/eits-tf-aws-ce-common",
+        "version": "v1",
+        "description": null
+      }
+    ],
+    "outputs": [
+      {
+        "name": "parameter_value",
+        "description": "Secure value of the parameter"
+      },
+      {
+        "name": "secure_type",
+        "description": "Whether SSM parameter is a SecureString or not"
+      },
+      {
+        "name": "ssm_parameter_arn",
+        "description": "The ARN of the parameter"
+      },
+      {
+        "name": "ssm_parameter_name",
+        "description": "Name of the parameter"
+      },
+      {
+        "name": "ssm_parameter_tags_all",
+        "description": "All tags used for the parameter"
+      },
+      {
+        "name": "ssm_parameter_type",
+        "description": "Type of the parameter"
+      },
+      {
+        "name": "ssm_parameter_version",
+        "description": "Version of the parameter"
+      }
+    ],
+    "providers": [
+      {
+        "name": "aws",
+        "alias": null,
+        "version": "6.42.0"
+      }
+    ],
+    "requirements": [
+      {
+        "name": "terraform",
+        "version": ">= 1.11.0"
+      },
+      {
+        "name": "aws",
+        "version": ">= 6.26.0"
+      }
+    ]
+  }
+}
