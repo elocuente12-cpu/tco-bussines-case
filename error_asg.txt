@@ -100,3 +100,21 @@ grupo 5: PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstr
 2026-10-08T14:48:31.0228201-05:00  Aviso hook (CONTINUE): An error occurred while sending the request.
 2026-10-08T14:48:31.0251682-05:00  === Bootstrap completado ===
 PS C:\Windows\system32>
+
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-10-08T11:08:14.9707916+00:00  === Inicio bootstrap ===
+2026-10-08T11:08:16.1220605+00:00  Instance ID: i-0b45cc90dc3c304a8
+2026-10-08T11:08:17.7040420+00:00  Health-check deshabilitado mientras se valida bootstrap.
+2026-10-08T11:08:21.3283289+00:00  Fase 1: Domain join...
+2026-10-08T11:09:49.0257701+00:00  Hostname 2 reclamado (1).
+2026-10-08T11:09:49.0971358+00:00  Hostname asignado: USAEA1PWBWESPG2
+2026-10-08T11:09:49.1258212+00:00  Renombrando: EC2AMAZ-FBK6ITH -> USAEA1PWBWESPG2
+2026-10-08T11:09:50.8311191+00:00  Rename OK. Exit 3010.
+2026-10-08T11:11:15.9777100+00:00  === Inicio bootstrap ===
+2026-10-08T11:11:17.3935087+00:00  Instance ID: i-0b45cc90dc3c304a8
+2026-10-08T11:11:18.0254369+00:00  Health-check deshabilitado mientras se valida bootstrap.
+2026-10-08T11:11:18.4549802+00:00  Fase 1: Domain join...
+2026-10-08T11:12:19.2851877+00:00  Hostname reutilizado: USAEA1PWBWESPG2
+2026-10-08T11:12:47.1602725+00:00  Domain join: USAEA1PWBWESPG2 -> gdc.local
+2026-10-08T11:12:56.0876227+00:00  ERROR FATAL: Computer 'USAEA1PWBWESPG2' failed to join domain 'gdc.local' from its current workgroup 'WORKGROUP' with following error message: The system cannot find the file specified.
+PS C:\Windows\system32>
