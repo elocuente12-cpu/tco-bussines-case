@@ -1,0 +1,11 @@
+Descargando MSI del Datadog Agent...
+Invoke-WebRequest : Unable to connect to the remote server
+At C:\ProgramData\Amazon\SSM\InstanceData\i-0a48c4c90a81a7c9f\document\orchestration\9023b910-a5bc-4af2-bff9-160815f92a
+ed\installAndConfigureDatadog\_script.ps1:16 char:3
++   Invoke-WebRequest -Uri $url -OutFile $msi -UseBasicParsing
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebExc 
+   eption
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+ 
+failed to run commands: exit status 1
