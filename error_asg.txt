@@ -1,26 +1,41 @@
-2026-10-09T17:25:27.9400633+00:00  === Inicio bootstrap ===
-2026-10-09T17:25:30.5098472+00:00  Instance ID: i-05d5540faafc3cb58
-2026-10-09T17:26:20.6779897+00:00  Health-check off durante bootstrap.
-2026-10-09T17:26:22.4247496+00:00  Fase 1: Domain join...
-2026-10-09T17:28:03.9826200+00:00  Hostname 1 reclamado (1).
-2026-10-09T17:28:03.9905658+00:00  Hostname asignado: USAEA1PWBWESPF1
-2026-10-09T17:28:04.0750286+00:00  Renombrando: EC2AMAZ-GHIIFDT -> USAEA1PWBWESPF1
-2026-10-09T17:28:05.0746458+00:00  Rename OK. Exit 3010.
-2026-10-09T17:30:26.3775191+00:00  === Inicio bootstrap ===
-2026-10-09T17:30:27.3759214+00:00  Instance ID: i-05d5540faafc3cb58
-2026-10-09T17:31:02.5764601+00:00  Health-check off durante bootstrap.
-2026-10-09T17:31:04.4989364+00:00  Fase 1: Domain join...
-2026-10-09T17:31:14.5561150+00:00  Hostname reutilizado: USAEA1PWBWESPF1
-2026-10-09T17:31:25.4402570+00:00  Domain join: USAEA1PWBWESPF1 -> gdc.local
-2026-10-09T17:31:31.8567588+00:00  Domain join OK. Exit 3010.
-2026-10-09T17:33:32.7278402+00:00  === Inicio bootstrap ===
-2026-10-09T17:33:36.6322754+00:00  Instance ID: i-05d5540faafc3cb58
-2026-10-09T17:34:31.0275097+00:00  Health-check off durante bootstrap.
-2026-10-09T17:34:32.2385904+00:00  Gate AD OK: gdc.local/USAEA1PWBWESPF1.
-2026-10-09T17:34:43.4176634+00:00  Fase 2: Montaje FSx...
-2026-10-09T17:34:51.1677461+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
-2026-10-09T17:34:51.5153890+00:00  Gate FSx OK: Z:\ accesible.
-2026-10-09T17:34:51.5498299+00:00  Fase 7: Config IIS+SO...
-2026-10-09T17:35:07.2827058+00:00  Ejecutando config IIS...
-2026-10-09T17:36:19.6362298+00:00  ERROR FATAL: iis-configure.ps1 fallo (exit 1).
-2026-10-09T17:36:19.9453016+00:00  Hook ABANDON OK.
+2026-10-09T12:42:58.864-05:00
+2026-10-09T17:28:04.2795730+00:00  === Inicio bootstrap ===
+2026-10-09T17:28:06.8848500+00:00  Instance ID: i-05499786d7c6a09d7
+2026-10-09T17:28:55.0443668+00:00  Health-check off durante bootstrap.
+2026-10-09T17:28:57.9170660+00:00  Fase 1: Domain join...
+2026-10-09T17:29:28.0325428+00:00  Hostname 1 reclamado (1).
+2026-10-09T17:29:28.1191436+00:00  Hostname asignado: USAEA1PWBWESPC1
+2026-10-09T17:29:28.1708759+00:00  Renombrando: EC2AMAZ-FCBRJP5 -> USAEA1PWBWESPC1
+2026-10-09T17:29:29.3115747+00:00  Rename OK. Exit 3010.
+2026-10-09T17:31:37.4817672+00:00  === Inicio bootstrap ===
+2026-10-09T17:31:40.0806961+00:00  Instance ID: i-05499786d7c6a09d7
+2026-10-09T17:32:33.8549459+00:00  Health-check off durante bootstrap.
+2026-10-09T17:32:35.7265966+00:00  Fase 1: Domain join...
+2026-10-09T17:32:44.6514924+00:00  Hostname reutilizado: USAEA1PWBWESPC1
+2026-10-09T17:32:51.5018123+00:00  Domain join: USAEA1PWBWESPC1 -> gdc.local
+2026-10-09T17:32:56.7834838+00:00  Domain join OK. Exit 3010.
+2026-10-09T17:34:35.1414909+00:00  === Inicio bootstrap ===
+2026-10-09T17:34:37.9406998+00:00  Instance ID: i-05499786d7c6a09d7
+2026-10-09T17:35:06.2956785+00:00  Health-check off durante bootstrap.
+2026-10-09T17:35:07.5955995+00:00  Gate AD OK: gdc.local/USAEA1PWBWESPC1.
+2026-10-09T17:35:35.2833916+00:00  Fase 2: Montaje FSx...
+2026-10-09T17:35:39.2785807+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-10-09T17:35:39.2954754+00:00  Gate FSx OK: Z:\ accesible.
+2026-10-09T17:35:39.3133934+00:00  Fase 7: Config IIS+SO...
+2026-10-09T17:35:44.8374266+00:00  Ejecutando config IIS...
+2026-10-09T17:36:39.1766952+00:00  Config IIS OK.
+2026-10-09T17:36:39.1787073+00:00  Fase 7b: APM .NET...
+2026-10-09T17:36:39.7117911+00:00  APM .NET (reinicia IIS)...
+2026-10-09T17:36:41.4357532+00:00  Aviso APM (exit 1); sigo.
+2026-10-09T17:36:41.4395235+00:00  Fase 8: Pre-warm DNN...
+2026-10-09T17:42:26.1431830+00:00  2026-10-09T12:37:42.9612712-05:00  Pre-warm webfolder.intelidat.com (1) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
+2026-10-09T17:42:26.1570723+00:00  2026-10-09T12:38:58.0393681-05:00  Pre-warm webfolder.intelidat.com (2) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
+2026-10-09T17:42:26.1590860+00:00  2026-10-09T12:40:13.2595965-05:00  Pre-warm webfolder.intelidat.com (3) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
+2026-10-09T17:42:26.1618690+00:00  2026-10-09T12:41:28.3448246-05:00  Pre-warm webfolder.intelidat.com (4) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
+2026-10-09T17:42:26.1686425+00:00  2026-10-09T12:42:25.8778218-05:00  Pre-warm webfolder.intelidat.com (5) -> HTTP 200
+2026-10-09T17:42:26.1726613+00:00  2026-10-09T12:42:25.9084066-05:00  Pre-warm DNN completado.
+2026-10-09T17:42:26.3303961+00:00  Fase final: Health-check...
+2026-10-09T17:42:27.2834536+00:00  Health-check creado.
+2026-10-09T17:42:27.4029319+00:00  Health-check ON (AD/FSx/IIS/prewarm OK).
+2026-10-09T17:42:27.9198215+00:00  Hook CONTINUE OK.
+2026-10-09T17:42:27.9218339+00:00  === Bootstrap completado ===
