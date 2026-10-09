@@ -1,54 +1,10 @@
-2026-10-09T13:21:44.613-05:00
-2026-10-09T18:19:53.6827035+00:00  === Inicio reconciliacion IIS SSM ===
-2026-10-09T18:19:54.2855415+00:00  SQL Alias vaonsql -> DBMSSOCN,eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com,1433
-2026-10-09T18:19:56.6562706+00:00  Postbuild_tasks off.
-2026-10-09T18:20:01.7506288+00:00  Time sync NT5DS.
-2026-10-09T13:20:01.8353425-05:00  Timezone UTC-5.
-2026-10-09T13:20:02.7157289-05:00  Proxy WinINET OK.
-2026-10-09T13:20:03.6659834-05:00  Default Web Site removido.
-2026-10-09T13:20:04.1710410-05:00  AppPool creado: webservicesapcexperian
-2026-10-09T13:20:04.7519766-05:00  Sitio creado: webservicesapcexperian -> Z:\CrediWeb\WS\wwwroot
-2026-10-09T13:20:54.3480547-05:00  Cert instalado: webservices-apcexperian-com thumbprint=96E2D3EBFE51333DAD1399F1CA1B9CE924666BDC
-2026-10-09T13:20:54.4712349-05:00  Binding HTTPS creado: webservicesapcexperian [*:443:webservices.apcexperian.com]
-2026-10-09T13:20:54.8824551-05:00  SSL SNI asignado: webservices.apcexperian.com cert=96E2D3EBFE51333DAD1399F1CA1B9CE924666BDC
-2026-10-09T13:20:55.9018662-05:00  SSL default (0.0.0.0:443) cert=96E2D3EBFE51333DAD1399F1CA1B9CE924666BDC
-2026-10-09T13:20:56.1851655-05:00  AppPool creado: webservicesapcexperian-CustomModelsService
-2026-10-09T13:20:56.3884254-05:00  App creada: webservicesapcexperian/CustomModelsService -> Z:\CrediWeb\WS\CustomModelsService (pool webservicesapcexperian-CustomModelsService)
-2026-10-09T13:20:56.6425704-05:00  AppPool creado: webservicesapcexperian-IntelicheckService
-2026-10-09T13:20:56.9763196-05:00  App creada: webservicesapcexperian/IntelicheckService -> Z:\CrediWeb\WS\IntelicheckService (pool webservicesapcexperian-IntelicheckService)
-2026-10-09T13:20:57.1854901-05:00  AppPool creado: webservicesapcexperian-PCF
-2026-10-09T13:20:57.3033700-05:00  AppPool webservicesapcexperian-PCF runtime -> ''
-2026-10-09T13:20:57.6616309-05:00  App creada: webservicesapcexperian/PCF -> Z:\CrediWeb\WS\PcEssentialsService (pool webservicesapcexperian-PCF)
-2026-10-09T13:20:58.0000838-05:00  AppPool creado: webservicesapcexperian-SCOREPLUS
-2026-10-09T13:20:58.2217275-05:00  App creada: webservicesapcexperian/SCOREPLUS -> Z:\CrediWeb\WS\SCOREPLUS\Produccion\SCOREAPCWS (pool webservicesapcexperian-SCOREPLUS)
-2026-10-09T13:20:58.4512715-05:00  AppPool creado: webservicesapcexperian-WsContactsAPC
-2026-10-09T13:20:58.6845223-05:00  App creada: webservicesapcexperian/WsContactsAPC -> Z:\CrediWeb\WS\WsCrmContacts (pool webservicesapcexperian-WsContactsAPC)
-2026-10-09T13:20:58.9493947-05:00  AppPool creado: webservicesapcpa
-2026-10-09T13:20:59.4146708-05:00  Sitio creado: webservicesapcpa -> Z:\CrediWeb\WS\wwwroot
-2026-10-09T13:20:59.6510143-05:00  Cert instalado: webservices-apc-com-pa thumbprint=2360FDA57FDE9836B9905B0D74213BED983E9C0B
-2026-10-09T13:20:59.7444976-05:00  Binding HTTPS creado: webservicesapcpa [*:443:webservices.apc.com.pa]
-2026-10-09T13:20:59.8503011-05:00  SSL SNI asignado: webservices.apc.com.pa cert=2360FDA57FDE9836B9905B0D74213BED983E9C0B
-2026-10-09T13:21:00.1204788-05:00  AppPool creado: webservicesapcpa-CustomModelsService
-2026-10-09T13:21:00.9811924-05:00  App creada: webservicesapcpa/CustomModelsService -> Z:\CrediWeb\WS\CustomModelsService (pool webservicesapcpa-CustomModelsService)
-2026-10-09T13:21:01.3163065-05:00  AppPool creado: webservicesapcpa-IntelicheckService
-2026-10-09T13:21:02.0223804-05:00  App creada: webservicesapcpa/IntelicheckService -> Z:\CrediWeb\WS\IntelicheckService (pool webservicesapcpa-IntelicheckService)
-2026-10-09T13:21:02.4107293-05:00  AppPool creado: webservicesapcpa-PCF
-2026-10-09T13:21:02.5044022-05:00  AppPool webservicesapcpa-PCF runtime -> ''
-2026-10-09T13:21:03.2994492-05:00  App creada: webservicesapcpa/PCF -> Z:\CrediWeb\WS\PcEssentialsService (pool webservicesapcpa-PCF)
-2026-10-09T13:21:03.5821797-05:00  AppPool creado: webservicesapcpa-SCOREPLUS
-2026-10-09T13:21:04.3570983-05:00  App creada: webservicesapcpa/SCOREPLUS -> Z:\CrediWeb\WS\SCOREPLUS\Produccion\SCOREAPCWS (pool webservicesapcpa-SCOREPLUS)
-2026-10-09T13:21:04.6029064-05:00  AppPool creado: webservicesapcpa-WsContactsAPC
-2026-10-09T13:21:05.3501239-05:00  App creada: webservicesapcpa/WsContactsAPC -> Z:\CrediWeb\WS\WsCrmContacts (pool webservicesapcpa-WsContactsAPC)
-2026-10-09T13:21:05.3827233-05:00  AppPool reciclado: webservicesapcpa-CustomModelsService
-2026-10-09T13:21:05.3900539-05:00  AppPool reciclado: webservicesapcpa-WsContactsAPC
-2026-10-09T13:21:05.4000859-05:00  AppPool reciclado: webservicesapcexperian-IntelicheckService
-2026-10-09T13:21:05.4078540-05:00  AppPool reciclado: webservicesapcpa-PCF
-2026-10-09T13:21:05.4162199-05:00  AppPool reciclado: webservicesapcexperian-PCF
-2026-10-09T13:21:05.4260544-05:00  AppPool reciclado: webservicesapcpa-SCOREPLUS
-2026-10-09T13:21:05.4354888-05:00  AppPool reciclado: webservicesapcpa
-2026-10-09T13:21:05.4442064-05:00  AppPool reciclado: webservicesapcexperian-SCOREPLUS
-2026-10-09T13:21:05.4538413-05:00  AppPool reciclado: webservicesapcexperian-CustomModelsService
-2026-10-09T13:21:05.4619181-05:00  AppPool reciclado: webservicesapcexperian-WsContactsAPC
-2026-10-09T13:21:05.4717175-05:00  AppPool reciclado: webservicesapcpa-IntelicheckService
-2026-10-09T13:21:05.4797737-05:00  AppPool reciclado: webservicesapcexperian
-2026-10-09T13:21:05.4840438-05:00  === Reconciliacion IIS SSM completada ===
+Invoke-WebRequest : The remote server returned an error: (404) Not Found.
+At C:\ProgramData\Amazon\SSM\InstanceData\i-082f33d42cd0d9b8c\document\orchestration\6d53ab29-7b45-4877-bd42-f6763e37ed
+af\installAndConfigureDatadog\_script.ps1:19 char:3
++   Invoke-WebRequest -Uri $url -OutFile $msi -UseBasicParsing
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (System.Net.HttpWebRequest:HttpWebRequest) [Invoke-WebRequest], WebExc 
+   eption
+    + FullyQualifiedErrorId : WebCmdletWebResponseException,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+ 
+failed to run commands: exit status 1
