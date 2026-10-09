@@ -1,82 +1,19 @@
-Error: creating SSM Parameter (/intelisrcpa/app7/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 5bbd56d7-2ba6-4387-b6ea-ef5d7cf84ba2, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app7"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app6/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: a886aae2-fa86-406c-8944-31621fe94ef4, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app6"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app4/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 06ed42a1-82f9-4d54-8a3f-edcfdab27153, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app4"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app1/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 97d0d1ba-06aa-4db9-80c9-ae20aaaa8612, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app1"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app2/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 526f3ab9-d793-47ca-9b16-6842c780447c, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app2"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app3/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 8ee3c30a-7092-4b72-90b1-201d0eae357f, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app3"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app5/iis-sites): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: fc582a5d-ecec-414c-9d17-9db0ea84defd, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.iis_sites["app5"],
-  on bootstrap-scripts.tf line 101, in resource "aws_ssm_parameter" "iis_sites":
- 101: resource "aws_ssm_parameter" "iis_sites" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app4/apm-pools): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: c7e0957e-5d6e-4879-a75e-ed9088c1f939, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.apm_pools["app4"],
-  on bootstrap-scripts.tf line 116, in resource "aws_ssm_parameter" "apm_pools":
- 116: resource "aws_ssm_parameter" "apm_pools" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app3/apm-pools): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: aac7dd7e-5cea-4a5b-8f3b-fb968486a65b, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.apm_pools["app3"],
-  on bootstrap-scripts.tf line 116, in resource "aws_ssm_parameter" "apm_pools":
- 116: resource "aws_ssm_parameter" "apm_pools" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app1/apm-pools): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 8317e00f-c472-4468-90e6-fe9b4e6d6535, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.apm_pools["app1"],
-  on bootstrap-scripts.tf line 116, in resource "aws_ssm_parameter" "apm_pools":
- 116: resource "aws_ssm_parameter" "apm_pools" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app2/apm-pools): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 1fffaad3-a3a0-444a-93ac-f89bfd24f030, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.apm_pools["app2"],
-  on bootstrap-scripts.tf line 116, in resource "aws_ssm_parameter" "apm_pools":
- 116: resource "aws_ssm_parameter" "apm_pools" {
-
-
-Error: creating SSM Parameter (/intelisrcpa/app5/apm-pools): operation error SSM: PutParameter, https response error StatusCode: 400, RequestID: 6b2bc053-56e3-4dac-be36-c737ead2b0fa, ParameterAlreadyExists: The parameter already exists. To overwrite this value, set the overwrite option in the request to true.
-
-  with aws_ssm_parameter.apm_pools["app5"],
-  on bootstrap-scripts.tf line 116, in resource "aws_ssm_parameter" "apm_pools":
- 116: resource "aws_ssm_parameter" "apm_pools" {
+PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
+2026-10-09T16:24:25.5272209+00:00  === Inicio bootstrap ===
+2026-10-09T16:24:27.1637015+00:00  Instance ID: i-0f89693c429c1f3c0
+2026-10-09T16:24:53.1990507+00:00  Health-check off durante bootstrap.
+2026-10-09T16:24:54.9285754+00:00  Fase 1: Domain join...
+2026-10-09T16:25:47.5492762+00:00  ERROR FATAL: parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:25:47.7439154+00:00  Retry hook ABANDON (1): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:26:07.7936621+00:00  Retry hook ABANDON (2): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:26:27.8531701+00:00  Retry hook ABANDON (3): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:26:47.9051083+00:00  Retry hook ABANDON (4): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:27:08.0226290+00:00  Retry hook ABANDON (5): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:27:28.1027423+00:00  Retry hook ABANDON (6): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:27:48.2353273+00:00  Hook ABANDON fallo tras reintentos.
+2026-10-09T16:28:19.0107132+00:00  Retry S3 flush-log.ps1 (1): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:28:34.0419985+00:00  Retry S3 flush-log.ps1 (2): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:28:49.1496627+00:00  Retry S3 flush-log.ps1 (3): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:29:04.2698399+00:00  Retry S3 flush-log.ps1 (4): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+2026-10-09T16:29:19.3920952+00:00  Retry S3 flush-log.ps1 (5): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
+PS C:\Windows\system32>
