@@ -1,48 +1,26 @@
-2026-10-09T12:28:39.114-05:00
-2026-10-09T17:07:41.4829927+00:00  === Inicio bootstrap ===
-2026-10-09T17:07:43.9536087+00:00  Instance ID: i-0ba217d62704032aa
-2026-10-09T17:08:11.3921430+00:00  Health-check off durante bootstrap.
-2026-10-09T17:08:13.4739688+00:00  Fase 1: Domain join...
-2026-10-09T17:08:55.6075559+00:00  Hostname 1 reclamado (1).
-2026-10-09T17:08:55.6295976+00:00  Hostname asignado: USAEA1PWBWESPG1
-2026-10-09T17:08:55.6327591+00:00  Renombrando: EC2AMAZ-RUHSCQD -> USAEA1PWBWESPG1
-2026-10-09T17:08:56.5681580+00:00  Rename OK. Exit 3010.
-2026-10-09T17:10:26.2999681+00:00  === Inicio bootstrap ===
-2026-10-09T17:10:28.6394733+00:00  Instance ID: i-0ba217d62704032aa
-2026-10-09T17:11:20.6851938+00:00  Health-check off durante bootstrap.
-2026-10-09T17:11:22.3990056+00:00  Fase 1: Domain join...
-2026-10-09T17:11:31.3787239+00:00  Hostname reutilizado: USAEA1PWBWESPG1
-2026-10-09T17:11:38.2647490+00:00  Domain join: USAEA1PWBWESPG1 -> gdc.local
-2026-10-09T17:11:49.2540552+00:00  Domain join OK. Exit 3010.
-2026-10-09T17:13:37.8358736+00:00  === Inicio bootstrap ===
-2026-10-09T17:13:39.3282057+00:00  Instance ID: i-0ba217d62704032aa
-2026-10-09T17:14:05.3020867+00:00  Health-check off durante bootstrap.
-2026-10-09T17:14:05.6241766+00:00  Gate AD OK: gdc.local/USAEA1PWBWESPG1.
-2026-10-09T17:14:32.8620024+00:00  Fase 2: Montaje FSx...
-2026-10-09T17:14:37.5118688+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
-2026-10-09T17:14:37.8797602+00:00  Gate FSx OK: Z:\ accesible.
-2026-10-09T17:14:38.3348584+00:00  Fase 7: Config IIS+SO...
-2026-10-09T17:14:44.6611380+00:00  Ejecutando config IIS...
-2026-10-09T17:15:48.2439889+00:00  Config IIS OK.
-2026-10-09T17:15:48.2480194+00:00  Fase 7b: APM .NET...
-2026-10-09T17:15:48.2837300+00:00  APM no habilitado; se omite.
-2026-10-09T17:15:48.2875077+00:00  Fase 8: Pre-warm DNN...
-2026-10-09T17:28:03.2542826+00:00  2026-10-09T12:16:50.2800984-05:00  Pre-warm apps.apcexperian.com (1) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2562974+00:00  2026-10-09T12:18:05.4933195-05:00  Pre-warm apps.apcexperian.com (2) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2596473+00:00  2026-10-09T12:19:20.8356074-05:00  Pre-warm apps.apcexperian.com (3) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2623500+00:00  2026-10-09T12:20:36.0509977-05:00  Pre-warm apps.apcexperian.com (4) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2643618+00:00  2026-10-09T12:21:51.1163569-05:00  Pre-warm apps.apcexperian.com (5) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2663741+00:00  2026-10-09T12:23:06.3244201-05:00  Pre-warm apps.apcexperian.com (6) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2679514+00:00  2026-10-09T12:24:21.7133676-05:00  Pre-warm apps.apcexperian.com (7) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2712817+00:00  2026-10-09T12:25:36.7505521-05:00  Pre-warm apps.apcexperian.com (8) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2721539+00:00  2026-10-09T12:26:07.6743143-05:00  Pre-warm apps.apcexperian.com (9) sin resp: Exception calling "GetResponse" with "0" argument(s): "The remote server returned an error: (500) Internal Server Error."
-2026-10-09T17:28:03.2745268+00:00  2026-10-09T12:26:32.8499857-05:00  Pre-warm apps.apcexperian.com (10) sin resp: Exception calling "GetResponse" with "0" argument(s): "The remote server returned an error: (500) Internal Server Error."
-2026-10-09T17:28:03.2870267+00:00  2026-10-09T12:26:47.8597444-05:00  Pre-warm apps.apcexperian.com sin respuesta tras reintentos.
-2026-10-09T17:28:03.2910496+00:00  2026-10-09T12:27:48.1186632-05:00  Pre-warm dashboard.apcexperian.com (1) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T17:28:03.2921736+00:00  2026-10-09T12:28:03.2009541-05:00  Pre-warm dashboard.apcexperian.com (2) -> HTTP 200
-2026-10-09T17:28:03.2945296+00:00  2026-10-09T12:28:03.2029692-05:00  Pre-warm DNN completado.
-2026-10-09T17:28:03.4751807+00:00  Fase final: Health-check...
-2026-10-09T17:28:04.0184970+00:00  Health-check creado.
-2026-10-09T17:28:04.0558706+00:00  Health-check ON (AD/FSx/IIS/prewarm OK).
-2026-10-09T17:28:04.3309518+00:00  Hook CONTINUE OK.
-2026-10-09T17:28:04.3349786+00:00  === Bootstrap completado ===
+2026-10-09T17:25:27.9400633+00:00  === Inicio bootstrap ===
+2026-10-09T17:25:30.5098472+00:00  Instance ID: i-05d5540faafc3cb58
+2026-10-09T17:26:20.6779897+00:00  Health-check off durante bootstrap.
+2026-10-09T17:26:22.4247496+00:00  Fase 1: Domain join...
+2026-10-09T17:28:03.9826200+00:00  Hostname 1 reclamado (1).
+2026-10-09T17:28:03.9905658+00:00  Hostname asignado: USAEA1PWBWESPF1
+2026-10-09T17:28:04.0750286+00:00  Renombrando: EC2AMAZ-GHIIFDT -> USAEA1PWBWESPF1
+2026-10-09T17:28:05.0746458+00:00  Rename OK. Exit 3010.
+2026-10-09T17:30:26.3775191+00:00  === Inicio bootstrap ===
+2026-10-09T17:30:27.3759214+00:00  Instance ID: i-05d5540faafc3cb58
+2026-10-09T17:31:02.5764601+00:00  Health-check off durante bootstrap.
+2026-10-09T17:31:04.4989364+00:00  Fase 1: Domain join...
+2026-10-09T17:31:14.5561150+00:00  Hostname reutilizado: USAEA1PWBWESPF1
+2026-10-09T17:31:25.4402570+00:00  Domain join: USAEA1PWBWESPF1 -> gdc.local
+2026-10-09T17:31:31.8567588+00:00  Domain join OK. Exit 3010.
+2026-10-09T17:33:32.7278402+00:00  === Inicio bootstrap ===
+2026-10-09T17:33:36.6322754+00:00  Instance ID: i-05d5540faafc3cb58
+2026-10-09T17:34:31.0275097+00:00  Health-check off durante bootstrap.
+2026-10-09T17:34:32.2385904+00:00  Gate AD OK: gdc.local/USAEA1PWBWESPF1.
+2026-10-09T17:34:43.4176634+00:00  Fase 2: Montaje FSx...
+2026-10-09T17:34:51.1677461+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-10-09T17:34:51.5153890+00:00  Gate FSx OK: Z:\ accesible.
+2026-10-09T17:34:51.5498299+00:00  Fase 7: Config IIS+SO...
+2026-10-09T17:35:07.2827058+00:00  Ejecutando config IIS...
+2026-10-09T17:36:19.6362298+00:00  ERROR FATAL: iis-configure.ps1 fallo (exit 1).
+2026-10-09T17:36:19.9453016+00:00  Hook ABANDON OK.
