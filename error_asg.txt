@@ -1,19 +1,285 @@
-PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-2026-10-09T16:24:25.5272209+00:00  === Inicio bootstrap ===
-2026-10-09T16:24:27.1637015+00:00  Instance ID: i-0f89693c429c1f3c0
-2026-10-09T16:24:53.1990507+00:00  Health-check off durante bootstrap.
-2026-10-09T16:24:54.9285754+00:00  Fase 1: Domain join...
-2026-10-09T16:25:47.5492762+00:00  ERROR FATAL: parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:25:47.7439154+00:00  Retry hook ABANDON (1): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:26:07.7936621+00:00  Retry hook ABANDON (2): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:26:27.8531701+00:00  Retry hook ABANDON (3): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:26:47.9051083+00:00  Retry hook ABANDON (4): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:27:08.0226290+00:00  Retry hook ABANDON (5): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:27:28.1027423+00:00  Retry hook ABANDON (6): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:27:48.2353273+00:00  Hook ABANDON fallo tras reintentos.
-2026-10-09T16:28:19.0107132+00:00  Retry S3 flush-log.ps1 (1): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:28:34.0419985+00:00  Retry S3 flush-log.ps1 (2): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:28:49.1496627+00:00  Retry S3 flush-log.ps1 (3): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:29:04.2698399+00:00  Retry S3 flush-log.ps1 (4): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-2026-10-09T16:29:19.3920952+00:00  Retry S3 flush-log.ps1 (5): parsing "*.gdc.local" - Quantifier {x,y} following nothing.
-PS C:\Windows\system32>
+version: 1.1
+tasks:
+- task: executeScript
+  inputs:
+  - frequency: always
+    type: powershell
+    runAs: localSystem
+    content: |-
+      $ErrorActionPreference="Stop"
+      $L="C:\ProgramData\intelisrcpa-bootstrap.log"
+      function W($m){$x="$(Get-Date -Format o)  $m";$x|Out-File -Append -Encoding utf8 $L;[Console]::Out.WriteLine($x)}
+      $SID="arn:aws:secretsmanager:us-east-1:274193347839:secret:eec-aws-us-eits-intelisrcpa-prd-ec2ad-credentials-Zac1YP";$RG="us-east-1";$FQ="gdc.local";$OU="OU=AutoScaling,OU=Panama,OU=SP LATAM Servers,OU=Windows Server 2025 Member Servers,OU=Servers,OU=Systems,DC=gdc,DC=local"
+      $PF="USAEA1PWBWESPG";$ST=1;$PS=5;$DR="Z"
+      $MP="/intelisrcpa/app7/hostname-mapping";$OP="/intelisrcpa/app7/orphaned"
+      $HOOK="launch-ready";$ASG="eec-aws-us-eits-intelisrcpa-prd-web-app7-asg";$PREWARM="apps.apcexperian.com,dashboard.apcexperian.com"
+      $S3B="eec-aws-us-eits-intelisrcpa-prd-bootstrap-scripts-bucket";$S3K="iis-configure.ps1";$IISPARAM="/intelisrcpa/app7/iis-sites";$CERTPFX="eec-aws-us-eits-intelisrcpa-prd";$PXY="http://proxy-useast.us.experian.eeca:9595"
+      $SQLN="vaonsql";$SQLS="eec-aws-us-eits-intelisrcpa-prd-sqlserver-multiaz1.cupsmsc8gdqo.us-east-1.rds.amazonaws.com";$SQLP="1433"
+      $APM="false";$APMK="enable_apm_dotnet_iis.ps1";$APMENV="prd";$APMPORT="8126";$APMPARAM=""
+      $PWK="prewarm.ps1";$LG="/intelisrcpa/asg-bootstrap";$FLK="flush-log.ps1"
+      # Set-AWSProxy: UNICO proxy que respeta el SDK de AWS (DefaultWebProxy NO lo
+      # lee -> por eso fallaba Complete-ASLifecycleAction). Bypass: IMDS/AD/S3.
+      # BypassList son REGEX (no comodines): "*.x" es regex invalida. Se escriben
+      # como patrones: 169.254.169.254, cualquier *.gdc.local y *.s3.<region>.
+      if($PXY){try{$u=[Uri]$PXY;Set-AWSProxy -Hostname $u.Host -Port $u.Port -BypassList @("169\.254\.169\.254",".*\.gdc.local$",".*\.s3\.us-east-1\.amazonaws\.com$")}catch{W "Aviso proxy: $($_.Exception.Message)"}}
+      function Sec($sid=$SID){
+       for($i=1;$i -le 5;$i++){
+        try{
+         if(Get-Command Get-SECSecretValue -EA SilentlyContinue){return (Get-SECSecretValue -SecretId $sid -Region $RG).SecretString}
+         $a="C:\Program Files\Amazon\AWSCLIV2\aws.exe"
+         if(Test-Path $a){$v=& $a secretsmanager get-secret-value --secret-id $sid --region $RG --query SecretString --output text;if($LASTEXITCODE -eq 0 -and $v){return $v}}
+         throw "AWS tools no disp."
+        }catch{W "Retry secret ($i): $($_.Exception.Message)";Start-Sleep 15}
+       }
+       throw "No se pudo leer secret $sid."
+      }
+      function Cred{
+       $s=(Sec)|ConvertFrom-Json
+       $u=if($s.username){$s.username}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_USERNAME}
+       $p=if($s.password){$s.password}else{$s.SELF_MANAGED_ACTIVE_DIRECTORY_PASSWORD}
+       if(-not $u -or -not $p){throw "Secret AD sin credenciales."}
+       if($u -notlike "*\*"){$u="$FQ\$u"}
+       New-Object System.Management.Automation.PSCredential($u,(ConvertTo-SecureString $p -AsPlainText -Force))
+      }
+      function IID{
+       for($i=1;$i -le 5;$i++){
+        try{
+         $t=Invoke-RestMethod -Method PUT -Uri "http://169.254.169.254/latest/api/token" -Headers @{"X-aws-ec2-metadata-token-ttl-seconds"="300"} -TimeoutSec 5
+         return (Invoke-RestMethod -Uri "http://169.254.169.254/latest/meta-data/instance-id" -Headers @{"X-aws-ec2-metadata-token"=$t} -TimeoutSec 5)
+        }catch{W "Retry IMDSv2 ($i)";Start-Sleep 10}
+       }
+       throw "No se pudo obtener instance-id."
+      }
+      function CompleteHook($res,$iid){
+       if([string]::IsNullOrEmpty($HOOK) -or [string]::IsNullOrEmpty($ASG)){return}
+       for($i=1;$i -le 6;$i++){
+        try{Complete-ASLifecycleAction -LifecycleHookName $HOOK -AutoScalingGroupName $ASG -LifecycleActionResult $res -InstanceId $iid -Region $RG -EA Stop;W "Hook $res OK.";return}
+        catch{W "Retry hook $res ($i): $($_.Exception.Message)";Beat $iid;Start-Sleep 20}
+       }
+       W "Hook $res fallo tras reintentos."
+      }
+      function Beat($iid){
+       if([string]::IsNullOrEmpty($HOOK) -or [string]::IsNullOrEmpty($ASG)){return}
+       try{Write-ASLifecycleActionHeartbeat -LifecycleHookName $HOOK -AutoScalingGroupName $ASG -InstanceId $iid -Region $RG -EA Stop}catch{}
+      }
+      # TEMPORAL (debug): baja flush-log.ps1 de S3 y sube el bootstrap.log a CloudWatch.
+      function Flush($iid){
+       if([string]::IsNullOrEmpty($LG) -or [string]::IsNullOrEmpty($FLK)){return}
+       try{$f="$env:TEMP\flush-log.ps1";Dl $FLK $f $iid;& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $f -LogGroup $LG -Stream $iid -LogFile $L -Region $RG}catch{}
+      }
+
+      # Helpers compartidos por ConfigureIisLocal y EnableApm.
+      function Dl($key,$file,$iid){
+       Beat $iid
+       for($i=1;$i -le 5;$i++){
+        try{Read-S3Object -BucketName $S3B -Key $key -File $file -Region $RG -EA Stop|Out-Null;return}
+        catch{W "Retry S3 $key ($i): $($_.Exception.Message)";if($i -eq 5){throw};Start-Sleep 15}
+       }
+      }
+      function Par($name){
+       for($i=1;$i -le 5;$i++){
+        try{$v=(Get-SSMParameter -Name $name -Region $RG -EA Stop).Value;if($v){return $v}}
+        catch{W "Retry param $name ($i): $($_.Exception.Message)";Start-Sleep 15}
+       }
+       throw "No se pudo leer el parametro $name."
+      }
+      function ConfigureIisLocal($iid){
+       if([string]::IsNullOrEmpty($S3B) -or [string]::IsNullOrEmpty($S3K)){W "Sin S3 script; se omite config IIS.";return}
+       $tmp="$env:TEMP\iis-configure.ps1"
+       Dl $S3K $tmp $iid
+       $b64=Par $IISPARAM
+       Beat $iid
+       $raw=Get-Content $tmp -Raw
+       $raw=$raw -replace "\{\{\s*IisSitesJsonB64\s*\}\}",$b64
+       $raw=$raw -replace "\{\{\s*CertSecretPrefix\s*\}\}",$CERTPFX
+       $raw=$raw -replace "\{\{\s*FsxDrive\s*\}\}",$DR
+       $raw=$raw -replace "\{\{\s*Region\s*\}\}",$RG
+       $raw=$raw -replace "\{\{\s*SqlAliasName\s*\}\}",$SQLN
+       $raw=$raw -replace "\{\{\s*SqlAliasServer\s*\}\}",$SQLS
+       $raw=$raw -replace "\{\{\s*SqlAliasPort\s*\}\}",$SQLP
+       Set-Content -Path $tmp -Value $raw -Encoding UTF8
+       W "Ejecutando config IIS..."
+       & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $tmp
+       if($LASTEXITCODE -ne 0){throw "iis-configure.ps1 fallo (exit $LASTEXITCODE)."}
+       W "Config IIS OK."
+      }
+      function EnableApm($iid){
+       if($APM -ne "true"){W "APM no habilitado; se omite.";return}
+       $t="$env:TEMP\enable_apm_dotnet_iis.ps1"
+       Dl $APMK $t $iid
+       $pools=Par $APMPARAM
+       $r=Get-Content $t -Raw
+       $r=$r -replace "\{\{\s*DdEnv\s*\}\}",$APMENV
+       $r=$r -replace "\{\{\s*DdTracerVersion\s*\}\}","3.55.0"
+       $r=$r -replace "\{\{\s*DdApmPort\s*\}\}",$APMPORT
+       $r=$r -replace "\{\{\s*DdApmAppPools\s*\}\}",$pools
+       Set-Content -Path $t -Value $r -Encoding UTF8
+       # Reinicio de IIS AQUI (wait state, sin trafico); el pre-warm siguiente
+       # recompila DNN con el tracer ya cargado.
+       $env:DD_APM_FORCE_RESTART="1"
+       W "APM .NET (reinicia IIS)..."
+       & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $t
+       if($LASTEXITCODE -ne 0){W "Aviso APM (exit $LASTEXITCODE); sigo."}else{W "APM .NET OK."}
+      }
+      function PreWarm($iid){
+       if([string]::IsNullOrEmpty($PREWARM) -or [string]::IsNullOrEmpty($PWK)){return}
+       $p="$env:TEMP\prewarm.ps1";Dl $PWK $p $iid;Beat $iid
+       $out=& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $p -Hosts $PREWARM -Region $RG
+       foreach($line in $out){W $line}
+       Beat $iid
+      }
+      function HN($n){"{0}{1:D1}" -f $PF,($n+$ST-1)}
+      function Own($id){
+       try{$v=(Get-SSMParameter -Name "$MP/$id" -Region $RG).Value
+       if($v -like "$PF|*"){return HN ([int]$v.Split("|")[1])}}catch{}
+       $null
+      }
+      function Next($id){
+       for($a=1;$a -le 5;$a++){
+        $u=@{}
+        try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+         if($p.Value -notlike "$PF|*"){continue}
+         $i=($p.Name -split "/")[-1];if($i -eq $id){continue}
+         $u[[int]$p.Value.Split("|")[1]]=$true}}catch{}
+        try{foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG)){
+         $n=[int](($o.Name -split "/")[-1] -replace [regex]::Escape($PF),"")
+         if($n -ge 1 -and $n -le $PS){$u[$n]=$true}}}catch{}
+        $k=0;for($n=1;$n -le $PS;$n++){if(-not $u.ContainsKey($n)){$k=$n;break}}
+        if($k -eq 0){throw "POOL AGOTADO $($PF): sin libres. Requiere AD."}
+        Write-SSMParameter -Name "$MP/$id" -Value "$PF|$k" -Description (HN $k) -Type String -Overwrite $true -Region $RG|Out-Null
+        Start-Sleep (5+(Get-Random -Max 10))
+        $c=$false
+        try{foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+         if($p.Value -notlike "$PF|*"){continue}
+         $i=($p.Name -split "/")[-1]
+         if($i -ne $id -and [int]$p.Value.Split("|")[1] -eq $k -and $i -lt $id){$c=$true;break}}}catch{}
+        if(-not $c){W "Hostname $k reclamado ($a).";return HN $k}
+        W "Conflicto SSM $k; reintento."
+        Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
+        Start-Sleep (Get-Random -Max 10)
+       }
+       throw "No se pudo reclamar hostname de $PF."
+      }
+      try{
+       W "=== Inicio bootstrap ==="
+       $id=IID;W "Instance ID: $id"
+       Beat $id   # renueva el hook en CADA boot (frequency:always); cubre reboots + AD
+       Import-Module WebAdministration -EA Stop
+       $hp="C:\inetpub\health"
+       Remove-Item "$hp\index.html" -Force -EA SilentlyContinue
+       if(Get-Website -Name "health-check" -EA SilentlyContinue){Stop-Website -Name "health-check" -EA SilentlyContinue}
+       W "Health-check off durante bootstrap."
+       $cs=Get-CimInstance Win32_ComputerSystem
+       if(-not $cs.PartOfDomain){
+        W "Fase 1: Domain join..."
+        for($i=1;$i -le 20;$i++){if(Resolve-DnsName $FQ -DnsOnly -EA SilentlyContinue){break};W "Esp AD... $i";Start-Sleep 15}
+        $h=Own $id
+        if($h){W "Hostname reutilizado: $h"}else{$h=Next $id;W "Hostname asignado: $h"}
+        if($env:COMPUTERNAME -ne $h){W "Renombrando: $env:COMPUTERNAME -> $h";Rename-Computer -NewName $h -Force;W "Rename OK. Exit 3010.";exit 3010}
+        $c=Cred
+        W "Domain join: $env:COMPUTERNAME -> $FQ"
+        try{
+         if([string]::IsNullOrEmpty($OU)){Add-Computer -DomainName $FQ -Credential $c -Force -EA Stop}
+         else{Add-Computer -DomainName $FQ -Credential $c -OUPath $OU -Force -EA Stop}
+         W "Domain join OK. Exit 3010.";exit 3010
+        }catch{
+         $m=$_.Exception.Message
+         if($m -like "*Re-using the account was blocked*" -or $m -like "*account with the same name exists*"){
+          W "Join bloqueado huerfano $env:COMPUTERNAME; salto."
+          Write-SSMParameter -Name "$OP/$env:COMPUTERNAME" -Value "$id|$(Get-Date -Format o)" -Type String -Overwrite $true -Region $RG -EA SilentlyContinue|Out-Null
+          Remove-SSMParameter -Name "$MP/$id" -Region $RG -Force -EA SilentlyContinue|Out-Null
+          $n=Next $id
+          W "Nuevo hostname: $n (era $env:COMPUTERNAME)"
+          Rename-Computer -NewName $n -Force;W "Rename OK. Exit 3010.";exit 3010
+         }
+         throw
+        }
+       }
+       $cs=Get-CimInstance Win32_ComputerSystem
+       if(-not $cs.PartOfDomain){throw "Gate AD fallo: no pertenece a $FQ."}
+       W "Gate AD OK: $($cs.Domain)/$env:COMPUTERNAME."
+       try{
+        $cc=Cred;$cu=$cc.UserName;$cp=$cc.GetNetworkCredential().Password
+        $hi=$ST+$PS-1;$rx="^"+[regex]::Escape($PF)+"([0-9]+)$";$live=@{}
+        try{foreach($m in (Get-SSMParametersByPath -Path $MP -Region $RG)){
+         if($m.Value -like "$PF|*"){$live[(HN ([int]$m.Value.Split("|")[1]))]=$true}}}catch{}
+        foreach($o in (Get-SSMParametersByPath -Path $OP -Region $RG -EA SilentlyContinue)){
+         $nm=($o.Name -split "/")[-1];$mt=[regex]::Match($nm,$rx)
+         if(-not $mt.Success){continue}
+         $nu=[int]$mt.Groups[1].Value
+         if($nu -lt $ST -or $nu -gt $hi){continue}
+         if($live.ContainsKey($nm)){Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null;continue}
+         try{
+          $de=New-Object DirectoryServices.DirectoryEntry("LDAP://$FQ",$cu,$cp)
+          $ds=New-Object DirectoryServices.DirectorySearcher($de);$ds.Filter="(&(objectClass=computer)(cn=$nm))"
+          $f=$ds.FindOne()
+          if($f){$e=$f.GetDirectoryEntry();$e.Username=$cu;$e.Password=$cp;$e.DeleteTree();W "AD huerfano $nm eliminado."}
+          Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
+         }catch{
+          if($_.Exception.Message -like "*no such object*" -or $_.Exception.Message -like "*does not exist*"){
+           Remove-SSMParameter -Name $o.Name -Region $RG -Force -EA SilentlyContinue|Out-Null
+          }else{W "No limpio $($nm): $($_.Exception.Message)"}
+         }
+        }
+       }catch{W "Aviso huerfanos: $($_.Exception.Message)"}
+       try{
+        $maps=@{}
+        foreach($p in (Get-SSMParametersByPath -Path $MP -Region $RG -EA SilentlyContinue)){
+         $iid=($p.Name -split "/")[-1]
+         if($iid -eq $id){continue}
+         if($iid -match "^i-[0-9a-f]{8,17}$"){$maps[$iid]=$p.Name}
+        }
+        foreach($iid in $maps.Keys){
+         $decision=$null
+         try{
+          $inst=(Get-EC2Instance -InstanceId $iid -Region $RG -EA Stop).Instances
+          $state=$inst[0].State.Name.Value
+          if($state -eq "terminated"){$decision="delete"}else{$decision="keep"}
+         }catch{
+          if($_.Exception.Message -like "*does not exist*" -or $_.Exception.Message -like "*InvalidInstanceID.NotFound*"){$decision="delete"}
+          else{$decision=$null;W "No verificado $iid; conservo."}
+         }
+         if($decision -eq "delete"){Remove-SSMParameter -Name $maps[$iid] -Region $RG -Force -EA SilentlyContinue|Out-Null;W "Mapping huerfano $iid borrado."}
+        }
+       }catch{W "Aviso mappings: $($_.Exception.Message)"}
+       W "Fase 2: Montaje FSx..."
+       $rm="\\amznfsxsokjtgsj.gdc.local\share"
+       if(-not (Get-SmbGlobalMapping -EA SilentlyContinue|?{$_.LocalPath -eq "$DR`:"})){
+        $c=Cred
+        for($i=1;$i -le 5;$i++){
+         try{New-SmbGlobalMapping -LocalPath "$DR`:" -RemotePath $rm -Credential $c -Persistent $false -RequirePrivacy $true;W "FSx montado en $DR`: ($rm)";break}
+         catch{W "Retry FSx ($i): $($_.Exception.Message)";if($i -eq 5){throw};Start-Sleep 20}
+        }
+       }else{W "FSx ya montado en $DR`:"}
+       if(-not (Test-Path "$DR`:\")){throw "Gate FSx fallo: $DR`:\ inaccesible."}
+       W "Gate FSx OK: $DR`:\ accesible."
+       $w=Get-Service W3SVC -EA SilentlyContinue
+       if($w -and $w.Status -ne "Running"){Start-Service W3SVC;W "W3SVC iniciado."}
+       # SQL alias, Postbuild off, time/timezone y proxy WinINET se movieron al
+       # iis-configure.ps1 (Fase 7) por el limite de 16 KB del userdata. Corren
+       # tras AD+FSx (igual que antes) y son idempotentes (drift via State Manager).
+       W "Fase 7: Config IIS+SO..."
+       ConfigureIisLocal $id
+       W "Fase 7b: APM .NET..."
+       EnableApm $id
+       W "Fase 8: Pre-warm DNN..."
+       PreWarm $id
+       W "Fase final: Health-check..."
+       if(Get-Website -Name "Default Web Site" -EA SilentlyContinue){
+        Stop-Website -Name "Default Web Site" -EA SilentlyContinue
+        Remove-Website -Name "Default Web Site" -EA SilentlyContinue
+        W "Default Web Site off."
+       }
+       New-Item $hp -ItemType Directory -Force|Out-Null
+       "OK"|Out-File "$hp\index.html" -Encoding utf8
+       if(-not (Get-Website -Name "health-check" -EA SilentlyContinue)){New-Website -Name "health-check" -PhysicalPath $hp -Port 80 -Force|Out-Null;W "Health-check creado."}
+       Start-Website -Name "health-check" -EA Stop
+       W "Health-check ON (AD/FSx/IIS/prewarm OK)."
+       CompleteHook "CONTINUE" $id
+       W "=== Bootstrap completado ==="
+       Flush $id
+      }catch{
+       W ("ERROR FATAL: "+$_.Exception.Message)
+       try{$fid=IID; CompleteHook "ABANDON" $fid; Flush $fid}catch{W "ABANDON fallo: $($_.Exception.Message)"}
+       exit 1
+      }
