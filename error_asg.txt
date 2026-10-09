@@ -1,43 +1,34 @@
-Instance refresh history (26) Info
 
-
+eec-aws-us-eits-intelisrcpa-prd-web-app4-asg
+eec-aws-us-eits-intelisrcpa-prd-web-app4-asg Capacity overview
+Edit
+arn:aws:autoscaling:us-east-1:274193347839:autoScalingGroup:6e382eb1-d3d9-4cd1-b548-7964d6426792:autoScalingGroupName/eec-aws-us-eits-intelisrcpa-prd-web-app4-asg
+Desired capacity
 1
-2
-3
+Scaling limits
+1 - 2
+Desired capacity type
+Units (number of instances)
+Status
+ At desired capacity
+Date created
+Tue Sep 08 2026 17:32:06 GMT-0500 (hora estándar de Colombia)
 
+Details
 
-Instance refresh ID
-	
-Instance refresh status
-	
-Rollback status
-	
-Status reason
-	
-Percentage completed
-	
-Instances to update
-	
-Start time
-	
-End time
-	
-Skip matching
-	
-Desired configuration
+Integrations
 
-85346470-f3c9-429d-b6cd-e5042caaaa03
-Successful
--
--
-100%
-0
-2026 October 08, 10:15:09 PM -05:00
-2026 October 08, 10:15:09 PM -05:00
-Disabled
-View
+Automatic scaling
 
+Instance management
 
+Instance refresh
+
+Activity
+
+Monitoring
+
+Tags
 Instances (1) 
 
 Actions
@@ -61,10 +52,78 @@ Health status
 	
 Protected from
 
-i-01d784bac68f4275b  
-Pending:Wait
+i-0a48c4c90a81a7c9f  
+InService
 m5.large
 -
-eec-aws-us-eits-intelisrcpa-prd-web-app3-lt   | Version 25
-use1-az2 (us-east-1b)
+eec-aws-us-eits-intelisrcpa-prd-web-app4-lt   | Version 25
+use1-az1 (us-east-1a)
  Healthy
+Instance lifecycle policy for lifecycle hooks Info
+Manage policy
+Controls instance behavior when an instance transitions through its lifecycle states.
+
+Termination hook abandon behavior
+Terminate (default)
+Lifecycle hooks (2) Info
+
+Actions
+Create lifecycle hook
+
+1
+
+
+Name
+	
+Lifecycle transition
+	
+Default result
+	
+Heartbeat timeout (seconds)
+	
+Notification target ARN
+	
+Role ARN
+
+launch-ready
+autoscaling:EC2_INSTANCE_LAUNCHING
+ABANDON
+1800
+leave-domain
+autoscaling:EC2_INSTANCE_TERMINATING
+CONTINUE
+300
+
+
+Activity history (100+)
+Activity history results have finished loading
+Activity history results have finished loading
+
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+...
+
+
+Status
+	
+Description
+	
+Cause
+	
+Start time
+	
+End time
+
+Successful
+Launching a new EC2 instance: i-0a48c4c90a81a7c9f
+At 2026-10-09T03:15:03Z a user request update of AutoScalingGroup constraints to min: 0, max: 2, desired: 0 changing the desired capacity from 1 to 0. At 2026-10-09T03:30:30Z a user request update of AutoScalingGroup constraints to min: 1, max: 2, desired: 1 changing the desired capacity from 0 to 1. At 2026-10-09T03:51:27Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 1.
+2026 October 08, 10:51:29 PM -05:00
+2026 October 08, 11:23:41 PM -05:00
