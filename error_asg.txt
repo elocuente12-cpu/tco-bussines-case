@@ -1,41 +1,39 @@
 PS C:\Windows\system32> Get-Content "C:\ProgramData\intelisrcpa-bootstrap.log"
-2026-10-09T14:45:38.1643839+00:00  === Inicio bootstrap ===
-2026-10-09T14:45:40.7514930+00:00  Instance ID: i-086f5dfa4939a5ba9
-2026-10-09T14:46:56.8771131+00:00  Health-check off durante bootstrap.
-2026-10-09T14:46:59.1235389+00:00  Fase 1: Domain join...
-2026-10-09T14:47:43.3473431+00:00  Hostname 1 reclamado (1).
-2026-10-09T14:47:43.4316964+00:00  Hostname asignado: USAEA1PWBWESPC1
-2026-10-09T14:47:43.5130754+00:00  Renombrando: EC2AMAZ-RHH3DS0 -> USAEA1PWBWESPC1
-2026-10-09T14:47:44.1108882+00:00  Rename OK. Exit 3010.
-2026-10-09T14:49:08.9351192+00:00  === Inicio bootstrap ===
-2026-10-09T14:49:09.4373230+00:00  Instance ID: i-086f5dfa4939a5ba9
-2026-10-09T14:50:02.3546036+00:00  Health-check off durante bootstrap.
-2026-10-09T14:50:04.1137851+00:00  Fase 1: Domain join...
-2026-10-09T14:50:32.5806594+00:00  Hostname reutilizado: USAEA1PWBWESPC1
-2026-10-09T14:50:38.8752363+00:00  Domain join: USAEA1PWBWESPC1 -> gdc.local
-2026-10-09T14:50:59.2932008+00:00  Domain join OK. Exit 3010.
-2026-10-09T14:52:13.1012961+00:00  === Inicio bootstrap ===
-2026-10-09T14:52:13.4024429+00:00  Instance ID: i-086f5dfa4939a5ba9
-2026-10-09T14:53:29.2038266+00:00  Health-check off durante bootstrap.
-2026-10-09T14:53:29.4650671+00:00  Gate AD OK: gdc.local/USAEA1PWBWESPC1.
-2026-10-09T14:53:36.9069080+00:00  Fase 2: Montaje FSx...
-2026-10-09T14:53:40.7766871+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
-2026-10-09T14:53:40.8445825+00:00  Gate FSx OK: Z:\ accesible.
-2026-10-09T14:53:40.8606540+00:00  Fase 7: Config IIS+SO...
-2026-10-09T14:53:45.9456233+00:00  Ejecutando config IIS...
-2026-10-09T14:54:43.7243853+00:00  Config IIS OK.
-2026-10-09T14:54:43.7263956+00:00  Fase 7b: APM .NET...
-2026-10-09T14:54:44.1906313+00:00  APM .NET (reinicia IIS)...
-2026-10-09T14:54:45.6658457+00:00  Aviso APM (exit 1); sigo.
-2026-10-09T14:54:45.6678579+00:00  Fase 8: Pre-warm DNN...
-2026-10-09T14:55:45.8374124+00:00  Prewarm webfolder.intelidat.com (1) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T14:57:02.3344061+00:00  Prewarm webfolder.intelidat.com (2) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T14:58:20.5117005+00:00  Prewarm webfolder.intelidat.com (3) sin resp: Exception calling "GetResponse" with "0" argument(s): "The operation has timed out"
-2026-10-09T14:59:30.4419268+00:00  Pre-warm webfolder.intelidat.com (4) -> HTTP 200
-2026-10-09T14:59:30.4456938+00:00  Pre-warm DNN completado.
-2026-10-09T14:59:30.4524593+00:00  Fase final: Health-check...
-2026-10-09T14:59:31.1365700+00:00  Health-check creado.
-2026-10-09T14:59:31.1759310+00:00  Health-check ON (AD/FSx/IIS/prewarm OK).
-2026-10-09T14:59:34.1427547+00:00  Aviso hook (CONTINUE): An error occurred while sending the request.
-2026-10-09T14:59:34.1445090+00:00  === Bootstrap completado ===
+2026-10-09T09:27:15.0871132+00:00  === Inicio bootstrap ===
+2026-10-09T09:27:18.3470348+00:00  Instance ID: i-03f906ac1e1a166cf
+2026-10-09T09:28:41.8931557+00:00  Health-check off durante bootstrap.
+2026-10-09T09:28:43.3855867+00:00  Fase 1: Domain join...
+2026-10-09T09:29:24.0750638+00:00  Hostname 1 reclamado (1).
+2026-10-09T09:29:24.1018149+00:00  Hostname asignado: USAEA1PWBWESPE1
+2026-10-09T09:29:24.1128729+00:00  Renombrando: EC2AMAZ-L31T8OJ -> USAEA1PWBWESPE1
+2026-10-09T09:29:25.5130106+00:00  Rename OK. Exit 3010.
+2026-10-09T09:31:09.7201914+00:00  === Inicio bootstrap ===
+2026-10-09T09:31:10.1925521+00:00  Instance ID: i-03f906ac1e1a166cf
+2026-10-09T09:32:28.6227827+00:00  Health-check off durante bootstrap.
+2026-10-09T09:32:31.4092726+00:00  Fase 1: Domain join...
+2026-10-09T09:32:47.5436145+00:00  Hostname reutilizado: USAEA1PWBWESPE1
+2026-10-09T09:32:57.7711179+00:00  Domain join: USAEA1PWBWESPE1 -> gdc.local
+2026-10-09T09:33:19.6904128+00:00  Domain join OK. Exit 3010.
+2026-10-09T09:34:56.8674893+00:00  === Inicio bootstrap ===
+2026-10-09T09:34:59.2044554+00:00  Instance ID: i-03f906ac1e1a166cf
+2026-10-09T09:36:11.3750016+00:00  Health-check off durante bootstrap.
+2026-10-09T09:36:13.3966494+00:00  Gate AD OK: gdc.local/USAEA1PWBWESPE1.
+2026-10-09T09:36:47.9868495+00:00  Fase 2: Montaje FSx...
+2026-10-09T09:36:54.7320722+00:00  FSx montado en Z: (\\amznfsxsokjtgsj.gdc.local\share)
+2026-10-09T09:36:54.9865033+00:00  Gate FSx OK: Z:\ accesible.
+2026-10-09T09:36:55.0319967+00:00  Fase 7: Config IIS+SO...
+2026-10-09T09:37:08.0037566+00:00  Ejecutando config IIS...
+2026-10-09T09:38:12.0646504+00:00  Config IIS OK.
+2026-10-09T09:38:12.1066286+00:00  Fase 7b: APM .NET...
+2026-10-09T09:38:13.8863259+00:00  APM .NET (reinicia IIS)...
+2026-10-09T09:38:17.0674066+00:00  Aviso APM (exit 1); sigo.
+2026-10-09T09:38:17.0718873+00:00  Fase 8: Pre-warm DNN...
+2026-10-09T09:38:23.1900460+00:00  Pre-warm api.apcexperian.com (1) -> HTTP 200
+2026-10-09T09:38:24.8212721+00:00  Pre-warm apiprodpa.experian.local (1) -> HTTP 200
+2026-10-09T09:38:24.8261937+00:00  Pre-warm DNN completado.
+2026-10-09T09:38:24.8284251+00:00  Fase final: Health-check...
+2026-10-09T09:38:26.4336787+00:00  Health-check creado.
+2026-10-09T09:38:26.4829711+00:00  Health-check ON (AD/FSx/IIS/prewarm OK).
+2026-10-09T09:38:26.8287822+00:00  Hook CONTINUE (asg=eec-aws-us-eits-intelisrcpa-prd-web-app5-asg).
+2026-10-09T09:38:26.8439783+00:00  === Bootstrap completado ===
 PS C:\Windows\system32>
