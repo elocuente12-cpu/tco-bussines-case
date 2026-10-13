@@ -1,0 +1,3317 @@
+Tests started at 2026-09-23 07:37:40 UTC
+Branch: UKICLOENA-3123
+Pull Request ID: 33
+
+Static scan terraform_validate result: Success
+
+Static scan tflint result: Success
+
+Static scan trivy result: Success
+
+Plan result for 'alarms_test': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.nlb.aws_lb.this will be created
+  + resource "aws_lb" "this" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + dns_name                                                     = (known after apply)
+      + dns_record_client_routing_policy                             = "any_availability_zone"
+      + enable_cross_zone_load_balancing                             = false
+      + enable_deletion_protection                                   = false
+      + enable_prefix_for_ipv6_source_nat                            = (known after apply)
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + internal                                                     = true
+      + ip_address_type                                              = "ipv4"
+      + load_balancer_type                                           = "network"
+      + name                                                         = "eits-tf-aws-nlb-alarms-nlb"
+      + name_prefix                                                  = (known after apply)
+      + region                                                       = "eu-west-2"
+      + secondary_ips_auto_assigned_per_subnet                       = (known after apply)
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = [
+          + "subnet-07f7f119f8527be21",
+        ]
+      + tags                                                         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-alarms-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-alarms-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                                                       = (known after apply)
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # module.nlb.aws_lb_listener.this["tcp_80"] will be created
+  + resource "aws_lb_listener" "this" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 80
+      + protocol                                                              = "TCP"
+      + region                                                                = "eu-west-2"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags                                                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # module.nlb.aws_lb_target_group.this["nlb-alarms-test"] will be created
+  + resource "aws_lb_target_group" "this" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "nlb-alarms-test-tg"
+      + name_prefix                        = (known after apply)
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "TCP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "eu-west-2"
+      + slow_start                         = 0
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-alarms-nlb-alarms-test"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-alarms-nlb-alarms-test"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-044f838833610a3f6"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 3
+          + interval            = 30
+          + matcher             = (known after apply)
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = (known after apply)
+          + unhealthy_threshold = 3
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.nlb.aws_lb_target_group_attachment.this["alarm-test-target"] will be created
+  + resource "aws_lb_target_group_attachment" "this" {
+      + id               = (known after apply)
+      + region           = "eu-west-2"
+      + target_group_arn = (known after apply)
+      + target_id        = (known after apply)
+    }
+
+  # module.test_ec2.aws_instance.default will be created
+  + resource "aws_instance" "default" {
+      + ami                                  = "ami-05af190ff2aed4d89"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = false
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = false
+      + ebs_optimized                        = true
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = "eec-aws-amifactory-sc-iam-ec2role"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = false
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "eu-west-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = "subnet-07f7f119f8527be21"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Instance-Scheduler"   = "uk-london-office-hours"
+          + "Name"                 = "eits-tf-aws-nlb-alarms"
+          + "ResourceName"         = "eits-tf-aws-nlb-alarms.uk.experian.eeca"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+          + "eitsce:moduleversion" = "4.3.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Instance-Scheduler"   = "uk-london-office-hours"
+          + "Name"                 = "eits-tf-aws-nlb-alarms"
+          + "ResourceName"         = "eits-tf-aws-nlb-alarms.uk.experian.eeca"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+          + "eitsce:moduleversion" = "4.3.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = "disabled"
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = true
+          + iops                  = 3000
+          + kms_key_id            = (known after apply)
+          + tags                  = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "Name"                 = "eits-tf-aws-nlb-alarms"
+              + "ResourceName"         = "eits-tf-aws-nlb-alarms.uk.experian.eeca"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+              + "eitsce:moduleversion" = "4.3.1"
+              + "eitsce:tagschecked"   = "true"
+            }
+          + tags_all              = (known after apply)
+          + throughput            = 125
+          + volume_id             = (known after apply)
+          + volume_size           = 50
+          + volume_type           = "gp3"
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # module.nlb.module.alarm["nlb-alarms-test_healthy_min"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm detects when target group nlb-alarms-test has insufficient healthy targets."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "HealthyHostCount"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Minimum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.nlb.module.alarm["nlb-alarms-test_unhealthy"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm detects when one or more targets in target group nlb-alarms-test become unhealthy."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "UnHealthyHostCount"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.nlb.module.alarm["nlb_tcp_elb_reset_count"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps you detect a sustained increase in NLB TCP resets."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 3
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 3
+      + id                                    = (known after apply)
+      + metric_name                           = "TCP_ELB_Reset_Count"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 300
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 25
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.test_ec2.module.security_group[0].aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "eits-tf-aws-nlb-alarms"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-nlb-alarms-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-alarms"
+          + "ResourceName"         = "eits-tf-aws-nlb-alarms"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.7.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-ec2-innersource"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-alarms"
+          + "ResourceName"         = "eits-tf-aws-nlb-alarms"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.7.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-ec2-innersource"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_egress_rule.cidr_ipv4["10.0.0.0/8_-1_0"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Allow outbound traffic to Experian network"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_80"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "http"
+      + from_port              = 80
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 80
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.0/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.0/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.32/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.32/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.128/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.128/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.160/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.160/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.241.0/27"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 4750
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.226.224.0/24"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 4750
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.28.243.0/24"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.13.24.0/28"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.31.135.102/32"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_c"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.195.240/28"
+      + description            = "CyberArk UK CPM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_d"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.196.0/27"
+      + description            = "CyberArk UK PSM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.224/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.240/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.240/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.28.128/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.28.128/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.36.0/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.36.0/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.0/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.64/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.64/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 31 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'alarms_test': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006ab382-240b-81bc-99e7-ddfaa8da8001%252A2c2026-09-23T07%2525%25252A3a39%2525%25252A3a27.903252609Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'tcp_test': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.nlb.aws_lb.this will be created
+  + resource "aws_lb" "this" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + dns_name                                                     = (known after apply)
+      + dns_record_client_routing_policy                             = "any_availability_zone"
+      + enable_cross_zone_load_balancing                             = false
+      + enable_deletion_protection                                   = false
+      + enable_prefix_for_ipv6_source_nat                            = (known after apply)
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + internal                                                     = true
+      + ip_address_type                                              = "ipv4"
+      + load_balancer_type                                           = "network"
+      + name                                                         = "eits-tf-aws-nlb-tcp-nlb"
+      + name_prefix                                                  = (known after apply)
+      + region                                                       = "eu-west-2"
+      + secondary_ips_auto_assigned_per_subnet                       = (known after apply)
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = [
+          + "subnet-07f7f119f8527be21",
+        ]
+      + tags                                                         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tcp-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tcp-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                                                       = (known after apply)
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # module.nlb.aws_lb_listener.this["tcp_80"] will be created
+  + resource "aws_lb_listener" "this" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 80
+      + protocol                                                              = "TCP"
+      + region                                                                = "eu-west-2"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags                                                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # module.nlb.aws_lb_target_group.this["eits-tf-aws-nlb"] will be created
+  + resource "aws_lb_target_group" "this" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "eits-tf-aws-nlb-tg"
+      + name_prefix                        = (known after apply)
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "TCP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "eu-west-2"
+      + slow_start                         = 0
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tcp-eits-tf-aws-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tcp-eits-tf-aws-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-044f838833610a3f6"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 3
+          + interval            = 30
+          + matcher             = (known after apply)
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = (known after apply)
+          + unhealthy_threshold = 3
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.nlb.aws_lb_target_group_attachment.this["eits-tf-aws-nlb"] will be created
+  + resource "aws_lb_target_group_attachment" "this" {
+      + id               = (known after apply)
+      + region           = "eu-west-2"
+      + target_group_arn = (known after apply)
+      + target_id        = (known after apply)
+    }
+
+  # module.test_ec2.aws_instance.default will be created
+  + resource "aws_instance" "default" {
+      + ami                                  = "ami-05af190ff2aed4d89"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = false
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = false
+      + ebs_optimized                        = true
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = "eec-aws-amifactory-sc-iam-ec2role"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = false
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "eu-west-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = "subnet-07f7f119f8527be21"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Instance-Scheduler"   = "uk-london-office-hours"
+          + "Name"                 = "eits-tf-aws-nlb-tcp"
+          + "ResourceName"         = "eits-tf-aws-nlb-tcp.uk.experian.eeca"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+          + "eitsce:moduleversion" = "4.3.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Instance-Scheduler"   = "uk-london-office-hours"
+          + "Name"                 = "eits-tf-aws-nlb-tcp"
+          + "ResourceName"         = "eits-tf-aws-nlb-tcp.uk.experian.eeca"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+          + "eitsce:moduleversion" = "4.3.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = "disabled"
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = true
+          + iops                  = 3000
+          + kms_key_id            = (known after apply)
+          + tags                  = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "Name"                 = "eits-tf-aws-nlb-tcp"
+              + "ResourceName"         = "eits-tf-aws-nlb-tcp.uk.experian.eeca"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+              + "eitsce:moduleversion" = "4.3.1"
+              + "eitsce:tagschecked"   = "true"
+            }
+          + tags_all              = (known after apply)
+          + throughput            = 125
+          + volume_id             = (known after apply)
+          + volume_size           = 50
+          + volume_type           = "gp3"
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # module.nlb.module.alarm["eits-tf-aws-nlb_healthy_min"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm detects when target group eits-tf-aws-nlb has insufficient healthy targets."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "HealthyHostCount"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Minimum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.nlb.module.alarm["eits-tf-aws-nlb_unhealthy"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm detects when one or more targets in target group eits-tf-aws-nlb become unhealthy."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "UnHealthyHostCount"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.nlb.module.alarm["nlb_tcp_elb_reset_count"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps you detect a sustained increase in NLB TCP resets."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 3
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 3
+      + id                                    = (known after apply)
+      + metric_name                           = "TCP_ELB_Reset_Count"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 300
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 10
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.test_ec2.module.security_group[0].aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "eits-tf-aws-nlb-tcp"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-nlb-tcp-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tcp"
+          + "ResourceName"         = "eits-tf-aws-nlb-tcp"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.7.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-ec2-innersource"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tcp"
+          + "ResourceName"         = "eits-tf-aws-nlb-tcp"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.7.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-ec2-innersource"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_egress_rule.cidr_ipv4["10.0.0.0/8_-1_0"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Allow outbound traffic to Experian network"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_80"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "http"
+      + from_port              = 80
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 80
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.0/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.0/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.32/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.32/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.128/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.128/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.160/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.160/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.241.0/27"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 4750
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.226.224.0/24"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 4750
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.28.243.0/24"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.13.24.0/28"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.31.135.102/32"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_c"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.195.240/28"
+      + description            = "CyberArk UK CPM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_d"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.196.0/27"
+      + description            = "CyberArk UK PSM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.224/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.240/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.240/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.28.128/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.28.128/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.36.0/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.36.0/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.0/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.64/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.64/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 31 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'tcp_test': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006ab382-610b-8c0b-b183-bc99c02e8001%252A2c2026-09-23T07%2525%25252A3a40%2525%25252A3a29.538574742Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
+
+Plan result for 'tls_test': Success
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # tls_private_key.this will be created
+  + resource "tls_private_key" "this" {
+      + algorithm                     = "RSA"
+      + ecdsa_curve                   = "P224"
+      + id                            = (known after apply)
+      + private_key_openssh           = (sensitive value)
+      + private_key_pem               = (sensitive value)
+      + private_key_pem_pkcs8         = (sensitive value)
+      + public_key_fingerprint_md5    = (known after apply)
+      + public_key_fingerprint_sha256 = (known after apply)
+      + public_key_openssh            = (known after apply)
+      + public_key_pem                = (known after apply)
+      + rsa_bits                      = 4096
+    }
+
+  # tls_self_signed_cert.this will be created
+  + resource "tls_self_signed_cert" "this" {
+      + allowed_uses          = [
+          + "key_encipherment",
+          + "digital_signature",
+          + "client_auth",
+        ]
+      + cert_pem              = (known after apply)
+      + early_renewal_hours   = 0
+      + id                    = (known after apply)
+      + ip_addresses          = [
+          + (known after apply),
+        ]
+      + is_ca_certificate     = false
+      + key_algorithm         = (known after apply)
+      + max_path_length       = (known after apply)
+      + private_key_pem       = (sensitive value)
+      + private_key_pem_wo    = (write-only attribute)
+      + ready_for_renewal     = false
+      + set_authority_key_id  = false
+      + set_subject_key_id    = false
+      + validity_end_time     = (known after apply)
+      + validity_period_hours = 1
+      + validity_start_time   = (known after apply)
+    }
+
+  # module.acm.aws_acm_certificate.import_cert[0] will be created
+  + resource "aws_acm_certificate" "import_cert" {
+      + arn                       = (known after apply)
+      + certificate_body          = (known after apply)
+      + domain_name               = (known after apply)
+      + domain_validation_options = (known after apply)
+      + id                        = (known after apply)
+      + key_algorithm             = (known after apply)
+      + not_after                 = (known after apply)
+      + not_before                = (known after apply)
+      + pending_renewal           = (known after apply)
+      + private_key               = (sensitive value)
+      + private_key_wo            = (write-only attribute)
+      + region                    = "eu-west-2"
+      + renewal_eligibility       = (known after apply)
+      + renewal_summary           = (known after apply)
+      + status                    = (known after apply)
+      + subject_alternative_names = (known after apply)
+      + tags                      = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-acm"
+          + "eitsce:moduleversion" = "2.3.4"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-acm"
+          + "eitsce:moduleversion" = "2.3.4"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + type                      = (known after apply)
+      + validation_emails         = (known after apply)
+      + validation_method         = (known after apply)
+        # (1 unchanged attribute hidden)
+
+      + options (known after apply)
+    }
+
+  # module.acm_2.aws_acm_certificate.import_cert[0] will be created
+  + resource "aws_acm_certificate" "import_cert" {
+      + arn                       = (known after apply)
+      + certificate_body          = (known after apply)
+      + domain_name               = (known after apply)
+      + domain_validation_options = (known after apply)
+      + id                        = (known after apply)
+      + key_algorithm             = (known after apply)
+      + not_after                 = (known after apply)
+      + not_before                = (known after apply)
+      + pending_renewal           = (known after apply)
+      + private_key               = (sensitive value)
+      + private_key_wo            = (write-only attribute)
+      + region                    = "eu-west-2"
+      + renewal_eligibility       = (known after apply)
+      + renewal_summary           = (known after apply)
+      + status                    = (known after apply)
+      + subject_alternative_names = (known after apply)
+      + tags                      = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-acm"
+          + "eitsce:moduleversion" = "2.3.4"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-acm"
+          + "eitsce:moduleversion" = "2.3.4"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + type                      = (known after apply)
+      + validation_emails         = (known after apply)
+      + validation_method         = (known after apply)
+        # (1 unchanged attribute hidden)
+
+      + options (known after apply)
+    }
+
+  # module.nlb.aws_lb.this will be created
+  + resource "aws_lb" "this" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + dns_name                                                     = (known after apply)
+      + dns_record_client_routing_policy                             = "any_availability_zone"
+      + enable_cross_zone_load_balancing                             = true
+      + enable_deletion_protection                                   = false
+      + enable_prefix_for_ipv6_source_nat                            = (known after apply)
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + internal                                                     = true
+      + ip_address_type                                              = "ipv4"
+      + load_balancer_type                                           = "network"
+      + name                                                         = "eits-tf-aws-nlb-tls-nlb"
+      + name_prefix                                                  = (known after apply)
+      + region                                                       = "eu-west-2"
+      + secondary_ips_auto_assigned_per_subnet                       = (known after apply)
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = [
+          + "subnet-07f7f119f8527be21",
+        ]
+      + tags                                                         = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tls-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                                     = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tls-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                                                       = (known after apply)
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # module.nlb.aws_lb_listener.this["tls_443"] will be created
+  + resource "aws_lb_listener" "this" {
+      + arn                                                                   = (known after apply)
+      + certificate_arn                                                       = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 443
+      + protocol                                                              = "TLS"
+      + region                                                                = "eu-west-2"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+      + tags                                                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                                                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # module.nlb.aws_lb_listener_certificate.additional[0] will be created
+  + resource "aws_lb_listener_certificate" "additional" {
+      + certificate_arn = (known after apply)
+      + id              = (known after apply)
+      + listener_arn    = (known after apply)
+      + region          = "eu-west-2"
+    }
+
+  # module.nlb.aws_lb_target_group.this["eits-tf-aws-nlb"] will be created
+  + resource "aws_lb_target_group" "this" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "eits-tf-aws-nlb-tg"
+      + name_prefix                        = (known after apply)
+      + port                               = 443
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "TLS"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "eu-west-2"
+      + slow_start                         = 0
+      + tags                               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tls-eits-tf-aws-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                           = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tls-eits-tf-aws-nlb"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-nlb"
+          + "eitsce:moduleversion" = "local"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + target_type                        = "instance"
+      + vpc_id                             = "vpc-044f838833610a3f6"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 3
+          + interval            = 30
+          + matcher             = (known after apply)
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = (known after apply)
+          + unhealthy_threshold = 3
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.nlb.aws_lb_target_group_attachment.this["eits-tf-aws-nlb"] will be created
+  + resource "aws_lb_target_group_attachment" "this" {
+      + id               = (known after apply)
+      + region           = "eu-west-2"
+      + target_group_arn = (known after apply)
+      + target_id        = (known after apply)
+    }
+
+  # module.test_ec2.aws_instance.default will be created
+  + resource "aws_instance" "default" {
+      + ami                                  = "ami-05af190ff2aed4d89"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = false
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = false
+      + ebs_optimized                        = true
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = "eec-aws-amifactory-sc-iam-ec2role"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = false
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "eu-west-2"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = "subnet-07f7f119f8527be21"
+      + tags                                 = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Instance-Scheduler"   = "uk-london-office-hours"
+          + "Name"                 = "eits-tf-aws-nlb-tls"
+          + "ResourceName"         = "eits-tf-aws-nlb-tls.uk.experian.eeca"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+          + "eitsce:moduleversion" = "4.3.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                             = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Instance-Scheduler"   = "uk-london-office-hours"
+          + "Name"                 = "eits-tf-aws-nlb-tls"
+          + "ResourceName"         = "eits-tf-aws-nlb-tls.uk.experian.eeca"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+          + "eitsce:moduleversion" = "4.3.1"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options {
+          + http_endpoint               = "enabled"
+          + http_protocol_ipv6          = "disabled"
+          + http_put_response_hop_limit = 1
+          + http_tokens                 = "required"
+          + instance_metadata_tags      = "disabled"
+        }
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = true
+          + iops                  = 3000
+          + kms_key_id            = (known after apply)
+          + tags                  = {
+              + "AppID"                = "23117"
+              + "BusinessUnit"         = "EITS"
+              + "CostString"           = "2000.GB.139.606005"
+              + "CreatedWith"          = "Terraform"
+              + "Environment"          = "sbx"
+              + "Name"                 = "eits-tf-aws-nlb-tls"
+              + "ResourceName"         = "eits-tf-aws-nlb-tls.uk.experian.eeca"
+              + "ResourceOwner"        = "eitsukicloud@experian.com"
+              + "eitsce:modulename"    = "eits-tf-aws-ec2-innersource"
+              + "eitsce:moduleversion" = "4.3.1"
+              + "eitsce:tagschecked"   = "true"
+            }
+          + tags_all              = (known after apply)
+          + throughput            = 125
+          + volume_id             = (known after apply)
+          + volume_size           = 50
+          + volume_type           = "gp3"
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # module.acm.module.alarm["cert_expiration"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps you detect when a certificate managed by or imported into ACM is approaching its expiration date."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "CertificateArn"
+      + namespace                             = "AWS/CertificateManager"
+      + period                                = 86400
+      + region                                = "eu-west-2"
+      + statistic                             = "Minimum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-acm"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-acm"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 44
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.acm_2.module.alarm["cert_expiration"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps you detect when a certificate managed by or imported into ACM is approaching its expiration date."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "CertificateArn"
+      + namespace                             = "AWS/CertificateManager"
+      + period                                = 86400
+      + region                                = "eu-west-2"
+      + statistic                             = "Minimum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-acm"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-acm"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 44
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.nlb.module.alarm["eits-tf-aws-nlb_healthy_min"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm detects when target group eits-tf-aws-nlb has insufficient healthy targets."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "LessThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "HealthyHostCount"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Minimum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 0
+      + treat_missing_data                    = "breaching"
+    }
+
+  # module.nlb.module.alarm["eits-tf-aws-nlb_unhealthy"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm detects when one or more targets in target group eits-tf-aws-nlb become unhealthy."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 1
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "UnHealthyHostCount"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 60
+      + region                                = "eu-west-2"
+      + statistic                             = "Maximum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 1
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.nlb.module.alarm["nlb_tcp_elb_reset_count"].aws_cloudwatch_metric_alarm.this will be created
+  + resource "aws_cloudwatch_metric_alarm" "this" {
+      + actions_enabled                       = false
+      + alarm_description                     = "This alarm helps you detect a sustained increase in NLB TCP resets."
+      + alarm_name                            = (known after apply)
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanOrEqualToThreshold"
+      + datapoints_to_alarm                   = 3
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 3
+      + id                                    = (known after apply)
+      + metric_name                           = "TCP_ELB_Reset_Count"
+      + namespace                             = "AWS/NetworkELB"
+      + period                                = 300
+      + region                                = "eu-west-2"
+      + statistic                             = "Sum"
+      + tags                                  = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all                              = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-cloudwatch-alarm"
+          + "eitsce:moduleversion" = "1.3.1"
+          + "eitsce:parentmodule"  = "eits-tf-aws-nlb"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + threshold                             = 10
+      + treat_missing_data                    = "missing"
+    }
+
+  # module.test_ec2.module.security_group[0].aws_security_group.this will be created
+  + resource "aws_security_group" "this" {
+      + arn                    = (known after apply)
+      + description            = "eits-tf-aws-nlb-tls"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = (known after apply)
+      + name_prefix            = "uk-cloudenablement-sbx-eits-tf-aws-nlb-tls-sg"
+      + owner_id               = (known after apply)
+      + region                 = "eu-west-2"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tls"
+          + "ResourceName"         = "eits-tf-aws-nlb-tls"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.7.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-ec2-innersource"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + tags_all               = {
+          + "AppID"                = "23117"
+          + "BusinessUnit"         = "EITS"
+          + "CostString"           = "2000.GB.139.606005"
+          + "CreatedWith"          = "Terraform"
+          + "DeployedByAURA"       = "true"
+          + "Environment"          = "sbx"
+          + "Name"                 = "eits-tf-aws-nlb-tls"
+          + "ResourceName"         = "eits-tf-aws-nlb-tls"
+          + "ResourceOwner"        = "eitsukicloud@experian.com"
+          + "eitsce:modulename"    = "eits-tf-aws-security-group"
+          + "eitsce:moduleversion" = "3.7.0"
+          + "eitsce:parentmodule"  = "eits-tf-aws-ec2-innersource"
+          + "eitsce:tagschecked"   = "true"
+        }
+      + vpc_id                 = "vpc-044f838833610a3f6"
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_egress_rule.cidr_ipv4["10.0.0.0/8_-1_0"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "Allow outbound traffic to Experian network"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_egress_rule.eec_default["eec_egress_all"] will be created
+  + resource "aws_vpc_security_group_egress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + description            = "Allow outbound traffic"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cidr_ipv4["10.0.0.0/8_tcp_443"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cidr_ipv4" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.0.0.0/8"
+      + description            = "https"
+      + from_port              = 443
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 443
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.0/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.0/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.232.152.32/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.232.152.32/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.128/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.128/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.cyberark_sia["eec_cyberark_sia_ssh_10.233.81.160/27"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "cyberark_sia" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.233.81.160/27"
+      + description            = "CyberArk SIA SSH access"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.241.0/27"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 4750
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_bladelogic_4750_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.226.224.0/24"
+      + description            = "BladeLogic"
+      + from_port              = 4750
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 4750
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.28.243.0/24"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cmdb_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.229.161.0/25"
+      + description            = "CMDB Asset discovery"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_a"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.13.24.0/28"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_b"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.31.135.102/32"
+      + description            = "CyberArk password reconciliation"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_c"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.195.240/28"
+      + description            = "CyberArk UK CPM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_cyberark_22_d"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.188.196.0/27"
+      + description            = "CyberArk UK PSM"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 22
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.224/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.224/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.2.89.240/28"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.2.89.240/28"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.28.128/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.28.128/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.231.36.0/25"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.231.36.0/25"
+      + description            = "Tanium P2P client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.0/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.0/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].aws_vpc_security_group_ingress_rule.eec_default["eec_tanium_17472_10.64.31.64/26"] will be created
+  + resource "aws_vpc_security_group_ingress_rule" "eec_default" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "10.64.31.64/26"
+      + description            = "Tanium client"
+      + from_port              = 17472
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "eu-west-2"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {
+          + "DeployedByAURA" = "true"
+        }
+      + to_port                = 17472
+    }
+
+  # module.test_ec2.module.security_group[0].time_sleep.sg_rule_wait will be created
+  + resource "time_sleep" "sg_rule_wait" {
+      + create_duration = "5s"
+      + id              = (known after apply)
+    }
+
+Plan: 38 to add, 0 to change, 0 to destroy.
+
+
+Wiz.io IaC scan result for 'tls_test': Success
+Report URL: https://app.wiz.io/findings/cicd-scans#~%2528cicd_scan~%2527006ab382-a10b-84b3-8bd2-ec2d2c578001%252A2c2026-09-23T07%2525%25252A3a41%2525%25252A3a41.58018583Z%2527%2529
+{
+  "__typename": "CICDDiskScanResult",
+  "osPackages": null,
+  "libraries": null,
+  "applications": null,
+  "endOfLifeTechnologies": null,
+  "cpes": null,
+  "secrets": null,
+  "dataFindings": null,
+  "vulnerableSBOMArtifactsByNameVersion": null,
+  "hostConfiguration": {
+    "hostConfigurationFrameworks": null,
+    "hostConfigurationFindings": null,
+    "analytics": {
+      "severity": {
+        "infoCount": 0,
+        "lowCount": 0,
+        "mediumCount": 0,
+        "highCount": 0,
+        "criticalCount": 0
+      },
+      "status": {
+        "passCount": 0,
+        "failCount": 0,
+        "errorCount": 0,
+        "notAssessedCount": 0,
+        "totalCount": 0
+      }
+    }
+  },
+  "failedPolicyMatches": null,
+  "analytics": {
+    "vulnerabilities": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "unfixedCount": 0,
+      "totalCount": 0
+    },
+    "secrets": {
+      "privateKeyCount": 0,
+      "publicKeyCount": 0,
+      "passwordCount": 0,
+      "certificateCount": 0,
+      "cloudKeyCount": 0,
+      "sshAuthorizedKeyCount": 0,
+      "dbConnectionStringCount": 0,
+      "gitCredentialCount": 0,
+      "presignedURLCount": 0,
+      "saasAPIKeyCount": 0,
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "hostConfiguration": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0
+    },
+    "malware": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "softwareSupplyChain": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiModel": null,
+    "sast": {
+      "infoCount": 0,
+      "lowCount": 0,
+      "mediumCount": 0,
+      "highCount": 0,
+      "criticalCount": 0,
+      "totalCount": 0
+    },
+    "aiSast": null,
+    "filesScannedCount": 1,
+    "directoriesScannedCount": 1
+  },
+  "sbomOutput": "",
+  "malwares": null,
+  "softwareSupplyChain": null,
+  "aiModels": null,
+  "sast": null,
+  "iac": {
+    "__typename": "CICDIACScanResult",
+    "failedPolicyMatches": null,
+    "ruleMatches": null,
+    "scanStatistics": {
+      "infoMatches": 0,
+      "lowMatches": 0,
+      "mediumMatches": 0,
+      "highMatches": 0,
+      "criticalMatches": 0,
+      "totalMatches": 0,
+      "filesFound": 1,
+      "filesParsed": 1,
+      "queriesLoaded": 25,
+      "queriesExecuted": 25,
+      "queriesExecutionFailed": 0
+    },
+    "secrets": null,
+    "fileTypes": null,
+    "discoveredResources": null
+  },
+  "ruleMatches": null,
+  "scanStatistics": {
+    "infoMatches": 0,
+    "lowMatches": 0,
+    "mediumMatches": 0,
+    "highMatches": 0,
+    "criticalMatches": 0,
+    "totalMatches": 0,
+    "filesFound": 1,
+    "filesParsed": 1,
+    "queriesLoaded": 25,
+    "queriesExecuted": 25,
+    "queriesExecutionFailed": 0
+  },
+  "fileTypes": null,
+  "discoveredResources": null
+}
