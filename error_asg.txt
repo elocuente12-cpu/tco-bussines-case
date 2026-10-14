@@ -1,6 +1,11 @@
-Error: Invalid for_each argument
+fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, action, protocol
+| filter dstPort = 443
+| filter srcAddr like /10.5.232/ or srcAddr like /10.64.160.182/ or srcAddr like /10.64.160.202/
+| sort @timestamp desc
+| limit 50
 
-  on .terraform/modules/sg_alb/main.tf line 99, in resource "aws_vpc_security_group_ingress_rule" "security_groups":
-  99:   for_each = local.sg_ingress_rule_sg
-    ├────────────────
-    │ local.sg_ingress_rule_sg will be known only after apply
+
+fields @timestamp, srcAddr, dstAddr, srcPort, dstPort, action
+| filter action = "REJECT" and dstPort = 443
+| sort @timestamp desc
+| limit 50
