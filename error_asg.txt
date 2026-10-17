@@ -6,3 +6,11 @@ fields @timestamp, @message
 | filter @message like /miexperian/ or @message like /504/ or @message like /timeout/
 | sort @timestamp desc
 | limit 100
+
+
+
+SOURCE "eits-logging-vpc-flowlogs-log-group-274193347839" START=-1d END=0s |
+fields @timestamp, srcAddr, dstAddr, dstPort, action
+| filter @timestamp >= "2026-10-16T03:00:00.000Z" and @timestamp <= "2026-10-16T04:00:00.000Z"
+| sort @timestamp desc
+| limit 100
