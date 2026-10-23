@@ -1,17 +1,5 @@
-        instances:
-              - dbm: true
-                host: "$db_host,$db_port"          # desde $secret_sqlserver (host/port)
-                username: ENC[$secret_sqlserver;username]
-                password: ENC[$secret_sqlserver;password]
-                database: ENC[$secret_sqlserver;database]
-                connector: odbc
-                driver: ODBC Driver 18 for SQL Server   # embebido en el Agent
-                # La RDS exige TLS (rds.force_ssl=1). PoC: no valida la CA de RDS.
-                connection_string: "TrustServerCertificate=yes;"
-                aws:
-                  instance_endpoint: "$db_host"
-                tags:
-                  - env:$dd_env
-                  - service:$dd_service
-          -       - version:$dd_version
-          +       - version:$dd_version$country_check
+Error: updating IAM Policy (arn:aws:iam::779394371865:policy/eec-aws-us-eits-intelisrcpa-dev-s3-rdsssis-readwrite-iam-policy): operation error IAM: CreatePolicyVersion, https response error StatusCode: 403, RequestID: 1600a1ee-27f0-424c-979e-53dbcecb9fb4, api error AccessDenied: User: arn:aws:sts::779394371865:assumed-role/eec-aws-infrastructure-deployment-role/terraform is not authorized to perform: iam:CreatePolicyVersion on resource: policy arn:aws:iam::779394371865:policy/eec-aws-us-eits-intelisrcpa-dev-s3-rdsssis-readwrite-iam-policy with an explicit deny in a service control policy: arn:aws:organizations::037952747912:policy/o-33fd8d019b/service_control_policy/p-iwe94fc8
+
+  with module.iam_rds_ssis.aws_iam_policy.default[0],
+  on .terraform/modules/iam_rds_ssis/main.tf line 117, in resource "aws_iam_policy" "default":
+ 117: resource "aws_iam_policy" "default" {
