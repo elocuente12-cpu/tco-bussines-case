@@ -1,5 +1,517 @@
-Error: updating IAM Policy (arn:aws:iam::779394371865:policy/eec-aws-us-eits-intelisrcpa-dev-s3-rdsssis-readwrite-iam-policy): operation error IAM: CreatePolicyVersion, https response error StatusCode: 403, RequestID: 1600a1ee-27f0-424c-979e-53dbcecb9fb4, api error AccessDenied: User: arn:aws:sts::779394371865:assumed-role/eec-aws-infrastructure-deployment-role/terraform is not authorized to perform: iam:CreatePolicyVersion on resource: policy arn:aws:iam::779394371865:policy/eec-aws-us-eits-intelisrcpa-dev-s3-rdsssis-readwrite-iam-policy with an explicit deny in a service control policy: arn:aws:organizations::037952747912:policy/o-33fd8d019b/service_control_policy/p-iwe94fc8
-
-  with module.iam_rds_ssis.aws_iam_policy.default[0],
-  on .terraform/modules/iam_rds_ssis/main.tf line 117, in resource "aws_iam_policy" "default":
- 117: resource "aws_iam_policy" "default" {
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "iam:*"
+            ],
+            "Resource": [
+                "arn:aws:iam::779394371865:role/BURoleFor*-jenkinssplatam",
+                "arn:aws:iam::779394371865:policy/BUPolicyFor-*-jenkinssplatam"
+            ],
+            "Effect": "Deny",
+            "Sid": "DenyIamJenkins"
+        },
+        {
+            "Action": [
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*assetsbucket-jenkinssplatam",
+                "arn:aws:s3:::*assetsbucket-jenkinssplatam/*"
+            ],
+            "Effect": "Deny",
+            "Sid": "DenyS3Jenkins"
+        },
+        {
+            "Action": [
+                "glue:*",
+                "lambda:*",
+                "cloudformation:*",
+                "cloudwatch:*",
+                "logs:*",
+                "dynamodb:*",
+                "sns:*",
+                "sqs:*",
+                "kinesis:*",
+                "states:*",
+                "events:*",
+                "pipes:*",
+                "firehose:*",
+                "secretsmanager:*",
+                "quicksight:*",
+                "athena:*",
+                "ecr:*",
+                "kms:*",
+                "ses:*",
+                "lakeformation:*",
+                "cloudshell:*",
+                "redshift:*",
+                "redshift-serverless:ListTracks",
+                "xray:*",
+                "elasticmapreduce:GetOnClusterAppUIPresignedURL"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "AllowMultipleResources"
+        },
+        {
+            "Action": "iam:*",
+            "Resource": [
+                "arn:aws:iam::*:role/BURoleFor-dev-779394371865*",
+                "arn:aws:iam::*:policy/BUPolicyFor-dev-779394371865*",
+                "arn:aws:iam::*:instance-profile/BURoleFor-dev-779394371865*",
+                "arn:aws:iam::*:role/eec-aws-*-iam-role",
+                "arn:aws:iam::*:policy/eec-aws-*-iam-policy"
+            ],
+            "Effect": "Allow",
+            "Sid": "Iam1"
+        },
+        {
+            "Action": "iam:PassRole",
+            "Resource": [
+                "arn:aws:iam::*:role/BURoleForEMRServerless_SPLatam",
+                "arn:aws:iam::779394371865:role/BURoleFor-dev-779394371865*"
+            ],
+            "Effect": "Allow",
+            "Sid": "IamEmrServerless"
+        },
+        {
+            "Condition": {
+                "ForAllValues:StringEqualsIfExists": {
+                    "apigateway:Resource/EndpointType": "PRIVATE",
+                    "apigateway:Request/EndpointType": "PRIVATE"
+                }
+            },
+            "Action": [
+                "apigateway:DELETE",
+                "apigateway:PATCH",
+                "apigateway:POST",
+                "apigateway:PUT",
+                "apigateway:UpdateRestApiPolicy"
+            ],
+            "Resource": [
+                "arn:aws:apigateway:us-east-1::/restapis",
+                "arn:aws:apigateway:us-east-1::/restapis/??????????",
+                "arn:aws:apigateway:us-east-1::/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "PrivateAPICreation"
+        },
+        {
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::dev-779394371865*",
+                "arn:aws:s3:::dev-779394371865*/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "s3"
+        },
+        {
+            "Action": [
+                "s3:*",
+                "dynamodb:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::infrasplatam-terraform-779394371865*",
+                "arn:aws:s3:::infrasplatam-terraform-779394371865*/*",
+                "arn:aws:s3:::dba-terraform-779394371865*",
+                "arn:aws:s3:::dba-terraform-779394371865*/*",
+                "arn:aws:dynamodb:us-east-1:167753196070:table/infrasplatam-terraform-lock-779394371865",
+                "arn:aws:dynamodb:us-east-1:167753196070:table/dba-terraform-lock-779394371865"
+            ],
+            "Effect": "Deny",
+            "Sid": "s3backendInfra"
+        },
+        {
+            "Action": [
+                "s3:GetBucketLocation",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads",
+                "s3:AbortMultipartUpload",
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:ListMultipartUploadParts",
+                "s3:PutObject",
+                "s3:GetObjectTagging",
+                "s3:PutObjectTagging"
+            ],
+            "Resource": [
+                "arn:aws:s3:::dev-779394371865-assetsbucket-jenkinssplatam",
+                "arn:aws:s3:::dev-779394371865-assetsbucket-jenkinssplatam/*",
+                "arn:aws:s3:::dto-terraform-779394371865",
+                "arn:aws:s3:::dto-terraform-779394371865/*",
+                "arn:aws:s3:::dev-167753196070-airflow-coslabureau",
+                "arn:aws:s3:::dev-167753196070-airflow-coslabureau/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "s3Assets"
+        },
+        {
+            "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "LambdaVpcPermissions"
+        },
+        {
+            "Action": [
+                "airflow:ListEnvironments",
+                "airflow:GetEnvironment",
+                "airflow:ListTagsForResource"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "AmazonMWAAOpAccess"
+        },
+        {
+            "Action": [
+                "airflow:CreateWebLoginToken"
+            ],
+            "Resource": [
+                "arn:aws:airflow:us-east-1:779394371865:role/*/Op"
+            ],
+            "Effect": "Allow",
+            "Sid": "AmazonMWAAWebServerAccess"
+        },
+        {
+            "Action": "support:*",
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "AccessToSupport"
+        },
+        {
+            "Action": [
+                "cloudfront:CreateOriginRequestPolicy",
+                "cloudfront:DeleteOriginRequestPolicy",
+                "cloudfront:CreateOriginAccessControl",
+                "cloudfront:DeleteOriginAccessControl",
+                "cloudfront:DeleteKeyGroup",
+                "cloudfront:AssociateAlias",
+                "cloudfront:DeleteCloudFrontOriginAccessIdentity",
+                "cloudfront:UpdateOriginAccessControl",
+                "cloudfront:CreateDistribution",
+                "cloudfront:CreateFunction",
+                "cloudfront:CreateCloudFrontOriginAccessIdentity",
+                "cloudfront:CreateCachePolicy",
+                "cloudfront:UpdateCachePolicy",
+                "cloudfront:CopyDistribution",
+                "cloudfront:DeleteCachePolicy",
+                "cloudfront:UpdateDistribution",
+                "cloudfront:DeleteDistribution",
+                "cloudfront:DeleteFunction",
+                "cloudfront:TagResource"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "CloudFront"
+        },
+        {
+            "Action": [
+                "ecs:ExecuteCommand"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "ECS"
+        },
+        {
+            "Action": [
+                "ecs:RunTask",
+                "ecs:UpdateService",
+                "ecs:StopTask"
+            ],
+            "Resource": [
+                "arn:aws:ecs:us-east-1:779394371865:task/*",
+                "arn:aws:ecs:us-east-1:779394371865:service/*",
+                "arn:aws:ecs:us-east-1:779394371865:cluster/*",
+                "arn:aws:ecs:us-east-1:779394371865:task-definition/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "ECSOperations"
+        },
+        {
+            "Action": [
+                "ecs:DescribeTasks",
+                "ecs:ListTasks"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "ECSReadOnly"
+        },
+        {
+            "Action": [
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "ECSExecTunnel"
+        },
+        {
+            "Action": [
+                "elasticmapreduce:CancelSteps",
+                "elasticmapreduce:RunJobFlow",
+                "elasticmapreduce:TerminateJobFlows",
+                "elasticmapreduce:AddJobFlowSteps"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "EMR"
+        },
+        {
+            "Action": [
+                "elasticmapreduce:CreateStudioPresignedUrl"
+            ],
+            "Resource": [
+                "arn:aws:elasticmapreduce:us-east-1:779394371865:studio/es*"
+            ],
+            "Effect": "Allow",
+            "Sid": "EMRAccessStudio"
+        },
+        {
+            "Action": [
+                "ecs:UpdateService"
+            ],
+            "Resource": [
+                "arn:aws:ecs:us-east-1:779394371865:service/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "AllowUpdateServiceClusterECS"
+        },
+        {
+            "Action": [
+                "servicediscovery:CreateService",
+                "servicediscovery:GetNamespace",
+                "servicediscovery:DeleteService",
+                "servicediscovery:GetOperation",
+                "servicediscovery:ListNamespaces",
+                "servicediscovery:ListServices",
+                "servicediscovery:UpdateService"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "AllowservicediscoveryClusterECS"
+        },
+        {
+            "Action": [
+                "route53:GetHostedZone",
+                "route53:ListHostedZonesByName"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "Allowroute53ClusterECS"
+        },
+        {
+            "Action": [
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeSessions",
+                "ec2:describeInstances",
+                "ssm:GetConnectionStatus",
+                "ssm:TerminateSession",
+                "ssm:ResumeSession"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "SSMEMRList"
+        },
+        {
+            "Condition": {
+                "StringLike": {
+                    "ssm:resourceTag/SSMEMR": [
+                        "yes"
+                    ]
+                }
+            },
+            "Action": [
+                "ssm:StartSession"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:779394371865:instance/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "SSMEMR"
+        },
+        {
+            "Action": [
+                "ssm:StartSession"
+            ],
+            "Resource": [
+                "arn:aws:ssm:us-east-1:779394371865:document/SSM-SessionManagerRunShell"
+            ],
+            "Effect": "Allow",
+            "Sid": "SSMEMRSes"
+        },
+        {
+            "Action": [
+                "ssm:StartSession"
+            ],
+            "Resource": [
+                "arn:aws:ecs:us-east-1:779394371865:task/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "SSMEcs"
+        },
+        {
+            "Action": [
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeVpcs"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "AllowDescribeVPC"
+        },
+        {
+            "Action": [
+                "cloudshell:*"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "CloudShellOperations"
+        },
+        {
+            "Condition": {
+                "StringEquals": {
+                    "ec2:CreateAction": "CreateNetworkInterface"
+                },
+                "ForAnyValue:StringEquals": {
+                    "aws:TagKeys": "ManagedByCloudShell"
+                }
+            },
+            "Action": [
+                "ec2:CreateTags"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:779394371865:network-interface/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "CreateTagWithCloudShellKey"
+        },
+        {
+            "Action": [
+                "ec2:CreateNetworkInterface"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:779394371865:subnet/*",
+                "arn:aws:ec2:us-east-1:779394371865:security-group/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "CreateNetworkInterfaceWithSubnetsAndSG"
+        },
+        {
+            "Condition": {
+                "ForAnyValue:StringEquals": {
+                    "aws:TagKeys": "ManagedByCloudShell"
+                }
+            },
+            "Action": [
+                "ec2:CreateNetworkInterface"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:779394371865:network-interface/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "CreateNetworkInterfaceWithCloudShellTag"
+        },
+        {
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/ManagedByCloudShell": ""
+                }
+            },
+            "Action": [
+                "ec2:CreateNetworkInterfacePermission"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:779394371865:network-interface/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "CreateNetworkInterfacePermissionWithCloudShellTag"
+        },
+        {
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/ManagedByCloudShell": ""
+                }
+            },
+            "Action": [
+                "ec2:DeleteNetworkInterface"
+            ],
+            "Resource": [
+                "arn:aws:ec2:us-east-1:779394371865:network-interface/*"
+            ],
+            "Effect": "Allow",
+            "Sid": "DeleteNetworkInterfaceWithCloudShellTag"
+        },
+        {
+            "Action": [
+                "emr-serverless:ListApplications",
+                "emr-serverless:GetApplication",
+                "emr-serverless:StartApplication",
+                "emr-serverless:StopApplication",
+                "emr-serverless:StartJobRun",
+                "emr-serverless:CancelJobRun",
+                "emr-serverless:ListJobRuns",
+                "emr-serverless:GetJobRun"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "EMRServerlessActions"
+        },
+        {
+            "Action": [
+                "dynamodb:CreateTable"
+            ],
+            "Resource": "*",
+            "Effect": "Deny",
+            "Sid": "NoDynamoTable"
+        },
+        {
+            "Condition": {
+                "StringEquals": {
+                    "aws:CalledVia": "cloudformation.amazonaws.com"
+                }
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:List*"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "cloudformationS3action"
+        },
+        {
+            "Action": "ssm:PutParameter",
+            "Resource": [
+                "arn:aws:ssm:us-east-1:779394371865:parameter/dev-779394371865*"
+            ],
+            "Effect": "Allow",
+            "Sid": "ssm"
+        },
+        {
+            "Action": [
+                "aoss:ListCollections",
+                "aoss:BatchGetCollection",
+                "aoss:APIAccessAll",
+                "aoss:DashboardsAccessAll"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "aoss"
+        },
+        {
+            "Action": [
+                "bedrock:*"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Sid": "Bedrock"
+        }
+    ]
+}
