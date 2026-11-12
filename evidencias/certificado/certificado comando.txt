@@ -1,0 +1,3 @@
+Import-Certificate `
+    -FilePath "C:\AWS-Certificates\rds-root-ca.cer" `
+    -CertStoreLocation "Cert:\LocalMachine\Root"
