@@ -1,1 +1,13 @@
-.Net Framework 4.8 Features / WCF Services / HTTP Activation
+Plan: 2 to add, 1 to change, 1 to destroy.
+module.rds_sqlserver["procesos"].aws_db_option_group.this[0] (deposed object d183f56d): Destroying... [id=eec-aws-us-eits-intelisrcpa-prd-sqlserver-standalone1-optiongroup]
+module.aws_backup.aws_backup_region_settings.this[0]: Modifying... [id=us-east-1]
+aws_ssm_document.rds_ca_install: Creating...
+module.aws_backup.aws_backup_region_settings.this[0]: Modifications complete after 0s [id=us-east-1]
+aws_ssm_document.rds_ca_install: Creation complete after 0s [id=eec-aws-us-eits-intelisrcpa-prd-rds-ca-install]
+aws_ssm_association.rds_ca["rsa2048"]: Creating...
+
+Error: creating SSM Association (eec-aws-us-eits-intelisrcpa-prd-rds-ca-install): operation error SSM: CreateAssociation, https response error StatusCode: 400, RequestID: f831bde9-58e4-4fb5-863c-fd30be537354, InvalidTarget: The number of tag values for tag:Name was 7. Max: 5.
+
+  with aws_ssm_association.rds_ca["rsa2048"],
+  on rds-ca-cert.tf line 71, in resource "aws_ssm_association" "rds_ca":
+  71: resource "aws_ssm_association" "rds_ca" {s
