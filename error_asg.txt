@@ -14,3 +14,6 @@
 2026-11-19T15:32:29.3706015-05:00  Resolucion webservices.apc.com.pa -> 10.64.160.182,10.64.160.202
 2026-11-19T15:32:29.3734013-05:00  Resolucion webservices.apcexperian.com -> 10.64.160.182,10.64.160.202
 2026-11-19T15:32:29.3749948-05:00  === Gestion archivo hosts completada ===
+
+
+Get-Content $env:SystemRoot\System32\drivers\etc\hosts
